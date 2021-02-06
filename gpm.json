@@ -1,0 +1,60 @@
+{
+ "added": [
+  {
+   "id": 1,
+   "type": "implementation",
+   "installed_name": "retrofit",
+   "gpm_dep": {
+    "artifact_id": "retrofit",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit",
+    "get_from": "Central",
+    "group_id": "com.squareup.retrofit2",
+    "name": "Retrofit",
+    "description": "A type-safe HTTP client for Android and Java."
+   }
+  },
+  {
+   "id": 2,
+   "type": "implementation",
+   "installed_name": "dagger",
+   "gpm_dep": {
+    "artifact_id": "dagger",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/com.google.dagger/dagger",
+    "get_from": "Central",
+    "group_id": "com.google.dagger",
+    "name": "Dagger",
+    "description": "A fast dependency injector for Android and Java."
+   }
+  },
+  {
+   "id": 3,
+   "type": "kapt",
+   "installed_name": "dagger-compiler",
+   "gpm_dep": {
+    "artifact_id": "dagger-compiler",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler",
+    "get_from": "Central",
+    "group_id": "com.google.dagger",
+    "name": "Dagger Compiler",
+    "description": "A fast dependency injector for Android and Java."
+   }
+  },
+  {
+   "id": 4,
+   "type": "implementation",
+   "installed_name": "decompose",
+   "gpm_dep": {
+    "artifact_id": "decompose",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/com.arkivanov.decompose/decompose",
+    "get_from": "JCenter",
+    "group_id": "com.arkivanov.decompose",
+    "name": "Decompose",
+    "description": "Decompose"
+   }
+  }
+ ]
+}

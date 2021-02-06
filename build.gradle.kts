@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.4.30"
+    kotlin("kapt") version "1.4.30"
     id("org.jetbrains.compose") version "0.3.0-build149"
 }
 
@@ -14,11 +15,27 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+    mavenLocal()
 }
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test-junit"))
     implementation(compose.desktop.currentOs)
+
+    // Cyclone
+    implementation("com.theapache64:cyclone:1.0.0-alpha02")
+
+    // Dagger : A fast dependency injector for Android and Java.
+    val daggerVersion = "2.31.2"
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+
+    // Retrofit : A type-safe HTTP client for Android and Java.
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Decompose : Decompose
+    implementation("com.arkivanov.decompose:decompose:0.1.7")
 }
 
 tasks.test {
@@ -37,4 +54,12 @@ compose.desktop {
             packageName = "stackzy"
         }
     }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }
