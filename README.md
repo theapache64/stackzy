@@ -10,16 +10,15 @@
 
 > A desktop app to identify the app stack. Built using Compose desktop
 
-### ✨ Demo
+[comment]: <> (### ✨ Demo)
 
-![](demo.gif)
-
+[comment]: <> (![]&#40;demo.gif&#41;)
 
 ## ⌨️ Usage
 
 1. Open `Stackzy`
-1. Enter part of `packageName`
-1. Choose APK source
+1. Choose `Device`
+1. Choose `Application`
 1. Press `GO!`
 
 ## ✍️ Author
@@ -64,6 +63,8 @@ Give a ⭐️ if this project helped you!
 ## ☑️ TODO
 
 - [ ] Release the first public version with basic features
+- [ ] Theme switching
+- [ ] Playstore integration (Download APK from playstore)
 
 ## 📝 License
 

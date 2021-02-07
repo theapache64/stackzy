@@ -3,9 +3,10 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.30"
-    kotlin("kapt") version "1.4.30"
-    id("org.jetbrains.compose") version "0.3.0-build149"
+    val kotlinVersion = "1.4.21-2"
+    kotlin("jvm") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
+    id("org.jetbrains.compose") version "0.3.0-build146"
 }
 
 group = "com.theapache64"
@@ -35,7 +36,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // Decompose : Decompose
-    implementation("com.arkivanov.decompose:decompose:0.1.7")
+    val decomposeVersion = "0.1.7"
+    implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.1.7")
 }
 
 tasks.test {
