@@ -55,6 +55,20 @@
     "name": "Decompose",
     "description": "Decompose"
    }
+  },
+  {
+   "id": 5,
+   "type": "implementation",
+   "installed_name": "retrosheet",
+   "gpm_dep": {
+    "artifact_id": "retrosheet",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/com.theapache64/retrosheet",
+    "get_from": "JCenter",
+    "group_id": "com.theapache64",
+    "name": "Retrosheet",
+    "description": "Turn Google Spreadsheet to JSON endpoint (for Android and JVM)"
+   }
   }
  ]
 }

@@ -23,6 +23,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test-junit"))
     implementation(compose.desktop.currentOs)
+    implementation(compose.materialIconsExtended)
 
     // Cyclone
     implementation("com.theapache64:cyclone:1.0.0-alpha02")
@@ -39,6 +40,9 @@ dependencies {
     val decomposeVersion = "0.1.7"
     implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.1.7")
+
+    // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
+    implementation("com.theapache64:retrosheet:1.2.2")
 }
 
 tasks.test {
@@ -54,7 +58,7 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "stackzy"
+            packageName = "Stackzy"
         }
     }
 }
