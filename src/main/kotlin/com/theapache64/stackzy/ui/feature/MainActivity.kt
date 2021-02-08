@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.feature
 
+import androidx.compose.ui.unit.IntSize
 import com.arkivanov.decompose.extensions.compose.jetbrains.rootComponent
 import com.theapache64.cyclone.core.Activity
 import com.theapache64.cyclone.core.Intent
@@ -22,9 +23,12 @@ class MainActivity : Activity() {
 
         setContent(
             title = R.string.app_name,
-            undecorated = true
+            undecorated = true,
+            size = IntSize(1024, 600),
         ) {
-            StackzyTheme {
+            StackzyTheme(
+                title = R.string.app_name
+            ) {
                 rootComponent(factory = ::NavHostComponent)
                     .render()
             }

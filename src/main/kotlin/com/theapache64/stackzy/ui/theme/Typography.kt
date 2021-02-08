@@ -59,7 +59,7 @@ val StackzyTypography = Typography(
     ),
     button = TextStyle(
         fontSize = 14.sp,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Bold
     ),
     caption = TextStyle(
         fontSize = 12.sp,

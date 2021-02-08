@@ -1,5 +1,7 @@
 package com.theapache64.stackzy.ui.common
 
+import androidx.compose.desktop.AppManager
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -8,14 +10,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowCircleDown
-import androidx.compose.material.icons.outlined.ArrowCircleUp
 import androidx.compose.material.icons.outlined.HighlightOff
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.WindowDraggableArea
 
+/**
+ * A common toolbar to provide close, minimise and maximize on main window
+ */
+@ExperimentalFoundationApi
 @Composable
 fun ToolBar(
     title: String = "",
@@ -25,34 +32,55 @@ fun ToolBar(
         modifier = modifier
             .height(24.dp)
             .background(MaterialTheme.colors.secondary)
-            .fillMaxWidth(),
+            .fillMaxWidth()
     ) {
 
         // Close Icon : X
         ToolBarIcon(
             icon = Icons.Outlined.HighlightOff,
             onClick = {
-
+                AppManager.focusedWindow?.close()
             }
         )
 
         // Minimise Icon : ⬇
         ToolBarIcon(
             icon = Icons.Outlined.ArrowCircleDown,
-            onClick = {}
-        )
-
-        // Maximize Icon : ⬆️
-        ToolBarIcon(
-            icon = Icons.Outlined.ArrowCircleUp,
-            onClick = {}
+            onClick = {
+                AppManager.focusedWindow?.minimize()
+            }
         )
 
         WindowDraggableArea(
             modifier = Modifier
                 .fillMaxSize()
+            /*
+            // Commenting due to https://github.com/JetBrains/compose-jb/issues/357. Feel free to uncomment once fixed.
+            .combinedClickable(
+                onClick = {
+                    println("Clicked!")
+                },
+                onDoubleClick = {
+                    println("Double clicked")
+                }
+            )*/
+
         ) {
-            Text(text = title)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 10.dp),
+                    style = MaterialTheme.typography.body2,
+                    textAlign = TextAlign.End
+                )
+            }
         }
     }
 

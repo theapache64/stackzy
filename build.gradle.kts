@@ -3,20 +3,20 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.4.21-2"
+    val kotlinVersion = "1.4.30"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.3.0-build146"
+    id("org.jetbrains.compose") version "0.3.0-build150"
 }
 
 group = "com.theapache64"
 version = "1.0.0-alpha01"
 
 repositories {
+    mavenLocal()
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
-    mavenLocal()
 }
 
 dependencies {
@@ -37,9 +37,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.1.7"
-    implementation("com.arkivanov.decompose:decompose:$decomposeVersion")
-    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.1.7")
+    val decomposeVersion = "0.1.8"
+    implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
     // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
     implementation("com.theapache64:retrosheet:1.2.2")
@@ -51,6 +51,7 @@ tasks.test {
 
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "11"
+    // kotlinOptions.freeCompilerArgs += "-Xallow-unstable-dependencies"
 }
 
 compose.desktop {

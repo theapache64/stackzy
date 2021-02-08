@@ -10,13 +10,21 @@ import androidx.compose.ui.graphics.Color
 import com.theapache64.stackzy.ui.common.ToolBar
 
 // Colors
-val TelegramBlue = Color(48, 163, 230)
+private val TelegramBlue = Color(48, 163, 230)
+private val WoodSmoke = Color(24, 25, 29)
+private val OuterSpace = Color(53, 60, 67)
+private val BrightGray = Color(58, 64, 71)
 
 // Color set
 val LightTheme = lightColors()
 val DarkTheme = darkColors(
     primary = TelegramBlue,
-    secondary = Color(40, 46, 51)
+    onPrimary = Color.White,
+
+    secondary = BrightGray,
+    onSecondary = Color.White,
+
+    surface = WoodSmoke,
 )
 
 @Composable
