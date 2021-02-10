@@ -4,6 +4,7 @@ import com.theapache64.stackzy.data.repo.CategoriesRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,8 +50,8 @@ class SplashViewModel @Inject constructor(
                             // Cache libraries
                             librariesRepo.cacheLibraries(r2.data)
 
-                            println("${categoriesRepo.getCachedCategories()?.size} categories cached")
-                            println("${librariesRepo.getCachedLibraries()?.size} libraries cached")
+                            Arbor.d("${categoriesRepo.getCachedCategories()?.size} categories cached")
+                            Arbor.d("${librariesRepo.getCachedLibraries()?.size} libraries cached")
 
                             _isSyncFinished.value = true
                         } else {
