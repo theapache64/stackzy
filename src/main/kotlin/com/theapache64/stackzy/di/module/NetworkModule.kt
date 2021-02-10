@@ -12,11 +12,13 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
+
 @Module
 class NetworkModule {
 
     companion object {
         const val TABLE_CATEGORIES = "categories"
+        const val TABLE_LIBRARIES = "libraries"
     }
 
     @Provides
@@ -27,7 +29,7 @@ class NetworkModule {
                 "id", "name"
             )
             .addSheet(
-                sheetName = "libraries",
+                sheetName = TABLE_LIBRARIES,
                 "id", "name", "package_name", "category", "website"
             )
             .build()

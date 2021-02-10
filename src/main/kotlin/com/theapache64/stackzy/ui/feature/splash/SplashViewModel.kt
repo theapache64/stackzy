@@ -1,16 +1,19 @@
 package com.theapache64.stackzy.ui.feature.splash
 
 import com.theapache64.stackzy.data.repo.CategoriesRepo
+import com.theapache64.stackzy.data.repo.LibrariesRepo
+import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.utils.calladapter.flow.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
-    private val categoriesRepo: CategoriesRepo
+    private val categoriesRepo: CategoriesRepo,
+    private val librariesRepo: LibrariesRepo
 ) {
 
     private val _isSyncFinished = MutableStateFlow(false)
@@ -23,22 +26,43 @@ class SplashViewModel @Inject constructor(
         syncData()
     }
 
+    /**
+     * To sync remote data with local
+     */
     private fun syncData() {
         GlobalScope.launch {
-            categoriesRepo.getCategories()
-                .collect {
-                    when (it) {
-                        is Resource.Loading -> {
-                            _isSyncFinished.value = false
-                            _isSyncFailed.value = null
-                        }
-                        is Resource.Success -> {
-                            _isSyncFinished.value = true
-                        }
-                        is Resource.Error -> {
-                            _isSyncFailed.value = it.errorData
+            categoriesRepo.getRemoteCategories()
+                .zip(librariesRepo.getRemoteLibraries()) { r1, r2 ->
+
+                    if (r1 is Resource.Loading && r2 is Resource.Loading) {
+                        _isSyncFinished.value = false
+                        _isSyncFailed.value = null
+                    } else if (r1 is Resource.Success && r2 is Resource.Success) {
+
+                        // Cache categories
+                        categoriesRepo.cacheCategories(r1.data)
+
+                        // Cache libraries
+                        librariesRepo.cacheLibraries(r2.data)
+
+                        println("${categoriesRepo.getCachedCategories()?.size} categories cached")
+                        println("${librariesRepo.getCachedLibraries()?.size} libraries cached")
+
+                        _isSyncFinished.value = true
+                    } else {
+                        _isSyncFailed.value = when {
+                            r1 is Resource.Error -> {
+                                r1.errorData
+                            }
+                            r2 is Resource.Error -> {
+                                r2.errorData
+                            }
+                            else -> {
+                                R.string.all_error_unknown
+                            }
                         }
                     }
+
                 }
         }
     }
