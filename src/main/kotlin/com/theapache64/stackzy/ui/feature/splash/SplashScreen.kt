@@ -14,7 +14,8 @@ import com.theapache64.stackzy.ui.common.Logo
 
 @ExperimentalFoundationApi
 @Composable
-fun SplashScreen() {
+fun SplashScreen(splashScreenViewModel: SplashScreenViewModel) {
+    println("Splash : $splashScreenViewModel")
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

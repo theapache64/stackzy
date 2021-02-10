@@ -1,4 +1,6 @@
 package com.theapache64.stackzy.ui.feature.splash
 
-class SplashScreenViewModel {
+import javax.inject.Inject
+
+class SplashScreenViewModel @Inject constructor() {
 }

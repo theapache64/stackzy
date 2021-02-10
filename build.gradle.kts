@@ -6,6 +6,7 @@ plugins {
     val kotlinVersion = "1.4.30"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
+    id("org.jetbrains.kotlin.plugin.serialization") version kotlinVersion
     id("org.jetbrains.compose") version "0.3.0-build152"
 }
 
@@ -43,6 +44,11 @@ dependencies {
 
     // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
     implementation("com.theapache64:retrosheet:1.2.2")
+
+    // Kotlinx.Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+
 }
 
 tasks.test {
