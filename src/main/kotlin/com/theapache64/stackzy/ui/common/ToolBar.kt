@@ -66,25 +66,28 @@ fun ToolBar(
             )*/
 
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 10.dp),
-                    style = MaterialTheme.typography.body2,
-                    textAlign = TextAlign.End
-                )
-            }
+            Title(title)
         }
     }
+}
 
-
+@Composable
+private fun Title(title: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 10.dp),
+            style = MaterialTheme.typography.body2,
+            textAlign = TextAlign.End
+        )
+    }
 }
 
 @Composable
@@ -98,7 +101,7 @@ private fun ToolBarIcon(
         onClick = onClick
     ) {
         Icon(
-            modifier = Modifier.padding(7.dp),
+            modifier = Modifier.padding(3.dp),
             imageVector = icon,
             contentDescription = ""
         )

@@ -6,7 +6,7 @@ plugins {
     val kotlinVersion = "1.4.30"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.3.0-build150"
+    id("org.jetbrains.compose") version "0.3.0-build152"
 }
 
 group = "com.theapache64"
@@ -51,7 +51,7 @@ tasks.test {
 
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "11"
-    // kotlinOptions.freeCompilerArgs += "-Xallow-unstable-dependencies"
+    kotlinOptions.freeCompilerArgs += "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi"
 }
 
 compose.desktop {
