@@ -7,6 +7,7 @@ import com.theapache64.stackzy.utils.calladapter.flow.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,39 +32,48 @@ class SplashViewModel @Inject constructor(
      */
     private fun syncData() {
         GlobalScope.launch {
-            categoriesRepo.getRemoteCategories()
-                .zip(librariesRepo.getRemoteLibraries()) { r1, r2 ->
+            try {
+                categoriesRepo.getRemoteCategories()
+                    .zip(librariesRepo.getRemoteLibraries()) { r1, r2 ->
 
-                    if (r1 is Resource.Loading && r2 is Resource.Loading) {
-                        _isSyncFinished.value = false
-                        _isSyncFailed.value = null
-                    } else if (r1 is Resource.Success && r2 is Resource.Success) {
+                        if (r1 is Resource.Loading && r2 is Resource.Loading) {
+                            // Both request are loading
+                            _isSyncFinished.value = false
+                            _isSyncFailed.value = null
+                        } else if (r1 is Resource.Success && r2 is Resource.Success) {
+                            // Both requests succeeded
 
-                        // Cache categories
-                        categoriesRepo.cacheCategories(r1.data)
+                            // Cache categories
+                            categoriesRepo.cacheCategories(r1.data)
 
-                        // Cache libraries
-                        librariesRepo.cacheLibraries(r2.data)
+                            // Cache libraries
+                            librariesRepo.cacheLibraries(r2.data)
 
-                        println("${categoriesRepo.getCachedCategories()?.size} categories cached")
-                        println("${librariesRepo.getCachedLibraries()?.size} libraries cached")
+                            println("${categoriesRepo.getCachedCategories()?.size} categories cached")
+                            println("${librariesRepo.getCachedLibraries()?.size} libraries cached")
 
-                        _isSyncFinished.value = true
-                    } else {
-                        _isSyncFailed.value = when {
-                            r1 is Resource.Error -> {
-                                r1.errorData
-                            }
-                            r2 is Resource.Error -> {
-                                r2.errorData
-                            }
-                            else -> {
-                                R.string.all_error_unknown
+                            _isSyncFinished.value = true
+                        } else {
+                            _isSyncFailed.value = when {
+                                r1 is Resource.Error -> {
+                                    r1.errorData
+                                }
+                                r2 is Resource.Error -> {
+                                    r2.errorData
+                                }
+                                else -> {
+                                    R.string.all_error_unknown
+                                }
                             }
                         }
-                    }
 
-                }
+                    }
+                    .collect()
+
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
+                _isSyncFailed.value = e.message
+            }
         }
     }
 

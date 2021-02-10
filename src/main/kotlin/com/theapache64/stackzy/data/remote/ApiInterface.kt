@@ -13,6 +13,7 @@ interface ApiInterface {
     fun getCategories(): Flow<Resource<List<Category>>>
 
     @Read("SELECT * ")
+    @GET(NetworkModule.TABLE_LIBRARIES)
     fun getLibraries(): Flow<Resource<List<Library>>>
 
 }
