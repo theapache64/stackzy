@@ -11,7 +11,7 @@ class SplashScreenComponent(
 ) : Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var splashScreenViewModel: SplashScreenViewModel
+    lateinit var splashViewModel: SplashViewModel
 
     init {
         DaggerSplashComponent
@@ -21,6 +21,6 @@ class SplashScreenComponent(
 
     @Composable
     override fun render() {
-        SplashScreen(splashScreenViewModel)
+        SplashScreen(splashViewModel)
     }
 }

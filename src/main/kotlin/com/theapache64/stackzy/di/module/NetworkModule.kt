@@ -3,6 +3,7 @@ package com.theapache64.stackzy.di.module
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
+import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -48,6 +49,7 @@ class NetworkModule {
             .client(okHttpClient)
             .baseUrl("https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/")
             .addConverterFactory(Json.asConverterFactory(jsonContentType))
+            .addCallAdapterFactory(FlowResourceCallAdapterFactory())
             .build()
     }
 
