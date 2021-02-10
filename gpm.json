@@ -83,6 +83,34 @@
     "name": "Arbor",
     "description": "Like Timber, just different."
    }
+  },
+  {
+   "id": 7,
+   "type": "testImplementation",
+   "installed_name": "mockito",
+   "gpm_dep": {
+    "artifact_id": "mockito-core",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/org.mockito/mockito-core",
+    "get_from": "Central",
+    "group_id": "org.mockito",
+    "name": "Mockito Core",
+    "description": "Mockito mock objects library core API and implementation"
+   }
+  },
+  {
+   "id": 8,
+   "type": "testImplementation",
+   "installed_name": "expekt",
+   "gpm_dep": {
+    "artifact_id": "expekt",
+    "default_type": "implementation",
+    "docs": "https://mvnrepository.com/artifact/com.theapache64/expekt",
+    "get_from": "JCenter",
+    "group_id": "com.theapache64",
+    "name": "Expekt",
+    "description": "An assertion library for Kotlin"
+   }
   }
  ]
 }

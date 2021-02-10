@@ -18,6 +18,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -33,12 +34,13 @@ dependencies {
     val daggerVersion = "2.31.2"
     implementation("com.google.dagger:dagger:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
+    kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
 
     // Retrofit : A type-safe HTTP client for Android and Java.
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.1.8"
+    val decomposeVersion = "0.1.7-1"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
@@ -52,6 +54,18 @@ dependencies {
 
     // Arbor : Like Timber, just different.
     implementation("com.ToxicBakery.logging:arbor-jvm:1.34.109")
+
+    testImplementation("org.mockito:mockito-inline:3.7.7")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    // DaggerMock
+    testImplementation("com.github.fabioCollini.daggermock:daggermock:0.8.5")
+    testImplementation("com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5")
+
+    // Mockito Core : Mockito mock objects library core API and implementation
+    testImplementation("org.mockito:mockito-core:3.7.7")
+
+    // Expekt : An assertion library for Kotlin
+    testImplementation("com.theapache64:expekt:0.0.1")
 }
 
 tasks.test {

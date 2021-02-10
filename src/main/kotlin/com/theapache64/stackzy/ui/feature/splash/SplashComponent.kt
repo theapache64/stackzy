@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.di.component
+package com.theapache64.stackzy.ui.feature.splash
 
 import com.theapache64.stackzy.di.module.NetworkModule
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent

@@ -9,17 +9,17 @@ import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
 
-internal class CategoriesRepoTest {
+internal class LibrariesRepoTest {
 
     @get:Rule
     val daggerMockRule = MyDaggerMockRule()
 
     @InjectFromComponent
-    private lateinit var categoriesRepo: CategoriesRepo
+    private lateinit var librariesRepo: LibrariesRepo
 
     @Test
-    fun `Categories have data`() = runBlockingUnitTest {
-        categoriesRepo.getRemoteCategories()
+    fun `Libraries have data`() = runBlockingUnitTest {
+        librariesRepo.getRemoteLibraries()
             .collect {
                 when (it) {
                     is Resource.Loading -> {
