@@ -11,6 +11,8 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import javax.inject.Singleton
+
 
 
 @Module
@@ -21,6 +23,7 @@ class NetworkModule {
         const val TABLE_LIBRARIES = "libraries"
     }
 
+    @Singleton
     @Provides
     fun provideRetrosheetInterceptor(): RetrosheetInterceptor {
         return RetrosheetInterceptor.Builder()
@@ -35,6 +38,7 @@ class NetworkModule {
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideOkHttpClient(retrosheetInterceptor: RetrosheetInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
@@ -43,6 +47,7 @@ class NetworkModule {
     }
 
     @ExperimentalSerializationApi
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val jsonContentType = MediaType.parse("application/json")!!
@@ -55,6 +60,7 @@ class NetworkModule {
             .build()
     }
 
+    @Singleton
     @Provides
     fun provideApiInterface(retrofit: Retrofit): ApiInterface {
         return retrofit.create(ApiInterface::class.java)

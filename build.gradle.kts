@@ -51,6 +51,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
+    implementation("com.malinskiy:adam:0.2.3")
 
     // Arbor : Like Timber, just different.
     implementation("com.ToxicBakery.logging:arbor-jvm:1.34.109")
@@ -66,6 +67,7 @@ dependencies {
 
     // Expekt : An assertion library for Kotlin
     testImplementation("com.theapache64:expekt:0.0.1")
+
 }
 
 tasks.test {
