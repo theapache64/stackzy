@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -15,7 +17,9 @@ import com.theapache64.stackzy.ui.common.Logo
 @ExperimentalFoundationApi
 @Composable
 fun SplashScreen(splashViewModel: SplashViewModel) {
-    println("Splash : $splashViewModel")
+
+    val isSyncFinished by splashViewModel.isSyncFinished.collectAsState()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -26,13 +30,15 @@ fun SplashScreen(splashViewModel: SplashViewModel) {
                 .align(Alignment.Center)
         )
 
-        LoadingText(
-            message = "Syncing...",
-            modifier = Modifier
-                .padding(bottom = 30.dp)
-                .align(Alignment.BottomCenter)
+        if (isSyncFinished.not()) {
+            LoadingText(
+                message = "Syncing...",
+                modifier = Modifier
+                    .padding(bottom = 30.dp)
+                    .align(Alignment.BottomCenter)
 
-        )
+            )
+        }
     }
 }
 
