@@ -16,7 +16,6 @@ class AdbRepoTest {
 
     @Test
     fun `Libraries have data`() = runBlockingUnitTest {
-        println(System.getenv("ANDROID_HOME"))
         adbRepo.runIt()
     }
 }

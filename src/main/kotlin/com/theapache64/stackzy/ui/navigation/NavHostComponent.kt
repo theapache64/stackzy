@@ -6,6 +6,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.malinskiy.adam.request.device.Device
 import com.theapache64.stackzy.ui.feature.device.DeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 
@@ -45,7 +46,14 @@ class NavHostComponent(
     /**
      * Invoked when splash finish data sync
      */
-    fun onSplashSyncFinished() {
+    private fun onSplashSyncFinished() {
         router.push(Config.Device)
+    }
+
+    /**
+     * Invoked when a device selected
+     */
+    private fun onDeviceSelected(device: Device) {
+
     }
 }
