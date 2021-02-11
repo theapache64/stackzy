@@ -3,8 +3,10 @@ package com.theapache64.stackzy.ui.navigation
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
+import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.theapache64.stackzy.ui.feature.device.DeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 
 class NavHostComponent(
@@ -13,6 +15,7 @@ class NavHostComponent(
 
     private sealed class Config : Parcelable {
         object Splash : Config()
+        object Device : Config()
     }
 
     private val router = router<Config, Component>(
@@ -23,7 +26,11 @@ class NavHostComponent(
     private fun createScreenComponent(config: Config, componentContext: ComponentContext): Component {
         return when (config) {
             Config.Splash -> SplashScreenComponent(
-                componentContext
+                componentContext = componentContext,
+                onSyncFinished = ::onSplashSyncFinished
+            )
+            Config.Device -> DeviceScreenComponent(
+                componentContext = componentContext
             )
         }
     }
@@ -33,5 +40,12 @@ class NavHostComponent(
         Children(routerState = router.state) { child, _ ->
             child.render()
         }
+    }
+
+    /**
+     * Invoked when splash finish data sync
+     */
+    fun onSplashSyncFinished() {
+        router.push(Config.Device)
     }
 }

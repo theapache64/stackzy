@@ -6,7 +6,8 @@ import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
 class SplashScreenComponent(
-    private val componentContext: ComponentContext
+    private val componentContext: ComponentContext,
+    private val onSyncFinished: () -> Unit
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -20,6 +21,10 @@ class SplashScreenComponent(
 
     @Composable
     override fun render() {
-        SplashScreen(splashViewModel)
+        SplashScreen(
+            splashViewModel = splashViewModel,
+            onSyncFinished = onSyncFinished
+        )
     }
+
 }

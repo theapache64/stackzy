@@ -72,6 +72,7 @@ dependencies {
 
 tasks.test {
     useJUnit()
+    environment("ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "/home/theapache64/Android/Sdk")
 }
 
 tasks.withType<KotlinCompile>() {

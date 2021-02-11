@@ -6,6 +6,11 @@ import com.malinskiy.adam.request.device.ListDevicesRequest
 import javax.inject.Inject
 
 class AdbRepo @Inject constructor() {
+
+    init {
+
+    }
+
     suspend fun runIt() {
         val result = StartAdbInteractor().execute()
         println("Result: $result")
@@ -16,4 +21,5 @@ class AdbRepo @Inject constructor() {
     init {
 
     }
+
 }

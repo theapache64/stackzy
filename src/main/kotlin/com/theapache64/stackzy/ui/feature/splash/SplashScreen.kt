@@ -21,10 +21,18 @@ import com.theapache64.stackzy.util.R
 
 @ExperimentalFoundationApi
 @Composable
-fun SplashScreen(splashViewModel: SplashViewModel) {
+fun SplashScreen(
+    splashViewModel: SplashViewModel,
+    onSyncFinished: () -> Unit
+) {
 
     val isSyncFinished by splashViewModel.isSyncFinished.collectAsState()
     val syncFailedReason by splashViewModel.isSyncFailed.collectAsState()
+
+    if (isSyncFinished) {
+        onSyncFinished()
+        return
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
