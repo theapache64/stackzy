@@ -2,8 +2,7 @@
 
 # stackzy
 
-![buildStatus](https://img.shields.io/github/workflow/status/theapache64/stackzy/Java%20CI%20with%20Gradle?style=plastic)
-![latestVersion](https://img.shields.io/github/v/release/theapache64/stackzy)
+[comment]: <> (![latestVersion]&#40;https://img.shields.io/github/v/release/theapache64/stackzy&#41;)
 <a href="https://twitter.com/theapache64" target="_blank">
 <img alt="Twitter: theapache64" src="https://img.shields.io/twitter/follow/theapache64.svg?style=social" />
 </a>
@@ -20,6 +19,12 @@
 1. Choose `Device`
 1. Choose `Application`
 1. Press `GO!`
+
+## 🥼 Test
+
+Before executing any test, ensure
+
+- A device has connected to the adb
 
 ## ✍️ Author
 

@@ -15,7 +15,7 @@ class AdbRepoTest {
     private lateinit var adbRepo: AdbRepo
 
     @Test
-    fun `Libraries have data`() = runBlockingUnitTest {
-        adbRepo.runIt()
+    fun `Device list works`() = runBlockingUnitTest {
+
     }
 }
