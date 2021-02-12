@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -15,6 +16,8 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.ui.common.ContentScreen
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.util.R
+
+private const val GRID_SIZE = 2
 
 @Composable
 fun SelectAppScreen(
@@ -30,8 +33,13 @@ fun SelectAppScreen(
         title = R.string.select_app_title,
         onBackClicked = onBackClicked,
         topRightSlot = {
+
+            // SearchBox
             OutlinedTextField(
                 value = searchKeyword,
+                label = {
+                    Text(text = R.string.select_app_label_search)
+                },
                 onValueChange = {
                     searchKeyword = it
                     selectAppViewModel.onSearchKeywordChanged(it)
@@ -40,26 +48,31 @@ fun SelectAppScreen(
                     .padding(start = 200.dp)
                     .fillMaxWidth()
             )
+
         }
     ) {
-        LazyColumn {
-            items(apps.chunked(2)) { app ->
-                Row {
-                    Selectable(
-                        data = app[0],
-                        icon = {
-                            AppIcon()
-                        },
-                        onSelected = onAppSelected
-                    )
 
-                    Selectable(
-                        data = app[1],
-                        icon = {
-                            AppIcon()
-                        },
-                        onSelected = onAppSelected
-                    )
+        // Grid
+        LazyColumn {
+            items(
+                items = if (apps.size > GRID_SIZE) {
+                    apps.chunked(GRID_SIZE)
+                } else {
+                    listOf(apps)
+                }
+            ) { appSet ->
+                Row {
+                    appSet.map { app ->
+
+                        // GridItem
+                        Selectable(
+                            data = app,
+                            icon = {
+                                AppIcon()
+                            },
+                            onSelected = onAppSelected
+                        )
+                    }
                 }
 
                 Spacer(
@@ -70,7 +83,8 @@ fun SelectAppScreen(
     }
 }
 
-private fun AppIcon() {
+@Composable
+fun AppIcon() {
     Image(
         modifier = Modifier
             .padding(
