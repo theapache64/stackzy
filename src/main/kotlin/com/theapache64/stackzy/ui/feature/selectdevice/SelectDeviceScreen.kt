@@ -23,10 +23,10 @@ import com.theapache64.stackzy.util.R
 
 @Composable
 fun SelectDeviceScreen(
-    deviceViewModel: SelectDeviceViewModel,
+    selectDeviceViewModel: SelectDeviceViewModel,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
-    val devices by deviceViewModel.connectedDevices.collectAsState(listOf())
+    val devices by selectDeviceViewModel.connectedDevices.collectAsState(listOf())
 
     Content(
         devices = devices,

@@ -12,16 +12,18 @@ class SelectDeviceScreenComponent(
 ) : Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var deviceViewModel: SelectDeviceViewModel
+    lateinit var selectDeviceViewModel: SelectDeviceViewModel
 
     init {
-        DaggerDeviceComponent.create().inject(this)
+        DaggerSelectDeviceComponent
+            .create()
+            .inject(this)
     }
 
     @Composable
     override fun render() {
         SelectDeviceScreen(
-            deviceViewModel,
+            selectDeviceViewModel,
             onDeviceSelected
         )
     }

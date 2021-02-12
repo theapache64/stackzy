@@ -9,6 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+/**
+ * To show full screen error with centered title and message
+ */
 @Composable
 fun FullScreenError(
     modifier: Modifier = Modifier,
