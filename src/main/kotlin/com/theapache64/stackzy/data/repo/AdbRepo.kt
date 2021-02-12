@@ -8,6 +8,7 @@ import com.malinskiy.adam.request.device.DeviceState
 import com.malinskiy.adam.request.device.ListDevicesRequest
 import com.malinskiy.adam.request.pkg.PmListRequest
 import com.malinskiy.adam.request.prop.GetPropRequest
+import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import kotlinx.coroutines.GlobalScope
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class AdbRepo @Inject constructor() {
 
     companion object {
+        const val PATH_PACKAGE_PREFIX = "package:"
         private const val DETAIL_UNKNOWN = "Unknown"
     }
 
@@ -35,41 +37,35 @@ class AdbRepo @Inject constructor() {
 
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
-            val isAdbStarted = startAdbInteractor.execute()
-            if (isAdbStarted) {
+            deviceEventsChannel = adb.execute(
+                request = AsyncDeviceMonitorRequest(),
+                scope = GlobalScope
+            )
 
-                deviceEventsChannel = adb.execute(
-                    request = AsyncDeviceMonitorRequest(),
-                    scope = GlobalScope
-                )
+            adb.execute(request = ListDevicesRequest())
 
-                adb.execute(
-                    request = ListDevicesRequest()
-                )
+            for (currentDeviceList in deviceEventsChannel!!) {
 
-                for (currentDeviceList in deviceEventsChannel!!) {
+                val deviceList = currentDeviceList
+                    .filter { it.state == DeviceState.DEVICE }
+                    .map { device ->
+                        val props = adb.execute(
+                            request = GetPropRequest(),
+                            serial = device.serial
+                        )
 
-                    val deviceList = currentDeviceList
-                        .filter { it.state == DeviceState.DEVICE }
-                        .map { device ->
-                            val props = adb.execute(
-                                request = GetPropRequest(),
-                                serial = device.serial
-                            )
+                        val deviceProductName = props["ro.product.name"]?.singleLine() ?: DETAIL_UNKNOWN
+                        val deviceProductModel = props["ro.product.model"]?.singleLine() ?: DETAIL_UNKNOWN
 
-                            val deviceProductName = props["ro.product.name"]?.singleLine() ?: DETAIL_UNKNOWN
-                            val deviceProductModel = props["ro.product.model"]?.singleLine() ?: DETAIL_UNKNOWN
+                        AndroidDevice(
+                            deviceProductName,
+                            deviceProductModel,
+                            device
+                        )
+                    }
 
-                            AndroidDevice(
-                                deviceProductName,
-                                deviceProductModel,
-                                device
-                            )
-                        }
-
-                    // Finally emitting result
-                    emit(deviceList)
-                }
+                // Finally emitting result
+                emit(deviceList)
             }
         }
     }
@@ -83,31 +79,41 @@ class AdbRepo @Inject constructor() {
      */
     suspend fun getInstalledApps(device: Device): List<AndroidApp> {
 
-        val isAdbStarted = startAdbInteractor.execute()
-        if (isAdbStarted) {
+        val installedPackages = adb.execute(
+            request = PmListRequest(
+                includePath = false
+            ),
+            serial = device.serial
+        )
 
-            val installedPackages = adb.execute(
-                request = PmListRequest(
-                    includePath = false
-                ),
-                serial = device.serial
-            )
-
-            return installedPackages
-                .filter { it.name.isNotBlank() }
-                .map {
-                    println(it.name)
-                    AndroidApp(it)
-                }
-        }
-
-        return listOf()
+        return installedPackages
+            .filter { it.name.isNotBlank() }
+            .map {
+                AndroidApp(it)
+            }
     }
-
 
 
     private fun String.singleLine(): String {
         return this.replace("\n", "")
+    }
+
+    suspend fun getApkPath(
+        androidDevice: AndroidDevice,
+        androidApp: AndroidApp
+    ): String? {
+        val cmd = "pm path ${androidApp.appPackage.name}"
+        println(cmd)
+        val response = adb.execute(
+            request = ShellCommandRequest(
+                cmd
+            ),
+            serial = androidDevice.device.serial
+        )
+
+        return response.output
+            .takeIf { it.contains(PATH_PACKAGE_PREFIX) }
+            ?.replace(PATH_PACKAGE_PREFIX, "")?.trim()
     }
 }
 

@@ -23,7 +23,10 @@ class NavHostComponent(
         object Splash : Config()
         object SelectDevice : Config()
         data class SelectApp(val androidDevice: AndroidDevice) : Config()
-        data class AppDetail(val androidApp: AndroidApp) : Config()
+        data class AppDetail(
+            val androidDevice: AndroidDevice,
+            val androidApp: AndroidApp
+        ) : Config()
     }
 
     private val router = router<Config, Component>(
@@ -58,6 +61,7 @@ class NavHostComponent(
             is Config.AppDetail -> AppDetailScreenComponent(
                 componentContext = componentContext,
                 selectedApp = config.androidApp,
+                selectedDevice = config.androidDevice,
                 onLibrarySelected = ::onLibrarySelected,
                 onBackClicked = ::onBackClicked
             )
@@ -88,8 +92,16 @@ class NavHostComponent(
     /**
      * Invoked when the app got selected
      */
-    private fun onAppSelected(androidApp: AndroidApp) {
-        router.push(Config.AppDetail(androidApp))
+    private fun onAppSelected(
+        androidDevice: AndroidDevice,
+        androidApp: AndroidApp
+    ) {
+        router.push(
+            Config.AppDetail(
+                androidDevice = androidDevice,
+                androidApp = androidApp
+            )
+        )
     }
 
     /**

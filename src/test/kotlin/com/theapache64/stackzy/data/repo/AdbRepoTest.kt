@@ -1,5 +1,8 @@
 package com.theapache64.stackzy.data.repo
 
+import com.malinskiy.adam.request.pkg.Package
+import com.theapache64.expekt.should
+import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import it.cosenonjaviste.daggermock.InjectFromComponent
@@ -40,5 +43,31 @@ class AdbRepoTest {
             // not empty. one or more devices are connected
             assert(true)
         }
+    }
+
+    @Test
+    fun `Fetch path works`() = runBlockingUnitTest {
+        val device = adbRepo.watchConnectedDevice().first().first()
+        val app = "com.whatsapp"
+        val apkPath = adbRepo.getApkPath(
+            device,
+            AndroidApp(
+                Package(app)
+            )
+        )
+        apkPath.should.startWith("/data/app/")
+    }
+
+    @Test
+    fun `Fetch path fails for invalid package`() = runBlockingUnitTest {
+        val device = adbRepo.watchConnectedDevice().first().first()
+        val app = "dffgfgdf"
+        val apkPath = adbRepo.getApkPath(
+            device,
+            AndroidApp(
+                Package(app)
+            )
+        )
+        apkPath.should.`null`
     }
 }

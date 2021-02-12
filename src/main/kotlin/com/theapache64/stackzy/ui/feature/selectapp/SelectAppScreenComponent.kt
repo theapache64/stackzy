@@ -10,7 +10,7 @@ import javax.inject.Inject
 class SelectAppScreenComponent(
     componentContext: ComponentContext,
     val selectedDevice: AndroidDevice,
-    val onAppSelected: (AndroidApp) -> Unit,
+    val onAppSelected: (AndroidDevice, AndroidApp) -> Unit,
     val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 
@@ -30,7 +30,9 @@ class SelectAppScreenComponent(
         SelectAppScreen(
             selectAppViewModel = selectAppViewModel,
             onBackClicked = onBackClicked,
-            onAppSelected = onAppSelected
+            onAppSelected = {
+                onAppSelected(selectedDevice, it)
+            }
         )
     }
 }
