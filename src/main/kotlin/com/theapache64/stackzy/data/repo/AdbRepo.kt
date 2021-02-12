@@ -90,7 +90,9 @@ class AdbRepo @Inject constructor() {
                 serial = device.serial
             )
 
-            return installedPackages.map {
+            return installedPackages
+                .filter { it.name.isNotBlank() }
+                .map {
                 AndroidApp(it)
             }
         }

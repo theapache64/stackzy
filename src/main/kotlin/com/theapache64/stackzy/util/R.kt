@@ -3,6 +3,7 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val apps_cd_app_icon = "App Icon"
         const val select_app_cd_go_back = "Go back"
         const val select_app_title = "Select Application"
         const val device_cd_device_icon = "Device icon"

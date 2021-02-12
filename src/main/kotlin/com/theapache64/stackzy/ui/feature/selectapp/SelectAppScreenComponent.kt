@@ -29,7 +29,8 @@ class SelectAppScreenComponent(
     override fun render() {
         SelectAppScreen(
             selectAppViewModel = selectAppViewModel,
-            onBackClicked = onBackClicked
+            onBackClicked = onBackClicked,
+            onAppSelected = onAppSelected
         )
     }
 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SelectAppViewModel @Inject constructor(
-    val selectedDevice: AndroidDevice,
+    private val selectedDevice: AndroidDevice,
     val adbRepo: AdbRepo
 ) {
     private val _apps = MutableStateFlow(listOf<AndroidApp>())
@@ -18,7 +18,7 @@ class SelectAppViewModel @Inject constructor(
 
     init {
         GlobalScope.launch {
-
+            _apps.value = adbRepo.getInstalledApps(selectedDevice.device)
         }
     }
 }
