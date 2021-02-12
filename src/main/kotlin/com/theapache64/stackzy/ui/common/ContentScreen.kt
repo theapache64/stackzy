@@ -21,6 +21,7 @@ fun ContentScreen(
     title: String,
     modifier: Modifier = Modifier,
     onBackClicked: (() -> Unit)? = null,
+    topRightSlot: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Column(
@@ -48,6 +49,8 @@ fun ContentScreen(
                 text = title,
                 style = MaterialTheme.typography.h3
             )
+
+            topRightSlot?.invoke()
         }
 
         Spacer(

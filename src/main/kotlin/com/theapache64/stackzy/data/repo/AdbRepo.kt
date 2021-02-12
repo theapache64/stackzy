@@ -85,7 +85,7 @@ class AdbRepo @Inject constructor() {
 
             val installedPackages = adb.execute(
                 request = PmListRequest(
-                    includePath = true
+                    includePath = false
                 ),
                 serial = device.serial
             )
@@ -93,8 +93,9 @@ class AdbRepo @Inject constructor() {
             return installedPackages
                 .filter { it.name.isNotBlank() }
                 .map {
-                AndroidApp(it)
-            }
+                    println(it.name)
+                    AndroidApp(it)
+                }
         }
 
         return listOf()

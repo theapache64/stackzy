@@ -13,12 +13,20 @@ class SelectAppViewModel @Inject constructor(
     private val selectedDevice: AndroidDevice,
     val adbRepo: AdbRepo
 ) {
+
+
+    private var fullApps: List<AndroidApp>? = null
     private val _apps = MutableStateFlow(listOf<AndroidApp>())
     val apps: StateFlow<List<AndroidApp>> = _apps
 
     init {
         GlobalScope.launch {
-            _apps.value = adbRepo.getInstalledApps(selectedDevice.device)
+            fullApps = adbRepo.getInstalledApps(selectedDevice.device)
+            _apps.value = fullApps!!
         }
+    }
+
+    fun onSearchKeywordChanged(newKeyword: String) {
+        _apps.value = fullApps!!.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
     }
 }
