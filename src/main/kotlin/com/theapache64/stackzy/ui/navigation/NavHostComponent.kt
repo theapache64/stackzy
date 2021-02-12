@@ -9,6 +9,8 @@ import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
@@ -21,6 +23,7 @@ class NavHostComponent(
         object Splash : Config()
         object SelectDevice : Config()
         data class SelectApp(val androidDevice: AndroidDevice) : Config()
+        data class AppDetail(val androidApp: AndroidApp) : Config()
     }
 
     private val router = router<Config, Component>(
@@ -51,6 +54,13 @@ class NavHostComponent(
                 onAppSelected = ::onAppSelected,
                 onBackClicked = ::onBackClicked
             )
+
+            is Config.AppDetail -> AppDetailScreenComponent(
+                componentContext = componentContext,
+                selectedApp = config.androidApp,
+                onLibrarySelected = ::onLibrarySelected,
+                onBackClicked = ::onBackClicked
+            )
         }
     }
 
@@ -79,6 +89,13 @@ class NavHostComponent(
      * Invoked when the app got selected
      */
     private fun onAppSelected(androidApp: AndroidApp) {
+        router.push(Config.AppDetail(androidApp))
+    }
+
+    /**
+     * Invoked when library selected
+     */
+    private fun onLibrarySelected(library: Library) {
 
     }
 

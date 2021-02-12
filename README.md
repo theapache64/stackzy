@@ -20,6 +20,15 @@
 1. Choose `Application`
 1. Press `GO!`
 
+## 🏗️️ Built with
+
+- Compose Desktop
+- MVVM
+- Dagger2
+- Decompose
+- Coroutines
+
+
 ## 🥼 Test
 
 Before executing any test, ensure

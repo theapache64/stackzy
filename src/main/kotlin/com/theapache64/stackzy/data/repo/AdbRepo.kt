@@ -78,6 +78,9 @@ class AdbRepo @Inject constructor() {
         deviceEventsChannel?.cancel()
     }
 
+    /**
+     * To get installed app from given device
+     */
     suspend fun getInstalledApps(device: Device): List<AndroidApp> {
 
         val isAdbStarted = startAdbInteractor.execute()
@@ -101,8 +104,11 @@ class AdbRepo @Inject constructor() {
         return listOf()
     }
 
+
+
+    private fun String.singleLine(): String {
+        return this.replace("\n", "")
+    }
 }
 
-private fun String.singleLine(): String {
-    return this.replace("\n", "")
-}
+
