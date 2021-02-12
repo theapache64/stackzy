@@ -26,11 +26,14 @@ fun SelectDeviceScreen(
     selectDeviceViewModel: SelectDeviceViewModel,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
-    val devices by selectDeviceViewModel.connectedDevices.collectAsState(listOf())
 
+    val devices by selectDeviceViewModel.connectedDevices.collectAsState()
     Content(
         devices = devices,
-        onDeviceSelected = onDeviceSelected
+        onDeviceSelected = {
+            selectDeviceViewModel.removeConnectionWatcher()
+            onDeviceSelected(it)
+        }
     )
 }
 
@@ -39,47 +42,32 @@ fun Content(
     devices: List<AndroidDevice>,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        if (devices.isEmpty()) {
-            FullScreenError(
-                title = R.string.device_no_device_title,
-                message = R.string.device_no_device_message,
-            )
-        } else {
-            SelectDevice(
-                devices = devices,
-                onDeviceSelected = onDeviceSelected
-            )
-        }
-    }
-}
+    if (devices.isEmpty()) {
+        FullScreenError(
+            title = R.string.device_no_device_title,
+            message = R.string.device_no_device_message,
+        )
+    } else {
+        ContentScreen(
+            title = R.string.device_select_the_device
+        ) {
+            LazyColumn {
+                items(devices) { device ->
+                    DeviceItem(
+                        device = device,
+                        onDeviceSelected = onDeviceSelected
+                    )
 
-@Composable
-fun SelectDevice(
-    devices: List<AndroidDevice>,
-    modifier: Modifier = Modifier,
-    onDeviceSelected: (AndroidDevice) -> Unit
-) {
-    ContentScreen(
-        title = R.string.device_select_the_device
-    ) {
-        LazyColumn {
-            items(devices) { device ->
-                DeviceItem(
-                    device = device,
-                    onDeviceSelected = onDeviceSelected
-                )
-
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
+                    )
+                }
             }
         }
+
     }
 }
+
 
 @Composable
 fun DeviceItem(

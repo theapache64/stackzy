@@ -3,6 +3,7 @@ package com.theapache64.stackzy.ui.navigation
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
+import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
@@ -24,6 +25,13 @@ class NavHostComponent(
 
     private val router = router<Config, Component>(
         initialConfiguration = Config.SelectDevice,
+        /*initialConfiguration = Config.SelectApp(
+            AndroidDevice(
+                "Dummy Device",
+                "Dummy Name",
+                Device("DummySerial", DeviceState.DEVICE)
+            )
+        ),*/
         componentFactory = ::createScreenComponent
     )
 
@@ -38,9 +46,10 @@ class NavHostComponent(
                 onDeviceSelected = ::onDeviceSelected
             )
             is Config.SelectApp -> SelectAppScreenComponent(
-                selectedDevice = config.androidDevice,
                 componentContext = componentContext,
-                onAppSelected = ::onAppSelected
+                selectedDevice = config.androidDevice,
+                onAppSelected = ::onAppSelected,
+                onBackClicked = ::onBackClicked
             )
         }
     }
@@ -71,5 +80,9 @@ class NavHostComponent(
      */
     private fun onAppSelected(androidApp: AndroidApp) {
 
+    }
+
+    private fun onBackClicked() {
+        router.pop()
     }
 }

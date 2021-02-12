@@ -8,9 +8,10 @@ import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
 class SelectAppScreenComponent(
-    val selectedDevice: AndroidDevice,
     componentContext: ComponentContext,
-    onAppSelected: (AndroidApp) -> Unit
+    val selectedDevice: AndroidDevice,
+    val onAppSelected: (AndroidApp) -> Unit,
+    val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -18,15 +19,17 @@ class SelectAppScreenComponent(
 
     init {
         DaggerSelectAppComponent
-            .create()
+            .builder()
+            .androidDevice(selectedDevice)
+            .build()
             .inject(this)
     }
 
     @Composable
     override fun render() {
         SelectAppScreen(
-            androidDevice = selectedDevice,
-            selectAppViewModel = selectAppViewModel
+            selectAppViewModel = selectAppViewModel,
+            onBackClicked = onBackClicked
         )
     }
 }

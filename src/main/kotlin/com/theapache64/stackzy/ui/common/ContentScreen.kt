@@ -1,31 +1,54 @@
 package com.theapache64.stackzy.ui.common
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.theapache64.stackzy.util.R
 
 /**
  * To show a basic content page with title
  */
 @Composable
 fun ContentScreen(
-    modifier: Modifier = Modifier,
     title: String,
+    modifier: Modifier = Modifier,
+    onBackClicked: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = modifier.padding(30.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(30.dp)
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h3
-        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            if (onBackClicked != null) {
+                IconButton(
+                    onClick = onBackClicked,
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.ChevronLeft,
+                        contentDescription = R.string.select_app_cd_go_back
+                    )
+                }
+            }
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h3
+            )
+        }
 
         Spacer(
             modifier = Modifier.height(30.dp)

@@ -22,6 +22,8 @@ class SelectDeviceScreenComponent(
 
     @Composable
     override fun render() {
+        selectDeviceViewModel.watchConnectedDevices()
+
         SelectDeviceScreen(
             selectDeviceViewModel,
             onDeviceSelected

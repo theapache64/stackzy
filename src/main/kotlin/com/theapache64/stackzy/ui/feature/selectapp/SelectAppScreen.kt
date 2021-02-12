@@ -2,12 +2,18 @@ package com.theapache64.stackzy.ui.feature.selectapp
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.ui.common.ContentScreen
+import com.theapache64.stackzy.util.R
 
 @Composable
 fun SelectAppScreen(
-    androidDevice: AndroidDevice,
-    selectAppViewModel: SelectAppViewModel
+    selectAppViewModel: SelectAppViewModel,
+    onBackClicked: () -> Unit
 ) {
-    Text(text = "Selected device : ${androidDevice.model}")
+    ContentScreen(
+        title = R.string.select_app_title,
+        onBackClicked = onBackClicked
+    ) {
+        Text(text = selectAppViewModel.selectedDevice.name)
+    }
 }

@@ -3,6 +3,8 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val select_app_cd_go_back = "Go back"
+        const val select_app_title = "Select Application"
         const val device_cd_device_icon = "Device icon"
         const val device_select_the_device = "Select the device"
         const val device_no_device_message = "Looks like you're not connected your phone"
