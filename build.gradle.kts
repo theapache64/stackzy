@@ -91,9 +91,9 @@ compose.desktop {
 }
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
 }
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
 }

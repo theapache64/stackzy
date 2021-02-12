@@ -6,8 +6,8 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
-import com.malinskiy.adam.request.device.Device
-import com.theapache64.stackzy.ui.feature.device.DeviceScreenComponent
+import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 
 class NavHostComponent(
@@ -16,11 +16,11 @@ class NavHostComponent(
 
     private sealed class Config : Parcelable {
         object Splash : Config()
-        object Device : Config()
+        object SelectDevice : Config()
     }
 
     private val router = router<Config, Component>(
-        initialConfiguration = Config.Splash,
+        initialConfiguration = Config.SelectDevice,
         componentFactory = ::createScreenComponent
     )
 
@@ -30,8 +30,9 @@ class NavHostComponent(
                 componentContext = componentContext,
                 onSyncFinished = ::onSplashSyncFinished
             )
-            Config.Device -> DeviceScreenComponent(
-                componentContext = componentContext
+            Config.SelectDevice -> SelectDeviceScreenComponent(
+                componentContext = componentContext,
+                onDeviceSelected = ::onDeviceSelected
             )
         }
     }
@@ -47,13 +48,13 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        router.push(Config.Device)
+        router.push(Config.SelectDevice)
     }
 
     /**
      * Invoked when a device selected
      */
-    private fun onDeviceSelected(device: Device) {
+    private fun onDeviceSelected(androidDevice: AndroidDevice) {
 
     }
 }

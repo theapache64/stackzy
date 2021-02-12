@@ -19,6 +19,7 @@ fun LoadingText(
     } else {
         0.2f
     }
+
     val animatedAlpha by animateFloatAsState(
         targetValue = alpha,
         animationSpec = tween(200),

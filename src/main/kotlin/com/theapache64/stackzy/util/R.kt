@@ -3,6 +3,11 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val device_cd_device_icon = "Device icon"
+        const val device_select_the_device = "Select the device"
+        const val device_no_device_message = "Looks like you're not connected your phone"
+        const val device_no_device_title = "No device connected"
+        const val device_cd_dummy_device = "Dummy Device"
         const val all_error_unknown = "Something went wrong"
         const val all_action_retry = "RETRY"
         const val splash_sync_failed_title = "Sync Failed"

@@ -11,7 +11,7 @@ import com.theapache64.stackzy.ui.common.ToolBar
 
 // Colors
 private val TelegramBlue = Color(48, 163, 230)
-private val WoodSmoke = Color(24, 25, 29)
+private val WoodSmoke =  Color(0xff18191D)
 private val OuterSpace = Color(53, 60, 67)
 private val BrightGray = Color(58, 64, 71)
 
