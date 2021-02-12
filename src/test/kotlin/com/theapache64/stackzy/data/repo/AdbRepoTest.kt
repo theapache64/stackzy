@@ -27,4 +27,18 @@ class AdbRepoTest {
             assert(true)
         }
     }
+
+    @Test
+    fun `App list works`() = runBlockingUnitTest {
+        val connectedDevices = adbRepo.watchConnectedDevice().first()
+        val installedApps = adbRepo.getInstalledApps(connectedDevices.first().device)
+        if (installedApps.isEmpty()) {
+            assert(false) {
+                "Are you sure you've at least one device connected"
+            }
+        } else {
+            // not empty. one or more devices are connected
+            assert(true)
+        }
+    }
 }

@@ -6,7 +6,9 @@ import com.malinskiy.adam.request.device.AsyncDeviceMonitorRequest
 import com.malinskiy.adam.request.device.Device
 import com.malinskiy.adam.request.device.DeviceState
 import com.malinskiy.adam.request.device.ListDevicesRequest
+import com.malinskiy.adam.request.pkg.PmListRequest
 import com.malinskiy.adam.request.prop.GetPropRequest
+import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -46,9 +48,10 @@ class AdbRepo @Inject constructor() {
                 )
 
                 for (currentDeviceList in deviceEventsChannel!!) {
-                    val deviceList = mutableListOf<AndroidDevice>()
-                    for (device in currentDeviceList) {
-                        if (device.state == DeviceState.DEVICE) {
+
+                    val deviceList = currentDeviceList
+                        .filter { it.state == DeviceState.DEVICE }
+                        .map { device ->
                             val props = adb.execute(
                                 request = GetPropRequest(),
                                 serial = device.serial
@@ -57,15 +60,12 @@ class AdbRepo @Inject constructor() {
                             val deviceProductName = props["ro.product.name"]?.singleLine() ?: DETAIL_UNKNOWN
                             val deviceProductModel = props["ro.product.model"]?.singleLine() ?: DETAIL_UNKNOWN
 
-                            deviceList.add(
-                                AndroidDevice(
-                                    deviceProductName,
-                                    deviceProductModel,
-                                    device
-                                )
+                            AndroidDevice(
+                                deviceProductName,
+                                deviceProductModel,
+                                device
                             )
                         }
-                    }
 
                     // Finally emitting result
                     emit(deviceList)
@@ -78,29 +78,25 @@ class AdbRepo @Inject constructor() {
         deviceEventsChannel?.cancel()
     }
 
+    suspend fun getInstalledApps(device: Device): List<AndroidApp> {
 
-    /*suspend fun runIt() {
-        val result = startAdbInteractor.execute()
-        println("Result: $result")
-        val adb = AndroidDebugBridgeClientFactory().build()
-        println("Dev: ${adb.execute(ListDevicesRequest())}")
+        val isAdbStarted = startAdbInteractor.execute()
+        if (isAdbStarted) {
 
-        val deviceEventsChannel: ReceiveChannel<List<Device>> = adb.execute(
-            request = AsyncDeviceMonitorRequest(),
-            scope = GlobalScope
-        )
+            val installedPackages = adb.execute(
+                request = PmListRequest(
+                    includePath = true
+                ),
+                serial = device.serial
+            )
 
-        for (currentDeviceList in deviceEventsChannel) {
-            println("List :${currentDeviceList}")
+            return installedPackages.map {
+                AndroidApp(it)
+            }
         }
 
-
-        deviceEventsChannel.cancel()
+        return listOf()
     }
-
-    init {
-
-    }*/
 
 }
 

@@ -26,14 +26,11 @@ fun SelectDeviceScreen(
     selectDeviceViewModel: SelectDeviceViewModel,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
-
     val devices by selectDeviceViewModel.connectedDevices.collectAsState()
+
     Content(
         devices = devices,
-        onDeviceSelected = {
-            selectDeviceViewModel.removeConnectionWatcher()
-            onDeviceSelected(it)
-        }
+        onDeviceSelected = onDeviceSelected
     )
 }
 

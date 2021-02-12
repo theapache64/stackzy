@@ -1,4 +1,7 @@
 package com.theapache64.stackzy.data.local
 
-class AndroidApp {
-}
+import com.malinskiy.adam.request.pkg.Package
+
+class AndroidApp(
+    val appPackage : Package
+)

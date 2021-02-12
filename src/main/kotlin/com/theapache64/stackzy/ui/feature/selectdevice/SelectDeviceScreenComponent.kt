@@ -22,11 +22,17 @@ class SelectDeviceScreenComponent(
 
     @Composable
     override fun render() {
+        // Start watching
         selectDeviceViewModel.watchConnectedDevices()
 
         SelectDeviceScreen(
             selectDeviceViewModel,
-            onDeviceSelected
+            onDeviceSelected = {
+                // Stop watching
+                selectDeviceViewModel.removeConnectionWatcher()
+
+                onDeviceSelected(it)
+            }
         )
     }
 
