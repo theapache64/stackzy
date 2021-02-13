@@ -1,18 +1,14 @@
 package com.theapache64.stackzy.di.module
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
 import dagger.Module
 import dagger.Provides
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
-
 
 
 @Module
@@ -46,16 +42,14 @@ class NetworkModule {
             .build()
     }
 
-    @ExperimentalSerializationApi
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val jsonContentType = MediaType.parse("application/json")!!
 
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl("https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/")
-            .addConverterFactory(Json.asConverterFactory(jsonContentType))
+            .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(FlowResourceCallAdapterFactory())
             .build()
     }

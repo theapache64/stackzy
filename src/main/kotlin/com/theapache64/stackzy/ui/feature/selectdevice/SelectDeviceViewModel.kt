@@ -14,8 +14,8 @@ class SelectDeviceViewModel @Inject constructor(
     private val adbRepo: AdbRepo
 ) {
 
-    private val _connectedDevices = MutableStateFlow(listOf<AndroidDevice>())
-    val connectedDevices: StateFlow<List<AndroidDevice>> = _connectedDevices
+    private val _connectedDevices = MutableStateFlow<List<AndroidDevice>?>(null)
+    val connectedDevices: StateFlow<List<AndroidDevice>?> = _connectedDevices
 
 
     fun watchConnectedDevices() {

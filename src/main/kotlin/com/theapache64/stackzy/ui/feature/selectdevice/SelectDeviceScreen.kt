@@ -1,9 +1,7 @@
 package com.theapache64.stackzy.ui.feature.selectdevice
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
@@ -35,9 +33,17 @@ fun SelectDeviceScreen(
 
 @Composable
 fun Content(
-    devices: List<AndroidDevice>,
+    devices: List<AndroidDevice>?,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
+    if (devices == null) {
+        // Just background
+        Box(
+            modifier = Modifier.fillMaxSize()
+        )
+        return
+    }
+
     if (devices.isEmpty()) {
         FullScreenError(
             title = R.string.device_no_device_title,

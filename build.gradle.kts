@@ -6,7 +6,6 @@ plugins {
     val kotlinVersion = "1.4.30"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.kotlin.plugin.serialization") version kotlinVersion
     id("org.jetbrains.compose") version "0.3.0-build152"
 }
 
@@ -37,7 +36,9 @@ dependencies {
     kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
 
     // Retrofit : A type-safe HTTP client for Android and Java.
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
     // Decompose : Decompose
     val decomposeVersion = "0.1.7-1"
@@ -48,8 +49,8 @@ dependencies {
     implementation("com.theapache64:retrosheet:1.2.2")
 
     // Kotlinx.Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation("com.squareup.moshi:moshi:1.11.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
 
     implementation("com.malinskiy:adam:0.2.3")
 

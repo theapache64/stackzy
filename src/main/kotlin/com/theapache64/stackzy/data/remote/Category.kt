@@ -1,12 +1,12 @@
 package com.theapache64.stackzy.data.remote
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
-@Serializable
+@JsonClass(generateAdapter = true)
 data class Category(
-    @SerialName("id")
+    @Json(name = "id")
     val id: Int,
-    @SerialName("name")
+    @Json(name = "name")
     val name: String
 )
