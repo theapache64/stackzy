@@ -3,6 +3,7 @@ package com.theapache64.stackzy.di.module
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
+import com.toxicbakery.logging.Arbor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -57,6 +58,7 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideApiInterface(retrofit: Retrofit): ApiInterface {
+        Arbor.d("Creating new API interface")
         return retrofit.create(ApiInterface::class.java)
     }
 }
