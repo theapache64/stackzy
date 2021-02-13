@@ -2,6 +2,7 @@ package com.theapache64.stackzy.data.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.theapache64.stackzy.ui.common.Selectable
 
 @JsonClass(generateAdapter = true)
 data class Library(
@@ -15,4 +16,9 @@ data class Library(
     val packageName: String,
     @Json(name = "website")
     val website: String
-)
+) : Selectable {
+    override fun getTitle(): String {
+        return name
+    }
+
+}

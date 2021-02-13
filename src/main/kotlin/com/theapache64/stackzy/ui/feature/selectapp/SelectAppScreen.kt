@@ -26,7 +26,7 @@ fun SelectAppScreen(
     onAppSelected: (AndroidApp) -> Unit
 ) {
 
-    var searchKeyword by remember { mutableStateOf("") }
+    val searchKeyword by selectAppViewModel.searchKeyword.collectAsState()
     val apps by selectAppViewModel.apps.collectAsState()
 
     ContentScreen(
@@ -41,7 +41,6 @@ fun SelectAppScreen(
                     Text(text = R.string.select_app_label_search)
                 },
                 onValueChange = {
-                    searchKeyword = it
                     selectAppViewModel.onSearchKeywordChanged(it)
                 },
                 modifier = Modifier

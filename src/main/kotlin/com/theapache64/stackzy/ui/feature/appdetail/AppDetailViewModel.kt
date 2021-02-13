@@ -9,7 +9,6 @@ import com.theapache64.stackzy.data.repo.ApkToolRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.R
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -32,7 +31,7 @@ class AppDetailViewModel @Inject constructor(
     private val _analysisReport = MutableStateFlow<AnalysisReport?>(null)
     val analysisReport: StateFlow<AnalysisReport?> = _analysisReport
 
-    private val _loadingMessage = MutableStateFlow("Fetching APK")
+    private val _loadingMessage = MutableStateFlow<String?>(null)
     val loadingMessage: StateFlow<String?> = _loadingMessage
 
     fun init(
@@ -40,6 +39,9 @@ class AppDetailViewModel @Inject constructor(
         androidApp: AndroidApp,
     ) {
         GlobalScope.launch {
+
+            _loadingMessage.value = R.string.app_detail_loading_fetching_apk
+
             // First get APK path
             val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
             if (apkRemotePath != null) {
@@ -56,17 +58,26 @@ class AppDetailViewModel @Inject constructor(
                     destinationFile
                 ).distinctUntilChanged()
                     .collect {
-                        _loadingMessage.value = "Downloading APK $it%"
-                        if (it == 100) {
-                            // Now let's decompile
-                            _loadingMessage.value = "Decompiling"
-                            val decompiledDir = apkToolRepo.decompile(destinationFile)
-                            _loadingMessage.value = "Analysing"
-                            delay(5000)
-                            val allLibraries = librariesRepo.getCachedLibraries()
-                            require(allLibraries != null) { "Cached libraries are null" }
-                            val report = apkAnalyzerRepo.analyze(decompiledDir, allLibraries)
-                            _loadingMessage.value = "Done : ${report.appName}"
+                        _loadingMessage.value = "Pulling APK $it% ..."
+                        try {
+                            if (it == 100) {
+                                // Now let's decompile
+                                _loadingMessage.value = R.string.app_detail_loading_decompiling
+                                val decompiledDir = apkToolRepo.decompile(destinationFile)
+
+                                // Analyse
+                                _loadingMessage.value = R.string.app_detail_loading_analysing
+                                val allLibraries = librariesRepo.getCachedLibraries()
+                                require(allLibraries != null) { "Cached libraries are null" }
+
+                                // Report
+                                val report = apkAnalyzerRepo.analyze(decompiledDir, allLibraries)
+                                _analysisReport.value = report
+                                _loadingMessage.value = null
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            _fatalError.value = e.message
                         }
                     }
             } else {

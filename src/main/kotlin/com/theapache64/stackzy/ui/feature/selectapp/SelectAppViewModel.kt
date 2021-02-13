@@ -14,6 +14,9 @@ class SelectAppViewModel @Inject constructor(
 ) {
 
     private var fullApps: List<AndroidApp>? = null
+    private val _searchKeyword = MutableStateFlow("")
+    val searchKeyword: StateFlow<String> = _searchKeyword
+
     private val _apps = MutableStateFlow(listOf<AndroidApp>())
     val apps: StateFlow<List<AndroidApp>> = _apps
 
@@ -25,6 +28,7 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun onSearchKeywordChanged(newKeyword: String) {
+        _searchKeyword.value = newKeyword
         _apps.value = fullApps!!.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
     }
 }
