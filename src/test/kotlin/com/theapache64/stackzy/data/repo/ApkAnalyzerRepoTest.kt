@@ -109,4 +109,12 @@ class ApkAnalyzerRepoTest {
         val decompiledDir = apkToolRepo.decompile(sampleApkFile)
         apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Cordova::class.java)
     }
+
+    @Test
+    fun `Get platform - xamarin`() {
+        val sampleApkFile = getTestResource(XAMARIN_APK_FILE_NAME)
+        sampleApkFile.exists().should.`true`
+        val decompiledDir = apkToolRepo.decompile(sampleApkFile)
+        apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Xamarin::class.java)
+    }
 }

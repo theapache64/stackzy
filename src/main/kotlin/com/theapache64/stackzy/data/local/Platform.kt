@@ -6,6 +6,6 @@ sealed class Platform(val name: String) {
     class ReactNative() : Platform("React Native")
     class Flutter() : Platform("Flutter")
     class Cordova() : Platform("Apache Cordova")
-    class PhoneGap() : Platform("Adobe PhoneHap")
+    class PhoneGap() : Platform("Adobe PhoneGap")
     class Xamarin() : Platform("Xamarin")
 }
