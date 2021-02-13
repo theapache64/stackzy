@@ -93,6 +93,8 @@ class AdbRepo @Inject constructor() {
             .filter { it.name.isNotBlank() }
             .map {
                 AndroidApp(it)
+            }.apply {
+                println("Total apps : $size")
             }
     }
 

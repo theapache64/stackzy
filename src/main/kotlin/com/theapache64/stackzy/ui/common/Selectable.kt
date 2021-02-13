@@ -64,6 +64,7 @@ fun <T : Selectable> Selectable(
         Text(
             text = data.getTitle(),
             maxLines = 1,
+            style = MaterialTheme.typography.body1,
             overflow = TextOverflow.Ellipsis
         )
     }

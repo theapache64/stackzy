@@ -13,7 +13,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
         private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
-        private val APP_LABEL_MANIFEST_REGEX = "android:label=\"(.+?)\"".toRegex()
+        private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
     }
 
     /**

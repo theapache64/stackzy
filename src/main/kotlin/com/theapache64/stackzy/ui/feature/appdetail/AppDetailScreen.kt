@@ -2,6 +2,7 @@ package com.theapache64.stackzy.ui.feature.appdetail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -63,43 +64,56 @@ fun AppDetailScreen(
                      )
                  }*/
 
-                report!!.libraries.entries.forEach { (category: String, libraries: List<Library>) ->
-                    Text(
-                        text = category,
-                        style = MaterialTheme.typography.h5
-                    )
-                    Spacer(
-                        modifier = Modifier.height(10.dp)
-                    )
-                    LazyColumn {
-                        items(
-                            items = if (libraries.size > GRID_SIZE) {
-                                libraries.chunked(GRID_SIZE)
-                            } else {
-                                listOf(libraries)
-                            }
-                        ) { appSet ->
-                            Row {
-                                appSet.map { app ->
+                val keys = report!!.libraries.keys.toList()
+                LazyColumn {
+                    items(keys) { category ->
 
-                                    // GridItem
-                                    Selectable(
-                                        modifier = Modifier.width(200.dp),
-                                        data = app,
-                                        icon = {
-                                            AppIcon()
-                                        },
-                                        onSelected = onLibrarySelected
-                                    )
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+
+                        Text(
+                            text = category,
+                            style = MaterialTheme.typography.body2,
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+                        )
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+
+                        val libraries = report!!.libraries[category]!!
+
+                        LazyRow {
+                            items(
+                                items = if (libraries.size > GRID_SIZE) {
+                                    libraries.chunked(GRID_SIZE)
+                                } else {
+                                    listOf(libraries)
                                 }
-                            }
+                            ) { appSet ->
+                                Row {
+                                    appSet.map { app ->
 
-                            Spacer(
-                                modifier = Modifier.height(10.dp)
-                            )
+                                        // GridItem
+                                        Selectable(
+                                            modifier = Modifier.width(200.dp),
+                                            data = app,
+                                            icon = {
+                                                AppIcon()
+                                            },
+                                            onSelected = onLibrarySelected
+                                        )
+                                    }
+                                }
+
+                                Spacer(
+                                    modifier = Modifier.height(10.dp)
+                                )
+                            }
                         }
                     }
                 }
+
             }
         }
 

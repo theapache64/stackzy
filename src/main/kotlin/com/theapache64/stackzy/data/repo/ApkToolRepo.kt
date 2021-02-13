@@ -11,9 +11,7 @@ class ApkToolRepo @Inject constructor(
     private val apkToolJarFile: File
 ) {
 
-
     fun decompile(destinationFile: File): File {
-
         val tempDir = createTempDirectory().toFile()
         val command =
             "java -jar '${apkToolJarFile.absolutePath}' d '${destinationFile.absolutePath}' -o '${tempDir.absolutePath}' -f"
