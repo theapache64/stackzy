@@ -10,17 +10,20 @@ import javax.inject.Singleton
 class LibrariesRepo @Inject constructor(
     private val apiInterface: ApiInterface
 ) {
+    companion object {
+        private var cachedLibraries: List<Library>? = null
+    }
+
     init {
         Arbor.i("New Instance : $this")
     }
 
-    private var cachedLibraries: List<Library>? = null
 
     fun getRemoteLibraries() = apiInterface.getLibraries()
 
     fun cacheLibraries(Libraries: List<Library>) {
         println("Caching libs @ ${this}")
-        this.cachedLibraries = Libraries
+        cachedLibraries = Libraries
     }
 
     fun getCachedLibraries(): List<Library>? {
