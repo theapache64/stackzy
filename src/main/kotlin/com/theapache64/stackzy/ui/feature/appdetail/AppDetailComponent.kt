@@ -2,11 +2,13 @@ package com.theapache64.stackzy.ui.feature.appdetail
 
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.di.module.ApkToolModule
 import dagger.BindsInstance
 import dagger.Component
 
-@Component
+@Component(modules = [ApkToolModule::class])
 interface AppDetailComponent {
+
     fun inject(appDetailScreenComponent: AppDetailScreenComponent)
 
     @Component.Builder

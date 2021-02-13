@@ -3,6 +3,7 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val app_detail_error_apk_remote_path: String = "Couldn't find APK remote path"
         const val app_detail_title = "Built with"
         const val select_app_label_search = "Search"
         const val apps_cd_app_icon = "App Icon"

@@ -9,13 +9,16 @@ import com.malinskiy.adam.request.device.ListDevicesRequest
 import com.malinskiy.adam.request.pkg.PmListRequest
 import com.malinskiy.adam.request.prop.GetPropRequest
 import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
+import com.malinskiy.adam.request.sync.v1.PullFileRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.io.File
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class AdbRepo @Inject constructor() {
 
@@ -98,6 +101,9 @@ class AdbRepo @Inject constructor() {
         return this.replace("\n", "")
     }
 
+    /**
+     * To get APK path for given app from given device
+     */
     suspend fun getApkPath(
         androidDevice: AndroidDevice,
         androidApp: AndroidApp
@@ -114,6 +120,29 @@ class AdbRepo @Inject constructor() {
         return response.output
             .takeIf { it.contains(PATH_PACKAGE_PREFIX) }
             ?.replace(PATH_PACKAGE_PREFIX, "")?.trim()
+    }
+
+    suspend fun pullFile(
+        androidDevice: AndroidDevice,
+        apkRemotePath: String,
+        destinationFile: File
+    ): Flow<Int> {
+        return flow {
+            val channel = adb.execute(
+                serial = androidDevice.device.serial,
+                request = PullFileRequest(
+                    apkRemotePath,
+                    destinationFile
+                ),
+                scope = GlobalScope,
+            )
+
+            var percentage: Int
+            for (percentageDouble in channel) {
+                percentage = (percentageDouble * 100).roundToInt()
+                emit(percentage)
+            }
+        }
     }
 }
 

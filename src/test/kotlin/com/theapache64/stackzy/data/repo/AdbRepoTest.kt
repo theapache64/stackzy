@@ -48,7 +48,7 @@ class AdbRepoTest {
     @Test
     fun `Fetch path works`() = runBlockingUnitTest {
         val device = adbRepo.watchConnectedDevice().first().first()
-        val app = "com.whatsapp"
+        val app = "com.theapache64.raven"
         val apkPath = adbRepo.getApkPath(
             device,
             AndroidApp(
