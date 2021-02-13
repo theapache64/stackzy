@@ -5,6 +5,7 @@ import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.ApkAnalyzerRepo
 import com.theapache64.stackzy.data.repo.ApkToolRepo
+import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,8 @@ class AppDetailViewModel @Inject constructor(
     private val androidApp: AndroidApp,
     private val adbRepo: AdbRepo,
     private val apkToolRepo: ApkToolRepo,
-    private val apkAnalyzerRepo: ApkAnalyzerRepo
+    private val apkAnalyzerRepo: ApkAnalyzerRepo,
+    private val librariesRepo: LibrariesRepo
 ) {
 
 
@@ -49,7 +51,7 @@ class AppDetailViewModel @Inject constructor(
 
                         // Now let's decompile
                         val decompiledDir = apkToolRepo.decompile(destinationFile)
-                        val report = apkAnalyzerRepo.analyze(decompiledDir)
+                        val report = apkAnalyzerRepo.analyze(decompiledDir, librariesRepo.getCachedLibraries()!!)
                     }
                 }
             } else {

@@ -12,20 +12,38 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
+        private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?/%s"
         private val APP_LABEL_MANIFEST_REGEX = "android:label=\"(.+?)\"".toRegex()
     }
 
-    fun analyze(decompiledDir: File): AnalysisReport {
+    fun analyze(
+        decompiledDir: File,
+        allLibraries: List<Library>
+    ): AnalysisReport {
         val platform = getPlatform(decompiledDir)
         return AnalysisReport(
             appName = getAppName(decompiledDir),
             platform = platform,
-            libraries = getLibraries(decompiledDir)
+            libraries = getLibraries(platform, decompiledDir, allLibraries)
         )
     }
 
-    private fun getLibraries(decompiledDir: File): Map<String, List<Library>> {
-        return mapOf()
+    private fun getLibraries(
+        platform: Platform,
+        decompiledDir: File,
+        allLibraries: List<Library>
+    ): Map<String, List<Library>> {
+        return when (platform) {
+            is Platform.NativeJava,
+            is Platform.NativeKotlin -> {
+                getAppLibraries(decompiledDir, allLibraries)
+                mapOf()
+            }
+            else -> {
+                // TODO : Support other platforms
+                mapOf()
+            }
+        }
     }
 
     fun getAppName(decompiledDir: File): String {
@@ -131,5 +149,33 @@ class ApkAnalyzerRepo @Inject constructor() {
 
     private fun isPhoneGapDirectory(filePath: String) = PHONEGAP_FILE_PATH_REGEX.find(filePath) != null
 
+    fun getAppLibraries(
+        decompiledDir: File,
+        allLibraries: List<Library>
+    ): MutableSet<Library> {
+        val appLibs = mutableSetOf<Library>()
+        decompiledDir.walk().forEach { file ->
+            if (file.isDirectory) {
+                for (allLib in allLibraries) {
+                    val packageAsPath = allLib.packageName.replace(".", "/")
+                    val dirRegEx = getDirRegExFormat(packageAsPath)
+                    if (isMatch(dirRegEx, file.absolutePath)) {
+                        appLibs.add(allLib)
+                        break
+                    }
+                }
+            }
+        }
+        println(appLibs)
+        return appLibs
+    }
+
+    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {
+        return dirRegEx.find(absolutePath) != null
+    }
+
+    private fun getDirRegExFormat(packageAsPath: String): Regex {
+        return String.format(DIR_REGEX_FORMAT, packageAsPath).toRegex()
+    }
 
 }

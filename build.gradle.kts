@@ -48,7 +48,7 @@ dependencies {
     implementation("com.theapache64:retrosheet:1.2.2")
 
     // Kotlinx.Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0-RC")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     implementation("com.malinskiy:adam:0.2.3")
