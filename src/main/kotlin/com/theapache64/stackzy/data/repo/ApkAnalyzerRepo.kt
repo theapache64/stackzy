@@ -10,7 +10,7 @@ class ApkAnalyzerRepo @Inject constructor() {
 
     companion object {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
-        private val FLUTTER_FILE_PATH_REGEX = "temp/smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
+        private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
         private val APP_LABEL_MANIFEST_REGEX = "android:label=\"@string/(\\w+?)\"".toRegex()
     }

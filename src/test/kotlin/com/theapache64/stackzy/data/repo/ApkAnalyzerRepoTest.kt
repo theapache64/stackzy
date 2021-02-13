@@ -75,4 +75,12 @@ class ApkAnalyzerRepoTest {
         val decompiledDir = apkToolRepo.decompile(reactNativeSampleApp)
         apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.ReactNative::class.java)
     }
+
+    @Test
+    fun `Get platform - flutter`() {
+        val flutterAppApk = getTestResource("com.sts.flutter_flutter.apk")
+        flutterAppApk.exists().should.`true`
+        val decompiledDir = apkToolRepo.decompile(flutterAppApk)
+        apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Flutter::class.java)
+    }
 }
