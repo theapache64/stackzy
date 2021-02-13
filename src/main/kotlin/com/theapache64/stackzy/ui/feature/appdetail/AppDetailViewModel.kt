@@ -19,8 +19,6 @@ import javax.inject.Inject
 
 
 class AppDetailViewModel @Inject constructor(
-    private val androidDevice: AndroidDevice,
-    private val androidApp: AndroidApp,
     private val adbRepo: AdbRepo,
     private val apkToolRepo: ApkToolRepo,
     private val apkAnalyzerRepo: ApkAnalyzerRepo,
@@ -37,7 +35,10 @@ class AppDetailViewModel @Inject constructor(
     private val _loadingMessage = MutableStateFlow("Fetching APK")
     val loadingMessage: StateFlow<String?> = _loadingMessage
 
-    init {
+    fun init(
+        androidDevice: AndroidDevice,
+        androidApp: AndroidApp,
+    ) {
         GlobalScope.launch {
             // First get APK path
             val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)

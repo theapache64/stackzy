@@ -7,12 +7,11 @@ import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
-import com.malinskiy.adam.request.device.Device
-import com.malinskiy.adam.request.device.DeviceState
-import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.di.AppComponent
+import com.theapache64.stackzy.di.DaggerAppComponent
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
@@ -31,6 +30,10 @@ class NavHostComponent(
             val androidApp: AndroidApp
         ) : Config()
     }
+
+    private val appComponent: AppComponent = DaggerAppComponent
+        .create()
+
 
     private val router = router<Config, Component>(
         initialConfiguration = Config.Splash,
@@ -53,14 +56,17 @@ class NavHostComponent(
     private fun createScreenComponent(config: Config, componentContext: ComponentContext): Component {
         return when (config) {
             is Config.Splash -> SplashScreenComponent(
+                appComponent = appComponent,
                 componentContext = componentContext,
                 onSyncFinished = ::onSplashSyncFinished
             )
             is Config.SelectDevice -> SelectDeviceScreenComponent(
+                appComponent = appComponent,
                 componentContext = componentContext,
                 onDeviceSelected = ::onDeviceSelected
             )
             is Config.SelectApp -> SelectAppScreenComponent(
+                appComponent = appComponent,
                 componentContext = componentContext,
                 selectedDevice = config.androidDevice,
                 onAppSelected = ::onAppSelected,
@@ -68,6 +74,7 @@ class NavHostComponent(
             )
 
             is Config.AppDetail -> AppDetailScreenComponent(
+                appComponent = appComponent,
                 componentContext = componentContext,
                 selectedApp = config.androidApp,
                 selectedDevice = config.androidDevice,

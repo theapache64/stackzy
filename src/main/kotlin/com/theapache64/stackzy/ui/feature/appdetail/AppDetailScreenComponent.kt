@@ -5,10 +5,12 @@ import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
 class AppDetailScreenComponent(
+    appComponent: AppComponent,
     componentContext: ComponentContext,
     selectedApp: AndroidApp,
     selectedDevice: AndroidDevice,
@@ -20,11 +22,13 @@ class AppDetailScreenComponent(
     lateinit var appDetailViewModel: AppDetailViewModel
 
     init {
-        DaggerAppDetailComponent.builder()
-            .androidApp(selectedApp)
-            .androidDevice(selectedDevice)
-            .build()
-            .inject(this)
+
+        appComponent.inject(this)
+
+        appDetailViewModel.init(
+            androidDevice = selectedDevice,
+            androidApp = selectedApp
+        )
     }
 
     @Composable

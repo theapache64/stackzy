@@ -3,10 +3,12 @@ package com.theapache64.stackzy.ui.feature.selectdevice
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
 class SelectDeviceScreenComponent(
+    appComponent : AppComponent,
     private val componentContext: ComponentContext,
     private val onDeviceSelected: (AndroidDevice) -> Unit
 ) : Component, ComponentContext by componentContext {
@@ -15,9 +17,7 @@ class SelectDeviceScreenComponent(
     lateinit var selectDeviceViewModel: SelectDeviceViewModel
 
     init {
-        DaggerSelectDeviceComponent
-            .create()
-            .inject(this)
+        appComponent.inject(this)
     }
 
     @Composable
