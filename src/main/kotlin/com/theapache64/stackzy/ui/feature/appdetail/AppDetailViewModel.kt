@@ -3,6 +3,7 @@ package com.theapache64.stackzy.ui.feature.appdetail
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.data.repo.ApkAnalyzerRepo
 import com.theapache64.stackzy.data.repo.ApkToolRepo
 import com.theapache64.stackzy.util.R
 import kotlinx.coroutines.GlobalScope
@@ -16,7 +17,8 @@ class AppDetailViewModel @Inject constructor(
     private val androidDevice: AndroidDevice,
     private val androidApp: AndroidApp,
     private val adbRepo: AdbRepo,
-    private val apkToolRepo: ApkToolRepo
+    private val apkToolRepo: ApkToolRepo,
+    private val apkAnalyzerRepo: ApkAnalyzerRepo
 ) {
 
 
@@ -46,7 +48,8 @@ class AppDetailViewModel @Inject constructor(
                         isDecompileStarted = true
 
                         // Now let's decompile
-                        apkToolRepo.decompile(destinationFile)
+                        val decompiledDir = apkToolRepo.decompile(destinationFile)
+                        val report = apkAnalyzerRepo.analyze(decompiledDir)
                     }
                 }
             } else {
