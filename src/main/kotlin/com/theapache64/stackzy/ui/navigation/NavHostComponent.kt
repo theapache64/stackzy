@@ -16,6 +16,8 @@ import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
+import java.awt.Desktop
+import java.net.URI
 
 class NavHostComponent(
     private val componentContext: ComponentContext
@@ -124,7 +126,7 @@ class NavHostComponent(
      * Invoked when library selected
      */
     private fun onLibrarySelected(library: Library) {
-
+        Desktop.getDesktop().browse(URI(library.website))
     }
 
     private fun onBackClicked() {

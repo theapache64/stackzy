@@ -3,6 +3,7 @@ package com.theapache64.stackzy.ui.feature.appdetail
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,12 +32,16 @@ fun AppDetailScreen(
     val report by appDetailViewModel.analysisReport.collectAsState()
 
     ContentScreen(
-        title = R.string.app_detail_title,
+        title = if (report == null) {
+            R.string.app_detail_title
+        } else {
+            report!!.appName
+        },
         onBackClicked = onBackClicked
     ) {
         if (fatalError != null) {
             FullScreenError(
-                title = "Damn It!",
+                title = R.string.any_error_title_damn_it,
                 message = fatalError!!
             )
         } else {
@@ -51,13 +56,21 @@ fun AppDetailScreen(
                 }
             } else if (report != null) {
 
-                Column {
-                    Text(text = report!!.appName)
-                }
+                /* Column {
+                     Text(
+                         text = report!!.appName,
+                         style = MaterialTheme.typography.h4
+                     )
+                 }*/
 
                 report!!.libraries.entries.forEach { (category: String, libraries: List<Library>) ->
-                    Text(text = category)
-
+                    Text(
+                        text = category,
+                        style = MaterialTheme.typography.h5
+                    )
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
+                    )
                     LazyColumn {
                         items(
                             items = if (libraries.size > GRID_SIZE) {
@@ -71,6 +84,7 @@ fun AppDetailScreen(
 
                                     // GridItem
                                     Selectable(
+                                        modifier = Modifier.width(200.dp),
                                         data = app,
                                         icon = {
                                             AppIcon()

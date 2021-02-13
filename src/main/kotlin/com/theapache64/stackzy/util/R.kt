@@ -3,6 +3,7 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val any_error_title_damn_it: String = "Damn It!"
         const val app_detail_loading_fetching_apk: String = "Fetching APK..."
         const val app_detail_loading_decompiling: String = "Decompiling..."
         const val app_detail_loading_analysing: String = "Analysing..."

@@ -7,7 +7,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.imageResource
@@ -65,6 +67,7 @@ fun SelectAppScreen(
 
                         // GridItem
                         Selectable(
+                            modifier = Modifier.width(500.dp),
                             data = app,
                             icon = {
                                 AppIcon()

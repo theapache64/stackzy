@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 interface Selectable {
@@ -25,7 +26,8 @@ fun <T : Selectable> Selectable(
     data: T,
     icon: @Composable () -> Unit,
     onSelected: (T) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    padding: Dp = 10.dp
 ) {
     var isHovered by remember { mutableStateOf(false) }
     val backgroundAlpha = if (isHovered) {
@@ -36,7 +38,6 @@ fun <T : Selectable> Selectable(
 
     Row(
         modifier = modifier
-            .width(400.dp)
             .background(MaterialTheme.colors.secondary.copy(alpha = backgroundAlpha), RoundedCornerShape(5.dp))
             .clickable {
                 onSelected(data)
@@ -50,7 +51,7 @@ fun <T : Selectable> Selectable(
                     isHovered = false
                     false
                 }
-            ).padding(10.dp),
+            ).padding(padding),
         verticalAlignment = Alignment.CenterVertically
     ) {
 

@@ -56,6 +56,8 @@ fun Content(
             LazyColumn {
                 items(devices) { device ->
                     Selectable(
+                        modifier = Modifier
+                            .width(400.dp),
                         data = device,
                         onSelected = onDeviceSelected,
                         icon = {
