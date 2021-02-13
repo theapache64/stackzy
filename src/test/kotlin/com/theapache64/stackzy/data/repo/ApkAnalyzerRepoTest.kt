@@ -136,8 +136,23 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val x = apkAnalyzerRepo.getAppLibraries(decompiledDir, libs)
-            println(x)
+            val appLibraries = apkAnalyzerRepo.getAppLibraries(decompiledDir, libs)
+            appLibraries.size.should.above(0)
+        }
+    }
+
+    @Test
+    fun `Get categorized libraries - native kotlin`() = runBlockingUnitTest {
+        loadLibs { libs ->
+            val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
+            val decompiledDir = apkToolRepo.decompile(sampleApkFile)
+            val appLibraries = apkAnalyzerRepo.getLibraries(
+                Platform.NativeKotlin(),
+                decompiledDir,
+                libs
+            )
+            println(appLibraries)
+            appLibraries.size.should.above(0)
         }
     }
 

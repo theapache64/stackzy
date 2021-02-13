@@ -12,7 +12,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
-        private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?/%s"
+        private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "android:label=\"(.+?)\"".toRegex()
     }
 
@@ -28,7 +28,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         )
     }
 
-    private fun getLibraries(
+    fun getLibraries(
         platform: Platform,
         decompiledDir: File,
         allLibraries: List<Library>
@@ -36,14 +36,44 @@ class ApkAnalyzerRepo @Inject constructor() {
         return when (platform) {
             is Platform.NativeJava,
             is Platform.NativeKotlin -> {
-                getAppLibraries(decompiledDir, allLibraries)
-                mapOf()
+
+                // Get all used libraries
+                var appLibraries = getAppLibraries(decompiledDir, allLibraries).toMutableList()
+                appLibraries = mergeDep(appLibraries, "okhttp3", "retrofit2")
+
+                // Now let's categories it
+                val libWithCats = mutableMapOf<String, MutableList<Library>>()
+                for (appLib in appLibraries) {
+                    val catList = libWithCats.getOrPut(appLib.category) {
+                        mutableListOf()
+                    }
+                    catList.add(appLib)
+                }
+                println("Cats: $libWithCats")
+                return libWithCats
             }
             else -> {
                 // TODO : Support other platforms
                 mapOf()
             }
         }
+    }
+
+    private fun mergeDep(
+        appLibraries: MutableList<Library>,
+        libToRemove: String,
+        libToRemoveFrom: String
+    ): MutableList<Library> {
+        val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == libToRemoveFrom } != null
+        if (hasDepLib) {
+            // remove that lib
+            val library = appLibraries.find { it.packageName == libToRemove }
+            if (library != null) {
+                appLibraries.removeIf { it.id == library.id }
+            }
+        }
+
+        return appLibraries
     }
 
     fun getAppName(decompiledDir: File): String {
@@ -156,17 +186,16 @@ class ApkAnalyzerRepo @Inject constructor() {
         val appLibs = mutableSetOf<Library>()
         decompiledDir.walk().forEach { file ->
             if (file.isDirectory) {
-                for (allLib in allLibraries) {
-                    val packageAsPath = allLib.packageName.replace(".", "/")
+                for (remoteLib in allLibraries) {
+                    val packageAsPath = remoteLib.packageName.replace(".", "/")
                     val dirRegEx = getDirRegExFormat(packageAsPath)
                     if (isMatch(dirRegEx, file.absolutePath)) {
-                        appLibs.add(allLib)
+                        appLibs.add(remoteLib)
                         break
                     }
                 }
             }
         }
-        println(appLibs)
         return appLibs
     }
 

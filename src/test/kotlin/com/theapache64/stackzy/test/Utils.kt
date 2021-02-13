@@ -9,9 +9,9 @@ const val FLUTTER_APP_NAME = "Flutter Tutorial"
 const val FLUTTER_PACKAGE_NAME = "com.sts.flutter"
 const val FLUTTER_APK_FILE_NAME = "com.sts.flutter_flutter.apk"
 
-const val NATIVE_KOTLIN_APP_NAME = "Paper Cop"
+const val NATIVE_KOTLIN_APP_NAME = "TopCorn"
 const val NATIVE_KOTLIN_PACKAGE_NAME = "com.theapache64.topcorn"
-const val NATIVE_KOTLIN_APK_FILE_NAME = "com.theapache64.papercop_kotlin_android.apk"
+const val NATIVE_KOTLIN_APK_FILE_NAME = "com.theapache64.topcorn_kotlin_android.apk"
 
 const val CORDOVA_APP_NAME = "FinC Financial Calculators"
 const val CORDOVA_PACKAGE_NAME = "com.swot.emicalculator"
