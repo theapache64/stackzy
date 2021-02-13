@@ -35,6 +35,8 @@
 Before executing any test, ensure
 
 - A device has connected to the adb
+- `com.sts.flutter` is installed
+
 
 ## ✍️ Author
 

@@ -12,26 +12,31 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
-        private val APP_LABEL_MANIFEST_REGEX = "android:label=\"@string/(\\w+?)\"".toRegex()
+        private val APP_LABEL_MANIFEST_REGEX = "android:label=\"(.+?)\"".toRegex()
     }
 
     fun analyze(decompiledDir: File): AnalysisReport {
+        val platform = getPlatform(decompiledDir)
         return AnalysisReport(
             appName = getAppName(decompiledDir),
-            platform = getPlatform(decompiledDir),
+            platform = platform,
             libraries = getLibraries(decompiledDir)
         )
     }
 
     private fun getLibraries(decompiledDir: File): Map<String, List<Library>> {
-        TODO("Not yet implemented")
+        return mapOf()
     }
 
     fun getAppName(decompiledDir: File): String {
         // Get label key from AndroidManifest.xml
-        val labelKey = getAppNameLabel(decompiledDir)
-        require(labelKey != null) { "Failed to get labelKey" }
-        val appName = getStringXmlValue(decompiledDir, labelKey)
+        val label = getAppNameLabel(decompiledDir)
+        require(label != null) { "Failed to get label" }
+        val appName = if (label.contains("@string/")) {
+            getStringXmlValue(decompiledDir, label)
+        } else {
+            label
+        }
         require(appName != null) { "Failed to get app name" }
         return appName
     }
@@ -39,7 +44,8 @@ class ApkAnalyzerRepo @Inject constructor() {
     fun getStringXmlValue(decompiledDir: File, labelKey: String): String? {
         val stringXmlFile = File("${decompiledDir.absolutePath}/res/values/strings.xml")
         val stringXmlContent = stringXmlFile.readText()
-        val regEx = "<string name=\"${labelKey}\">(.+?)</string>".toRegex()
+        val stringKey = labelKey.replace("@string/", "")
+        val regEx = "<string name=\"$stringKey\">(.+?)</string>".toRegex()
         return regEx.find(stringXmlContent)?.groups?.get(1)?.value
     }
 

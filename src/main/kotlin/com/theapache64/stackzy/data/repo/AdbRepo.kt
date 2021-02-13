@@ -118,6 +118,7 @@ class AdbRepo @Inject constructor() {
         )
 
         return response.output
+            .split("\n")[0] // first file only
             .takeIf { it.contains(PATH_PACKAGE_PREFIX) }
             ?.replace(PATH_PACKAGE_PREFIX, "")?.trim()
     }

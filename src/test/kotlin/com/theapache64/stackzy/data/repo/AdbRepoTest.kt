@@ -3,7 +3,9 @@ package com.theapache64.stackzy.data.repo
 import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.expekt.should
 import com.theapache64.stackzy.data.local.AndroidApp
+import com.theapache64.stackzy.test.FLUTTER_PACKAGE_NAME
 import com.theapache64.stackzy.test.MyDaggerMockRule
+import com.theapache64.stackzy.test.NATIVE_KOTLIN_PACKAGE_NAME
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.first
@@ -46,13 +48,24 @@ class AdbRepoTest {
     }
 
     @Test
-    fun `Fetch path works`() = runBlockingUnitTest {
+    fun `Fetch path works - native android`() = runBlockingUnitTest {
         val device = adbRepo.watchConnectedDevice().first().first()
-        val app = "com.theapache64.raven"
         val apkPath = adbRepo.getApkPath(
             device,
             AndroidApp(
-                Package(app)
+                Package(NATIVE_KOTLIN_PACKAGE_NAME)
+            )
+        )
+        apkPath.should.startWith("/data/app/")
+    }
+
+    @Test
+    fun `Fetch path works - flutter`() = runBlockingUnitTest {
+        val device = adbRepo.watchConnectedDevice().first().first()
+        val apkPath = adbRepo.getApkPath(
+            device,
+            AndroidApp(
+                Package(FLUTTER_PACKAGE_NAME)
             )
         )
         apkPath.should.startWith("/data/app/")
