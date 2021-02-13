@@ -33,11 +33,20 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Analysis Report - Flutter`() {
-        val paperCopApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
-        val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
+        val sampleApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
+        val decompiledDir = apkToolRepo.decompile(sampleApkFile)
         val report = apkAnalyzerRepo.analyze(decompiledDir)
         report.appName.should.equal(FLUTTER_APP_NAME)
         report.platform.should.instanceof(Platform.Flutter::class.java)
+    }
+
+    @Test
+    fun `Analysis Report - React Native`() {
+        val sampleApkFile = getTestResource(REACT_NATIVE_APK_FILE_NAME)
+        val decompiledDir = apkToolRepo.decompile(sampleApkFile)
+        val report = apkAnalyzerRepo.analyze(decompiledDir)
+        report.appName.should.equal(REACT_NATIVE_APP_NAME)
+        report.platform.should.instanceof(Platform.ReactNative::class.java)
     }
 
     @Test
@@ -91,5 +100,13 @@ class ApkAnalyzerRepoTest {
         flutterAppApk.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(flutterAppApk)
         apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Flutter::class.java)
+    }
+
+    @Test
+    fun `Get platform - cordova`() {
+        val sampleApkFile = getTestResource(CORDOVA_APK_FILE_NAME)
+        sampleApkFile.exists().should.`true`
+        val decompiledDir = apkToolRepo.decompile(sampleApkFile)
+        apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Cordova::class.java)
     }
 }

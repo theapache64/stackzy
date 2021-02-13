@@ -13,8 +13,13 @@ const val NATIVE_KOTLIN_APP_NAME = "Paper Cop"
 const val NATIVE_KOTLIN_PACKAGE_NAME = "com.theapache64.topcorn"
 const val NATIVE_KOTLIN_APK_FILE_NAME = "com.theapache64.papercop_kotlin_android.apk"
 
+const val CORDOVA_APP_NAME = "FinC Financial Calculators"
+const val CORDOVA_PACKAGE_NAME = "com.swot.emicalculator"
+const val CORDOVA_APK_FILE_NAME = "com.swot.emicalculator_cordova.apk"
+
 const val NATIVE_JAVA_APK_FILE_NAME = "com.theah64.whatsappstatusbrowser_java_android.apk"
 
+const val REACT_NATIVE_APP_NAME = "React Native Animation Examples"
 const val REACT_NATIVE_APK_FILE_NAME = "com.reactnativeanimationexamples_react_native.apk"
 
 fun runBlockingUnitTest(block: suspend (scope: CoroutineScope) -> Unit) = runBlocking {
