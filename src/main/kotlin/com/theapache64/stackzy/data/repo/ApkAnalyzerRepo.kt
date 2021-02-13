@@ -57,7 +57,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     /**
      * To get platform from given decompiled APK directory
      */
-    private fun getPlatform(decompiledDir: File): Platform {
+    fun getPlatform(decompiledDir: File): Platform {
         return when {
             isPhoneGap(decompiledDir) -> Platform.PhoneGap()
             isCordova(decompiledDir) -> Platform.Cordova()
@@ -65,7 +65,7 @@ class ApkAnalyzerRepo @Inject constructor() {
             isReactNative(decompiledDir) -> Platform.ReactNative()
             isFlutter(decompiledDir) -> Platform.Flutter()
             isWrittenKotlin(decompiledDir) -> Platform.NativeKotlin()
-            else -> Platform.Unknown()
+            else -> Platform.NativeJava()
         }
     }
 
@@ -82,7 +82,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     }
 
     private fun isReactNative(decompiledDir: File): Boolean {
-        return decompiledDir.listFiles()?.find { it.name == "index.android.bundle" } != null
+        return getAssetsDir(decompiledDir).listFiles()?.find { it.name == "index.android.bundle" } != null
     }
 
     private fun isXamarin(decompiledDir: File): Boolean {

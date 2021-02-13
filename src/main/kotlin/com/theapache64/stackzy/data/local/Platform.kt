@@ -8,5 +8,4 @@ sealed class Platform(val name: String) {
     class Cordova() : Platform("Apache Cordova")
     class PhoneGap() : Platform("Adobe PhoneHap")
     class Xamarin() : Platform("Xamarin")
-    class Unknown() : Platform("Unknown")
 }
