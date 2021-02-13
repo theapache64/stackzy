@@ -16,6 +16,9 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val APP_LABEL_MANIFEST_REGEX = "android:label=\"(.+?)\"".toRegex()
     }
 
+    /**
+     * To get final report
+     */
     fun analyze(
         decompiledDir: File,
         allLibraries: List<Library>
@@ -28,6 +31,9 @@ class ApkAnalyzerRepo @Inject constructor() {
         )
     }
 
+    /**
+     * To get libraries used in the given decompiled app
+     */
     fun getLibraries(
         platform: Platform,
         decompiledDir: File,
