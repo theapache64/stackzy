@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.ui.common.ContentScreen
+import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.util.R
@@ -48,7 +48,7 @@ fun Content(
             image = imageResource("drawables/no_device.png")
         )
     } else {
-        ContentScreen(
+        CustomScaffold(
             title = R.string.device_select_the_device
         ) {
             LazyColumn {

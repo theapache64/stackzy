@@ -1,7 +1,6 @@
 package com.theapache64.stackzy.ui.feature.selectapp
 
 import androidx.compose.desktop.LocalAppWindow
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -18,14 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.ui.common.CONTENT_PADDING_HORIZONTAL
-import com.theapache64.stackzy.ui.common.ContentScreen
+import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.Selectable
-import com.theapache64.stackzy.ui.theme.BigStone
-import com.theapache64.stackzy.ui.theme.Ebony
 import com.theapache64.stackzy.util.R
 
 private const val GRID_SIZE = 3
@@ -42,7 +38,7 @@ fun SelectAppScreen(
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
     println("Width is $appItemWidth")
 
-    ContentScreen(
+    CustomScaffold(
         title = R.string.select_app_title,
         onBackClicked = onBackClicked,
         topRightSlot = {

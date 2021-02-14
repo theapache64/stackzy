@@ -39,8 +39,9 @@ fun AppDetailScreen(
 
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
-    ContentScreen(
+    CustomScaffold(
         title = title,
+        subTitle = report?.platform?.name,
         onBackClicked = onBackClicked
     ) {
         if (fatalError != null) {

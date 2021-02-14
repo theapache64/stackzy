@@ -20,8 +20,9 @@ const val CONTENT_PADDING_VERTICAL = 15
 const val CONTENT_PADDING_HORIZONTAL = 30
 
 @Composable
-fun ContentScreen(
+fun CustomScaffold(
     title: String,
+    subTitle: String? = null,
     modifier: Modifier = Modifier,
     onBackClicked: (() -> Unit)? = null,
     topRightSlot: (@Composable () -> Unit)? = null,
@@ -55,10 +56,20 @@ fun ContentScreen(
                 }
             }
 
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h5
-            )
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h5
+                )
+
+                if (subTitle != null) {
+                    Text(
+                        text = subTitle,
+                        style = MaterialTheme.typography.body2,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
+                    )
+                }
+            }
 
             if (topRightSlot != null) {
                 Box(
