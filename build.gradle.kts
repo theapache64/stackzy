@@ -41,7 +41,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.1.7-1"
+    val decomposeVersion = "0.1.8"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
@@ -56,9 +56,15 @@ dependencies {
 
     // Arbor : Like Timber, just different.
     implementation("com.ToxicBakery.logging:arbor-jvm:1.34.109")
+
+    testImplementation("org.mockito:mockito-inline:3.7.7")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     // DaggerMock
     testImplementation("com.github.fabioCollini.daggermock:daggermock:0.8.5")
     testImplementation("com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5")
+
+    // Mockito Core : Mockito mock objects library core API and implementation
+    testImplementation("org.mockito:mockito-core:3.7.7")
 
     // Expekt : An assertion library for Kotlin
     testImplementation("com.theapache64:expekt:0.0.1")

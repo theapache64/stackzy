@@ -18,6 +18,7 @@ class NetworkModule {
     companion object {
         const val TABLE_CATEGORIES = "categories"
         const val TABLE_LIBRARIES = "libraries"
+        const val TABLE_UNTRACKED_LIBS = "untracked_libs"
     }
 
     @Singleton
@@ -31,6 +32,14 @@ class NetworkModule {
             .addSheet(
                 sheetName = TABLE_LIBRARIES,
                 "id", "name", "package_name", "category", "website"
+            )
+            .addSheet(
+                sheetName = TABLE_UNTRACKED_LIBS,
+                "created_at", "package_name"
+            )
+            .addForm(
+                TABLE_UNTRACKED_LIBS,
+                "https://docs.google.com/forms/d/e/1FAIpQLSdWuRkjXqBkL-w5NfktA_ju_sI2bJTDVb4LoYco4mxEpskU9g/viewform?usp=sf_link"
             )
             .build()
     }

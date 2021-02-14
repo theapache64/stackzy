@@ -15,5 +15,6 @@ interface TestComponent {
     fun librariesRepo(): LibrariesRepo
     fun adbRepo(): AdbRepo
     fun apkToolRepo(): ApkToolRepo
-    fun apkAnalyzerRepo() : ApkAnalyzerRepo
+    fun apkAnalyzerRepo(): ApkAnalyzerRepo
+    fun untrackedLibsRepo(): UntrackedLibsRepo
 }
