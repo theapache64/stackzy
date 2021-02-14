@@ -1,14 +1,21 @@
 package com.theapache64.stackzy.data.local
 
 import com.malinskiy.adam.request.pkg.Package
-import com.theapache64.stackzy.ui.common.Selectable
+import com.theapache64.stackzy.ui.common.AlphabetCircle
 
 class AndroidApp(
     val appPackage: Package
-) : Selectable {
+) : AlphabetCircle() {
 
     override fun getTitle(): String {
         return appPackage.name
     }
 
+    override fun getSubtitle(): String {
+        return appPackage.name.split(".").last().capitalize()
+    }
+
+    override fun getAlphabet(): Char {
+        return getSubtitle().first()
+    }
 }

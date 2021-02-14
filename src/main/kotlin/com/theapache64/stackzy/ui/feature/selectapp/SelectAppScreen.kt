@@ -69,9 +69,6 @@ fun SelectAppScreen(
                         Selectable(
                             modifier = Modifier.width(500.dp),
                             data = app,
-                            icon = {
-                                AppIcon()
-                            },
                             onSelected = onAppSelected
                         )
                     }

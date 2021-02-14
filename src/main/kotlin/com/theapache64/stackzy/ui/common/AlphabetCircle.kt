@@ -2,44 +2,42 @@ package com.theapache64.stackzy.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.font.FontWeight
 
 fun main() {
     Preview {
-        AlphabetCircle(
-            text = "ANDROID",
-            modifier = Modifier
-                .padding(10.dp)
-                .size(60.dp)
-        )
+        LazyRow {
+            items(count = 10) {
+
+            }
+        }
     }
 }
 
 
 @Composable
 fun AlphabetCircle(
-    text: String,
+    character: Char,
+    color: Brush,
     modifier: Modifier = Modifier
 ) {
 
-
     Box(
         modifier = modifier
-            .background(Color.Red, CircleShape),
+            .background(color, CircleShape),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = text.first().toString(),
-            style = MaterialTheme.typography.h5
+            text = character.toUpperCase().toString(),
+            style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
         )
     }
 }

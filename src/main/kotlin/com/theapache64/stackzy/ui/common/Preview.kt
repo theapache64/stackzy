@@ -8,30 +8,21 @@ import androidx.compose.ui.Modifier
 import com.theapache64.stackzy.ui.theme.StackzyTheme
 
 /**
- * To support preview feature
+ * To support instant preview (replacement for android's @Preview annotation)
  */
 fun Preview(
-    slot: @Composable () -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     Window(
         undecorated = true
     ) {
-        PreviewContent {
-            slot()
-        }
-    }
-}
-
-@Composable
-private fun PreviewContent(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    StackzyTheme {
-        Row(
-            modifier = modifier.fillMaxSize()
-        ) {
-            content()
+        StackzyTheme {
+            Row(
+                modifier = modifier.fillMaxSize()
+            ) {
+                content()
+            }
         }
     }
 }

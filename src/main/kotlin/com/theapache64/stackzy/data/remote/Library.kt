@@ -2,7 +2,7 @@ package com.theapache64.stackzy.data.remote
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.theapache64.stackzy.ui.common.Selectable
+import com.theapache64.stackzy.ui.common.AlphabetCircle
 
 @JsonClass(generateAdapter = true)
 data class Library(
@@ -16,9 +16,14 @@ data class Library(
     val packageName: String,
     @Json(name = "website")
     val website: String
-) : Selectable {
+) : AlphabetCircle() {
+
     override fun getTitle(): String {
         return name
+    }
+
+    override fun getSubtitle(): String {
+        return category
     }
 
 }

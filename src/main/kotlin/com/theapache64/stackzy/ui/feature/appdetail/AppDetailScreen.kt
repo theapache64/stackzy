@@ -100,9 +100,6 @@ fun AppDetailScreen(
                                         Selectable(
                                             modifier = Modifier.width(200.dp),
                                             data = app,
-                                            icon = {
-                                                AppIcon()
-                                            },
                                             onSelected = onLibrarySelected
                                         )
                                     }
