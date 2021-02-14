@@ -38,7 +38,11 @@
 | 💻 ADB        	| [Adam](https://malinskiy.github.io/adam/)                         	|
 | 🧪 Testing        	| [DaggerMock](https://github.com/fabioCollini/DaggerMock) + [JUnit](https://github.com/junit-team/junit5) 	|
 
+## 🙇 Credits
+
 - Special thanks to [@SpikeySanju](https://github.com/Spikeysanju) for the beautiful design 😎
+- Icons are from [flaticon.com](https://www.flaticon.com/)
+- Illustrations are from [evernote.design](https://evernote.design/categories/illustrations/)
 
 ## 🥼 Test
 
