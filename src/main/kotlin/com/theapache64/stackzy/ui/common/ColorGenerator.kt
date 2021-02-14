@@ -19,6 +19,9 @@ import java.util.*
 
 private val addedNameColorNames = mutableSetOf<String>()
 
+/**
+ * A color generator to list out colors
+ */
 fun main() {
     var color by mutableStateOf(getRandomColor())
 
@@ -80,7 +83,7 @@ fun main() {
 }
 
 private val random by lazy { Random() }
-fun getRandomColor(): Pair<String, Color> {
+private fun getRandomColor(): Pair<String, Color> {
     val randNum = random.nextInt(0xffffff + 1)
     val colorHex = String.format("#%06x", randNum)
     val javaColor = java.awt.Color.decode(colorHex)

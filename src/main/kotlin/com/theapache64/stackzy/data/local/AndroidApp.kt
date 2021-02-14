@@ -8,11 +8,11 @@ class AndroidApp(
 ) : AlphabetCircle() {
 
     override fun getTitle(): String {
-        return appPackage.name
+        return appPackage.name.split(".").last().capitalize()
     }
 
     override fun getSubtitle(): String {
-        return appPackage.name.split(".").last().capitalize()
+        return appPackage.name
     }
 
     override fun getAlphabet(): Char {

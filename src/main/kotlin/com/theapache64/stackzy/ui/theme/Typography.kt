@@ -50,12 +50,12 @@ val StackzyTypography = Typography(
         fontWeight = FontWeight.Bold,
     ),
     body1 = TextStyle(
-        fontSize = 16.sp,
-        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Normal,
     ),
     body2 = TextStyle(
         fontSize = 14.sp,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Normal,
     ),
     button = TextStyle(
         fontSize = 14.sp,
