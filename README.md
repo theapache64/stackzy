@@ -24,19 +24,27 @@
 
 ## 🏗️️ Built with
 
-- Compose Desktop
-- MVVM
-- Dagger2
-- Decompose
-- Coroutines
+| What           	| How                    	|
+|----------------	|------------------------------	|
+| 🎭 User Interface 	| [Compose Desktop](https://github.com/jetbrains/compose-jb)             	|
+| 🏗 Architecture   	| MVVM                         	|
+| 💉 DI             	| [Dagger2](https://github.com/google/dagger)                      	|
+| 🛠️ APK Decompiling             	| [ApkTool](https://github.com/iBotPeaches/Apktool)                      	|
+| 🛣️ Navigation     	| [Decompose](https://github.com/arkivanov/Decompose)                    	|
+| 🌊 Async          	| Coroutines + Flow            	|
+| 🌐 Networking     	| [Retrofit](https://github.com/square/retrofit)                     	|
+| 📄 JSON           	| [Moshi](https://github.com/square/moshi)                        	|
+| 🪵 Logging        	| [Arbor](https://github.com/ToxicBakery/Arbor)                         	|
+| 💻 ADB        	| [Adam](https://malinskiy.github.io/adam/)                         	|
+| 🧪 Testing        	| [DaggerMock](https://github.com/fabioCollini/DaggerMock) + JUnit + Mockito 	|
+
+- Special thanks to [@SpikeySanju](https://github.com/Spikeysanju) for the beautiful design
 
 ## 🥼 Test
 
 Before executing any test, ensure
 
 - A device has connected to the adb
-- `com.sts.flutter` is installed
-
 
 ## ✍️ Author
 

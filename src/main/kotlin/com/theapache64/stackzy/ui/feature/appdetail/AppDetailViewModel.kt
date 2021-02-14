@@ -9,7 +9,6 @@ import com.theapache64.stackzy.data.repo.ApkToolRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.R
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -58,15 +57,13 @@ class AppDetailViewModel @Inject constructor(
                     apkRemotePath,
                     destinationFile
                 ).distinctUntilChanged()
-                    .collect {
-                        _loadingMessage.value = "Pulling APK $it% ..."
+                    .collect { downloadPercentage ->
+                        _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
                         try {
-                            if (it == 100) {
+                            if (downloadPercentage == 100) {
                                 // Now let's decompile
                                 _loadingMessage.value = R.string.app_detail_loading_decompiling
                                 val decompiledDir = apkToolRepo.decompile(destinationFile)
-
-                                delay(5000)
 
                                 // Analyse
                                 _loadingMessage.value = R.string.app_detail_loading_analysing
