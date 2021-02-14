@@ -1,22 +1,24 @@
 package com.theapache64.stackzy.ui.common
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.unit.dp
 
 /**
  * To show full screen error with centered title and message
  */
 @Composable
 fun FullScreenError(
-    modifier: Modifier = Modifier,
     title: String,
-    message: String
+    message: String,
+    imageBitmap: ImageBitmap? = null,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -24,17 +26,35 @@ fun FullScreenError(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if (imageBitmap != null) {
+            // Image
+            Image(
+                bitmap = imageBitmap,
+                modifier = Modifier.width(300.dp),
+                contentDescription = ""
+            )
+        }
+
+        /*Space*/
+        Spacer(
+            modifier = Modifier.height(30.dp)
+        )
 
         /*Title*/
         Text(
             text = title,
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.h4
+        )
+
+        /*Space*/
+        Spacer(
+            modifier = Modifier.height(10.dp)
         )
 
         /*Message*/
         Text(
             text = message,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.body2,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )
     }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.ui.common.ContentScreen
@@ -44,6 +45,7 @@ fun Content(
         FullScreenError(
             title = R.string.device_no_device_title,
             message = R.string.device_no_device_message,
+            imageBitmap = imageResource("drawables/no_device.png")
         )
     } else {
         ContentScreen(
