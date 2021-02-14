@@ -16,6 +16,8 @@ import com.theapache64.stackzy.util.R
 /**
  * To show a basic content page with title
  */
+const val CONTENT_PADDING = 30
+
 @Composable
 fun ContentScreen(
     title: String,
@@ -27,10 +29,12 @@ fun ContentScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(30.dp)
+            .padding(CONTENT_PADDING.dp)
     ) {
 
         Row(
+            modifier = Modifier
+                .height(50.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -54,7 +58,7 @@ fun ContentScreen(
         }
 
         Spacer(
-            modifier = Modifier.height(30.dp)
+            modifier = Modifier.height(20.dp)
         )
 
         content()

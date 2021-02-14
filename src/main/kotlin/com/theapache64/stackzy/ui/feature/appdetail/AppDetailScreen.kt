@@ -17,7 +17,6 @@ import com.theapache64.stackzy.ui.common.ContentScreen
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.LoadingText
 import com.theapache64.stackzy.ui.common.Selectable
-import com.theapache64.stackzy.ui.feature.selectapp.AppIcon
 import com.theapache64.stackzy.util.R
 
 private const val GRID_SIZE = 3

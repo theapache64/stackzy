@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.ui.common.AlphabetCircle
 import com.theapache64.stackzy.ui.common.ContentScreen
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable

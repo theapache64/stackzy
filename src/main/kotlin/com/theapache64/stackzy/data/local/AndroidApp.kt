@@ -16,6 +16,6 @@ class AndroidApp(
     }
 
     override fun getAlphabet(): Char {
-        return getSubtitle().first()
+        return getTitle().first()
     }
 }

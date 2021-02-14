@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.common
+package com.theapache64.stackzy.ui.util
 
 import androidx.compose.desktop.Window
 import androidx.compose.foundation.layout.Row
