@@ -2,7 +2,7 @@
 
 # stackzy
 
-👷 This project is under active development
+👷 This project is under active development and in a highly experimental stage
 
 [comment]: <> (![latestVersion]&#40;https://img.shields.io/github/v/release/theapache64/stackzy&#41;)
 <a href="https://twitter.com/theapache64" target="_blank">
@@ -90,6 +90,7 @@ Give a ⭐️ if this project helped you!
 - [ ] Release the first public version with basic features
 - [ ] Theme switching
 - [ ] Playstore integration (Download APK from playstore)
+- [ ] Support more libraries
 
 ## 📝 License
 
