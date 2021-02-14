@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
+import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.ui.common.*
 import com.theapache64.stackzy.util.R
@@ -88,37 +89,59 @@ fun AppDetailScreen(
                 }
             } else if (report != null) {
 
-                val libsUsed = mutableListOf<Library>()
-                for (x in report!!.libraries.values) {
-                    libsUsed.addAll(x)
-                }
-
-
-                LazyColumn {
-                    items(
-                        items = if (libsUsed.size > GRID_SIZE) {
-                            libsUsed.chunked(GRID_SIZE)
-                        } else {
-                            listOf(libsUsed)
-                        }
-                    ) { appSet ->
-                        Row {
-                            appSet.map { app ->
-
-                                // GridItem
-                                Selectable(
-                                    modifier = Modifier.width(appItemWidth.dp),
-                                    data = app,
-                                    onSelected = onLibrarySelected
-                                )
-                            }
-                        }
-
-                        Spacer(
-                            modifier = Modifier.height(10.dp)
+                if (report!!.libraries.isEmpty()) {
+                    val platform = report!!.platform
+                    if (platform is Platform.NativeKotlin || platform is Platform.NativeJava) {
+                        FullScreenError(
+                            title = "We couldn't find any libraries",
+                            message = "But don't worry, we're improving our dictionary strength. Please try later",
+                            image = imageResource("drawables/guy.png")
+                        )
+                    } else {
+                        // non native platform with no libs
+                        FullScreenError(
+                            title = "// TODO : ",
+                            message = "${report?.platform?.name} dependency analysis is yet to support",
+                            image = imageResource("drawables/code.png")
                         )
                     }
+                } else {
+
+                    // Show library
+                    val libsUsed = mutableListOf<Library>()
+                    for (x in report!!.libraries.values) {
+                        libsUsed.addAll(x)
+                    }
+
+
+                    LazyColumn {
+                        items(
+                            items = if (libsUsed.size > GRID_SIZE) {
+                                libsUsed.chunked(GRID_SIZE)
+                            } else {
+                                listOf(libsUsed)
+                            }
+                        ) { appSet ->
+                            Row {
+                                appSet.map { app ->
+
+                                    // GridItem
+                                    Selectable(
+                                        modifier = Modifier.width(appItemWidth.dp),
+                                        data = app,
+                                        onSelected = onLibrarySelected
+                                    )
+                                }
+                            }
+
+                            Spacer(
+                                modifier = Modifier.height(10.dp)
+                            )
+                        }
+                    }
                 }
+
+
             }
         }
 

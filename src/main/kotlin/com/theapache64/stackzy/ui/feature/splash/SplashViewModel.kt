@@ -54,7 +54,7 @@ class SplashViewModel @Inject constructor(
                             Arbor.d("${categoriesRepo.getCachedCategories()?.size} categories cached")
                             Arbor.d("${librariesRepo.getCachedLibraries()?.size} libraries cached")
 
-                            delay(1000)
+                            // delay(1000)
                             _isSyncFinished.value = true
                         } else {
                             _isSyncFailed.value = when {
