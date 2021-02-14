@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.common
+package com.theapache64.stackzy.ui.util
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.github.theapache64.namethatcolor.manager.ColorNameFinder
 import com.github.theapache64.namethatcolor.model.HexColor
-import com.theapache64.stackzy.ui.util.Preview
+import com.theapache64.stackzy.ui.common.AlphabetCircle
 import com.theapache64.stackzy.util.ColorUtil
 import java.util.*
 

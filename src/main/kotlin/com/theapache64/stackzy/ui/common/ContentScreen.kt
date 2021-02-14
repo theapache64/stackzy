@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.util.R
 
@@ -34,7 +36,7 @@ fun ContentScreen(
 
         Row(
             modifier = Modifier
-                .height(50.dp),
+                .height(60.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -54,7 +56,14 @@ fun ContentScreen(
                 style = MaterialTheme.typography.h5
             )
 
-            topRightSlot?.invoke()
+            if (topRightSlot != null) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    topRightSlot()
+                }
+            }
         }
 
         Spacer(

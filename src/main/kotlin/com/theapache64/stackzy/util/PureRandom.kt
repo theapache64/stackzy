@@ -12,14 +12,12 @@ class PureRandom<T>(
 
         if (takenItems.size >= items.size) {
             // all items taken so clear the list
-            println("Clear!")
             takenItems.clear()
         }
 
         val takenItem = items.random()
         if (takenItems.contains(takenItem)) {
             // already taken
-            println("Already taken")
             return take()
         }
         takenItems.add(takenItem)

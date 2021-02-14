@@ -39,6 +39,16 @@ class NavHostComponent(
 
     private val router = router<Config, Component>(
         initialConfiguration = Config.Splash,
+        /*initialConfiguration = Config.SelectApp(
+            AndroidDevice(
+                "Samsung",
+                "someModel",
+                Device(
+                    "R52M604X18E",
+                    DeviceState.DEVICE
+                )
+            )
+        ),*/
         /*initialConfiguration = Config.AppDetail(
             AndroidDevice(
                 "Samsung",

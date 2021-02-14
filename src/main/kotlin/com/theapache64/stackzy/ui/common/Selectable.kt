@@ -84,7 +84,7 @@ fun <T : AlphabetCircle> Selectable(
             )
 
             Spacer(
-                modifier = Modifier.width(6.dp)
+                modifier = Modifier.width(12.dp)
             )
 
             Text(
