@@ -47,7 +47,7 @@ fun ContentScreen(
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h5
             )
 
             topRightSlot?.invoke()

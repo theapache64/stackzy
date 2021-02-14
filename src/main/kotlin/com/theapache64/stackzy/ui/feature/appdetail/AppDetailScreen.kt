@@ -32,12 +32,14 @@ fun AppDetailScreen(
     val loadingMessage by appDetailViewModel.loadingMessage.collectAsState()
     val report by appDetailViewModel.analysisReport.collectAsState()
 
+    val title = if (report == null || report?.appName == null) {
+        R.string.app_detail_title
+    } else {
+        report!!.appName!!
+    }
+
     ContentScreen(
-        title = if (report == null) {
-            R.string.app_detail_title
-        } else {
-            report!!.appName
-        },
+        title = title,
         onBackClicked = onBackClicked
     ) {
         if (fatalError != null) {
