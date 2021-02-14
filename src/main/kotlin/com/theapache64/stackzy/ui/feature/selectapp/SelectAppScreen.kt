@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.AndroidApp
-import com.theapache64.stackzy.ui.common.CONTENT_PADDING
+import com.theapache64.stackzy.ui.common.CONTENT_PADDING_HORIZONTAL
 import com.theapache64.stackzy.ui.common.ContentScreen
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.ui.theme.BigStone
@@ -39,7 +39,7 @@ fun SelectAppScreen(
 
     val searchKeyword by selectAppViewModel.searchKeyword.collectAsState()
     val apps by selectAppViewModel.apps.collectAsState()
-    val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING * 2)) / GRID_SIZE
+    val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
     println("Width is $appItemWidth")
 
     ContentScreen(

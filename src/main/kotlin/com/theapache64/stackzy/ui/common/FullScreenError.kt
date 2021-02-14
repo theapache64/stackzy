@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun FullScreenError(
     title: String,
     message: String,
-    imageBitmap: ImageBitmap? = null,
+    image: ImageBitmap? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -26,10 +26,10 @@ fun FullScreenError(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (imageBitmap != null) {
+        if (image != null) {
             // Image
             Image(
-                bitmap = imageBitmap,
+                bitmap = image,
                 modifier = Modifier.width(300.dp),
                 contentDescription = ""
             )

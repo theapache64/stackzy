@@ -1,6 +1,5 @@
 package com.theapache64.stackzy.ui.common
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -11,14 +10,14 @@ import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.util.R
 
 /**
  * To show a basic content page with title
  */
-const val CONTENT_PADDING = 30
+const val CONTENT_PADDING_VERTICAL = 15
+const val CONTENT_PADDING_HORIZONTAL = 30
 
 @Composable
 fun ContentScreen(
@@ -31,7 +30,12 @@ fun ContentScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(CONTENT_PADDING.dp)
+            .padding(
+                start = CONTENT_PADDING_HORIZONTAL.dp,
+                end = CONTENT_PADDING_HORIZONTAL.dp,
+                top = CONTENT_PADDING_VERTICAL.dp,
+                bottom = CONTENT_PADDING_VERTICAL.dp,
+            )
     ) {
 
         Row(

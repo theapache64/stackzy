@@ -45,7 +45,7 @@ fun Content(
         FullScreenError(
             title = R.string.device_no_device_title,
             message = R.string.device_no_device_message,
-            imageBitmap = imageResource("drawables/no_device.png")
+            image = imageResource("drawables/no_device.png")
         )
     } else {
         ContentScreen(

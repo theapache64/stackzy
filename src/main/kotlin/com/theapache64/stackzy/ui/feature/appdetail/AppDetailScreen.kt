@@ -1,14 +1,19 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.desktop.LocalAppWindow
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.ui.common.*
@@ -32,7 +37,7 @@ fun AppDetailScreen(
         report!!.appName!!
     }
 
-    val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING * 2)) / GRID_SIZE
+    val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
     ContentScreen(
         title = title,
@@ -45,11 +50,38 @@ fun AppDetailScreen(
             )
         } else {
             if (loadingMessage != null) {
+
+                var enabled by remember { mutableStateOf(true) }
+
+                val alpha = if (enabled) {
+                    0f
+                } else {
+                    360f
+                }
+
+                val animatedValue by animateFloatAsState(
+                    targetValue = alpha,
+                    animationSpec = tween(200),
+                    finishedListener = {
+                        enabled = !enabled
+                    }
+                )
+
                 Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxSize()
                 ) {
+                    Image(
+                        modifier = Modifier
+                            .rotate(animatedValue)
+                            .align(Alignment.Center)
+                            .size(50.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                        bitmap = imageResource("drawables/loading.png"),
+                        contentDescription = ""
+                    )
+
                     LoadingText(
+                        modifier = Modifier.align(Alignment.BottomCenter),
                         message = loadingMessage!!
                     )
                 }

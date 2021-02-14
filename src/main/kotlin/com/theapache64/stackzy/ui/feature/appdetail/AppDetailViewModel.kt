@@ -9,6 +9,7 @@ import com.theapache64.stackzy.data.repo.ApkToolRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.R
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -64,6 +65,8 @@ class AppDetailViewModel @Inject constructor(
                                 // Now let's decompile
                                 _loadingMessage.value = R.string.app_detail_loading_decompiling
                                 val decompiledDir = apkToolRepo.decompile(destinationFile)
+
+                                delay(5000)
 
                                 // Analyse
                                 _loadingMessage.value = R.string.app_detail_loading_analysing
