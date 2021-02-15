@@ -29,6 +29,7 @@ class MainActivity : Activity() {
             StackzyTheme(
                 title = R.string.app_name
             ) {
+                // Igniting navigation
                 rootComponent(factory = ::NavHostComponent)
                     .render()
             }

@@ -6,6 +6,9 @@ import kotlin.math.min
 object ColorUtil {
     private const val BRIGHT_FRACTION = 0.20f
 
+    /**
+     * To get brightened version of the given color
+     */
     fun getBrightenedColor(randomColor: Color): Color {
         val newRed = min(1f, (randomColor.red + (randomColor.red + 1 * BRIGHT_FRACTION)))
         val newGreen = min(1f, (randomColor.green + (randomColor.green + 1 * BRIGHT_FRACTION)))

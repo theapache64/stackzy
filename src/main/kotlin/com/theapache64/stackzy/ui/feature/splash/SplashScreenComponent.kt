@@ -6,6 +6,9 @@ import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
+/**
+ * Splash Screen Component
+ */
 class SplashScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,

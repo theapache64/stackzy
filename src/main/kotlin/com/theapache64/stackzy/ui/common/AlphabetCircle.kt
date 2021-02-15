@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import com.theapache64.stackzy.ui.util.Preview
 
+/*
 fun main() {
     Preview {
         LazyRow {
@@ -22,6 +23,7 @@ fun main() {
         }
     }
 }
+*/
 
 
 @Composable

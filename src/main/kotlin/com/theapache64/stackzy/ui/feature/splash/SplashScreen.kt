@@ -19,6 +19,9 @@ import com.theapache64.stackzy.ui.common.LoadingText
 import com.theapache64.stackzy.ui.common.Logo
 import com.theapache64.stackzy.util.R
 
+/**
+ * Renders SplashScreen
+ */
 @ExperimentalFoundationApi
 @Composable
 fun SplashScreen(
@@ -34,10 +37,12 @@ fun SplashScreen(
         return
     }
 
+    // Content
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
+        // Logo
         Logo(
             modifier = Modifier
                 .size(100.dp)
@@ -45,6 +50,8 @@ fun SplashScreen(
         )
 
         if (isSyncFinished.not()) {
+
+            // Loading text
             LoadingText(
                 message = "Syncing...",
                 modifier = Modifier
@@ -55,6 +62,7 @@ fun SplashScreen(
         }
 
         if (syncFailedReason != null) {
+            // Error
             Snackbar(
                 modifier = Modifier
                     .padding(10.dp)

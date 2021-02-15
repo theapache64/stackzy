@@ -13,10 +13,16 @@ class SelectAppViewModel @Inject constructor(
     val adbRepo: AdbRepo
 ) {
 
+    /**
+     * To store all apps instaled in the device (used for search filtering)
+     */
     private var fullApps: List<AndroidApp>? = null
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword: StateFlow<String> = _searchKeyword
 
+    /**
+     * Filtered apps
+     */
     private val _apps = MutableStateFlow(listOf<AndroidApp>())
     val apps: StateFlow<List<AndroidApp>> = _apps
 
@@ -29,6 +35,8 @@ class SelectAppViewModel @Inject constructor(
 
     fun onSearchKeywordChanged(newKeyword: String) {
         _searchKeyword.value = newKeyword
+
+        // Filtering apps
         _apps.value = fullApps!!.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
     }
 }

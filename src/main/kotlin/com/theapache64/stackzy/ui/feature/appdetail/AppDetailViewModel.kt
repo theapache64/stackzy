@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 
@@ -23,7 +24,6 @@ class AppDetailViewModel @Inject constructor(
     private val librariesRepo: LibrariesRepo,
     private val untrackedLibsRepo: UntrackedLibsRepo
 ) {
-
 
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
@@ -50,8 +50,6 @@ class AppDetailViewModel @Inject constructor(
                     suffix = ".apk"
                 ).toFile()
 
-                println("Path is ${destinationFile.absolutePath}")
-
                 adbRepo.pullFile(
                     androidDevice,
                     apkRemotePath,
@@ -61,21 +59,7 @@ class AppDetailViewModel @Inject constructor(
                         _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
                         try {
                             if (downloadPercentage == 100) {
-                                // Now let's decompile
-                                _loadingMessage.value = R.string.app_detail_loading_decompiling
-                                val decompiledDir = apkToolRepo.decompile(destinationFile)
-
-                                // Analyse
-                                _loadingMessage.value = R.string.app_detail_loading_analysing
-                                val allLibraries = librariesRepo.getCachedLibraries()
-                                require(allLibraries != null) { "Cached libraries are null" }
-
-                                // Report
-                                val report = apkAnalyzerRepo.analyze(decompiledDir, allLibraries)
-
-
-                                _analysisReport.value = report
-                                _loadingMessage.value = null
+                                onApkPulled(destinationFile)
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -86,6 +70,23 @@ class AppDetailViewModel @Inject constructor(
                 _fatalError.value = R.string.app_detail_error_apk_remote_path
             }
         }
+    }
+
+    private fun onApkPulled(destinationFile: File) {
+        // Now let's decompile
+        _loadingMessage.value = R.string.app_detail_loading_decompiling
+        val decompiledDir = apkToolRepo.decompile(destinationFile)
+
+        // Analyse
+        _loadingMessage.value = R.string.app_detail_loading_analysing
+        val allLibraries = librariesRepo.getCachedLibraries()
+        require(allLibraries != null) { "Cached libraries are null" }
+
+        // Report
+        val report = apkAnalyzerRepo.analyze(decompiledDir, allLibraries)
+
+        _analysisReport.value = report
+        _loadingMessage.value = null
     }
 
     /**

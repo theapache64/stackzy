@@ -8,7 +8,7 @@ import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
 class SelectDeviceScreenComponent(
-    appComponent : AppComponent,
+    appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onDeviceSelected: (AndroidDevice) -> Unit
 ) : Component, ComponentContext by componentContext {
@@ -22,13 +22,13 @@ class SelectDeviceScreenComponent(
 
     @Composable
     override fun render() {
-        // Start watching
+        // Start watching devices
         selectDeviceViewModel.watchConnectedDevices()
 
         SelectDeviceScreen(
             selectDeviceViewModel,
             onDeviceSelected = {
-                // Stop watching
+                // Stop watching devices
                 selectDeviceViewModel.removeConnectionWatcher()
 
                 onDeviceSelected(it)

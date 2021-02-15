@@ -15,6 +15,9 @@ import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.util.R
 
+/**
+ * To select a device from connected devices
+ */
 @Composable
 fun SelectDeviceScreen(
     selectDeviceViewModel: SelectDeviceViewModel,
@@ -48,6 +51,7 @@ fun Content(
             image = imageResource("drawables/no_device.png")
         )
     } else {
+        // Content
         CustomScaffold(
             title = R.string.device_select_the_device
         ) {

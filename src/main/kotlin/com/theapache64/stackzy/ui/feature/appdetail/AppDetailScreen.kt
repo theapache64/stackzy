@@ -38,6 +38,7 @@ fun AppDetailScreen(
         report!!.appName!!
     }
 
+    // Calculating item width based on screen width
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
     CustomScaffold(
@@ -52,46 +53,14 @@ fun AppDetailScreen(
             )
         } else {
             if (loadingMessage != null) {
-
-                var enabled by remember { mutableStateOf(true) }
-
-                val alpha = if (enabled) {
-                    0f
-                } else {
-                    360f
-                }
-
-                val animatedValue by animateFloatAsState(
-                    targetValue = alpha,
-                    animationSpec = tween(200),
-                    finishedListener = {
-                        enabled = !enabled
-                    }
-                )
-
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .rotate(animatedValue)
-                            .align(Alignment.Center)
-                            .size(50.dp),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                        bitmap = imageResource("drawables/loading.png"),
-                        contentDescription = ""
-                    )
-
-                    LoadingText(
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                        message = loadingMessage!!
-                    )
-                }
+                LoadingAnimation(loadingMessage!!)
             } else if (report != null) {
 
                 if (report!!.libraries.isEmpty()) {
+                    // No libraries found
                     val platform = report!!.platform
                     if (platform is Platform.NativeKotlin || platform is Platform.NativeJava) {
+                        // native platform with libs
                         FullScreenError(
                             title = "We couldn't find any libraries",
                             message = "But don't worry, we're improving our dictionary strength. Please try later",
@@ -146,5 +115,44 @@ fun AppDetailScreen(
         }
 
 
+    }
+}
+
+@Composable
+private fun LoadingAnimation(loadingMessage: String) {
+
+    var enabled by remember { mutableStateOf(true) }
+
+    val alpha = if (enabled) {
+        0f
+    } else {
+        360f
+    }
+
+    val animatedValue by animateFloatAsState(
+        targetValue = alpha,
+        animationSpec = tween(200),
+        finishedListener = {
+            enabled = !enabled
+        }
+    )
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Image(
+            modifier = Modifier
+                .rotate(animatedValue)
+                .align(Alignment.Center)
+                .size(50.dp),
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+            bitmap = imageResource("drawables/loading.png"),
+            contentDescription = ""
+        )
+
+        LoadingText(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            message = loadingMessage!!
+        )
     }
 }

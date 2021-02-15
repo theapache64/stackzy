@@ -2,10 +2,8 @@ package com.theapache64.stackzy
 
 import com.theapache64.cyclone.core.Application
 import com.theapache64.stackzy.ui.feature.MainActivity
-import com.theapache64.stackzy.util.CommandExecutor
 import com.toxicbakery.logging.Arbor
 import com.toxicbakery.logging.Seedling
-import java.io.File
 
 class App : Application() {
     override fun onCreate() {
@@ -17,6 +15,9 @@ class App : Application() {
     }
 }
 
+/**
+ * The magic beings here
+ */
 fun main() {
     App().onCreate()
 }

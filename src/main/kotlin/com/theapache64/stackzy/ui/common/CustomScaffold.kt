@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.util.R
 
 /**
- * To show a basic content page with title
+ * To show a basic content page
  */
 const val CONTENT_PADDING_VERTICAL = 15
 const val CONTENT_PADDING_HORIZONTAL = 30
@@ -39,12 +39,14 @@ fun CustomScaffold(
             )
     ) {
 
+        // Header
         Row(
             modifier = Modifier
                 .height(60.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
+            // Back button
             if (onBackClicked != null) {
                 IconButton(
                     onClick = onBackClicked,
@@ -56,6 +58,7 @@ fun CustomScaffold(
                 }
             }
 
+            // Title and Subtitle
             Column {
                 Text(
                     text = title,
@@ -71,6 +74,7 @@ fun CustomScaffold(
                 }
             }
 
+            // Right slot (Search, Icons etc)
             if (topRightSlot != null) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -85,6 +89,7 @@ fun CustomScaffold(
             modifier = Modifier.height(20.dp)
         )
 
+        // Content slot
         content()
     }
 

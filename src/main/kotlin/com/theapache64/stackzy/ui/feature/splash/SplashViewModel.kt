@@ -6,7 +6,6 @@ import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.utils.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -14,6 +13,9 @@ import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Splash Screen's brain
+ */
 class SplashViewModel @Inject constructor(
     private val categoriesRepo: CategoriesRepo,
     private val librariesRepo: LibrariesRepo

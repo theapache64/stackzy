@@ -19,10 +19,16 @@ import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 import java.awt.Desktop
 import java.net.URI
 
+/**
+ * All navigation decisions are made from here
+ */
 class NavHostComponent(
     private val componentContext: ComponentContext
 ) : Component, ComponentContext by componentContext {
 
+    /**
+     * Available screens
+     */
     private sealed class Config : Parcelable {
         object Splash : Config()
         object SelectDevice : Config()
@@ -36,7 +42,9 @@ class NavHostComponent(
     private val appComponent: AppComponent = DaggerAppComponent
         .create()
 
-
+    /**
+     * Router configuration
+     */
     private val router = router<Config, Component>(
         initialConfiguration = Config.Splash,
         /*initialConfiguration = Config.SelectApp(
@@ -65,6 +73,9 @@ class NavHostComponent(
         componentFactory = ::createScreenComponent
     )
 
+    /**
+     * When a new navigation request made, the screen will be created by this method.
+     */
     private fun createScreenComponent(config: Config, componentContext: ComponentContext): Component {
         return when (config) {
             is Config.Splash -> SplashScreenComponent(
@@ -139,6 +150,9 @@ class NavHostComponent(
         Desktop.getDesktop().browse(URI(library.website))
     }
 
+    /**
+     * Invoked when back arrow pressed
+     */
     private fun onBackClicked() {
         router.pop()
     }

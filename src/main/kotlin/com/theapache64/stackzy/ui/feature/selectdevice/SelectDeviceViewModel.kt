@@ -2,6 +2,7 @@ package com.theapache64.stackzy.ui.feature.selectdevice
 
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,22 +18,26 @@ class SelectDeviceViewModel @Inject constructor(
     private val _connectedDevices = MutableStateFlow<List<AndroidDevice>?>(null)
     val connectedDevices: StateFlow<List<AndroidDevice>?> = _connectedDevices
 
-
+    /**
+     * To start watching connected devices
+     */
     fun watchConnectedDevices() {
-        println("Adding watcher")
         GlobalScope.launch {
             adbRepo.watchConnectedDevice()
                 .catch {
-                    println("Error: ${it.message}")
+                    Arbor.d("Error: ${it.message}")
                 }
                 .collect {
-                    println("Devices : ${it}")
+                    Arbor.d("Devices : $it")
                     _connectedDevices.value = it
                 }
         }
     }
 
 
+    /**
+     * To stop watching connected devices
+     */
     fun removeConnectionWatcher() {
         println("Removing watcher")
         adbRepo.cancelWatchConnectedDevice()

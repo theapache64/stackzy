@@ -26,6 +26,9 @@ import com.theapache64.stackzy.util.R
 
 private const val GRID_SIZE = 3
 
+/**
+ * To select an application from the selected device
+ */
 @Composable
 fun SelectAppScreen(
     selectAppViewModel: SelectAppViewModel,
@@ -35,8 +38,9 @@ fun SelectAppScreen(
 
     val searchKeyword by selectAppViewModel.searchKeyword.collectAsState()
     val apps by selectAppViewModel.apps.collectAsState()
+
+    // Calculating item width based on screen width
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
-    println("Width is $appItemWidth")
 
     CustomScaffold(
         title = R.string.select_app_title,
