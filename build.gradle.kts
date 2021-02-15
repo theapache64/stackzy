@@ -27,7 +27,7 @@ dependencies {
     implementation(compose.materialIconsExtended)
 
     // Cyclone
-    implementation("com.theapache64:cyclone:1.0.0-alpha02")
+    implementation("com.github.theapache64:cyclone:1.0.0-alpha02")
 
     // Dagger : A fast dependency injector for Android and Java.
     val daggerVersion = "2.31.2"
