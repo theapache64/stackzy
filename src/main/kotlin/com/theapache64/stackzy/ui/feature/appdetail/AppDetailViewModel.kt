@@ -3,11 +3,10 @@ package com.theapache64.stackzy.ui.feature.appdetail
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.data.repo.AdbRepo
-import com.theapache64.stackzy.data.repo.ApkAnalyzerRepo
-import com.theapache64.stackzy.data.repo.ApkToolRepo
-import com.theapache64.stackzy.data.repo.LibrariesRepo
+import com.theapache64.stackzy.data.remote.UntrackedLibrary
+import com.theapache64.stackzy.data.repo.*
 import com.theapache64.stackzy.util.R
+import com.theapache64.stackzy.utils.calladapter.flow.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +20,8 @@ class AppDetailViewModel @Inject constructor(
     private val adbRepo: AdbRepo,
     private val apkToolRepo: ApkToolRepo,
     private val apkAnalyzerRepo: ApkAnalyzerRepo,
-    private val librariesRepo: LibrariesRepo
+    private val librariesRepo: LibrariesRepo,
+    private val untrackedLibsRepo: UntrackedLibsRepo
 ) {
 
 
@@ -72,6 +72,8 @@ class AppDetailViewModel @Inject constructor(
 
                                 // Report
                                 val report = apkAnalyzerRepo.analyze(decompiledDir, allLibraries)
+
+
                                 _analysisReport.value = report
                                 _loadingMessage.value = null
                             }
@@ -83,6 +85,52 @@ class AppDetailViewModel @Inject constructor(
             } else {
                 _fatalError.value = R.string.app_detail_error_apk_remote_path
             }
+        }
+    }
+
+    /**
+     * TODO:
+     */
+    private suspend fun trackUntrackedLibs(report: AnalysisReport) {
+        if (report.untrackedLibraries.isNotEmpty()) {
+            // Sync untracked libs
+            untrackedLibsRepo.getUntrackedLibs()
+                .collect { remoteUntrackedLibsResp ->
+                    when (remoteUntrackedLibsResp) {
+                        is Resource.Loading -> {
+                            _loadingMessage.value = "Loading untracked libs..."
+                        }
+                        is Resource.Success -> {
+                            // remove already listed libs
+                            val newUntrackedLibs =
+                                report.untrackedLibraries.filter { localUntrackedLib ->
+                                    remoteUntrackedLibsResp.data.find { it.packageName == localUntrackedLib } == null
+                                }.map { UntrackedLibrary(it) }
+
+                            for (ut in newUntrackedLibs) {
+                                untrackedLibsRepo.add(ut)
+                                    .collect {
+                                        when (it) {
+                                            is Resource.Loading -> {
+                                                _loadingMessage.value =
+                                                    "Adding ${ut.packageName} to untracked libs..."
+                                            }
+                                            is Resource.Success -> {
+                                                println("Done!! -> ${ut.packageName}")
+                                            }
+
+                                            is Resource.Error -> {
+                                                println("FAILED: ${it.errorData}")
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                        is Resource.Error -> {
+
+                        }
+                    }
+                }
         }
     }
 }

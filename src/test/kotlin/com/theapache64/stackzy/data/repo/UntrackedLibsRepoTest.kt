@@ -40,7 +40,6 @@ internal class UntrackedLibsRepoTest {
 
     @Test
     fun `Get untracked packages`() = runBlockingUnitTest {
-        val inputPackageName = "com.test.package"
         untrackedLibsRepo
             .getUntrackedLibs()
             .collect {

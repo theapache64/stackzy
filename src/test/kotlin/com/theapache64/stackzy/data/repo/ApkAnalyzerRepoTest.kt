@@ -136,8 +136,9 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val appLibraries = apkAnalyzerRepo.getAppLibraries(decompiledDir, libs)
+            val (appLibraries, untrackedLibs) = apkAnalyzerRepo.getAppLibraries(decompiledDir, libs)
             appLibraries.size.should.above(0)
+            untrackedLibs.size.should.above(0)
         }
     }
 
@@ -146,13 +147,13 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val appLibraries = apkAnalyzerRepo.getLibraries(
+            val (untrackedLibs, appLibraries) = apkAnalyzerRepo.getLibraries(
                 Platform.NativeKotlin(),
                 decompiledDir,
                 libs
             )
-            println(appLibraries)
             appLibraries.size.should.above(0)
+            untrackedLibs.size.should.above(0)
         }
     }
 

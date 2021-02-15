@@ -24,10 +24,12 @@ class ApkAnalyzerRepo @Inject constructor() {
         allLibraries: List<Library>
     ): AnalysisReport {
         val platform = getPlatform(decompiledDir)
+        val (untrackedLibs, libraries) = getLibraries(platform, decompiledDir, allLibraries)
         return AnalysisReport(
             appName = getAppName(decompiledDir),
             platform = platform,
-            libraries = getLibraries(platform, decompiledDir, allLibraries)
+            libraries = libraries,
+            untrackedLibraries = untrackedLibs
         )
     }
 
@@ -37,14 +39,14 @@ class ApkAnalyzerRepo @Inject constructor() {
     fun getLibraries(
         platform: Platform,
         decompiledDir: File,
-        allLibraries: List<Library>
-    ): Map<String, List<Library>> {
+        allRemoteLibraries: List<Library>
+    ): Pair<Set<String>, Map<String, List<Library>>> {
         return when (platform) {
             is Platform.NativeJava,
             is Platform.NativeKotlin -> {
 
                 // Get all used libraries
-                var appLibraries = getAppLibraries(decompiledDir, allLibraries).toMutableList()
+                var (appLibraries, untrackedLibs) = getAppLibraries(decompiledDir, allRemoteLibraries)
                 appLibraries = mergeDep(appLibraries, "okhttp3", "retrofit2")
 
                 // Now let's categories it
@@ -56,20 +58,21 @@ class ApkAnalyzerRepo @Inject constructor() {
                     catList.add(appLib)
                 }
                 println("Cats: $libWithCats")
-                return libWithCats
+                return Pair(untrackedLibs, libWithCats)
             }
             else -> {
                 // TODO : Support other platforms
-                mapOf()
+                Pair(setOf(), mapOf())
             }
         }
     }
 
     private fun mergeDep(
-        appLibraries: MutableList<Library>,
+        appLibSet: Set<Library>,
         libToRemove: String,
         libToRemoveFrom: String
-    ): MutableList<Library> {
+    ): MutableSet<Library> {
+        val appLibraries = appLibSet.toMutableSet()
         val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == libToRemoveFrom } != null
         if (hasDepLib) {
             // remove that lib
@@ -188,21 +191,37 @@ class ApkAnalyzerRepo @Inject constructor() {
     fun getAppLibraries(
         decompiledDir: File,
         allLibraries: List<Library>
-    ): MutableSet<Library> {
+    ): Pair<Set<Library>, Set<String>> {
         val appLibs = mutableSetOf<Library>()
+        val untrackedLibs = mutableSetOf<String>()
+
         decompiledDir.walk().forEach { file ->
             if (file.isDirectory) {
+                var isLibFound = false
                 for (remoteLib in allLibraries) {
                     val packageAsPath = remoteLib.packageName.replace(".", "/")
                     val dirRegEx = getDirRegExFormat(packageAsPath)
                     if (isMatch(dirRegEx, file.absolutePath)) {
                         appLibs.add(remoteLib)
+                        isLibFound = true
                         break
+                    }
+                }
+
+                // Listing untracked libs
+                if (isLibFound.not()) {
+                    val filesInsideDir = file.listFiles { it -> !it.isDirectory }?.size ?: 0
+                    if (filesInsideDir > 0 && file.absolutePath.contains("/smali")) {
+                        val afterSmali = file.absolutePath.split("/smali")[1]
+                        val firstSlash = afterSmali.indexOf('/')
+                        val packageName = afterSmali.substring(firstSlash + 1).replace("/", ".")
+                        untrackedLibs.add(packageName)
                     }
                 }
             }
         }
-        return appLibs
+
+        return Pair(appLibs, untrackedLibs)
     }
 
     private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {

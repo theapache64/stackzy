@@ -6,5 +6,6 @@ data class AnalysisReport(
     val appName: String?,
     val platform: Platform,
     // key = Category
-    val libraries: Map<String, List<Library>>
+    val libraries: Map<String, List<Library>>,
+    val untrackedLibraries: Set<String>
 )
