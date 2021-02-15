@@ -16,7 +16,7 @@ class App : Application() {
 }
 
 /**
- * The magic beings here
+ * The magic begins here
  */
 fun main() {
     App().onCreate()
