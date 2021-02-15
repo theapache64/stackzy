@@ -2,6 +2,8 @@
 
 # stackzy
 
+![](screenshot.png)
+
 👷 This project is under active development and in a highly experimental stage
 
 [comment]: <> (![latestVersion]&#40;https://img.shields.io/github/v/release/theapache64/stackzy&#41;)
@@ -10,10 +12,9 @@
 </a>
 
 > A desktop app to identify the app stack. Built using Compose desktop
+### ✨ Demo
 
-[comment]: <> (### ✨ Demo)
-
-[comment]: <> (![]&#40;demo.gif&#41;)
+- [Watch](https://www.youtube.com/watch?v=HjHQGcKxXaM&ab_channel=theapache64) demo
 
 ## ⌨️ Usage
 
