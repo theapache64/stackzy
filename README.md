@@ -1,5 +1,3 @@
-![](cover.jpeg)
-
 # stackzy
 
 ![](screenshot.png)
