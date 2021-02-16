@@ -17,7 +17,9 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.floor
 import kotlin.math.roundToInt
 
 class AdbRepo @Inject constructor() {
@@ -140,10 +142,14 @@ class AdbRepo @Inject constructor() {
                 scope = GlobalScope,
             )
 
-            var percentage: Int
+            var percentage: Int? = null
             for (percentageDouble in channel) {
-                percentage = (percentageDouble * 100).roundToInt()
+                percentage = floor(percentageDouble * 100).roundToInt()
                 emit(percentage)
+            }
+
+            if (percentage == null || percentage < 100) {
+                throw IOException("TSH : Percentage should be 100 but found $percentage")
             }
         }
     }
