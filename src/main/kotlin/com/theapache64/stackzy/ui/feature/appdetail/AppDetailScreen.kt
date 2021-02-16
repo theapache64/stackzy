@@ -126,7 +126,7 @@ private fun LoadingAnimation(loadingMessage: String) {
     val alpha = if (enabled) {
         0f
     } else {
-        360f
+        180f
     }
 
     val animatedValue by animateFloatAsState(
@@ -152,7 +152,7 @@ private fun LoadingAnimation(loadingMessage: String) {
 
         LoadingText(
             modifier = Modifier.align(Alignment.BottomCenter),
-            message = loadingMessage!!
+            message = loadingMessage
         )
     }
 }
