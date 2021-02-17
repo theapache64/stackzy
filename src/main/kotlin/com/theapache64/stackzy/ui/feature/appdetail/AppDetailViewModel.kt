@@ -102,6 +102,10 @@ class AppDetailViewModel @Inject constructor(
      */
     private suspend fun trackUntrackedLibs(report: AnalysisReport) {
 
+        if (true) {
+            return
+        }
+
         if (report.untrackedLibraries.isNotEmpty()) {
             // Sync untracked libs
             untrackedLibsRepo.getUntrackedLibs()
