@@ -46,9 +46,16 @@ class AdbRepo @Inject constructor(
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
 
-            val isStarted = startAdbInteractor.execute(adbFile)
+            var isStarted = startAdbInteractor.execute()
+
+            if (isStarted.not()) {
+                // default way didn't work. let's try built-in adb
+                isStarted = startAdbInteractor.execute(adbFile)
+            }
 
             if (isStarted) {
+
+
                 deviceEventsChannel = adb.execute(
                     request = AsyncDeviceMonitorRequest(),
                     scope = GlobalScope
