@@ -103,7 +103,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         val mergePairs = appLibSet
             .filter { it.replacementPackage != null }
             .map {
-                Pair(it.packageName, it.replacementPackage)
+                Pair(it.replacementPackage, it.packageName)
             }
         for ((libToRemove, replacement) in mergePairs) {
             val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == replacement } != null

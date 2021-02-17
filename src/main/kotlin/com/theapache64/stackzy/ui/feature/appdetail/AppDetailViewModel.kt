@@ -62,6 +62,7 @@ class AppDetailViewModel @Inject constructor(
                         try {
                             if (downloadPercentage == 100) {
                                 // Give some time to APK to prepare for decompile
+                                _loadingMessage.value = "Preparing APK for decompiling..."
                                 delay(2000)
                                 onApkPulled(androidApp, destinationFile)
                             }
