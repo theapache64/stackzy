@@ -12,6 +12,7 @@ import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.malinskiy.adam.request.sync.v1.PullFileRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.di.AdbFile
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,9 @@ import javax.inject.Inject
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
-class AdbRepo @Inject constructor() {
+class AdbRepo @Inject constructor(
+    @AdbFile private val adbFile: File
+) {
 
     companion object {
         const val PATH_PACKAGE_PREFIX = "package:"
@@ -42,35 +45,42 @@ class AdbRepo @Inject constructor() {
 
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
-            deviceEventsChannel = adb.execute(
-                request = AsyncDeviceMonitorRequest(),
-                scope = GlobalScope
-            )
 
-            adb.execute(request = ListDevicesRequest())
+            val isStarted = startAdbInteractor.execute(adbFile)
 
-            for (currentDeviceList in deviceEventsChannel!!) {
+            if (isStarted) {
+                deviceEventsChannel = adb.execute(
+                    request = AsyncDeviceMonitorRequest(),
+                    scope = GlobalScope
+                )
 
-                val deviceList = currentDeviceList
-                    .filter { it.state == DeviceState.DEVICE }
-                    .map { device ->
-                        val props = adb.execute(
-                            request = GetPropRequest(),
-                            serial = device.serial
-                        )
+                adb.execute(request = ListDevicesRequest())
 
-                        val deviceProductName = props["ro.product.name"]?.singleLine() ?: DETAIL_UNKNOWN
-                        val deviceProductModel = props["ro.product.model"]?.singleLine() ?: DETAIL_UNKNOWN
+                for (currentDeviceList in deviceEventsChannel!!) {
 
-                        AndroidDevice(
-                            deviceProductName,
-                            deviceProductModel,
-                            device
-                        )
-                    }
+                    val deviceList = currentDeviceList
+                        .filter { it.state == DeviceState.DEVICE }
+                        .map { device ->
+                            val props = adb.execute(
+                                request = GetPropRequest(),
+                                serial = device.serial
+                            )
 
-                // Finally emitting result
-                emit(deviceList)
+                            val deviceProductName = props["ro.product.name"]?.singleLine() ?: DETAIL_UNKNOWN
+                            val deviceProductModel = props["ro.product.model"]?.singleLine() ?: DETAIL_UNKNOWN
+
+                            AndroidDevice(
+                                deviceProductName,
+                                deviceProductModel,
+                                device
+                            )
+                        }
+
+                    // Finally emitting result
+                    emit(deviceList)
+                }
+            } else {
+                throw IOException("Failed to start adb")
             }
         }
     }

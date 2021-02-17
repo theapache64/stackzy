@@ -151,5 +151,7 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,intellij,gradle
 build
+adb
 
 !src/main/resources/apktool_2.5.0.jar
+!src/main/resources/adb

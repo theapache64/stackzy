@@ -2,13 +2,14 @@ package com.theapache64.stackzy.test
 
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.data.repo.*
+import com.theapache64.stackzy.di.module.AdbModule
 import com.theapache64.stackzy.di.module.ApkToolModule
 import com.theapache64.stackzy.di.module.NetworkModule
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [NetworkModule::class, ApkToolModule::class])
+@Component(modules = [NetworkModule::class, ApkToolModule::class, AdbModule::class])
 interface TestComponent {
     fun apiInterface(): ApiInterface
     fun categoriesRepo(): CategoriesRepo
