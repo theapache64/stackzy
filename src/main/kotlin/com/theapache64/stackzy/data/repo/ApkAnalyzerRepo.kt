@@ -20,6 +20,7 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get final report
      */
     fun analyze(
+        packageName: String,
         decompiledDir: File,
         allLibraries: List<Library>
     ): AnalysisReport {
@@ -27,6 +28,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         val (untrackedLibs, libraries) = getLibraries(platform, decompiledDir, allLibraries)
         return AnalysisReport(
             appName = getAppName(decompiledDir),
+            packageName = packageName,
             platform = platform,
             libraries = libraries,
             untrackedLibraries = untrackedLibs
