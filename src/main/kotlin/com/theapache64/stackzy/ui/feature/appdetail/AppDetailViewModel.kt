@@ -92,7 +92,7 @@ class AppDetailViewModel @Inject constructor(
             decompiledDir,
             allLibraries
         )
-        // trackUntrackedLibs(report)
+        trackUntrackedLibs(report)
         _analysisReport.value = report
         _loadingMessage.value = null
     }

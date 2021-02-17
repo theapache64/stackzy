@@ -49,7 +49,13 @@ class ApkAnalyzerRepo @Inject constructor() {
 
                 // Get all used libraries
                 var (appLibraries, untrackedLibs) = getAppLibraries(decompiledDir, allRemoteLibraries)
-                appLibraries = mergeDep(appLibraries, "okhttp3", "retrofit2")
+                appLibraries = mergeDep(
+                    appLibraries,
+                    listOf(
+                        Pair("okhttp3", "retrofit2"),
+                        Pair("dagger", "androidx.hilt")
+                    )
+                )
 
                 // Now let's categories it
                 val libWithCats = mutableMapOf<String, MutableList<Library>>()
@@ -69,18 +75,24 @@ class ApkAnalyzerRepo @Inject constructor() {
         }
     }
 
+    /**
+     * To merge dependencies.
+     * First : libToRemove
+     * Second : replacement
+     */
     private fun mergeDep(
         appLibSet: Set<Library>,
-        libToRemove: String,
-        libToRemoveFrom: String
+        mergePairs: List<Pair<String, String>>
     ): MutableSet<Library> {
         val appLibraries = appLibSet.toMutableSet()
-        val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == libToRemoveFrom } != null
-        if (hasDepLib) {
-            // remove that lib
-            val library = appLibraries.find { it.packageName == libToRemove }
-            if (library != null) {
-                appLibraries.removeIf { it.id == library.id }
+        for ((libToRemove, replacement) in mergePairs) {
+            val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == replacement } != null
+            if (hasDepLib) {
+                // remove that lib
+                val library = appLibraries.find { it.packageName == libToRemove }
+                if (library != null) {
+                    appLibraries.removeIf { it.id == library.id }
+                }
             }
         }
 
