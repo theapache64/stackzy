@@ -93,6 +93,12 @@ class AppDetailViewModel @Inject constructor(
             decompiledDir,
             allLibraries
         )
+
+        // Delete decompiled dir
+        _loadingMessage.value = "Hold on please..."
+        decompiledDir.deleteRecursively()
+        destinationFile.delete()
+
         trackUntrackedLibs(report)
         _analysisReport.value = report
         _loadingMessage.value = null

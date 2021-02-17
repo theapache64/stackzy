@@ -113,7 +113,6 @@ class AdbRepo @Inject constructor() {
         androidApp: AndroidApp
     ): String? {
         val cmd = "pm path ${androidApp.appPackage.name}"
-        println(cmd)
         val response = adb.execute(
             request = ShellCommandRequest(
                 cmd
