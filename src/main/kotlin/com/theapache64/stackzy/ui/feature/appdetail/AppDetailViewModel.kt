@@ -48,14 +48,14 @@ class AppDetailViewModel @Inject constructor(
             val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
             if (apkRemotePath != null) {
 
-                val destinationFile = kotlin.io.path.createTempFile(
+                val apkFile = kotlin.io.path.createTempFile(
                     suffix = ".apk"
                 ).toFile()
 
                 adbRepo.pullFile(
                     androidDevice,
                     apkRemotePath,
-                    destinationFile
+                    apkFile
                 ).distinctUntilChanged()
                     .collect { downloadPercentage ->
                         _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
@@ -64,7 +64,7 @@ class AppDetailViewModel @Inject constructor(
                                 // Give some time to APK to prepare for decompile
                                 _loadingMessage.value = "Preparing APK for decompiling..."
                                 delay(2000)
-                                onApkPulled(androidApp, destinationFile)
+                                onApkPulled(androidApp, apkFile)
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -77,10 +77,10 @@ class AppDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onApkPulled(androidApp: AndroidApp, destinationFile: File) {
+    private suspend fun onApkPulled(androidApp: AndroidApp, apkFile: File) {
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
-        val decompiledDir = apkToolRepo.decompile(destinationFile)
+        val decompiledDir = apkToolRepo.decompile(apkFile)
 
         // Analyse
         _loadingMessage.value = R.string.app_detail_loading_analysing
@@ -97,7 +97,7 @@ class AppDetailViewModel @Inject constructor(
         // Delete decompiled dir
         _loadingMessage.value = "Hold on please..."
         decompiledDir.deleteRecursively()
-        destinationFile.delete()
+        apkFile.delete()
 
         trackUntrackedLibs(report)
         _analysisReport.value = report
