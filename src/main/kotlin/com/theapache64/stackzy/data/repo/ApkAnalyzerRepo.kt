@@ -3,6 +3,7 @@ package com.theapache64.stackzy.data.repo
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.utils.StringUtils
 import java.io.File
 import javax.inject.Inject
 
@@ -123,12 +124,14 @@ class ApkAnalyzerRepo @Inject constructor() {
         // Get label key from AndroidManifest.xml
         val label = getAppNameLabel(decompiledDir)
         require(label != null) { "Failed to get label" }
-        val appName = if (label.contains("@string/")) {
+        var appName = if (label.contains("@string/")) {
             getStringXmlValue(decompiledDir, label)
         } else {
             label
         }
+
         require(appName != null) { "Failed to get app name" }
+        appName = StringUtils.removeApostrophe(appName)
         return appName
     }
 
