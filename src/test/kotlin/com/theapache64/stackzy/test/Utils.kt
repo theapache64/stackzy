@@ -24,6 +24,7 @@ const val XAMARIN_APK_FILE_NAME = "com.mobmaxime.xamarin_xamarin.apk"
 const val NATIVE_JAVA_APK_FILE_NAME = "com.theah64.whatsappstatusbrowser_java_android.apk"
 
 const val REACT_NATIVE_APP_NAME = "React Native Animation Examples"
+const val REACT_NATIVE_PACKAGE_NAME = "com.reactnativeanimationexamples"
 const val REACT_NATIVE_APK_FILE_NAME = "com.reactnativeanimationexamples_react_native.apk"
 
 fun runBlockingUnitTest(block: suspend (scope: CoroutineScope) -> Unit) = runBlocking {

@@ -32,7 +32,7 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val paperCopApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
-            val report = apkAnalyzerRepo.analyze(decompiledDir, libs)
+            val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, decompiledDir, libs)
             report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
             report.platform.should.instanceof(Platform.NativeKotlin::class.java)
             report.libraries.size.should.above(0)
@@ -45,7 +45,7 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val sampleApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val report = apkAnalyzerRepo.analyze(decompiledDir, libs)
+            val report = apkAnalyzerRepo.analyze(FLUTTER_PACKAGE_NAME,decompiledDir, libs)
             report.appName.should.equal(FLUTTER_APP_NAME)
             report.platform.should.instanceof(Platform.Flutter::class.java)
         }
@@ -56,7 +56,7 @@ class ApkAnalyzerRepoTest {
         loadLibs {
             val sampleApkFile = getTestResource(REACT_NATIVE_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val report = apkAnalyzerRepo.analyze(decompiledDir, it)
+            val report = apkAnalyzerRepo.analyze(REACT_NATIVE_APP_NAME, decompiledDir, it)
             report.appName.should.equal(REACT_NATIVE_APP_NAME)
             report.platform.should.instanceof(Platform.ReactNative::class.java)
         }
