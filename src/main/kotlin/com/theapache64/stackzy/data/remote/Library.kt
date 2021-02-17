@@ -14,6 +14,8 @@ data class Library(
     val name: String,
     @Json(name = "package_name")
     val packageName: String,
+    @Json(name = "replacement_package")
+    val replacementPackage: String?,
     @Json(name = "website")
     val website: String
 ) : AlphabetCircle() {
