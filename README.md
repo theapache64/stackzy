@@ -43,6 +43,7 @@
 
 ## 🙇 Credits
 
+- Special thanks to [@mikepenz](https://github.com/mikepenz) for contributing 200+ libraries from his project [AboutLibraries](https://github.com/mikepenz/AboutLibraries) 📚
 - Special thanks to [@SpikeySanju](https://github.com/Spikeysanju) for the beautiful design 😎
 - Icons are from [flaticon.com](https://www.flaticon.com/)
 - Illustrations are from [evernote.design](https://evernote.design/categories/illustrations/)
