@@ -21,6 +21,10 @@
 1. Choose `Application` to perform the analysis
 1. Enjoy the report 😎
 
+## 💻 Install
+
+- Executables for windows, linux and mac will be released soon. 😇
+
 ## 🏗️️ Built with
 
 | What           	| How                    	|
