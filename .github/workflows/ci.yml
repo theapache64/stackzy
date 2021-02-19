@@ -92,6 +92,7 @@ jobs:
         id: github_release
         uses: mikepenz/release-changelog-builder-action@v1
         with:
+          configuration: ".github/config/configuration.json"
           commitMode: true
           ignorePreReleases: ${{ !contains(github.ref, '-') }}
         env:

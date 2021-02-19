@@ -1,0 +1,29 @@
+{
+  "categories": [
+    {
+      "title": "## 🌟 Features",
+      "labels": ["🚀", "🌟"]
+    },
+    {
+      "title": "## 🐛 Fixes",
+      "labels": ["🐛"]
+    },
+    {
+      "title": "## 💬 Other",
+      "labels": ["💬", "📖", "🚨"]
+    }
+  ],
+  "pr_template": "${{TITLE}}",
+  "label_extractor": [
+    {
+      "pattern": "(.) (.+)",
+      "target": "$1"
+    }
+  ],
+  "transformers": [
+    {
+      "pattern": "(.) (.+)",
+      "target": "- $2"
+    }
+  ]
+}
