@@ -6,11 +6,11 @@
     },
     {
       "title": "## 🐛 Fixes",
-      "labels": ["🐛"]
+      "labels": ["🐛", "🚑"]
     },
     {
       "title": "## 💬 Other",
-      "labels": ["💬", "📖", "🚨"]
+      "labels": []
     }
   ],
   "pr_template": "${{TITLE}}",
