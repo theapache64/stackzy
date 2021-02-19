@@ -8,11 +8,11 @@ data class AnalysisReport(
     val packageName: String,
     val platform: Platform,
     // key = Category
-    val libraries: Map<String, List<Library>>,
+    val libraries: List<Library>,
     val untrackedLibraries: Set<String>
 ) {
 
-    val allLibraries by lazy {
+    /*val allLibraries by lazy {
         val libsUsed = mutableListOf<Library>()
         for (x in libraries.values) {
             libsUsed.addAll(x)
@@ -20,5 +20,5 @@ data class AnalysisReport(
 
         // Sort : Other libs should be last
         libsUsed.sortedBy { it.category == Category.OTHER }
-    }
+    }*/
 }

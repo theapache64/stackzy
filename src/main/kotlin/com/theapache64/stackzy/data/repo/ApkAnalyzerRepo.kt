@@ -31,19 +31,21 @@ class ApkAnalyzerRepo @Inject constructor() {
             appName = getAppName(decompiledDir),
             packageName = packageName,
             platform = platform,
-            libraries = libraries,
+            libraries = libraries.toList(),
             untrackedLibraries = untrackedLibs
         )
     }
 
     /**
-     * To get libraries used in the given decompiled app
+     * To get libraries used in the given decompiled app.
+     *
+     * Returns (untrackedLibs, usedLibs) in a Pair
      */
     fun getLibraries(
         platform: Platform,
         decompiledDir: File,
         allRemoteLibraries: List<Library>
-    ): Pair<Set<String>, Map<String, List<Library>>> {
+    ): Pair<Set<String>, Set<Library>> {
         return when (platform) {
             is Platform.NativeJava,
             is Platform.NativeKotlin -> {
@@ -52,46 +54,13 @@ class ApkAnalyzerRepo @Inject constructor() {
                 var (appLibraries, untrackedLibs) = getAppLibraries(decompiledDir, allRemoteLibraries)
                 appLibraries = mergeDep(appLibraries)
 
-                // Now let's categories it
-                val libWithCats = mutableMapOf<String, MutableList<Library>>()
-                for (appLib in appLibraries) {
-                    val catList = libWithCats.getOrPut(appLib.category) {
-                        mutableListOf()
-                    }
-                    catList.add(appLib)
-                }
-                println("Cats: $libWithCats")
-                return Pair(untrackedLibs, libWithCats)
+                return Pair(untrackedLibs, appLibraries)
             }
             else -> {
                 // TODO : Support other platforms
-                Pair(setOf(), mapOf())
+                Pair(setOf(), setOf())
             }
         }
-    }
-
-    /**
-     * To merge dependencies.
-     * First : libToRemove
-     * Second : replacement
-     */
-    private fun mergeDep(
-        appLibSet: Set<Library>,
-        mergePairs: List<Pair<String, String>>
-    ): MutableSet<Library> {
-        val appLibraries = appLibSet.toMutableSet()
-        for ((libToRemove, replacement) in mergePairs) {
-            val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == replacement } != null
-            if (hasDepLib) {
-                // remove that lib
-                val library = appLibraries.find { it.packageName == libToRemove }
-                if (library != null) {
-                    appLibraries.removeIf { it.id == library.id }
-                }
-            }
-        }
-
-        return appLibraries
     }
 
     /**
@@ -120,6 +89,9 @@ class ApkAnalyzerRepo @Inject constructor() {
         return appLibraries
     }
 
+    /**
+     * To get app name from decompiled directory
+     */
     fun getAppName(decompiledDir: File): String {
         // Get label key from AndroidManifest.xml
         val label = getAppNameLabel(decompiledDir)
@@ -135,6 +107,11 @@ class ApkAnalyzerRepo @Inject constructor() {
         return appName
     }
 
+    /**
+     * To get the appropriate value for the given labelKey from string.xml in the decompiledDir.
+     *
+     * Returns null if not found
+     */
     fun getStringXmlValue(decompiledDir: File, labelKey: String): String? {
         val stringXmlFile = File("${decompiledDir.absolutePath}/res/values/strings.xml")
         val stringXmlContent = stringXmlFile.readText()
@@ -143,6 +120,9 @@ class ApkAnalyzerRepo @Inject constructor() {
         return regEx.find(stringXmlContent)?.groups?.get(1)?.value
     }
 
+    /**
+     * To get `label`'s value from AndroidManifest.xml
+     */
     fun getAppNameLabel(decompiledDir: File): String? {
         val manifestFile = File("${decompiledDir.absolutePath}/AndroidManifest.xml")
         val manifestContent = manifestFile.readText()

@@ -79,10 +79,10 @@ fun AppDetailScreen(
 
                     LazyColumn {
                         items(
-                            items = if (report!!.allLibraries.size > GRID_SIZE) {
-                                report!!.allLibraries.chunked(GRID_SIZE)
+                            items = if (report!!.libraries.size > GRID_SIZE) {
+                                report!!.libraries.chunked(GRID_SIZE)
                             } else {
-                                listOf(report!!.allLibraries)
+                                listOf(report!!.libraries)
                             }
                         ) { appSet ->
                             Row {
