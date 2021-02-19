@@ -9,4 +9,8 @@ data class Category(
     val id: Int,
     @Json(name = "name")
     val name: String
-)
+){
+    companion object{
+        const val OTHER = "Other"
+    }
+}

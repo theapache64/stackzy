@@ -76,19 +76,13 @@ fun AppDetailScreen(
                     }
                 } else {
 
-                    // Show library
-                    val libsUsed = mutableListOf<Library>()
-                    for (x in report!!.libraries.values) {
-                        libsUsed.addAll(x)
-                    }
-
 
                     LazyColumn {
                         items(
-                            items = if (libsUsed.size > GRID_SIZE) {
-                                libsUsed.chunked(GRID_SIZE)
+                            items = if (report!!.allLibraries.size > GRID_SIZE) {
+                                report!!.allLibraries.chunked(GRID_SIZE)
                             } else {
-                                listOf(libsUsed)
+                                listOf(report!!.allLibraries)
                             }
                         ) { appSet ->
                             Row {
