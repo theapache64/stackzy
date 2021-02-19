@@ -9,7 +9,11 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ [ macos-latest ], [ ubuntu-latest ] ]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,16 +48,11 @@ jobs:
         run: |
           ./gradlew package
 
-      - name: Collect artifacts
-        run: |
-          COLLECT_PWD=${PWD}
-          mkdir -p "artifacts"
-          find . -name "*.dmg" -type f -exec cp {} "artifacts" \;
-          find . -name "*.deb" -type f -exec cp {} "artifacts" \;
-          find . -name "*.msi" -type f -exec cp {} "artifacts" \;
-
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: "Artifacts"
-          path: artifacts/*
+          path: |
+            build/**/*.dmg
+            build/**/*.msi
+            build/**/*.deb
