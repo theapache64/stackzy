@@ -51,8 +51,8 @@ jobs:
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: "Artifacts"
+          name: "distributable ${{ matrix.os }}"
+          if-no-files-found: ignore
           path: |
             build/**/*.dmg
-            build/**/*.msi
             build/**/*.deb
