@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '15'
+          java-package: jdk
+
+      - name: Validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Checkout Gradle Build Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            !~/.gradle/wrapper/dists/**/gradle*.zip
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Build Debug
+        run: ./gradlew build -x test
+
+  release:
+    name: Release
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-latest, ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '15'
+          java-package: jdk
+
+      - name: Validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      - name: Checkout Gradle Build Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            !~/.gradle/wrapper/dists/**/gradle*.zip
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Build Debug
+        run: ./gradlew build -x test
+
+      - name: Build Release App
+        run: ./gradlew package
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: distributable-${{ matrix.os }}
+          if-no-files-found: ignore
+          path: |
+            build/**/*.dmg
+            build/**/*.deb
+
+      - name: Build Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v1
+        with:
+          configuration: ".github/config/configuration.json"
+          commitMode: true
+          ignorePreReleases: ${{ !contains(github.ref, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
+          prerelease: ${{ contains(github.event.inputs.version, '-rc') || contains(github.event.inputs.version, '-b') || contains(github.event.inputs.version, '-a') }}
+          files: |
+            build/**/*.dmg
+            build/**/*.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
