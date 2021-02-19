@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ [ macos-latest ], [ ubuntu-latest ] ]
+        os: [ macos-latest, ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -51,7 +51,7 @@ jobs:
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: "distributable ${{ matrix.os }}"
+          name: distributable-${{ matrix.os }}
           if-no-files-found: ignore
           path: |
             build/**/*.dmg
