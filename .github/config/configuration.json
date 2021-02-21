@@ -2,11 +2,17 @@
   "categories": [
     {
       "title": "## 🌟 Features",
-      "labels": ["🚀", "🌟"]
+      "labels": [
+        "🚀",
+        "🌟"
+      ]
     },
     {
       "title": "## 🐛 Fixes",
-      "labels": ["🐛", "🚑"]
+      "labels": [
+        "🐛",
+        "🚑"
+      ]
     },
     {
       "title": "## 💬 Other",

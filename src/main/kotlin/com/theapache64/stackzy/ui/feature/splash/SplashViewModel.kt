@@ -1,16 +1,12 @@
 package com.theapache64.stackzy.ui.feature.splash
 
-import com.theapache64.stackzy.data.repo.CategoriesRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
-import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.utils.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,15 +14,14 @@ import javax.inject.Inject
  * Splash Screen's brain
  */
 class SplashViewModel @Inject constructor(
-    private val categoriesRepo: CategoriesRepo,
     private val librariesRepo: LibrariesRepo
 ) {
 
     private val _isSyncFinished = MutableStateFlow(false)
     val isSyncFinished: StateFlow<Boolean> = _isSyncFinished
 
-    private val _isSyncFailed = MutableStateFlow<String?>(null)
-    val isSyncFailed: StateFlow<String?> = _isSyncFailed
+    private val _syncFailedMsg = MutableStateFlow<String?>(null)
+    val syncFailedMsg: StateFlow<String?> = _syncFailedMsg
 
     init {
         syncData()
@@ -38,46 +33,33 @@ class SplashViewModel @Inject constructor(
     private fun syncData() {
         GlobalScope.launch {
             try {
-                categoriesRepo.getRemoteCategories()
-                    .zip(librariesRepo.getRemoteLibraries()) { r1, r2 ->
 
-                        if (r1 is Resource.Loading && r2 is Resource.Loading) {
+                librariesRepo.getRemoteLibraries().collect {
+                    when (it) {
+                        is Resource.Loading -> {
                             // Both request are loading
                             _isSyncFinished.value = false
-                            _isSyncFailed.value = null
-                        } else if (r1 is Resource.Success && r2 is Resource.Success) {
-                            // Both requests succeeded
+                            _syncFailedMsg.value = null
+                        }
 
-                            // Cache categories
-                            categoriesRepo.cacheCategories(r1.data)
+                        is Resource.Success -> {
 
                             // Cache libraries
-                            librariesRepo.cacheLibraries(r2.data)
-
-                            Arbor.d("${categoriesRepo.getCachedCategories()?.size} categories cached")
+                            librariesRepo.cacheLibraries(it.data)
                             Arbor.d("${librariesRepo.getCachedLibraries()?.size} libraries cached")
-
                             _isSyncFinished.value = true
-                        } else {
-                            _isSyncFailed.value = when {
-                                r1 is Resource.Error -> {
-                                    r1.errorData
-                                }
-                                r2 is Resource.Error -> {
-                                    r2.errorData
-                                }
-                                else -> {
-                                    R.string.all_error_unknown
-                                }
-                            }
+
+                        }
+
+                        is Resource.Error -> {
+                            _syncFailedMsg.value = it.errorData
                         }
 
                     }
-                    .collect()
-
+                }
             } catch (e: IllegalArgumentException) {
                 e.printStackTrace()
-                _isSyncFailed.value = e.message
+                _syncFailedMsg.value = e.message
             }
         }
     }

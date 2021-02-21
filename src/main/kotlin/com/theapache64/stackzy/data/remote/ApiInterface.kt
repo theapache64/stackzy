@@ -12,10 +12,6 @@ import retrofit2.http.POST
 interface ApiInterface {
 
     @Read("SELECT * ")
-    @GET(NetworkModule.TABLE_CATEGORIES)
-    fun getCategories(): Flow<Resource<List<Category>>>
-
-    @Read("SELECT * ")
     @GET(NetworkModule.TABLE_LIBRARIES)
     fun getLibraries(): Flow<Resource<List<Library>>>
 

@@ -31,7 +31,7 @@ class ApkAnalyzerRepo @Inject constructor() {
             appName = getAppName(decompiledDir),
             packageName = packageName,
             platform = platform,
-            libraries = libraries.toList(),
+            libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
             untrackedLibraries = untrackedLibs
         )
     }

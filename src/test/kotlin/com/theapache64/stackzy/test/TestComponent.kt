@@ -12,7 +12,6 @@ import javax.inject.Singleton
 @Component(modules = [NetworkModule::class, ApkToolModule::class, AdbModule::class])
 interface TestComponent {
     fun apiInterface(): ApiInterface
-    fun categoriesRepo(): CategoriesRepo
     fun librariesRepo(): LibrariesRepo
     fun adbRepo(): AdbRepo
     fun apkToolRepo(): ApkToolRepo

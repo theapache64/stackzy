@@ -20,6 +20,10 @@ data class Library(
     val website: String
 ) : AlphabetCircle() {
 
+    companion object{
+        const val CATEGORY_OTHER = "Other"
+    }
+
     override fun getTitle(): String {
         return name
     }

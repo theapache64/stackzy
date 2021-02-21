@@ -45,7 +45,7 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val sampleApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val report = apkAnalyzerRepo.analyze(FLUTTER_PACKAGE_NAME,decompiledDir, libs)
+            val report = apkAnalyzerRepo.analyze(FLUTTER_PACKAGE_NAME, decompiledDir, libs)
             report.appName.should.equal(FLUTTER_APP_NAME)
             report.platform.should.instanceof(Platform.Flutter::class.java)
         }

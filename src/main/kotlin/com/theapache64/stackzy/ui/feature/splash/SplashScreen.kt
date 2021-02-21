@@ -30,7 +30,7 @@ fun SplashScreen(
 ) {
 
     val isSyncFinished by splashViewModel.isSyncFinished.collectAsState()
-    val syncFailedReason by splashViewModel.isSyncFailed.collectAsState()
+    val syncFailedReason by splashViewModel.syncFailedMsg.collectAsState()
 
     if (isSyncFinished) {
         onSyncFinished()

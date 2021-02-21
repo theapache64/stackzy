@@ -10,6 +10,7 @@
 </a>
 
 > A desktop app to identify the app stack. Built using Compose desktop
+
 ### ✨ Demo
 
 - [Watch](https://www.youtube.com/watch?v=HjHQGcKxXaM&ab_channel=theapache64) demo
@@ -27,23 +28,24 @@
 
 ## 🏗️️ Built with
 
-| What           	| How                    	|
+| What            | How                        |
 |----------------	|------------------------------	|
-| 🎭 User Interface 	| [Compose Desktop](https://github.com/jetbrains/compose-jb)             	|
-| 🏗 Architecture   	| [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)                         	|
-| 💉 DI             	| [Dagger2](https://github.com/google/dagger)                      	|
-| 🛠️ APK Decompiling             	| [ApkTool](https://github.com/iBotPeaches/Apktool)                      	|
-| 🛣️ Navigation     	| [Decompose](https://github.com/arkivanov/Decompose)                    	|
-| 🌊 Async          	| [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)            	|
-| 🌐 Networking     	| [Retrofit](https://github.com/square/retrofit)                     	|
-| 📄 JSON           	| [Moshi](https://github.com/square/moshi)                        	|
-| ⌨️ Logging        	| [Arbor](https://github.com/ToxicBakery/Arbor)                         	|
-| 💻 ADB        	| [Adam](https://malinskiy.github.io/adam/)                         	|
-| 🧪 Testing        	| [DaggerMock](https://github.com/fabioCollini/DaggerMock) + [JUnit](https://github.com/junit-team/junit5) 	|
+| 🎭 User Interface    | [Compose Desktop](https://github.com/jetbrains/compose-jb)                |
+| 🏗 Architecture    | [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)                            |
+| 💉 DI                | [Dagger2](https://github.com/google/dagger)                        |
+| 🛠️ APK Decompiling                | [ApkTool](https://github.com/iBotPeaches/Apktool)                        |
+| 🛣️ Navigation        | [Decompose](https://github.com/arkivanov/Decompose)                        |
+| 🌊 Async            | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)                |
+| 🌐 Networking        | [Retrofit](https://github.com/square/retrofit)                        |
+| 📄 JSON            | [Moshi](https://github.com/square/moshi)                            |
+| ⌨️ Logging            | [Arbor](https://github.com/ToxicBakery/Arbor)                            |
+| 💻 ADB            | [Adam](https://malinskiy.github.io/adam/)                            |
+| 🧪 Testing            | [DaggerMock](https://github.com/fabioCollini/DaggerMock) + [JUnit](https://github.com/junit-team/junit5)    |
 
 ## 🙇 Credits
 
-- Special thanks to [@mikepenz](https://github.com/mikepenz) for contributing 200+ libraries from his project [AboutLibraries](https://github.com/mikepenz/AboutLibraries) 📚
+- Special thanks to [@mikepenz](https://github.com/mikepenz) for contributing 200+ libraries from his
+  project [AboutLibraries](https://github.com/mikepenz/AboutLibraries) 📚
 - Special thanks to [@SpikeySanju](https://github.com/Spikeysanju) for the beautiful design 😎
 - Icons are from [flaticon.com](https://www.flaticon.com/)
 - Illustrations are from [evernote.design](https://evernote.design/categories/illustrations/)
