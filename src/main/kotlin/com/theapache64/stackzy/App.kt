@@ -5,6 +5,7 @@ import com.theapache64.stackzy.ui.feature.MainActivity
 import com.toxicbakery.logging.Arbor
 import com.toxicbakery.logging.Seedling
 
+
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
