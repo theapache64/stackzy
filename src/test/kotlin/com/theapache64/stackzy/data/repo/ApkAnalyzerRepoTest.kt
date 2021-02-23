@@ -63,35 +63,35 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
-    fun `Fetch appName label from manifest`() {
+    fun `Fetch appName label from manifest`() = runBlockingUnitTest {
         val paperCopApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
         val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
         apkAnalyzerRepo.getAppNameLabel(decompiledDir).should.equal("@string/app_name")
     }
 
     @Test
-    fun `Fetch labelValue from string-xml`() {
+    fun `Fetch labelValue from string-xml`() = runBlockingUnitTest {
         val paperCopApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
         val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
         apkAnalyzerRepo.getStringXmlValue(decompiledDir, "@string/app_name").should.equal(NATIVE_KOTLIN_APP_NAME)
     }
 
     @Test
-    fun `Fetch appName`() {
+    fun `Fetch appName`() = runBlockingUnitTest {
         val paperCopApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
         val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
         apkAnalyzerRepo.getAppName(decompiledDir).should.equal(NATIVE_KOTLIN_APP_NAME)
     }
 
     @Test
-    fun `Get platform - kotlin android`() {
+    fun `Get platform - kotlin android`() = runBlockingUnitTest {
         val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
         val decompiledDir = apkToolRepo.decompile(sampleApkFile)
         apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.NativeKotlin::class.java)
     }
 
     @Test
-    fun `Get platform - java android`() {
+    fun `Get platform - java android`() = runBlockingUnitTest {
         val statsBrowserApkFile = getTestResource(NATIVE_JAVA_APK_FILE_NAME)
         statsBrowserApkFile.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(statsBrowserApkFile)
@@ -100,7 +100,7 @@ class ApkAnalyzerRepoTest {
 
 
     @Test
-    fun `Get platform - react native`() {
+    fun `Get platform - react native`() = runBlockingUnitTest {
         val reactNativeSampleApp = getTestResource(REACT_NATIVE_APK_FILE_NAME)
         reactNativeSampleApp.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(reactNativeSampleApp)
@@ -108,7 +108,7 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
-    fun `Get platform - flutter`() {
+    fun `Get platform - flutter`() = runBlockingUnitTest {
         val flutterAppApk = getTestResource(FLUTTER_APK_FILE_NAME)
         flutterAppApk.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(flutterAppApk)
@@ -116,7 +116,7 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
-    fun `Get platform - cordova`() {
+    fun `Get platform - cordova`() = runBlockingUnitTest {
         val sampleApkFile = getTestResource(CORDOVA_APK_FILE_NAME)
         sampleApkFile.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(sampleApkFile)
@@ -124,7 +124,7 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
-    fun `Get platform - xamarin`() {
+    fun `Get platform - xamarin`() = runBlockingUnitTest {
         val sampleApkFile = getTestResource(XAMARIN_APK_FILE_NAME)
         sampleApkFile.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(sampleApkFile)
@@ -157,7 +157,7 @@ class ApkAnalyzerRepoTest {
         }
     }
 
-    private suspend fun loadLibs(onLibsLoaded: (List<Library>) -> Unit) {
+    private suspend fun loadLibs(onLibsLoaded: suspend (List<Library>) -> Unit) {
         librariesRepo.getRemoteLibraries().collect {
             when (it) {
                 is Resource.Loading -> {
