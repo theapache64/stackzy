@@ -44,7 +44,10 @@ fun AppDetailScreen(
     CustomScaffold(
         title = title,
         subTitle = report?.platform?.name,
-        onBackClicked = onBackClicked
+        onBackClicked = {
+            appDetailViewModel.onBackPressed() // to cancel on going works
+            onBackClicked()
+        }
     ) {
         if (fatalError != null) {
             FullScreenError(

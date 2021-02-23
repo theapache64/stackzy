@@ -7,7 +7,9 @@ import com.theapache64.stackzy.data.remote.UntrackedLibrary
 import com.theapache64.stackzy.data.repo.*
 import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +29,7 @@ class AppDetailViewModel @Inject constructor(
     private val untrackedLibsRepo: UntrackedLibsRepo
 ) {
 
+    private var decompileJob: Job? = null
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
 
@@ -40,7 +43,15 @@ class AppDetailViewModel @Inject constructor(
         androidDevice: AndroidDevice,
         androidApp: AndroidApp,
     ) {
-        GlobalScope.launch {
+        startDecompile(androidDevice, androidApp)
+    }
+
+    private fun startDecompile(
+        androidDevice: AndroidDevice,
+        androidApp: AndroidApp
+    ) {
+
+        decompileJob = GlobalScope.launch {
 
             _loadingMessage.value = R.string.app_detail_loading_fetching_apk
 
@@ -75,6 +86,12 @@ class AppDetailViewModel @Inject constructor(
                 _fatalError.value = R.string.app_detail_error_apk_remote_path
             }
         }
+    }
+
+    fun onBackPressed() {
+        decompileJob?.cancel()
+        Arbor.d("Cancelled decompile job")
+        decompileJob = null
     }
 
     private suspend fun onApkPulled(androidApp: AndroidApp, apkFile: File) {
