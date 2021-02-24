@@ -18,6 +18,7 @@ fun FullScreenError(
     title: String,
     message: String,
     image: ImageBitmap? = null,
+    action: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -57,5 +58,14 @@ fun FullScreenError(
             style = MaterialTheme.typography.body2,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )
+
+        if (action != null) {
+            /*Space*/
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
+            action()
+        }
     }
 }

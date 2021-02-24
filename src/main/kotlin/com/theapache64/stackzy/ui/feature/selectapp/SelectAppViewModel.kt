@@ -23,13 +23,13 @@ class SelectAppViewModel @Inject constructor(
     /**
      * Filtered apps
      */
-    private val _apps = MutableStateFlow(listOf<AndroidApp>())
-    val apps: StateFlow<List<AndroidApp>> = _apps
+    private val _apps = MutableStateFlow<List<AndroidApp>?>(null)
+    val apps: StateFlow<List<AndroidApp>?> = _apps
 
     fun init(selectedDevice: AndroidDevice) {
         GlobalScope.launch {
             fullApps = adbRepo.getInstalledApps(selectedDevice.device)
-            _apps.value = fullApps!!
+            _apps.value = fullApps
         }
     }
 
@@ -38,5 +38,9 @@ class SelectAppViewModel @Inject constructor(
 
         // Filtering apps
         _apps.value = fullApps!!.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
+    }
+
+    fun onOpenMarketClicked() {
+        adbRepo.launchMarket(searchKeyword.value)
     }
 }
