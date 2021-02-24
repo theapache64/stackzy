@@ -170,7 +170,15 @@ class AdbRepo @Inject constructor(
         }
     }
 
-    suspend fun launchMarket(value: String) {
+    suspend fun launchMarket(
+        androidDevice: AndroidDevice,
+        keyword: String
+    ) {
+        val url = "https://play.google.com/store/search?q=$keyword&c=apps"
+        adb.execute(
+            request = ShellCommandRequest("am start -a android.intent.action.VIEW -d \"$url\""),
+            serial = androidDevice.device.serial
+        )
 
     }
 }

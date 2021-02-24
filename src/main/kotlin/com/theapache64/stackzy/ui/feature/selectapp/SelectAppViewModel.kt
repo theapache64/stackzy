@@ -13,6 +13,8 @@ class SelectAppViewModel @Inject constructor(
     val adbRepo: AdbRepo
 ) {
 
+    private lateinit var selectedDevice: AndroidDevice
+
     /**
      * To store all apps instaled in the device (used for search filtering)
      */
@@ -27,6 +29,7 @@ class SelectAppViewModel @Inject constructor(
     val apps: StateFlow<List<AndroidApp>?> = _apps
 
     fun init(selectedDevice: AndroidDevice) {
+        this.selectedDevice = selectedDevice
         GlobalScope.launch {
             fullApps = adbRepo.getInstalledApps(selectedDevice.device)
             _apps.value = fullApps
@@ -41,6 +44,8 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun onOpenMarketClicked() {
-        adbRepo.launchMarket(searchKeyword.value)
+        GlobalScope.launch {
+            adbRepo.launchMarket(selectedDevice, searchKeyword.value)
+        }
     }
 }
