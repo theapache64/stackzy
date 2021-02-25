@@ -26,6 +26,10 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
 
+    // Skiko : Temp -> due to : https://github.com/JetBrains/compose-jb/issues/275#issuecomment-785962291
+    implementation("org.jetbrains.skiko:skiko-jvm-runtime-linux-x64:0.2.16")
+    implementation("org.jetbrains.skiko:skiko-jvm:0.2.16")
+
     // Cyclone
     implementation("com.github.theapache64:cyclone:1.0.0-alpha02")
 
