@@ -6,6 +6,10 @@ on:
       - '*'
   pull_request:
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     name: Build
@@ -71,7 +75,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest, ubuntu-latest ]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     if: startsWith(github.ref, 'refs/tags/')
     steps:
