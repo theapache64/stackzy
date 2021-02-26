@@ -4,6 +4,7 @@ import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.utils.StringUtils
+import com.toxicbakery.logging.Arbor
 import java.io.File
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         val platform = getPlatform(decompiledDir)
         val (untrackedLibs, libraries) = getLibraries(platform, decompiledDir, allLibraries)
         return AnalysisReport(
-            appName = getAppName(decompiledDir),
+            appName = getAppName(decompiledDir) ?: packageName,
             packageName = packageName,
             platform = platform,
             libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
@@ -92,17 +93,22 @@ class ApkAnalyzerRepo @Inject constructor() {
     /**
      * To get app name from decompiled directory
      */
-    fun getAppName(decompiledDir: File): String {
+    fun getAppName(decompiledDir: File): String? {
         // Get label key from AndroidManifest.xml
         val label = getAppNameLabel(decompiledDir)
-        require(label != null) { "Failed to get label" }
+        if (label == null) {
+            Arbor.w("Could not retrieve app name label")
+            return null
+        }
         var appName = if (label.contains("@string/")) {
             getStringXmlValue(decompiledDir, label)
         } else {
             label
         }
-
-        require(appName != null) { "Failed to get app name" }
+        if (appName == null) {
+            Arbor.w("Could not retrieve app name")
+            return null
+        }
         appName = StringUtils.removeApostrophe(appName)
         return appName
     }
