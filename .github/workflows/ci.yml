@@ -126,5 +126,6 @@ jobs:
           files: |
             build/**/*.dmg
             build/**/*.deb
+            build/**/*.msi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
