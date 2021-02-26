@@ -28,8 +28,16 @@
   ],
   "transformers": [
     {
+      "pattern": "(\\[ImgBot\\]) (.+)",
+      "target": "- [ImgBot] $2"
+    },
+    {
       "pattern": "(.) (.+)",
       "target": "- $2"
     }
+  ],
+  "exclude_merge_branches": [
+    "merge pull request",
+    "Merge pull request"
   ]
 }
