@@ -103,6 +103,14 @@ compose.desktop {
             linux {
                 iconFile.set(iconsRoot.resolve("drawables/launcher_icon.png"))
             }
+
+            windows {
+                iconFile.set(iconsRoot.resolve("drawables/launcher_icon.png"))
+            }
+
+            macOS {
+                iconFile.set(iconsRoot.resolve("drawables/launcher_icon.png"))
+            }
         }
     }
 }
