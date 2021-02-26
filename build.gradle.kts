@@ -93,8 +93,8 @@ compose.desktop {
     application {
         mainClass = "com.theapache64.stackzy.AppKt"
         nativeDistributions {
-            version = (project.version as String).split("-")[0]
-            modules("java.logging")
+            packageVersion = (project.version as String).split("-")[0]
+            modules("java.logging", "jdk.crypto.ec")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Stackzy"
         }
