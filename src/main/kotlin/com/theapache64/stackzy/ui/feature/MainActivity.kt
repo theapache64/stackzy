@@ -9,6 +9,7 @@ import com.theapache64.stackzy.ui.theme.StackzyTheme
 import com.theapache64.stackzy.util.R
 import androidx.compose.desktop.Window as setContent
 
+
 class MainActivity : Activity() {
     companion object {
         fun getStartIntent(): Intent {
