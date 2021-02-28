@@ -8,7 +8,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [NetworkModule::class, ApkToolModule::class, AdbModule::class])
+@Component(modules = [NetworkModule::class, ApkToolModule::class])
 interface TestComponent {
     fun apiInterface(): ApiInterface
     fun librariesRepo(): LibrariesRepo
