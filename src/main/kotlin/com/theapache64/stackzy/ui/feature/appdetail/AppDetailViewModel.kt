@@ -11,10 +11,7 @@ import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -52,38 +49,42 @@ class AppDetailViewModel @Inject constructor(
     ) {
 
         decompileJob = GlobalScope.launch {
+            try {
+                _loadingMessage.value = R.string.app_detail_loading_fetching_apk
 
-            _loadingMessage.value = R.string.app_detail_loading_fetching_apk
+                // First get APK path
+                val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
+                if (apkRemotePath != null) {
 
-            // First get APK path
-            val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
-            if (apkRemotePath != null) {
+                    val apkFile = kotlin.io.path.createTempFile(
+                        suffix = ".apk"
+                    ).toFile()
 
-                val apkFile = kotlin.io.path.createTempFile(
-                    suffix = ".apk"
-                ).toFile()
+                    adbRepo.pullFile(
+                        androidDevice,
+                        apkRemotePath,
+                        apkFile
+                    ).distinctUntilChanged()
+                        .catch {
+                            _fatalError.value = it.message ?: "Something went wrong while pulling APK"
+                        }
+                        .collect { downloadPercentage ->
+                            _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
 
-                adbRepo.pullFile(
-                    androidDevice,
-                    apkRemotePath,
-                    apkFile
-                ).distinctUntilChanged()
-                    .collect { downloadPercentage ->
-                        _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
-                        try {
                             if (downloadPercentage == 100) {
                                 // Give some time to APK to prepare for decompile
                                 _loadingMessage.value = "Preparing APK for decompiling..."
                                 delay(2000)
                                 onApkPulled(androidApp, apkFile)
                             }
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            _fatalError.value = e.message
+
                         }
-                    }
-            } else {
-                _fatalError.value = R.string.app_detail_error_apk_remote_path
+                } else {
+                    _fatalError.value = R.string.app_detail_error_apk_remote_path
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _fatalError.value = e.message
             }
         }
     }
