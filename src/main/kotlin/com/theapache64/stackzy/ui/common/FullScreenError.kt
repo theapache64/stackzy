@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 /**
@@ -55,6 +56,7 @@ fun FullScreenError(
         /*Message*/
         Text(
             text = message,
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.body2,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
         )

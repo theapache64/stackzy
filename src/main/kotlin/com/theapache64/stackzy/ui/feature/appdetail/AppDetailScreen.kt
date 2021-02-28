@@ -7,7 +7,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Assessment
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +35,7 @@ fun AppDetailScreen(
     val fatalError by appDetailViewModel.fatalError.collectAsState()
     val loadingMessage by appDetailViewModel.loadingMessage.collectAsState()
     val report by appDetailViewModel.analysisReport.collectAsState()
+    var moreInfo by remember { mutableStateOf(false) }
 
     val title = if (report == null || report?.appName == null) {
         R.string.app_detail_title
@@ -47,10 +52,25 @@ fun AppDetailScreen(
         onBackClicked = {
             appDetailViewModel.onBackPressed() // to cancel on going works
             onBackClicked()
+        },
+        topRightSlot = {
+            if (report != null) {
+                IconButton(
+                    onClick = {
+                        moreInfo = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Assessment,
+                        contentDescription = R.string.app_detail_cd_meta
+                    )
+                }
+            }
         }
     ) {
         if (fatalError != null) {
             FullScreenError(
+                image = imageResource("drawables/code.png"),
                 title = R.string.any_error_title_damn_it,
                 message = fatalError!!
             )
@@ -58,7 +78,6 @@ fun AppDetailScreen(
             if (loadingMessage != null) {
                 LoadingAnimation(loadingMessage!!)
             } else if (report != null) {
-
                 if (report!!.libraries.isEmpty()) {
                     // No libraries found
                     val platform = report!!.platform
@@ -110,8 +129,6 @@ fun AppDetailScreen(
 
             }
         }
-
-
     }
 }
 

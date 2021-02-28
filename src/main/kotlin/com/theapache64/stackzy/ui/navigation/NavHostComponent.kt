@@ -119,6 +119,21 @@ class NavHostComponent(
      */
     private fun onSplashSyncFinished() {
         router.push(Config.SelectDevice)
+        /*router.push(
+            Config.AppDetail(
+                AndroidDevice(
+                    "Samsung",
+                    "someModel",
+                    Device(
+                        "R52M604X18E",
+                        DeviceState.DEVICE
+                    )
+                ),
+                AndroidApp(
+                    Package("a.i")
+                )
+            )
+        )*/
     }
 
     /**
