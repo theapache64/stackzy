@@ -12,7 +12,6 @@ import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.malinskiy.adam.request.sync.v1.PullFileRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.di.AdbFile
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +23,6 @@ import kotlin.math.floor
 import kotlin.math.roundToInt
 
 class AdbRepo @Inject constructor(
-    @AdbFile private val adbFile: File
 ) {
 
     companion object {
@@ -46,12 +44,7 @@ class AdbRepo @Inject constructor(
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
 
-            var isStarted = startAdbInteractor.execute()
-
-            if (isStarted.not()) {
-                // default way didn't work. let's try built-in adb
-                isStarted = startAdbInteractor.execute(adbFile)
-            }
+            val isStarted = startAdbInteractor.execute()
 
             if (isStarted) {
 
