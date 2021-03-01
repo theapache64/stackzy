@@ -11,14 +11,6 @@ import java.io.InputStreamReader
  */
 object CommandExecutor {
 
-    private val executeOn by lazy {
-        if (OsCheck.operatingSystemType == OSType.Windows) {
-            "cmd"
-        } else {
-            "/bin/sh"
-        }
-    }
-
     @Throws
     fun executeCommand(command: String): String = executeCommand(command, isLivePrint = false, isSkipException = false)
 
@@ -32,11 +24,17 @@ object CommandExecutor {
 
         val rt = Runtime.getRuntime()
 
-        val proc = rt.exec(
-            arrayOf(
-                executeOn, "-c", *commands
+        val proc = if(OsCheck.operatingSystemType==OSType.Windows){
+            // direct execution
+            rt.exec(commands.joinToString(separator = " "))
+        }else{
+            // execute via shell
+            rt.exec(
+                arrayOf(
+                    "/bin/sh", "-c", *commands
+                )
             )
-        )
+        }
 
         val stdInput = BufferedReader(InputStreamReader(proc.inputStream))
         val stdError = BufferedReader(InputStreamReader(proc.errorStream))

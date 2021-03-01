@@ -30,6 +30,7 @@ class ApkAnalyzerRepoTest {
     fun `Analysis Report - Native`() = runBlockingUnitTest {
         // First, lets decompile a native kotlin apk file
         loadLibs { libs ->
+            println("Starting test... ;)")
             val paperCopApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
             val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, decompiledDir, libs)

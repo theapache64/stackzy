@@ -6,8 +6,9 @@ import org.junit.Test
 internal class CommandExecutorTest {
     @Test
     fun `Test simple command execution`() {
-        CommandExecutor.executeCommand("ls").let {
-            it.split("\n").size.should.above(5)
+        val command = "java -jar 'C:\\Users\\theap\\Desktop\\stackzy\\apk-tool.jar' d 'C:\\Users\\theap\\AppData\\Local\\Temp\\4613591304202884654.apk' -o 'C:\\Users\\theap\\AppData\\Local\\Temp\\5314682004081986574' -f"
+        CommandExecutor.executeCommand(command, isLivePrint = true, isSkipException = true).let {
+            it.split("\n").size.should.above(2)
         }
     }
 }
