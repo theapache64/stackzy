@@ -44,6 +44,8 @@ class AdbRepo @Inject constructor(
         private const val DETAIL_UNKNOWN = "Unknown"
         private const val ADB_ZIP_ENTRY_NAME = "platform-tools/adb"
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS = "platform-tools/adb.exe"
+        private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL = "platform-tools/AdbWinApi.dll"
+        private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL = "platform-tools/AdbWinUsbApi.dll"
 
         private val pToolsMap by lazy {
             mapOf(
@@ -237,7 +239,7 @@ class AdbRepo @Inject constructor(
         }
 
         // Unzip and create adbFile
-        unzipAndSetAdbFile(pToolZipFile)
+        unzipAndSetupAdbFiles(pToolZipFile)
 
         // Finally, we can delete the downloaded platform-tools zip file.
         pToolZipFile.delete()
@@ -246,9 +248,10 @@ class AdbRepo @Inject constructor(
     /**
      * To unzip the given platform tools directory and write adb to adbFile
      */
-    private fun unzipAndSetAdbFile(pToolZipFile: File) {
+    private fun unzipAndSetupAdbFiles(pToolZipFile: File) {
 
         var isAdbExtracted = false
+        val isWindows = OsCheck.operatingSystemType == OSType.Windows
         ZipInputStream(pToolZipFile.inputStream()).use { zis ->
             var zipEntry = zis.nextEntry
             while (zipEntry != null) {
@@ -258,7 +261,17 @@ class AdbRepo @Inject constructor(
                         zis.copyTo(it)
                     }
                     isAdbExtracted = true
-                    break
+                }
+
+                if (isWindows) {
+                    // If windows, we need dll files also.
+                    if (zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL || zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL) {
+                        println("It's windows ")
+                        val dllFile = File(zipEntry.name.split("/").last())
+                        FileOutputStream(dllFile).use {
+                            zis.copyTo(it)
+                        }
+                    }
                 }
 
                 zipEntry = zis.nextEntry
