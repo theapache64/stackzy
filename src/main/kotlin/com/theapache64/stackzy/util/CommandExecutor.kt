@@ -22,11 +22,7 @@ object CommandExecutor {
     fun executeCommands(commands: Array<String>, isLivePrint: Boolean, isSkipException: Boolean): List<String> {
 
         val rt = Runtime.getRuntime()
-        val proc = rt.exec(
-            arrayOf(
-                "/bin/sh", "-c", *commands
-            )
-        )
+        val proc = rt.exec(commands)
 
         val stdInput = BufferedReader(InputStreamReader(proc.inputStream))
         val stdError = BufferedReader(InputStreamReader(proc.errorStream))

@@ -48,7 +48,6 @@ class AdbRepo @Inject constructor(
 
             if (isStarted) {
 
-
                 deviceEventsChannel = adb.execute(
                     request = AsyncDeviceMonitorRequest(),
                     scope = GlobalScope
