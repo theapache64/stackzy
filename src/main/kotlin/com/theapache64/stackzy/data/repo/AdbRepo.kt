@@ -266,7 +266,7 @@ class AdbRepo @Inject constructor(
                 if (isWindows) {
                     // If windows, we need dll files also.
                     if (zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL || zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL) {
-                        println("It's windows ")
+                        println("It's windows ${zipEntry.name}")
                         val dllFile = File(zipEntry.name.split("/").last())
                         FileOutputStream(dllFile).use {
                             zis.copyTo(it)
