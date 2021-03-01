@@ -28,7 +28,6 @@ object CommandExecutor {
         val stdError = BufferedReader(InputStreamReader(proc.errorStream))
 
         // Read the output from the command
-        // Read the output from the command
         var s: String?
         val result = mutableListOf<String>()
         while (stdInput.readLine().also { s = it } != null) {
@@ -38,7 +37,6 @@ object CommandExecutor {
             result.add(s!!)
         }
 
-        // Read any errors from the attempted command
         // Read any errors from the attempted command
         val error = StringBuilder()
         while (stdError.readLine().also { s = it } != null) {

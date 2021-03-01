@@ -31,6 +31,7 @@ fun SplashScreen(
 
     val isSyncFinished by splashViewModel.isSyncFinished.collectAsState()
     val syncFailedReason by splashViewModel.syncFailedMsg.collectAsState()
+    val syncMessage by splashViewModel.syncMsg.collectAsState()
 
     if (isSyncFinished) {
         onSyncFinished()
@@ -53,7 +54,7 @@ fun SplashScreen(
 
             // Loading text
             LoadingText(
-                message = "Syncing...",
+                message = syncMessage,
                 modifier = Modifier
                     .padding(bottom = 30.dp)
                     .align(Alignment.BottomCenter)

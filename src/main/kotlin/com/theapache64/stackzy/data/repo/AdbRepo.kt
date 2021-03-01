@@ -12,22 +12,46 @@ import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.malinskiy.adam.request.sync.v1.PullFileRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.utils.OSType
+import com.theapache64.stackzy.utils.OsCheck
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URL
+import java.util.zip.ZipInputStream
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
+@Singleton
 class AdbRepo @Inject constructor(
+
 ) {
+
+    init {
+        println("Creating new adbRepo instance")
+    }
 
     companion object {
         const val PATH_PACKAGE_PREFIX = "package:"
         private const val DETAIL_UNKNOWN = "Unknown"
+        private const val ADB_ZIP_ENTRY_NAME = "platform-tools/adb"
+        private const val ADB_ZIP_ENTRY_NAME_WINDOWS = "platform-tools/adb.exe"
+
+        private val pToolsMap by lazy {
+            mapOf(
+                OSType.Linux to "https://dl.google.com/android/repository/platform-tools-latest-linux.zip",
+                OSType.Windows to "https://dl.google.com/android/repository/platform-tools-latest-windows.zip",
+                OSType.MacOS to "https://dl.google.com/android/repository/platform-tools-latest-darwin.zip",
+            )
+        }
     }
 
     private var deviceEventsChannel: ReceiveChannel<List<Device>>? = null
@@ -44,7 +68,9 @@ class AdbRepo @Inject constructor(
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
 
-            val isStarted = startAdbInteractor.execute()
+            println("Binary file is ${adbFile.absolutePath}")
+
+            val isStarted = isAdbStarted()
 
             if (isStarted) {
 
@@ -82,6 +108,12 @@ class AdbRepo @Inject constructor(
                 throw IOException("Failed to start adb")
             }
         }
+    }
+
+    suspend fun isAdbStarted() = if (adbFile.exists()) {
+        startAdbInteractor.execute(adbFile)
+    } else {
+        startAdbInteractor.execute()
     }
 
     fun cancelWatchConnectedDevice() {
@@ -172,6 +204,73 @@ class AdbRepo @Inject constructor(
             serial = androidDevice.device.serial
         )
 
+    }
+
+    private val adbZipEntryName by lazy {
+        if (OsCheck.operatingSystemType == OSType.Windows) {
+            ADB_ZIP_ENTRY_NAME_WINDOWS
+        } else {
+            ADB_ZIP_ENTRY_NAME
+        }
+    }
+
+
+    private val adbFile by lazy {
+        File(adbZipEntryName.split("/").last())
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext") // suppressing because of the invalid IDE warning (bug)
+    suspend fun downloadAdb() = withContext(Dispatchers.IO) {
+
+        // Getting platform tools download url
+        val pToolsUrl = pToolsMap[OsCheck.operatingSystemType]
+        require(pToolsUrl != null) { "${OsCheck.operatingSystemType} doesn't have adb binary defined." }
+
+        // Download file
+        val pToolZipFile = kotlin.io.path.createTempFile().toFile()
+
+        URL(pToolsUrl).openStream().use { input ->
+            FileOutputStream(pToolZipFile)
+                .use { output ->
+                    input.copyTo(output)
+                }
+        }
+
+        // Unzip and create adbFile
+        unzipAndSetAdbFile(pToolZipFile)
+
+        // Finally, we can delete the downloaded platform-tools zip file.
+        pToolZipFile.delete()
+    }
+
+    /**
+     * To unzip the given platform tools directory and write adb to adbFile
+     */
+    private fun unzipAndSetAdbFile(pToolZipFile: File) {
+
+        var isAdbExtracted = false
+        ZipInputStream(pToolZipFile.inputStream()).use { zis ->
+            var zipEntry = zis.nextEntry
+            while (zipEntry != null) {
+                if (zipEntry.name == adbZipEntryName) {
+                    // Found adb
+                    FileOutputStream(adbFile).use {
+                        zis.copyTo(it)
+                    }
+                    isAdbExtracted = true
+                    break
+                }
+
+                zipEntry = zis.nextEntry
+            }
+        }
+
+        if (isAdbExtracted) {
+            adbFile.setExecutable(true)
+            println("Adb created '${adbFile.absolutePath}'")
+        } else {
+            throw IOException("Failed to find $adbZipEntryName from ${pToolZipFile.absolutePath}")
+        }
     }
 }
 
