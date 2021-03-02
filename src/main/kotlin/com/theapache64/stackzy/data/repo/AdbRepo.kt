@@ -47,6 +47,7 @@ class AdbRepo @Inject constructor(
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL = "platform-tools/AdbWinApi.dll"
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL = "platform-tools/AdbWinUsbApi.dll"
 
+        // platform-tools url map
         private val pToolsMap by lazy {
             mapOf(
                 OSType.Linux to "https://dl.google.com/android/repository/platform-tools-latest-linux.zip",
@@ -69,8 +70,6 @@ class AdbRepo @Inject constructor(
 
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
-
-            println("Binary file is ${adbFile.absolutePath}")
 
             val isStarted = isAdbStarted()
 
@@ -208,6 +207,9 @@ class AdbRepo @Inject constructor(
 
     }
 
+    /**
+     * adb binary file name inside platform-tool.zip
+     */
     private val adbZipEntryName by lazy {
         if (OsCheck.operatingSystemType == OSType.Windows) {
             ADB_ZIP_ENTRY_NAME_WINDOWS
@@ -218,10 +220,11 @@ class AdbRepo @Inject constructor(
 
 
     private val adbFile by lazy {
+        // only the filename (platform-tools/'adb/adb.exe')
         File(adbZipEntryName.split("/").last())
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext") // suppressing because of the invalid IDE warning (bug)
+    @Suppress("BlockingMethodInNonBlockingContext") // suppressing due to invalid IDE warning (bug)
     suspend fun downloadAdb() = withContext(Dispatchers.IO) {
 
         // Getting platform tools download url
@@ -241,12 +244,12 @@ class AdbRepo @Inject constructor(
         // Unzip and create adbFile
         unzipAndSetupAdbFiles(pToolZipFile)
 
-        // Finally, we can delete the downloaded platform-tools zip file.
+        // Since we've extracted adb binary from the download zip, we can delete it.
         pToolZipFile.delete()
     }
 
     /**
-     * To unzip the given platform tools directory and write adb to adbFile
+     * To unzip the given platform tools directory and write adb to adbFile (plus, dll files also - windows)
      */
     private fun unzipAndSetupAdbFiles(pToolZipFile: File) {
 
