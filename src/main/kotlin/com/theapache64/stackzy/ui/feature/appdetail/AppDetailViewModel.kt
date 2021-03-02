@@ -144,7 +144,7 @@ class AppDetailViewModel @Inject constructor(
                             // remove already listed libs and app packages
                             val newUntrackedLibs =
                                 report.untrackedLibraries.filter { localUntrackedLib ->
-                                    remoteUntrackedLibsResp.data.find { it.packageName == localUntrackedLib } == null &&
+                                    remoteUntrackedLibsResp.data.find { it.packageNames == localUntrackedLib } == null &&
                                             localUntrackedLib.startsWith(report.packageName).not()
                                 }.map { UntrackedLibrary(it) }
 
@@ -158,10 +158,10 @@ class AppDetailViewModel @Inject constructor(
                                             is Resource.Loading -> {
                                                 val percentage = (syncedLibs.toFloat() / totalLibsToSync) * 100
                                                 _loadingMessage.value =
-                                                    "Adding ${ut.packageName} to untracked libs... ${percentage.roundToInt()}%"
+                                                    "Adding ${ut.packageNames} to untracked libs... ${percentage.roundToInt()}%"
                                             }
                                             is Resource.Success -> {
-                                                println("Done!! -> ${ut.packageName}")
+                                                println("Done!! -> ${ut.packageNames}")
                                                 syncedLibs++
                                             }
 

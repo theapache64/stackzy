@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.di
 
-import com.theapache64.stackzy.di.module.AdbModule
+import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.di.module.ApkToolModule
 import com.theapache64.stackzy.di.module.NetworkModule
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
@@ -14,8 +14,7 @@ import javax.inject.Singleton
 @Component(
     modules = [
         NetworkModule::class,
-        ApkToolModule::class,
-        AdbModule::class
+        ApkToolModule::class
     ]
 )
 interface AppComponent {
@@ -23,4 +22,7 @@ interface AppComponent {
     fun inject(selectAppScreenComponent: SelectAppScreenComponent)
     fun inject(appDetailScreenComponent: AppDetailScreenComponent)
     fun inject(selectDeviceScreenComponent: SelectDeviceScreenComponent)
+
+    // bind repo to this component
+    fun bind(): AdbRepo
 }

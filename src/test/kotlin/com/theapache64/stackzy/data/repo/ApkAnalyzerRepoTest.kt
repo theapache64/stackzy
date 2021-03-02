@@ -9,6 +9,7 @@ import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 
 class ApkAnalyzerRepoTest {
@@ -27,11 +28,29 @@ class ApkAnalyzerRepoTest {
 
 
     @Test
+    fun `Analysis Report - Native - Cached`() = runBlockingUnitTest {
+        loadLibs { libs ->
+            val decompiledDir = File("build/topcorn_decompiled")
+            if (decompiledDir.exists().not()) {
+                // decompile
+                val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
+                apkToolRepo.decompile(nativeApkFile, decompiledDir)
+            }
+
+            val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, decompiledDir, libs)
+            report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
+            report.platform.should.instanceof(Platform.NativeKotlin::class.java)
+            report.libraries.size.should.above(0)
+        }
+    }
+
+    @Test
     fun `Analysis Report - Native`() = runBlockingUnitTest {
         // First, lets decompile a native kotlin apk file
         loadLibs { libs ->
-            val paperCopApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
-            val decompiledDir = apkToolRepo.decompile(paperCopApkFile)
+            println("Starting test... ;)")
+            val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
+            val decompiledDir = apkToolRepo.decompile(nativeApkFile)
             val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, decompiledDir, libs)
             report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
             report.platform.should.instanceof(Platform.NativeKotlin::class.java)

@@ -29,7 +29,7 @@ internal class UntrackedLibsRepoTest {
                         // do nothing
                     }
                     is Resource.Success -> {
-                        it.data.packageName.should.equal(inputPackageName)
+                        it.data.packageNames.should.equal(inputPackageName)
                     }
                     is Resource.Error -> {
                         assert(false)

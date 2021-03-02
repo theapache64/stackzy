@@ -155,3 +155,9 @@ adb
 
 !src/main/resources/apktool_2.5.0.jar
 !src/main/resources/adb
+
+AdbWinApi.dll
+AdbWinUsbApi.dll
+adb.exe
+
+build/topcorn_decompiled

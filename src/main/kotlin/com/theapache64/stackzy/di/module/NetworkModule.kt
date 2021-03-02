@@ -35,7 +35,7 @@ class NetworkModule {
             )
             .addSheet(
                 sheetName = TABLE_UNTRACKED_LIBS,
-                "created_at", "package_name"
+                "created_at", "package_names"
             )
             .addForm(
                 TABLE_UNTRACKED_LIBS,

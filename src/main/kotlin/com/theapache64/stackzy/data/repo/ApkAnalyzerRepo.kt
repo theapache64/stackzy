@@ -205,12 +205,18 @@ class ApkAnalyzerRepo @Inject constructor() {
         return false
     }
 
+    /**
+     * To get asset directory from the given decompiledDir
+     */
     private fun getAssetsDir(decompiledDir: File): File {
         return File("${decompiledDir.absolutePath}/assets/")
     }
 
     private fun isPhoneGapDirectory(filePath: String) = PHONEGAP_FILE_PATH_REGEX.find(filePath) != null
 
+    /**
+     * To get libraries used in the given decompiledDir (native app)
+     */
     fun getAppLibraries(
         decompiledDir: File,
         allLibraries: List<Library>
@@ -221,10 +227,14 @@ class ApkAnalyzerRepo @Inject constructor() {
         decompiledDir.walk().forEach { file ->
             if (file.isDirectory) {
                 var isLibFound = false
+
+                val filePath = file.absolutePath
+                    .replace("\\", "/") // replace f-slash with b-slash for windows
+
                 for (remoteLib in allLibraries) {
                     val packageAsPath = remoteLib.packageName.replace(".", "/")
                     val dirRegEx = getDirRegExFormat(packageAsPath)
-                    if (isMatch(dirRegEx, file.absolutePath)) {
+                    if (isMatch(dirRegEx, filePath)) {
                         appLibs.add(remoteLib)
                         isLibFound = true
                         break
@@ -234,10 +244,10 @@ class ApkAnalyzerRepo @Inject constructor() {
                 // Listing untracked libs
                 if (isLibFound.not()) {
                     val filesInsideDir = file.listFiles { it -> !it.isDirectory }?.size ?: 0
-                    if (filesInsideDir > 0 && file.absolutePath.contains("/smali")) {
-                        val afterSmali = file.absolutePath.split("/smali")[1]
-                        val firstSlash = afterSmali.indexOf('/')
-                        val packageName = afterSmali.substring(firstSlash + 1).replace("/", ".")
+                    if (filesInsideDir > 0 && file.absolutePath.contains("${File.separator}smali")) {
+                        val afterSmali = file.absolutePath.split("${File.separator}smali")[1]
+                        val firstSlash = afterSmali.indexOf(File.separator)
+                        val packageName = afterSmali.substring(firstSlash + 1).replace(File.separator, ".")
                         untrackedLibs.add(packageName)
                     }
                 }
@@ -252,7 +262,10 @@ class ApkAnalyzerRepo @Inject constructor() {
     }
 
     private fun getDirRegExFormat(packageAsPath: String): Regex {
-        return String.format(DIR_REGEX_FORMAT, packageAsPath).toRegex()
+        return String.format(
+            DIR_REGEX_FORMAT,
+            packageAsPath
+        ).toRegex()
     }
 
 }

@@ -6,6 +6,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class UntrackedLibrary(
-    @Json(name = "package_name")
-    val packageName: String
+    @Json(name = "package_names")
+    val packageNames: String
 )

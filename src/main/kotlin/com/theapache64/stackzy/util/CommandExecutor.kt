@@ -1,5 +1,7 @@
 package com.theapache64.stackzy.util
 
+import com.theapache64.stackzy.utils.OSType
+import com.theapache64.stackzy.utils.OsCheck
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -8,7 +10,6 @@ import java.io.InputStreamReader
  * To execute commands programmatically
  */
 object CommandExecutor {
-
 
     @Throws
     fun executeCommand(command: String): String = executeCommand(command, isLivePrint = false, isSkipException = false)
@@ -22,16 +23,22 @@ object CommandExecutor {
     fun executeCommands(commands: Array<String>, isLivePrint: Boolean, isSkipException: Boolean): List<String> {
 
         val rt = Runtime.getRuntime()
-        val proc = rt.exec(
-            arrayOf(
-                "/bin/sh", "-c", *commands
+
+        val proc = if(OsCheck.operatingSystemType==OSType.Windows){
+            // direct execution
+            rt.exec(commands.joinToString(separator = " "))
+        }else{
+            // execute via shell
+            rt.exec(
+                arrayOf(
+                    "/bin/sh", "-c", *commands
+                )
             )
-        )
+        }
 
         val stdInput = BufferedReader(InputStreamReader(proc.inputStream))
         val stdError = BufferedReader(InputStreamReader(proc.errorStream))
 
-        // Read the output from the command
         // Read the output from the command
         var s: String?
         val result = mutableListOf<String>()
@@ -42,7 +49,6 @@ object CommandExecutor {
             result.add(s!!)
         }
 
-        // Read any errors from the attempted command
         // Read any errors from the attempted command
         val error = StringBuilder()
         while (stdError.readLine().also { s = it } != null) {

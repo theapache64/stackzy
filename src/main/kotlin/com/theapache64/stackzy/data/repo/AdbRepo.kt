@@ -12,24 +12,49 @@ import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.malinskiy.adam.request.sync.v1.PullFileRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.di.AdbFile
+import com.theapache64.stackzy.utils.OSType
+import com.theapache64.stackzy.utils.OsCheck
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URL
+import java.util.zip.ZipInputStream
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
+@Singleton
 class AdbRepo @Inject constructor(
-    @AdbFile private val adbFile: File
+
 ) {
+
+    init {
+        println("Creating new adbRepo instance")
+    }
 
     companion object {
         const val PATH_PACKAGE_PREFIX = "package:"
         private const val DETAIL_UNKNOWN = "Unknown"
+        private const val ADB_ZIP_ENTRY_NAME = "platform-tools/adb"
+        private const val ADB_ZIP_ENTRY_NAME_WINDOWS = "platform-tools/adb.exe"
+        private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL = "platform-tools/AdbWinApi.dll"
+        private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL = "platform-tools/AdbWinUsbApi.dll"
+
+        // platform-tools url map
+        private val pToolsMap by lazy {
+            mapOf(
+                OSType.Linux to "https://dl.google.com/android/repository/platform-tools-latest-linux.zip",
+                OSType.Windows to "https://dl.google.com/android/repository/platform-tools-latest-windows.zip",
+                OSType.MacOS to "https://dl.google.com/android/repository/platform-tools-latest-darwin.zip",
+            )
+        }
     }
 
     private var deviceEventsChannel: ReceiveChannel<List<Device>>? = null
@@ -46,15 +71,9 @@ class AdbRepo @Inject constructor(
     fun watchConnectedDevice(): Flow<List<AndroidDevice>> {
         return flow {
 
-            var isStarted = startAdbInteractor.execute()
-
-            if (isStarted.not()) {
-                // default way didn't work. let's try built-in adb
-                isStarted = startAdbInteractor.execute(adbFile)
-            }
+            val isStarted = isAdbStarted()
 
             if (isStarted) {
-
 
                 deviceEventsChannel = adb.execute(
                     request = AsyncDeviceMonitorRequest(),
@@ -90,6 +109,12 @@ class AdbRepo @Inject constructor(
                 throw IOException("Failed to start adb")
             }
         }
+    }
+
+    suspend fun isAdbStarted() = if (adbFile.exists()) {
+        startAdbInteractor.execute(adbFile)
+    } else {
+        startAdbInteractor.execute()
     }
 
     fun cancelWatchConnectedDevice() {
@@ -180,6 +205,88 @@ class AdbRepo @Inject constructor(
             serial = androidDevice.device.serial
         )
 
+    }
+
+    /**
+     * adb binary file name inside platform-tool.zip
+     */
+    private val adbZipEntryName by lazy {
+        if (OsCheck.operatingSystemType == OSType.Windows) {
+            ADB_ZIP_ENTRY_NAME_WINDOWS
+        } else {
+            ADB_ZIP_ENTRY_NAME
+        }
+    }
+
+
+    private val adbFile by lazy {
+        // only the filename (platform-tools/'adb/adb.exe')
+        File(adbZipEntryName.split("/").last())
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext") // suppressing due to invalid IDE warning (bug)
+    suspend fun downloadAdb() = withContext(Dispatchers.IO) {
+
+        // Getting platform tools download url
+        val pToolsUrl = pToolsMap[OsCheck.operatingSystemType]
+        require(pToolsUrl != null) { "${OsCheck.operatingSystemType} doesn't have adb binary defined." }
+
+        // Download file
+        val pToolZipFile = kotlin.io.path.createTempFile().toFile()
+
+        URL(pToolsUrl).openStream().use { input ->
+            FileOutputStream(pToolZipFile)
+                .use { output ->
+                    input.copyTo(output)
+                }
+        }
+
+        // Unzip and create adbFile
+        unzipAndSetupAdbFiles(pToolZipFile)
+
+        // Since we've extracted adb binary from the download zip, we can delete it.
+        pToolZipFile.delete()
+    }
+
+    /**
+     * To unzip the given platform tools directory and write adb to adbFile (plus, dll files also - windows)
+     */
+    private fun unzipAndSetupAdbFiles(pToolZipFile: File) {
+
+        var isAdbExtracted = false
+        val isWindows = OsCheck.operatingSystemType == OSType.Windows
+        ZipInputStream(pToolZipFile.inputStream()).use { zis ->
+            var zipEntry = zis.nextEntry
+            while (zipEntry != null) {
+                if (zipEntry.name == adbZipEntryName) {
+                    // Found adb
+                    FileOutputStream(adbFile).use {
+                        zis.copyTo(it)
+                    }
+                    isAdbExtracted = true
+                }
+
+                if (isWindows) {
+                    // If windows, we need dll files also.
+                    if (zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL || zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL) {
+                        println("It's windows ${zipEntry.name}")
+                        val dllFile = File(zipEntry.name.split("/").last())
+                        FileOutputStream(dllFile).use {
+                            zis.copyTo(it)
+                        }
+                    }
+                }
+
+                zipEntry = zis.nextEntry
+            }
+        }
+
+        if (isAdbExtracted) {
+            adbFile.setExecutable(true)
+            println("Adb created '${adbFile.absolutePath}'")
+        } else {
+            throw IOException("Failed to find $adbZipEntryName from ${pToolZipFile.absolutePath}")
+        }
     }
 }
 
