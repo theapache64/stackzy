@@ -14,7 +14,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
-        private val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\${File.separator}%s"
+        private val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
     }
 
@@ -224,7 +224,7 @@ class ApkAnalyzerRepo @Inject constructor() {
                 for (remoteLib in allLibraries) {
                     val packageAsPath = remoteLib.packageName.replace(".", File.separator)
                     val dirRegEx = getDirRegExFormat(packageAsPath)
-                    if (isMatch(dirRegEx, file.absolutePath)) {
+                    if (isMatch(dirRegEx, file.absolutePath.replace("\\", "/"))) {
                         appLibs.add(remoteLib)
                         isLibFound = true
                         break
@@ -252,7 +252,10 @@ class ApkAnalyzerRepo @Inject constructor() {
     }
 
     private fun getDirRegExFormat(packageAsPath: String): Regex {
-        return String.format(DIR_REGEX_FORMAT, packageAsPath).toRegex()
+        return String.format(
+            DIR_REGEX_FORMAT,
+            packageAsPath.replace("\\", "/") // replace f-slash with b-slash for windows
+        ).toRegex()
     }
 
 }
