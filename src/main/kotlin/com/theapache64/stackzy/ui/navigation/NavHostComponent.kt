@@ -1,12 +1,22 @@
 package com.theapache64.stackzy.ui.navigation
 
-import androidx.compose.runtime.Composable
+import androidx.compose.desktop.Window
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.malinskiy.adam.request.device.Device
+import com.malinskiy.adam.request.device.DeviceState
+import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
@@ -47,29 +57,6 @@ class NavHostComponent(
      */
     private val router = router<Config, Component>(
         initialConfiguration = Config.Splash,
-        /*initialConfiguration = Config.SelectApp(
-            AndroidDevice(
-                "Samsung",
-                "someModel",
-                Device(
-                    "R52M604X18E",
-                    DeviceState.DEVICE
-                )
-            )
-        ),*/
-        /*initialConfiguration = Config.AppDetail(
-            AndroidDevice(
-                "Samsung",
-                "someModel",
-                Device(
-                    "R52M604X18E",
-                    DeviceState.DEVICE
-                )
-            ),
-            AndroidApp(
-                Package("com.theapache64.topcorn")
-            )
-        ),*/
         componentFactory = ::createScreenComponent
     )
 
@@ -118,8 +105,8 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        router.push(Config.SelectDevice)
-        /*router.push(
+        // router.push(Config.SelectDevice)
+        router.push(
             Config.AppDetail(
                 AndroidDevice(
                     "Samsung",
@@ -133,7 +120,7 @@ class NavHostComponent(
                     Package("a.i")
                 )
             )
-        )*/
+        )
     }
 
     /**
