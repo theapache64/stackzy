@@ -14,7 +14,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
 
-        private val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
+        private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
     }
 
@@ -205,12 +205,18 @@ class ApkAnalyzerRepo @Inject constructor() {
         return false
     }
 
+    /**
+     * To get asset directory from the given decompiledDir
+     */
     private fun getAssetsDir(decompiledDir: File): File {
         return File("${decompiledDir.absolutePath}/assets/")
     }
 
     private fun isPhoneGapDirectory(filePath: String) = PHONEGAP_FILE_PATH_REGEX.find(filePath) != null
 
+    /**
+     * To get libraries used in the given decompiledDir (native app)
+     */
     fun getAppLibraries(
         decompiledDir: File,
         allLibraries: List<Library>
@@ -221,10 +227,14 @@ class ApkAnalyzerRepo @Inject constructor() {
         decompiledDir.walk().forEach { file ->
             if (file.isDirectory) {
                 var isLibFound = false
+
+                val filePath = file.absolutePath
+                    .replace("\\", "/") // replace f-slash with b-slash for windows
+
                 for (remoteLib in allLibraries) {
-                    val packageAsPath = remoteLib.packageName.replace(".", File.separator)
+                    val packageAsPath = remoteLib.packageName.replace(".", "/")
                     val dirRegEx = getDirRegExFormat(packageAsPath)
-                    if (isMatch(dirRegEx, file.absolutePath.replace("\\", "/"))) {
+                    if (isMatch(dirRegEx, filePath)) {
                         appLibs.add(remoteLib)
                         isLibFound = true
                         break
@@ -254,7 +264,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     private fun getDirRegExFormat(packageAsPath: String): Regex {
         return String.format(
             DIR_REGEX_FORMAT,
-            packageAsPath.replace("\\", "/") // replace f-slash with b-slash for windows
+            packageAsPath
         ).toRegex()
     }
 
