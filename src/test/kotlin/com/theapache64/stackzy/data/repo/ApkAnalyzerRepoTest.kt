@@ -33,9 +33,19 @@ class ApkAnalyzerRepoTest {
             getCachedDecompiledApk { nativeApkFile, decompiledDir ->
                 val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
                 report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
+                report.packageName.should.equal("com.theapache64.topcorn")
                 report.platform.should.instanceof(Platform.NativeKotlin::class.java)
                 report.libraries.size.should.above(0)
-                report.packageName.should.equal("com.theapache64.topcorn")
+                report.apkSizeInMb.should.closeTo(6.5, 0.5)
+                report.assetsDir?.exists().should.`true`
+                report.permissions.size.should.equal(1) // INTERNET only
+                report.gradleInfo.run {
+                    minSdk.should.equal(Pair(16, "Jelly Bean"))
+                    targetSdk.should.equal(Pair(29, "Android 10"))
+                    versionName.should.equal("1.0.4-alpha03")
+                    versionCode.should.equal("10403")
+                }
+
             }
         }
     }
@@ -53,31 +63,22 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Parse permissions`() = runBlockingUnitTest {
-        loadLibs { libs ->
-            getCachedDecompiledApk { nativeApkFile, decompiledDir ->
-                val permissions = apkAnalyzerRepo.getPermissions(decompiledDir)
-                println(permissions)
-                permissions.size.should.above(1)
-            }
+        getCachedDecompiledApk { _, decompiledDir ->
+            val permissions = apkAnalyzerRepo.getPermissions(decompiledDir)
+            println(permissions)
+            permissions.size.should.above(1)
         }
     }
 
     @Test
     fun `Parse gradle info`() = runBlockingUnitTest {
-        loadLibs { libs ->
-            getCachedDecompiledApk { _, decompiledDir ->
-                val gradleInfo = apkAnalyzerRepo.getGradleInfo(decompiledDir)
-                gradleInfo.versionCode.should.equal("10403")
-                gradleInfo.versionName.should.equal("1.0.4-alpha03")
-                gradleInfo.minSdk.let { minSdk ->
-                    minSdk!!.first.should.equal(16)
-                    minSdk.second.should.equal("Jelly Bean")
-                }
-
-                gradleInfo.targetSdk.let { minSdk ->
-                    minSdk!!.first.should.equal(29)
-                    minSdk.second.should.equal("Android 10")
-                }
+        getCachedDecompiledApk { _, decompiledDir ->
+            val gradleInfo = apkAnalyzerRepo.getGradleInfo(decompiledDir)
+            gradleInfo.versionCode.should.equal("10403")
+            gradleInfo.versionName.should.equal("1.0.4-alpha03")
+            gradleInfo.run {
+                minSdk.should.equal(Pair(16, "Jelly Bean"))
+                targetSdk.should.equal(Pair(29, "Android 10"))
             }
         }
     }

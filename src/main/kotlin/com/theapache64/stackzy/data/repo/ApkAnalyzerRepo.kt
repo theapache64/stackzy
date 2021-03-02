@@ -44,7 +44,7 @@ class ApkAnalyzerRepo @Inject constructor() {
             platform = platform,
             libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
             untrackedLibraries = untrackedLibs,
-            apkSize = apkFile.sizeInMb,
+            apkSizeInMb = apkFile.sizeInMb,
             assetsDir = getAssetsDir(decompiledDir).takeIf { it.exists() },
             permissions = getPermissions(decompiledDir),
             gradleInfo = getGradleInfo(decompiledDir)
