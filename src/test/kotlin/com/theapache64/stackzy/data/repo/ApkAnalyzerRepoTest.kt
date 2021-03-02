@@ -30,17 +30,55 @@ class ApkAnalyzerRepoTest {
     @Test
     fun `Analysis Report - Native - Cached`() = runBlockingUnitTest {
         loadLibs { libs ->
-            val decompiledDir = File("build/topcorn_decompiled")
-            if (decompiledDir.exists().not()) {
-                // decompile
-                val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
-                apkToolRepo.decompile(nativeApkFile, decompiledDir)
+            getCachedDecompiledApk { nativeApkFile, decompiledDir ->
+                val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
+                report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
+                report.platform.should.instanceof(Platform.NativeKotlin::class.java)
+                report.libraries.size.should.above(0)
+                report.packageName.should.equal("com.theapache64.topcorn")
             }
+        }
+    }
 
-            val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, decompiledDir, libs)
-            report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
-            report.platform.should.instanceof(Platform.NativeKotlin::class.java)
-            report.libraries.size.should.above(0)
+    private suspend fun getCachedDecompiledApk(callback: (nativeApkFile: File, decompiledDir: File) -> Unit) {
+        val decompiledDir = File("build/topcorn_decompiled")
+        val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
+        if (decompiledDir.exists().not()) {
+            // decompile
+            apkToolRepo.decompile(nativeApkFile, decompiledDir)
+        }
+
+        callback(nativeApkFile, decompiledDir)
+    }
+
+    @Test
+    fun `Parse permissions`() = runBlockingUnitTest {
+        loadLibs { libs ->
+            getCachedDecompiledApk { nativeApkFile, decompiledDir ->
+                val permissions = apkAnalyzerRepo.getPermissions(decompiledDir)
+                println(permissions)
+                permissions.size.should.above(1)
+            }
+        }
+    }
+
+    @Test
+    fun `Parse gradle info`() = runBlockingUnitTest {
+        loadLibs { libs ->
+            getCachedDecompiledApk { _, decompiledDir ->
+                val gradleInfo = apkAnalyzerRepo.getGradleInfo(decompiledDir)
+                gradleInfo.versionCode.should.equal("10403")
+                gradleInfo.versionName.should.equal("1.0.4-alpha03")
+                gradleInfo.minSdk.let { minSdk ->
+                    minSdk!!.first.should.equal(16)
+                    minSdk.second.should.equal("Jelly Bean")
+                }
+
+                gradleInfo.targetSdk.let { minSdk ->
+                    minSdk!!.first.should.equal(29)
+                    minSdk.second.should.equal("Android 10")
+                }
+            }
         }
     }
 
@@ -51,7 +89,7 @@ class ApkAnalyzerRepoTest {
             println("Starting test... ;)")
             val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(nativeApkFile)
-            val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, decompiledDir, libs)
+            val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
             report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
             report.platform.should.instanceof(Platform.NativeKotlin::class.java)
             report.libraries.size.should.above(0)
@@ -64,7 +102,7 @@ class ApkAnalyzerRepoTest {
         loadLibs { libs ->
             val sampleApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val report = apkAnalyzerRepo.analyze(FLUTTER_PACKAGE_NAME, decompiledDir, libs)
+            val report = apkAnalyzerRepo.analyze(FLUTTER_PACKAGE_NAME, sampleApkFile, decompiledDir, libs)
             report.appName.should.equal(FLUTTER_APP_NAME)
             report.platform.should.instanceof(Platform.Flutter::class.java)
         }
@@ -75,7 +113,7 @@ class ApkAnalyzerRepoTest {
         loadLibs {
             val sampleApkFile = getTestResource(REACT_NATIVE_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-            val report = apkAnalyzerRepo.analyze(REACT_NATIVE_APP_NAME, decompiledDir, it)
+            val report = apkAnalyzerRepo.analyze(REACT_NATIVE_APP_NAME, sampleApkFile, decompiledDir, it)
             report.appName.should.equal(REACT_NATIVE_APP_NAME)
             report.platform.should.instanceof(Platform.ReactNative::class.java)
         }

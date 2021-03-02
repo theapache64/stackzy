@@ -7,6 +7,7 @@ class AndroidVersionIdentifierTest {
     @Test
     fun `Single version`() {
         AndroidVersionIdentifier.getVersion(3).should.equal("Cupcake")
+        AndroidVersionIdentifier.getVersion(50).should.`null`
     }
 
     @Test

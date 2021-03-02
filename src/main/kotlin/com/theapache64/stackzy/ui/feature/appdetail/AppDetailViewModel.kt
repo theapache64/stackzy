@@ -108,6 +108,7 @@ class AppDetailViewModel @Inject constructor(
         // Report
         val report = apkAnalyzerRepo.analyze(
             androidApp.appPackage.name,
+            apkFile,
             decompiledDir,
             allLibraries
         )

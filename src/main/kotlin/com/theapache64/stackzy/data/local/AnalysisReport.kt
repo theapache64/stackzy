@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.data.local
 
 import com.theapache64.stackzy.data.remote.Library
+import java.io.File
 
 data class AnalysisReport(
     val appName: String?,
@@ -8,5 +9,9 @@ data class AnalysisReport(
     val platform: Platform,
     // key = Category
     val libraries: List<Library>,
-    val untrackedLibraries: Set<String>
+    val untrackedLibraries: Set<String>,
+    val apkSize: Double,
+    val assetsDir: File?,
+    val permissions: List<String>,
+    val gradleInfo: GradleInfo
 )

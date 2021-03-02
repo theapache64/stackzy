@@ -1,10 +1,16 @@
 package com.theapache64.stackzy.data.repo
 
+import brut.androlib.meta.MetaInfo
 import com.theapache64.stackzy.data.local.AnalysisReport
+import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.util.AndroidVersionIdentifier
 import com.theapache64.stackzy.utils.StringUtils
+import com.theapache64.stackzy.utils.sizeInMb
 import com.toxicbakery.logging.Arbor
+import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.representer.Representer
 import java.io.File
 import javax.inject.Inject
 
@@ -16,6 +22,9 @@ class ApkAnalyzerRepo @Inject constructor() {
 
         private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
+        private val USER_PERMISSION_REGEX = "<uses-permission android:name=\"(?<permission>.+?)\"\\/>".toRegex()
+
+
     }
 
     /**
@@ -23,6 +32,7 @@ class ApkAnalyzerRepo @Inject constructor() {
      */
     fun analyze(
         packageName: String,
+        apkFile: File,
         decompiledDir: File,
         allLibraries: List<Library>
     ): AnalysisReport {
@@ -33,8 +43,56 @@ class ApkAnalyzerRepo @Inject constructor() {
             packageName = packageName,
             platform = platform,
             libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
-            untrackedLibraries = untrackedLibs
+            untrackedLibraries = untrackedLibs,
+            apkSize = apkFile.sizeInMb,
+            assetsDir = getAssetsDir(decompiledDir).takeIf { it.exists() },
+            permissions = getPermissions(decompiledDir),
+            gradleInfo = getGradleInfo(decompiledDir)
         )
+    }
+
+
+    /**
+     * To get
+     */
+    fun getGradleInfo(decompiledDir: File): GradleInfo {
+        val yamlFile = File("${decompiledDir.absolutePath}/apktool.yml")
+        val yaml = Yaml(
+            Representer().apply {
+                propertyUtils.isSkipMissingProperties = true
+            }
+        )
+        val yamlString = yamlFile.readText()
+        val metaInfo: MetaInfo = yaml.load(yamlString)
+
+        // Building gradle info
+        return GradleInfo(
+            versionCode = metaInfo.versionInfo?.versionCode,
+            versionName = metaInfo.versionInfo?.versionName,
+            minSdk = metaInfo.sdkInfo?.minSdkVersion?.let {
+                val androidVersionName = AndroidVersionIdentifier.getVersion(it)
+                Pair(it, androidVersionName)
+            },
+            targetSdk = metaInfo.sdkInfo?.targetSdkVersion?.let {
+                val androidVersionName = AndroidVersionIdentifier.getVersion(it)
+                Pair(it, androidVersionName)
+            }
+        )
+    }
+
+    /**
+     * To get permissions used inside decompiled dir.
+     */
+    fun getPermissions(decompiledDir: File): List<String> {
+        val permissions = mutableListOf<String>()
+        val manifestFile = File("${decompiledDir.absolutePath}/AndroidManifest.xml")
+        val manifestRead = manifestFile.readText()
+        var matchResult = USER_PERMISSION_REGEX.find(manifestRead)
+        while (matchResult != null) {
+            permissions.add(matchResult.groupValues[1])
+            matchResult = matchResult.next()
+        }
+        return permissions
     }
 
     /**

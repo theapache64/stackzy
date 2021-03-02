@@ -76,6 +76,9 @@ dependencies {
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
 
 
+
+    // SnakeYAML : YAML 1.1 parser and emitter for Java
+    implementation("org.yaml:snakeyaml:1.28")
 }
 
 tasks.test {
