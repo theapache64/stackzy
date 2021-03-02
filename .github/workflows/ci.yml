@@ -108,7 +108,9 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Build Release App
-        run: ./gradlew package
+        run: |
+          ./gradlew packageUberJarForCurrentOS
+          ./gradlew package
 
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
@@ -118,6 +120,8 @@ jobs:
           path: |
             build/**/*.dmg
             build/**/*.deb
+            build/**/*.msi
+            build/compose/jars/*.jar
 
       - name: Release
         uses: softprops/action-gh-release@91409e712cf565ce9eff10c87a8d1b11b81757ae
@@ -127,5 +131,6 @@ jobs:
             build/**/*.dmg
             build/**/*.deb
             build/**/*.msi
+            build/compose/jars/*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
