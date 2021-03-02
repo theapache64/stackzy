@@ -56,7 +56,7 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get
      */
     fun getGradleInfo(decompiledDir: File): GradleInfo {
-        val yamlFile = File("${decompiledDir.absolutePath}/apktool.yml")
+        val yamlFile = File("${decompiledDir.absolutePath}${File.separator}apktool.yml")
         val yaml = Yaml(
             Representer().apply {
                 propertyUtils.isSkipMissingProperties = true

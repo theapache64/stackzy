@@ -26,6 +26,15 @@ class AppDetailViewModel @Inject constructor(
     private val untrackedLibsRepo: UntrackedLibsRepo
 ) {
 
+    companion object {
+        val TABS = mutableListOf(
+            "Libraries",
+            "Permissions",
+            "Assets",
+            "Info"
+        )
+    }
+
     private var decompileJob: Job? = null
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
@@ -35,6 +44,9 @@ class AppDetailViewModel @Inject constructor(
 
     private val _loadingMessage = MutableStateFlow<String?>(null)
     val loadingMessage: StateFlow<String?> = _loadingMessage
+
+    private val _selectedTabIndex = MutableStateFlow(0)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
 
     fun init(
         androidDevice: AndroidDevice,
@@ -179,5 +191,11 @@ class AppDetailViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun onTabClicked(index: Int) {
+
+
+        _selectedTabIndex.value = index
     }
 }

@@ -3,6 +3,7 @@ package com.theapache64.stackzy.data.local
 import com.theapache64.stackzy.data.remote.Library
 import java.io.File
 
+
 data class AnalysisReport(
     val appName: String?,
     val packageName: String,
