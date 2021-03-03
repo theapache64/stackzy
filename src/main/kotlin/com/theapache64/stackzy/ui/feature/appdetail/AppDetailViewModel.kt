@@ -108,8 +108,8 @@ class AppDetailViewModel @Inject constructor(
     private suspend fun onApkPulled(androidApp: AndroidApp, apkFile: File) {
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
-        // TODO : UNCOMMENT : val decompiledDir = apkToolRepo.decompile(apkFile)
-        val decompiledDir = File("build/topcorn_decompiled")
+        val decompiledDir = apkToolRepo.decompile(apkFile)
+        // val decompiledDir = File("build/topcorn_decompiled")
 
         // Analyse
         _loadingMessage.value = R.string.app_detail_loading_analysing
@@ -126,7 +126,7 @@ class AppDetailViewModel @Inject constructor(
 
         // Delete decompiled dir
         _loadingMessage.value = "Hold on please..."
-        //TODO: UNCOMMENT: decompiledDir.deleteRecursively()
+        decompiledDir.deleteRecursively()
         apkFile.delete()
 
         trackUntrackedLibs(report)

@@ -1,7 +1,8 @@
-package com.theapache64.stackzy.ui.common
+package com.theapache64.stackzy.ui.feature.appdetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.ui.theme.*
 import com.theapache64.stackzy.ui.util.Preview
@@ -50,9 +52,11 @@ fun main(args: Array<String>) {
 }
 
 
-private val firaCode = FontFamily(
-    Font("fonts/FiraCode-Regular.ttf")
-)
+private val firaCode by lazy {
+    FontFamily(
+        Font("fonts/FiraCode-Regular.ttf")
+    )
+}
 
 
 private val codeViewerPadding = 10.dp
@@ -60,7 +64,34 @@ private val codeViewerTitleContentSpacerHeight = 4.dp
 private val codeViewerFontSize = 14.sp
 
 @Composable
-fun BuildGradleGroovy(
+fun MoreInfo(
+    report: AnalysisReport,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        item {
+            BuildGradleGroovy(
+                packageName = report.packageName,
+                gradleInfo = report.gradleInfo
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+        item {
+            PermissionsXml(
+                permission = report.permissions
+            )
+        }
+    }
+}
+
+@Composable
+private fun BuildGradleGroovy(
     modifier: Modifier = Modifier,
     packageName: String,
     gradleInfo: GradleInfo
@@ -157,7 +188,7 @@ fun BuildGradleGroovy(
 }
 
 @Composable
-fun PermissionsXml(
+private fun PermissionsXml(
     modifier: Modifier = Modifier,
     permission: List<String>
 ) {

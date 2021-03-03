@@ -7,9 +7,6 @@ import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
-import com.malinskiy.adam.request.device.Device
-import com.malinskiy.adam.request.device.DeviceState
-import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
@@ -98,8 +95,8 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        // router.push(Config.SelectDevice)
-        router.push(
+        router.push(Config.SelectDevice)
+        /*router.push(
             Config.AppDetail(
                 AndroidDevice(
                     "Samsung",
@@ -114,7 +111,7 @@ class NavHostComponent(
                     Package("com.theapache64.topcorn"),
                 )
             )
-        )
+        )*/
     }
 
     /**
