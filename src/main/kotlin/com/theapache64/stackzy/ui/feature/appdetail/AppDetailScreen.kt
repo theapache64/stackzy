@@ -53,6 +53,11 @@ fun AppDetailScreen(
         onBackClicked = {
             appDetailViewModel.onBackPressed() // to cancel on going works
             onBackClicked()
+        },
+        topRightSlot = {
+            report?.let {
+                Badge("${it.apkSizeInMb} MB")
+            }
         }
     ) {
         if (fatalError != null) {
@@ -70,7 +75,9 @@ fun AppDetailScreen(
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
                     backgroundColor = Color.Transparent,
-                    modifier = Modifier.fillMaxWidth()
+                    contentColor = MaterialTheme.colors.primary,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     // Tabs
                     AppDetailViewModel.TABS.forEachIndexed { index, title ->
@@ -84,10 +91,14 @@ fun AppDetailScreen(
                     }
                 }
 
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+
                 if (selectedTabIndex == 0) {
                     LibsUsed(report!!, appItemWidth, onLibrarySelected)
                 } else {
-                    Text(text = "Tab Index : $selectedTabIndex")
+                    // show more info
                 }
 
             }

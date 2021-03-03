@@ -11,7 +11,7 @@ data class AnalysisReport(
     // key = Category
     val libraries: List<Library>,
     val untrackedLibraries: Set<String>,
-    val apkSizeInMb: Double,
+    val apkSizeInMb: Float,
     val assetsDir: File?,
     val permissions: List<String>,
     val gradleInfo: GradleInfo

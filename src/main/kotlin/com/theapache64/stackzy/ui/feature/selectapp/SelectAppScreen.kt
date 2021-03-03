@@ -49,6 +49,7 @@ fun SelectAppScreen(
         onBackClicked = onBackClicked,
         topRightSlot = {
 
+
             // SearchBox
             OutlinedTextField(
                 leadingIcon = {
@@ -71,6 +72,10 @@ fun SelectAppScreen(
             )
         }
     ) {
+
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
 
         apps?.let { apps ->
             if (apps.isNotEmpty()) {

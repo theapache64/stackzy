@@ -55,6 +55,11 @@ fun Content(
         CustomScaffold(
             title = R.string.device_select_the_device
         ) {
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
+            )
+
             LazyColumn {
                 items(devices) { device ->
                     Selectable(

@@ -1,13 +1,6 @@
 package com.theapache64.stackzy.ui.navigation
 
-import androidx.compose.desktop.Window
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.Tab
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.pop
@@ -117,7 +110,8 @@ class NavHostComponent(
                     )
                 ),
                 AndroidApp(
-                    Package("a.i")
+                    // Package("a.i"),
+                    Package("com.theapache64.topcorn"),
                 )
             )
         )

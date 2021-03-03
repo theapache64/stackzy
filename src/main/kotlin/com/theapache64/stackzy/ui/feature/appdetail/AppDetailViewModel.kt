@@ -29,9 +29,7 @@ class AppDetailViewModel @Inject constructor(
     companion object {
         val TABS = mutableListOf(
             "Libraries",
-            "Permissions",
-            "Assets",
-            "Info"
+            "Details"
         )
     }
 
