@@ -8,7 +8,6 @@ data class AnalysisReport(
     val appName: String?,
     val packageName: String,
     val platform: Platform,
-    // key = Category
     val libraries: List<Library>,
     val untrackedLibraries: Set<String>,
     val apkSizeInMb: Float,

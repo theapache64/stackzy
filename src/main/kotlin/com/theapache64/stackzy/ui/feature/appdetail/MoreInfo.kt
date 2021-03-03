@@ -21,37 +21,6 @@ import com.theapache64.stackzy.ui.theme.*
 import com.theapache64.stackzy.ui.util.Preview
 
 
-fun main(args: Array<String>) {
-    Preview(
-        modifier = Modifier.padding(10.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            BuildGradleGroovy(
-                packageName = "com.theapache64.topcorn",
-                gradleInfo = GradleInfo(
-                    versionCode = "10203",
-                    versionName = "v1.0.2-alpha03",
-                    minSdk = Pair(16, "Jelly Bean"),
-                    targetSdk = Pair(31, "Android 11"),
-                )
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            PermissionsXml(
-                permission = listOf(
-                    "android.permission.INTERNET",
-                    "android.permission.READ_SMS",
-                    "android.permission.WRITE_SMS",
-                )
-            )
-        }
-    }
-}
-
-
 private val firaCode by lazy {
     FontFamily(
         Font("fonts/FiraCode-Regular.ttf")
