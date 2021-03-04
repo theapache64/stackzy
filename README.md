@@ -112,6 +112,8 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
+- [Fira Code](https://github.com/tonsky/FiraCode) : [OFL-1.1 Licence](https://github.com/tonsky/FiraCode/blob/master/LICENSE)
+
 ```
 Copyright © 2021 - theapache64
 
