@@ -13,7 +13,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.awt.Desktop
 import java.io.File
+import java.net.URI
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -193,8 +195,13 @@ class AppDetailViewModel @Inject constructor(
     }
 
     fun onTabClicked(index: Int) {
-
-
         _selectedTabIndex.value = index
+    }
+
+    fun onPlayStoreIconClicked() {
+        _analysisReport.value?.let { report ->
+            val playStoreUrl = URI("https://play.google.com/store/apps/details?id=${report.packageName}")
+            Desktop.getDesktop().browse(playStoreUrl)
+        }
     }
 }

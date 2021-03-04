@@ -6,10 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +14,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.ui.common.CustomScaffold
@@ -43,7 +41,6 @@ fun AppDetailScreen(
     }
 
 
-
     CustomScaffold(
         title = title,
         subTitle = report?.platform?.name,
@@ -52,8 +49,20 @@ fun AppDetailScreen(
             onBackClicked()
         },
         topRightSlot = {
-            report?.let {
-                Badge("APK SIZE: ${it.apkSizeInMb} MB")
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                report?.let {
+
+                    // Badge
+                    Badge("APK SIZE: ${it.apkSizeInMb} MB")
+
+                    // Launch app in play-store icon
+                    PlayStoreIcon {
+                        appDetailViewModel.onPlayStoreIconClicked()
+                    }
+                }
             }
         }
     ) {
@@ -102,6 +111,19 @@ fun AppDetailScreen(
 
             }
         }
+    }
+}
+
+@Composable
+private fun PlayStoreIcon(onClicked: () -> Unit) {
+    IconButton(
+        onClick = onClicked
+    ) {
+        Icon(
+            painter = svgResource("drawables/playstore.svg"),
+            contentDescription = "open play store",
+            tint = MaterialTheme.colors.onSurface
+        )
     }
 }
 

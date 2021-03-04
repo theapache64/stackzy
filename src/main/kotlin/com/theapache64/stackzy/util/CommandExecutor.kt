@@ -24,10 +24,10 @@ object CommandExecutor {
 
         val rt = Runtime.getRuntime()
 
-        val proc = if(OsCheck.operatingSystemType==OSType.Windows){
+        val proc = if (OsCheck.operatingSystemType == OSType.Windows) {
             // direct execution
             rt.exec(commands.joinToString(separator = " "))
-        }else{
+        } else {
             // execute via shell
             rt.exec(
                 arrayOf(

@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.ui.theme.*
-import com.theapache64.stackzy.ui.util.Preview
 
 
 private val firaCode by lazy {
