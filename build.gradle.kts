@@ -3,10 +3,10 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.4.30"
+    val kotlinVersion = "1.4.31"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.4.0-build168"
+    id("org.jetbrains.compose") version "0.4.0-build171"
 }
 
 group = "com.theapache64"
@@ -74,7 +74,6 @@ dependencies {
     testImplementation("com.theapache64:expekt:0.0.1")
 
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
-
 
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java

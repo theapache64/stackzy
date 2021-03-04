@@ -20,7 +20,7 @@ data class Library(
     val website: String
 ) : AlphabetCircle() {
 
-    companion object{
+    companion object {
         const val CATEGORY_OTHER = "Other"
     }
 
