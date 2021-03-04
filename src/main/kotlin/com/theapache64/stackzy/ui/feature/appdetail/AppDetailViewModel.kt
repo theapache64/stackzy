@@ -26,6 +26,13 @@ class AppDetailViewModel @Inject constructor(
     private val untrackedLibsRepo: UntrackedLibsRepo
 ) {
 
+    companion object {
+        val TABS = mutableListOf(
+            "Libraries",
+            "Details"
+        )
+    }
+
     private var decompileJob: Job? = null
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
@@ -35,6 +42,9 @@ class AppDetailViewModel @Inject constructor(
 
     private val _loadingMessage = MutableStateFlow<String?>(null)
     val loadingMessage: StateFlow<String?> = _loadingMessage
+
+    private val _selectedTabIndex = MutableStateFlow(0)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
 
     fun init(
         androidDevice: AndroidDevice,
@@ -99,6 +109,7 @@ class AppDetailViewModel @Inject constructor(
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
         val decompiledDir = apkToolRepo.decompile(apkFile)
+        // val decompiledDir = File("build/topcorn_decompiled")
 
         // Analyse
         _loadingMessage.value = R.string.app_detail_loading_analysing
@@ -108,6 +119,7 @@ class AppDetailViewModel @Inject constructor(
         // Report
         val report = apkAnalyzerRepo.analyze(
             androidApp.appPackage.name,
+            apkFile,
             decompiledDir,
             allLibraries
         )
@@ -178,5 +190,11 @@ class AppDetailViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun onTabClicked(index: Int) {
+
+
+        _selectedTabIndex.value = index
     }
 }

@@ -47,29 +47,6 @@ class NavHostComponent(
      */
     private val router = router<Config, Component>(
         initialConfiguration = Config.Splash,
-        /*initialConfiguration = Config.SelectApp(
-            AndroidDevice(
-                "Samsung",
-                "someModel",
-                Device(
-                    "R52M604X18E",
-                    DeviceState.DEVICE
-                )
-            )
-        ),*/
-        /*initialConfiguration = Config.AppDetail(
-            AndroidDevice(
-                "Samsung",
-                "someModel",
-                Device(
-                    "R52M604X18E",
-                    DeviceState.DEVICE
-                )
-            ),
-            AndroidApp(
-                Package("com.theapache64.topcorn")
-            )
-        ),*/
         componentFactory = ::createScreenComponent
     )
 
@@ -130,7 +107,8 @@ class NavHostComponent(
                     )
                 ),
                 AndroidApp(
-                    Package("a.i")
+                    // Package("a.i"),
+                    Package("com.theapache64.topcorn"),
                 )
             )
         )*/

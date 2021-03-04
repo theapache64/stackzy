@@ -9,11 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.theapache64.stackzy.ui.common.ToolBar
 
-// Colors
-private val TelegramBlue = Color(48, 163, 230)
-val BigStone = Color(0xff0D1D32)
-private val Elephant = Color(0xff0D2841)
-
 // Color set
 val LightTheme = lightColors() // TODO :
 val DarkTheme = darkColors(

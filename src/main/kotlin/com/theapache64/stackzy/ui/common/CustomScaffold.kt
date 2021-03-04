@@ -85,10 +85,6 @@ fun CustomScaffold(
             }
         }
 
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
-
         // Content slot
         content()
     }

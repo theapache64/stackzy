@@ -1,6 +1,6 @@
 # stackzy
 
-![](screenshot.png)
+![](extras/screenshot.png)
 
 👷 This project is under active development.
 

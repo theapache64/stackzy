@@ -11,18 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 
-/*
-fun main() {
-    Preview {
-        LazyRow {
-            items(count = 10) {
-
-            }
-        }
-    }
-}
-*/
-
 
 @Composable
 fun AlphabetCircle(
