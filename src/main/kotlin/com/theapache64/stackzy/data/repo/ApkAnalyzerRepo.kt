@@ -12,6 +12,7 @@ import com.toxicbakery.logging.Arbor
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.representer.Representer
 import java.io.File
+import java.util.*
 import javax.inject.Inject
 
 class ApkAnalyzerRepo @Inject constructor() {
@@ -44,7 +45,7 @@ class ApkAnalyzerRepo @Inject constructor() {
             platform = platform,
             libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
             untrackedLibraries = untrackedLibs,
-            apkSizeInMb = "%.2f".format(apkFile.sizeInMb).toFloat(),
+            apkSizeInMb = "%.2f".format(Locale.US, apkFile.sizeInMb).toFloat(),
             assetsDir = getAssetsDir(decompiledDir).takeIf { it.exists() },
             permissions = getPermissions(decompiledDir),
             gradleInfo = getGradleInfo(decompiledDir)
