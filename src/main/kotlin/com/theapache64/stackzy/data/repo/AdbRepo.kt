@@ -276,6 +276,7 @@ class AdbRepo @Inject constructor(
                         FileOutputStream(dllFile).use {
                             zis.copyTo(it)
                         }
+                        dllFile.setExecutable(true)
                     }
                 }
 
