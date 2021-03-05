@@ -40,22 +40,22 @@ object CommandExecutor {
         val stdError = BufferedReader(InputStreamReader(proc.errorStream))
 
         // Read the output from the command
-        var s: String?
+        var lastLine: String?
         val result = mutableListOf<String>()
-        while (stdInput.readLine().also { s = it } != null) {
+        stdInput.forEachLine { line ->
             if (isLivePrint) {
-                println(s)
+                println(line)
             }
-            result.add(s!!)
+            result.add(line)
         }
 
         // Read any errors from the attempted command
         val error = StringBuilder()
-        while (stdError.readLine().also { s = it } != null) {
+        stdError.forEachLine { line ->
             if (isLivePrint) {
-                println(s)
+                println(line)
             }
-            error.append(s).append("\n")
+            error.append(line).append("\n")
         }
 
         if (!isSkipException) {
