@@ -107,7 +107,7 @@ compose.desktop {
             }
 
             windows {
-                iconFile.set(iconsRoot.resolve("drawables/windows.ico"))
+                iconFile.set(iconsRoot.resolve("launcher_icons/windows.ico"))
             }
 
             macOS {
