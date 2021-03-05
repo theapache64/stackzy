@@ -34,12 +34,7 @@ fun AppDetailScreen(
     val report by appDetailViewModel.analysisReport.collectAsState()
     val selectedTabIndex by appDetailViewModel.selectedTabIndex.collectAsState()
 
-    val title = if (report == null || report?.appName == null) {
-        R.string.app_detail_title
-    } else {
-        report!!.appName!!
-    }
-
+    val title = report?.appName ?: R.string.app_detail_title
 
     CustomScaffold(
         title = title,
@@ -66,16 +61,19 @@ fun AppDetailScreen(
             }
         }
     ) {
-        if (fatalError != null) {
+        val error = fatalError
+        if (error != null) {
             FullScreenError(
                 image = imageResource("drawables/ic_error_code.png"),
                 title = R.string.any_error_title_damn_it,
-                message = fatalError!!
+                message = error
             )
         } else {
-            if (loadingMessage != null) {
-                LoadingAnimation(loadingMessage!!)
-            } else if (report != null) {
+            val _report = report
+            val message = loadingMessage
+            if (message != null) {
+                LoadingAnimation(message)
+            } else if (_report != null) {
 
                 // Decompile and analysis done
                 TabRow(
@@ -103,10 +101,10 @@ fun AppDetailScreen(
 
                 if (selectedTabIndex == 0) {
                     // Libraries Tab
-                    Libraries(report!!, onLibrarySelected)
+                    Libraries(_report, onLibrarySelected)
                 } else {
                     // More Info tab
-                    MoreInfo(report!!)
+                    MoreInfo(_report)
                 }
 
             }

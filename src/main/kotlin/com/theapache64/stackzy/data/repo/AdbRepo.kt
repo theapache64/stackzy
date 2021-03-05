@@ -27,6 +27,7 @@ import java.net.URL
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.io.path.ExperimentalPathApi
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -74,16 +75,16 @@ class AdbRepo @Inject constructor(
             val isStarted = isAdbStarted()
 
             if (isStarted) {
-
-                deviceEventsChannel = adb.execute(
+                val deviceEventsChannel = adb.execute(
                     request = AsyncDeviceMonitorRequest(),
                     scope = GlobalScope
-                )
+                ).also {
+                    this@AdbRepo.deviceEventsChannel = it
+                }
 
                 adb.execute(request = ListDevicesRequest())
 
-                for (currentDeviceList in deviceEventsChannel!!) {
-
+                for (currentDeviceList in deviceEventsChannel) {
                     val deviceList = currentDeviceList
                         .filter { it.state == DeviceState.DEVICE }
                         .map { device ->
@@ -224,6 +225,7 @@ class AdbRepo @Inject constructor(
         File(adbZipEntryName.split("/").last())
     }
 
+    @ExperimentalPathApi
     @Suppress("BlockingMethodInNonBlockingContext") // suppressing due to invalid IDE warning (bug)
     suspend fun downloadAdb() = withContext(Dispatchers.IO) {
 

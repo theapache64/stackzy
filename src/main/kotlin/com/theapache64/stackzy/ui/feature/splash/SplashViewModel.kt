@@ -75,7 +75,7 @@ class SplashViewModel @Inject constructor(
     private suspend fun checkAdb() {
 
         if (adbRepo.isAdbStarted()) {
-            // _isSyncFinished.value = true
+            _isSyncFinished.value = true
         } else {
             // Download ADB
             _syncMsg.value = "Downloading adb..."
