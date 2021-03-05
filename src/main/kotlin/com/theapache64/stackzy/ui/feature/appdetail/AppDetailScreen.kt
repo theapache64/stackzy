@@ -68,7 +68,7 @@ fun AppDetailScreen(
     ) {
         if (fatalError != null) {
             FullScreenError(
-                image = imageResource("drawables/code.png"),
+                image = imageResource("drawables/ic_error_code.png"),
                 title = R.string.any_error_title_damn_it,
                 message = fatalError!!
             )

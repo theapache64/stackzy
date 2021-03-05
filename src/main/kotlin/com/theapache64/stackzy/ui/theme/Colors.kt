@@ -2,7 +2,7 @@ package com.theapache64.stackzy.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val TelegramBlue = Color(48, 163, 230)
+val TelegramBlue = Color(0xff30A3E6)
 val BigStone = Color(0xff0D1D32)
 val Elephant = Color(0xff0D2841)
 val WildWatermelon = Color(0xffFF5370)

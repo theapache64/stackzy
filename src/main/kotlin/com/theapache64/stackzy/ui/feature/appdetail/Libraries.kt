@@ -41,7 +41,7 @@ fun Libraries(
             FullScreenError(
                 title = "// TODO : ",
                 message = "${report.platform.name} dependency analysis is yet to support",
-                image = imageResource("drawables/code.png")
+                image = imageResource("drawables/ic_error_code.png")
             )
         }
     } else {
