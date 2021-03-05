@@ -31,8 +31,9 @@ class SelectAppViewModel @Inject constructor(
     fun init(selectedDevice: AndroidDevice) {
         this.selectedDevice = selectedDevice
         GlobalScope.launch {
-            fullApps = adbRepo.getInstalledApps(selectedDevice.device)
-            _apps.value = fullApps
+            fullApps = adbRepo.getInstalledApps(selectedDevice.device).also {
+                _apps.value = it
+            }
         }
     }
 
@@ -40,7 +41,7 @@ class SelectAppViewModel @Inject constructor(
         _searchKeyword.value = newKeyword
 
         // Filtering apps
-        _apps.value = fullApps!!.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
+        _apps.value = fullApps?.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
     }
 
     fun onOpenMarketClicked() {
