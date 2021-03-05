@@ -100,18 +100,18 @@ compose.desktop {
             modules("java.logging", "jdk.crypto.ec")
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
 
-            val iconsRoot = project.file("src/main/resources")
+            val iconsRoot = project.file("src/main/resources/drawables")
 
             linux {
-                iconFile.set(iconsRoot.resolve("drawables/launcher_icon.png"))
+                iconFile.set(iconsRoot.resolve("launcher_icons/linux.png"))
             }
 
             windows {
-                iconFile.set(iconsRoot.resolve("drawables/launcher_icon.png"))
+                iconFile.set(iconsRoot.resolve("drawables/windows.ico"))
             }
 
             macOS {
-                iconFile.set(iconsRoot.resolve("drawables/launcher_icon.png"))
+                iconFile.set(iconsRoot.resolve("launcher_icons/linux.png"))
             }
         }
     }
