@@ -28,7 +28,7 @@
 
 ## 🏋 Dependency
 
-- JDK
+- Java 8 (JRE 1.8)
 
 ## 🏗️️ Built with
 
