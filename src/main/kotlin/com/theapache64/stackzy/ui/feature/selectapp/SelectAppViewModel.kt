@@ -38,7 +38,7 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun onSearchKeywordChanged(newKeyword: String) {
-        _searchKeyword.value = newKeyword
+        _searchKeyword.value = newKeyword.trim().replace("\n", "")
 
         // Filtering apps
         _apps.value = fullApps?.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }

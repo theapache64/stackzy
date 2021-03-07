@@ -58,6 +58,7 @@ fun SelectAppScreen(
                         contentDescription = ""
                     )
                 },
+                singleLine = true,
                 value = searchKeyword,
                 label = {
                     Text(
