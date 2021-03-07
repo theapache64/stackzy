@@ -26,6 +26,10 @@
 
 - Executables for windows, linux and mac will be released soon. 😇
 
+## 🏋 Dependency
+
+- JDK
+
 ## 🏗️️ Built with
 
 | What            | How                        |
