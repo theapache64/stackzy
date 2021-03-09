@@ -32,12 +32,9 @@ abstract class AlphabetCircle {
 }
 
 @Composable
-fun <T : AlphabetCircle> Selectable(
-    data: T,
-    onSelected: (T) -> Unit,
-    modifier: Modifier = Modifier,
-    padding: Dp = 10.dp
-) {
+fun Modifier.addHoverEffect(
+    onClicked: () -> Unit
+): Modifier {
     var isHovered by remember { mutableStateOf(false) }
     val backgroundAlpha = if (isHovered) {
         0.8f
@@ -45,22 +42,39 @@ fun <T : AlphabetCircle> Selectable(
         0f
     }
 
+    return this
+        .background(MaterialTheme.colors.secondary.copy(alpha = backgroundAlpha), RoundedCornerShape(5.dp))
+        .clickable {
+            onClicked()
+        }
+        .pointerMoveFilter(
+            onEnter = {
+                isHovered = true
+                false
+            },
+            onExit = {
+                isHovered = false
+                false
+            }
+        )
+}
+
+@Composable
+fun <T : AlphabetCircle> Selectable(
+    data: T,
+    onSelected: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    padding: Dp = 10.dp
+) {
+
     Row(
         modifier = modifier
-            .background(MaterialTheme.colors.secondary.copy(alpha = backgroundAlpha), RoundedCornerShape(5.dp))
-            .clickable {
-                onSelected(data)
-            }
-            .pointerMoveFilter(
-                onEnter = {
-                    isHovered = true
-                    false
-                },
-                onExit = {
-                    isHovered = false
-                    false
+            .addHoverEffect(
+                onClicked = {
+                    onSelected(data)
                 }
-            ).padding(padding),
+            )
+            .padding(padding),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
