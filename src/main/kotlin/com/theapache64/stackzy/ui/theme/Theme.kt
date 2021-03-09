@@ -12,11 +12,11 @@ import com.theapache64.stackzy.ui.common.ToolBar
 // Color set
 val LightTheme = lightColors() // TODO :
 val DarkTheme = darkColors(
-    primary = TelegramBlue,
+    primary = R.color.TelegramBlue,
     onPrimary = Color.White,
-    secondary = Elephant,
+    secondary = R.color.Elephant,
     onSecondary = Color.White,
-    surface = BigStone,
+    surface = R.color.BigStone,
 )
 
 @Composable

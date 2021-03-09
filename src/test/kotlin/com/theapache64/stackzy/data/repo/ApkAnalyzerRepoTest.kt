@@ -36,7 +36,7 @@ class ApkAnalyzerRepoTest {
                 report.packageName.should.equal("com.theapache64.topcorn")
                 report.platform.should.instanceof(Platform.NativeKotlin::class.java)
                 report.libraries.size.should.above(0)
-                report.apkSizeInMb.should.closeTo(6.5, 0.5)
+                report.apkSizeInMb.toDouble().should.closeTo(6.5, 0.5)
                 report.assetsDir?.exists().should.`true`
                 report.permissions.size.should.equal(1) // INTERNET only
                 report.gradleInfo.run {
