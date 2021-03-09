@@ -18,6 +18,8 @@ class PathwayScreenComponent(
 
     init {
         appComponent.inject(this)
+
+        // Observe
     }
 
     @Composable

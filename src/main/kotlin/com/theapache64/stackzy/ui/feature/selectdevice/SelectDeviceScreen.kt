@@ -21,20 +21,23 @@ import com.theapache64.stackzy.util.R
 @Composable
 fun SelectDeviceScreen(
     selectDeviceViewModel: SelectDeviceViewModel,
+    onBackClicked: () -> Unit,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
     val devices by selectDeviceViewModel.connectedDevices.collectAsState()
 
     Content(
         devices = devices,
-        onDeviceSelected = onDeviceSelected
+        onDeviceSelected = onDeviceSelected,
+        onBackClicked = onBackClicked
     )
 }
 
 @Composable
 fun Content(
     devices: List<AndroidDevice>?,
-    onDeviceSelected: (AndroidDevice) -> Unit
+    onDeviceSelected: (AndroidDevice) -> Unit,
+    onBackClicked: () -> Unit
 ) {
     if (devices == null) {
         // Just background
@@ -53,7 +56,8 @@ fun Content(
     } else {
         // Content
         CustomScaffold(
-            title = R.string.device_select_the_device
+            title = R.string.device_select_the_device,
+            onBackClicked = onBackClicked
         ) {
 
             Spacer(

@@ -71,7 +71,8 @@ class NavHostComponent(
             is Config.SelectDevice -> SelectDeviceScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                onDeviceSelected = ::onDeviceSelected
+                onDeviceSelected = ::onDeviceSelected,
+                onBackClicked = ::onBackClicked,
             )
             is Config.SelectApp -> SelectAppScreenComponent(
                 appComponent = appComponent,
