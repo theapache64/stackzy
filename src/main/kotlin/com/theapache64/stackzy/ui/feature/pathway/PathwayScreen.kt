@@ -15,13 +15,19 @@ import com.theapache64.stackzy.ui.common.addHoverEffect
 import com.theapache64.stackzy.ui.util.Preview
 
 fun main(args: Array<String>) {
-    Preview {
-        PathwayScreen()
+    Preview(
+        undecorated = false
+    ) {
+        // PathwayScreen(PathwayViewModel())
     }
 }
 
 @Composable
-fun PathwayScreen() {
+fun PathwayScreen(
+    viewModel: PathwayViewModel,
+    onAdbSelected: () -> Unit,
+    onPlayStoreSelected: () -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

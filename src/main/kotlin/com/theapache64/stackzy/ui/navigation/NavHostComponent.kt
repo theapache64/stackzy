@@ -13,6 +13,7 @@ import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.di.DaggerAppComponent
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
+import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
@@ -31,6 +32,7 @@ class NavHostComponent(
      */
     private sealed class Config : Parcelable {
         object Splash : Config()
+        object SelectPathway : Config()
         object SelectDevice : Config()
         data class SelectApp(val androidDevice: AndroidDevice) : Config()
         data class AppDetail(
@@ -59,6 +61,12 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 onSyncFinished = ::onSplashSyncFinished
+            )
+            is Config.SelectPathway -> PathwayScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext,
+                onAdbSelected = ::onPathwayAdbSelected,
+                onPlayStoreSelected = ::onPathwayPlayStoreSelected
             )
             is Config.SelectDevice -> SelectDeviceScreenComponent(
                 appComponent = appComponent,
@@ -95,7 +103,7 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        router.push(Config.SelectDevice)
+        router.push(Config.SelectPathway)
         /*router.push(
             Config.AppDetail(
                 AndroidDevice(
@@ -112,6 +120,20 @@ class NavHostComponent(
                 )
             )
         )*/
+    }
+
+    /**
+     * Invoked when play store selected from the pathway screen
+     */
+    private fun onPathwayPlayStoreSelected(){
+
+    }
+
+    /**
+     * Invoked when adb selected from the pathway screen
+     */
+    private fun onPathwayAdbSelected(){
+        router.push(Config.SelectDevice)
     }
 
     /**

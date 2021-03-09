@@ -12,12 +12,15 @@ import com.theapache64.stackzy.ui.theme.StackzyTheme
  */
 fun Preview(
     modifier: Modifier = Modifier,
+    undecorated: Boolean = true,
     content: @Composable () -> Unit
 ) {
     Window(
-        undecorated = true
+        undecorated = undecorated
     ) {
-        StackzyTheme {
+        StackzyTheme(
+            displayToolbar = undecorated
+        ) {
             Row(
                 modifier = modifier.fillMaxSize()
             ) {
