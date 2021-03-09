@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -12,15 +14,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.ui.common.addHoverEffect
-import com.theapache64.stackzy.ui.util.Preview
 
-fun main(args: Array<String>) {
-    Preview(
-        undecorated = false
-    ) {
-        // PathwayScreen(PathwayViewModel())
-    }
-}
 
 @Composable
 fun PathwayScreen(
@@ -28,6 +22,18 @@ fun PathwayScreen(
     onAdbSelected: () -> Unit,
     onPlayStoreSelected: () -> Unit,
 ) {
+
+    val shouldLaunchLogInDialog by viewModel.shouldLaunchLogInDialog.collectAsState()
+    val shouldLaunchStoreSearch by viewModel.shouldLaunchStoreSearch.collectAsState()
+
+    if (shouldLaunchLogInDialog) {
+        LogInDialog(
+            onSubmit = { username, password ->
+
+            }
+        )
+        viewModel.onLogInDialogLaunched()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -54,11 +60,12 @@ fun PathwayScreen(
         Row {
             PathwayCards(
                 onAdbClicked = onAdbSelected,
-                onPlayStoreClicked = onPlayStoreSelected
+                onPlayStoreClicked = viewModel::onPlayStoreClicked
             )
         }
     }
 }
+
 
 @Composable
 private fun PathwayCards(

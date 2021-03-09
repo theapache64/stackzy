@@ -6,7 +6,7 @@ plugins {
     val kotlinVersion = "1.4.31"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.4.0-build171"
+    id("org.jetbrains.compose") version "0.4.0-build173"
 }
 
 group = "com.theapache64"

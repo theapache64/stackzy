@@ -17,6 +17,7 @@ val DarkTheme = darkColors(
     secondary = R.color.Elephant,
     onSecondary = Color.White,
     surface = R.color.BigStone,
+    error = R.color.WildWatermelon
 )
 
 @Composable

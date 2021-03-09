@@ -27,4 +27,9 @@ class PathwayViewModel @Inject constructor(
         }
     }
 
+    fun onLogInDialogLaunched() {
+        // Reset flag to show new dialog when clicked again
+        _shouldLaunchLogInDialog.value = false
+    }
+
 }
