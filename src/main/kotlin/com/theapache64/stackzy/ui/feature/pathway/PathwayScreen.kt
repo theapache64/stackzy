@@ -28,6 +28,7 @@ fun PathwayScreen(
     onAdbSelected: () -> Unit,
     onPlayStoreSelected: () -> Unit,
 ) {
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,12 +53,8 @@ fun PathwayScreen(
 
         Row {
             PathwayCards(
-                onAdbClicked = {
-
-                },
-                onPlayStoreClicked = {
-
-                }
+                onAdbClicked = onAdbSelected,
+                onPlayStoreClicked = onPlayStoreSelected
             )
         }
     }

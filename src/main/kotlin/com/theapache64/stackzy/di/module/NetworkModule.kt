@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.di.module
 
+import com.squareup.moshi.Moshi
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
@@ -54,12 +55,18 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
 
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl("https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(FlowResourceCallAdapterFactory())
             .build()
     }
