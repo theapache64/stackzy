@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -33,17 +34,21 @@ abstract class AlphabetCircle {
 
 @Composable
 fun Modifier.addHoverEffect(
-    onClicked: () -> Unit
+    onClicked: () -> Unit,
+    normalColor: Color = MaterialTheme.colors.secondary,
+    normalAlpha: Float = 0f,
+    hoverAlpha: Float = 0.8f,
+    cornerRadius: Dp = 5.dp
 ): Modifier {
     var isHovered by remember { mutableStateOf(false) }
     val backgroundAlpha = if (isHovered) {
-        0.8f
+        hoverAlpha
     } else {
-        0f
+        normalAlpha
     }
 
     return this
-        .background(MaterialTheme.colors.secondary.copy(alpha = backgroundAlpha), RoundedCornerShape(5.dp))
+        .background(normalColor.copy(alpha = backgroundAlpha), RoundedCornerShape(cornerRadius))
         .clickable {
             onClicked()
         }
