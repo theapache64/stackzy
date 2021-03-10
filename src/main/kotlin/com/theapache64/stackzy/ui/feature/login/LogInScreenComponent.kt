@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.pathway
+package com.theapache64.stackzy.ui.feature.login
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
@@ -6,16 +6,14 @@ import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
-class PathwayScreenComponent(
+class LogInScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
-    private val onAdbSelected: () -> Unit,
-    private val onPlayStoreSelected: () -> Unit,
-    private val onLogInNeeded: () -> Unit,
+    private val onLoggedIn: () -> Unit,
 ) : Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var viewModel: PathwayViewModel
+    lateinit var viewModel: LogInScreenViewModel
 
     init {
         appComponent.inject(this)
@@ -23,11 +21,9 @@ class PathwayScreenComponent(
 
     @Composable
     override fun render() {
-        PathwayScreen(
+        LogInScreen(
             viewModel = viewModel,
-            onAdbSelected = onAdbSelected,
-            onPlayStoreSelected = onPlayStoreSelected,
-            onLogInNeeded = onLogInNeeded
+            onLoggedIn = onLoggedIn
         )
     }
 

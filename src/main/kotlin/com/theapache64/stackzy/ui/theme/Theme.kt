@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.theme
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.darkColors
@@ -25,7 +26,7 @@ fun StackzyTheme(
     title: String = "",
     displayToolbar: Boolean = true,
     isDark: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable (ColumnScope) -> Unit
 ) {
     MaterialTheme(
         colors = if (isDark) DarkTheme else LightTheme,
@@ -38,10 +39,10 @@ fun StackzyTheme(
                         ToolBar(
                             title = title
                         )
-                        content()
+                        content(this)
                     }
                 } else {
-                    content()
+                    content(this)
                 }
             }
         }

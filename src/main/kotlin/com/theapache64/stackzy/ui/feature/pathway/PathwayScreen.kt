@@ -21,18 +21,20 @@ fun PathwayScreen(
     viewModel: PathwayViewModel,
     onAdbSelected: () -> Unit,
     onPlayStoreSelected: () -> Unit,
+    onLogInNeeded: () -> Unit,
 ) {
 
-    val shouldLaunchLogInDialog by viewModel.shouldLaunchLogInDialog.collectAsState()
+    val isLogInNeeded by viewModel.isLogInNeeded.collectAsState()
     val shouldLaunchStoreSearch by viewModel.shouldLaunchStoreSearch.collectAsState()
 
-    if (shouldLaunchLogInDialog) {
-        LogInDialog(
-            onSubmit = { username, password ->
+    if (isLogInNeeded) {
+        onLogInNeeded()
+        return
+    }
 
-            }
-        )
-        viewModel.onLogInDialogLaunched()
+    if (shouldLaunchStoreSearch) {
+        onPlayStoreSelected()
+        return
     }
 
     Column(

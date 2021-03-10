@@ -9,8 +9,8 @@ class PathwayViewModel @Inject constructor(
     private val authRepo: AuthRepo
 ) {
 
-    private val _shouldLaunchLogInDialog = MutableStateFlow(false)
-    val shouldLaunchLogInDialog: StateFlow<Boolean> = _shouldLaunchLogInDialog
+    private val _isLogInNeeded = MutableStateFlow(false)
+    val isLogInNeeded: StateFlow<Boolean> = _isLogInNeeded
 
     private val _shouldLaunchStoreSearch = MutableStateFlow(false)
     val shouldLaunchStoreSearch: StateFlow<Boolean> = _shouldLaunchStoreSearch
@@ -20,16 +20,11 @@ class PathwayViewModel @Inject constructor(
         val account = authRepo.getAccount()
         if (account == null) {
             // not logged in
-            _shouldLaunchLogInDialog.value = true
+            _isLogInNeeded.value = true
         } else {
             // logged in
             _shouldLaunchStoreSearch.value = true
         }
-    }
-
-    fun onLogInDialogLaunched() {
-        // Reset flag to show new dialog when clicked again
-        _shouldLaunchLogInDialog.value = false
     }
 
 }
