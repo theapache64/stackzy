@@ -7,6 +7,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -56,9 +57,15 @@ class LogInScreenViewModel @Inject constructor(
         _isPasswordError.value = isValidPassword(password)
 
         GlobalScope.launch {
-            authRepo.logIn(username, password).collect { logInResponse ->
-                _logInResponse.value = logInResponse
-            }
+            authRepo.logIn(username, password)
+                .onEach {
+                    if (it is Resource.Success) {
+                        authRepo.storeAccount(it.data)
+                    }
+                }
+                .collect { logInResponse ->
+                    _logInResponse.value = logInResponse
+                }
         }
     }
 

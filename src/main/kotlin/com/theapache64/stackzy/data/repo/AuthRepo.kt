@@ -56,4 +56,9 @@ class AuthRepo @Inject constructor(
         }
     }
 
+    fun storeAccount(account: Account) {
+        val accountJson = accountAdapter.toJson(account)
+        pref.put(KEY_ACCOUNT, accountJson)
+    }
+
 }
