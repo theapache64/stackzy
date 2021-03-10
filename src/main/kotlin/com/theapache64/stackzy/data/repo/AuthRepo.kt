@@ -1,7 +1,12 @@
 package com.theapache64.stackzy.data.repo
 
 import com.squareup.moshi.Moshi
+import com.theapache64.gpa.api.Play
 import com.theapache64.gpa.model.Account
+import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import java.util.prefs.Preferences
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,6 +38,21 @@ class AuthRepo @Inject constructor(
             accountAdapter.fromJson(accountJson)
         } else {
             null
+        }
+    }
+
+    suspend fun logIn(username: String, password: String) = withContext(Dispatchers.IO) {
+        flow<Resource<Account>> {
+            // Loading
+            emit(Resource.Loading())
+
+            try {
+                val account = Play.login(username, password)
+                emit(Resource.Success(null, account))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(Resource.Error(e.message ?: "Something went wrong"))
+            }
         }
     }
 

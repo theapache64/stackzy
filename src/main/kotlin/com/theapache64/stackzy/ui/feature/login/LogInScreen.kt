@@ -16,12 +16,16 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.CustomScaffold
+import com.theapache64.stackzy.ui.common.ErrorSnackBar
+import com.theapache64.stackzy.ui.common.LoadingText
 import com.theapache64.stackzy.ui.theme.R
-import com.theapache64.stackzy.ui.util.Preview
+import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.toxicbakery.logging.Arbor
 
 fun main(args: Array<String>) {
-    Preview {
+    /*Preview {
         LogInScreen(
             viewModel = LogInScreenViewModel(),
             onLoggedIn = {
@@ -31,7 +35,7 @@ fun main(args: Array<String>) {
 
             }
         )
-    }
+    }*/
 }
 
 @Composable
@@ -46,104 +50,148 @@ fun LogInScreen(
     val isUsernameError by viewModel.isUsernameError.collectAsState()
     val isPasswordError by viewModel.isPasswordError.collectAsState()
 
+    val logInResponse by viewModel.logInResponse.collectAsState()
+    Arbor.e("LogIn -> $logInResponse")
+
     CustomScaffold(
         title = "Configure Profile",
         subTitle = "Login with your Google account",
         onBackClicked = onBackClicked
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize()
         ) {
 
-            Column(
-                modifier = Modifier
-                    .width(400.dp)
-                    .padding(20.dp)
-            ) {
+            when (logInResponse) {
 
+                is Resource.Loading -> {
+                    LoadingText(
+                        message = "Authenticating",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
-                // Warning: to protect your privacy, do not use your primary account, but 'register a secondary one' exclusively for use with
-                // Stackzy.
-                Text(
-                    text = getWarningText(),
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier
-                        .background(
-                            MaterialTheme.colors.secondary,
-                            RoundedCornerShape(10.dp)
-                        ).padding(12.dp)
-                )
+                is Resource.Success -> onLoggedIn()
 
-                Spacer(
-                    modifier = Modifier.height(20.dp)
-                )
+                null, is Resource.Error -> {
+                    //Show form
+                    Form(
+                        username = username,
+                        isUsernameError = isUsernameError,
+                        password = password,
+                        isPasswordError = isPasswordError,
+                        onUsernameChanged = viewModel::onUsernameChanged,
+                        onPasswordChanged = viewModel::onPasswordChanged,
+                        onLogInClicked = viewModel::onLogInClicked
+                    )
 
-                // Username
-                OutlinedTextField(
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.AccountCircle,
-                            contentDescription = ""
+                    if (logInResponse is Resource.Error) {
+                        ErrorSnackBar(
+                            syncFailedReason = (logInResponse as Resource.Error<Account>).errorData
                         )
-                    },
-                    singleLine = true,
-                    value = username,
-                    label = {
-                        Text(
-                            text = "Username",
-                        )
-                    },
-                    onValueChange = { newUsername ->
-                        viewModel.onNewUsername(newUsername)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    isError = isUsernameError
-                )
-
-                Spacer(
-                    modifier = Modifier.height(5.dp)
-                )
-
-                // Password
-                OutlinedTextField(
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Password,
-                            contentDescription = ""
-                        )
-                    },
-                    singleLine = true,
-                    value = password,
-                    label = {
-                        Text(
-                            text = "Password",
-                        )
-                    },
-                    onValueChange = { newPassword ->
-                        viewModel.onNewPassword(newPassword)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    visualTransformation = PasswordVisualTransformation(),
-                    isError = isPasswordError
-                )
-
-                Spacer(
-                    modifier = Modifier.height(20.dp)
-                )
-
-                // Button
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        viewModel.onLogInClicked()
                     }
-                ) {
-                    Text(text = "LOGIN")
                 }
             }
-
         }
+    }
+}
+
+@Composable
+private fun Form(
+    username: String,
+    isUsernameError: Boolean,
+    password: String,
+    isPasswordError: Boolean,
+    onUsernameChanged: (username: String) -> Unit,
+    onPasswordChanged: (password: String) -> Unit,
+    onLogInClicked: () -> Unit,
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+
+        Column(
+            modifier = Modifier
+                .width(400.dp)
+                .padding(20.dp)
+        ) {
+
+
+            // Warning: to protect your privacy, do not use your primary account, but 'register a secondary one' exclusively for use with
+            // Stackzy.
+            Text(
+                text = getWarningText(),
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colors.secondary,
+                        RoundedCornerShape(10.dp)
+                    ).padding(12.dp)
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+
+            // Username
+            OutlinedTextField(
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountCircle,
+                        contentDescription = ""
+                    )
+                },
+                singleLine = true,
+                value = username,
+                label = {
+                    Text(
+                        text = "Username",
+                    )
+                },
+                onValueChange = onUsernameChanged,
+                modifier = Modifier.fillMaxWidth(),
+                isError = isUsernameError
+            )
+
+            Spacer(
+                modifier = Modifier.height(5.dp)
+            )
+
+            // Password
+            OutlinedTextField(
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Password,
+                        contentDescription = ""
+                    )
+                },
+                singleLine = true,
+                value = password,
+                label = {
+                    Text(
+                        text = "Password",
+                    )
+                },
+                onValueChange = onPasswordChanged,
+                modifier = Modifier.fillMaxWidth(),
+                visualTransformation = PasswordVisualTransformation(),
+                isError = isPasswordError
+            )
+
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
+
+            // Button
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onLogInClicked
+            ) {
+                Text(text = "LOGIN")
+            }
+        }
+
     }
 }
 
