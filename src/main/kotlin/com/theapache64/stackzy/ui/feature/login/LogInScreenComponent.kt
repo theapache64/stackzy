@@ -10,6 +10,7 @@ class LogInScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onLoggedIn: () -> Unit,
+    private val onBackClicked: () -> Unit,
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -23,7 +24,8 @@ class LogInScreenComponent(
     override fun render() {
         LogInScreen(
             viewModel = viewModel,
-            onLoggedIn = onLoggedIn
+            onLoggedIn = onLoggedIn,
+            onBackClicked = onBackClicked
         )
     }
 

@@ -74,7 +74,8 @@ class NavHostComponent(
             is Config.LogIn -> LogInScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                onLoggedIn = ::onLoggedIn
+                onLoggedIn = ::onLoggedIn,
+                onBackClicked = ::onBackClicked
             )
 
             is Config.SelectDevice -> SelectDeviceScreenComponent(
