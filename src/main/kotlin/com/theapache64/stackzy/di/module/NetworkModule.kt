@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.di.module
 
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
@@ -56,7 +57,9 @@ class NetworkModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
-        return Moshi.Builder().build()
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 
     @Singleton

@@ -75,6 +75,9 @@ dependencies {
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
     implementation("org.yaml:snakeyaml:1.28")
+
+    // Moshi Kotlin : A modern JSON API for Android and Java
+    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
 }
 
 tasks.test {
