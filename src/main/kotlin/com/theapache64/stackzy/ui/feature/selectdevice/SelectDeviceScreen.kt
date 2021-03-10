@@ -47,18 +47,19 @@ fun Content(
         return
     }
 
-    if (devices.isEmpty()) {
-        FullScreenError(
-            title = R.string.device_no_device_title,
-            message = R.string.device_no_device_message,
-            image = imageResource("drawables/no_device.png")
-        )
-    } else {
-        // Content
-        CustomScaffold(
-            title = R.string.device_select_the_device,
-            onBackClicked = onBackClicked
-        ) {
+    // Content
+    CustomScaffold(
+        title = R.string.device_select_the_device,
+        onBackClicked = onBackClicked
+    ) {
+
+        if (devices.isEmpty()) {
+            FullScreenError(
+                title = R.string.device_no_device_title,
+                message = R.string.device_no_device_message,
+                image = imageResource("drawables/no_device.png")
+            )
+        } else {
 
             Spacer(
                 modifier = Modifier.height(10.dp)
@@ -78,9 +79,12 @@ fun Content(
                     )
                 }
             }
+
         }
 
     }
+
+
 }
 
 
