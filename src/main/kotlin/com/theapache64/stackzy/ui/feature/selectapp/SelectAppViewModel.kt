@@ -1,9 +1,12 @@
 package com.theapache64.stackzy.ui.feature.selectapp
 
+import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.data.repo.AuthRepo
+import com.theapache64.stackzy.data.repo.PlayStoreRepo
 import com.theapache64.stackzy.util.ApkSource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +15,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SelectAppViewModel @Inject constructor(
-    val adbRepo: AdbRepo
+    private val adbRepo: AdbRepo,
+    private val playStoreRepo: PlayStoreRepo,
+    private val authRepo: AuthRepo,
 ) {
 
     /**
@@ -49,7 +54,11 @@ class SelectAppViewModel @Inject constructor(
             }
             is ApkSource.PlayStore -> {
                 // ### PLAY STORE ###
-
+                GlobalScope.launch {
+                    val api = Play.getApi(apkSource.value)
+                    _apps.value = playStoreRepo.search(" ", api)
+                    println("FullApps : ${fullApps?.size}")
+                }
             }
         }
     }
@@ -69,6 +78,7 @@ class SelectAppViewModel @Inject constructor(
             }
             is ApkSource.PlayStore -> {
                 // Play Store
+                println("Loading playstore apps")
             }
         }
     }

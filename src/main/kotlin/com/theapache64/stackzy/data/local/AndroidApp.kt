@@ -4,11 +4,12 @@ import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.ui.common.AlphabetCircle
 
 class AndroidApp(
-    val appPackage: Package
+    val appPackage: Package,
+    val appTitle: String? = null
 ) : AlphabetCircle() {
 
     override fun getTitle(): String {
-        return appPackage.name.split(".").last().capitalize()
+        return appTitle ?: appPackage.name.split(".").last().capitalize()
     }
 
     override fun getSubtitle(): String {

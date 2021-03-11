@@ -43,9 +43,20 @@ fun PathwayScreen(
 
 
         Row {
-            PathwayCards(
-                onAdbClicked = onAdbSelected,
-                onPlayStoreClicked = viewModel::onPlayStoreClicked
+            PathwayCard(
+                text = "Play Store",
+                icon = svgResource("drawables/playstore.svg"),
+                onClicked = viewModel::onPlayStoreClicked
+            )
+
+            Spacer(
+                modifier = Modifier.width(10.dp)
+            )
+
+            PathwayCard(
+                text = "ADB",
+                icon = svgResource("drawables/usb.svg"),
+                onClicked = onAdbSelected
             )
         }
     }
@@ -53,33 +64,10 @@ fun PathwayScreen(
 
 
 @Composable
-private fun PathwayCards(
-    onPlayStoreClicked: () -> Unit,
-    onAdbClicked: () -> Unit
-) {
-    PathwayCard(
-        text = "Play Store",
-        icon = svgResource("drawables/playstore.svg"),
-        onClicked = onPlayStoreClicked
-    )
-
-    Spacer(
-        modifier = Modifier.width(10.dp)
-    )
-
-    PathwayCard(
-        text = "ADB",
-        icon = svgResource("drawables/usb.svg"),
-        onClicked = onAdbClicked
-    )
-}
-
-@Composable
 fun PathwayCard(
     text: String,
     icon: Painter,
     onClicked: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
