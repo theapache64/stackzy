@@ -27,7 +27,8 @@ class AppDetailViewModel @Inject constructor(
     private val apkToolRepo: ApkToolRepo,
     private val apkAnalyzerRepo: ApkAnalyzerRepo,
     private val librariesRepo: LibrariesRepo,
-    private val untrackedLibsRepo: UntrackedLibsRepo
+    private val untrackedLibsRepo: UntrackedLibsRepo,
+    private val playStoreRepo: PlayStoreRepo,
 ) {
 
     companion object {
@@ -64,7 +65,7 @@ class AppDetailViewModel @Inject constructor(
 
         decompileJob = GlobalScope.launch {
             try {
-                when(apkSource){
+                when (apkSource) {
                     is ApkSource.Adb -> {
                         val androidDevice = apkSource.value
                         _loadingMessage.value = R.string.app_detail_loading_fetching_apk
@@ -100,7 +101,15 @@ class AppDetailViewModel @Inject constructor(
                             _fatalError.value = R.string.app_detail_error_apk_remote_path
                         }
                     }
-                    is ApkSource.PlayStore -> TODO()
+                    is ApkSource.PlayStore -> {
+                        val apkFile = playStoreRepo.downloadApk(
+                            apkSource.value,
+                            androidApp.appPackage.name
+                        )
+                        onApkPulled(
+                            androidApp, apkFile
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

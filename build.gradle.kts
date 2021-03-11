@@ -70,7 +70,7 @@ dependencies {
     testImplementation("com.theapache64:expekt:0.0.1")
 
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
-    implementation("com.github.theapache64:google-play-api:0.0.2")
+    implementation("com.github.theapache64:google-play-api:0.0.3")
 
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
