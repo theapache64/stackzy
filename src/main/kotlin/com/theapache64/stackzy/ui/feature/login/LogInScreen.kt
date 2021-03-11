@@ -16,7 +16,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.LoadingText

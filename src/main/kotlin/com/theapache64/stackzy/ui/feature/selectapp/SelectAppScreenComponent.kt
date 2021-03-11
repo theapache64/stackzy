@@ -2,7 +2,7 @@ package com.theapache64.stackzy.ui.feature.selectapp
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.di.AppComponent

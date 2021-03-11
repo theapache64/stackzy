@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.addHoverEffect
 
 

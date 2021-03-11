@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.ui.feature.selectapp
 
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
@@ -15,6 +15,7 @@ class SelectAppViewModel @Inject constructor(
     val adbRepo: AdbRepo
 ) {
 
+    private lateinit var source: Either<AndroidDevice, Account>
     private lateinit var selectedDevice: AndroidDevice
 
     /**
@@ -31,8 +32,11 @@ class SelectAppViewModel @Inject constructor(
     val apps: StateFlow<List<AndroidApp>?> = _apps
 
     fun init(source: Either<AndroidDevice, Account>) {
+        this.source = source
         when (source) {
             is Either.Left -> {
+                // ### ADB ###
+
                 this.selectedDevice = source.value
                 GlobalScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice.device).also {
@@ -41,7 +45,8 @@ class SelectAppViewModel @Inject constructor(
                 }
             }
             is Either.Right -> {
-                // TODO:
+                // ### PLAY STORE ###
+
             }
         }
     }
@@ -49,8 +54,20 @@ class SelectAppViewModel @Inject constructor(
     fun onSearchKeywordChanged(newKeyword: String) {
         _searchKeyword.value = newKeyword.trim().replace("\n", "")
 
-        // Filtering apps
-        _apps.value = fullApps?.filter { it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true) }
+        when (source) {
+            is Either.Left -> {
+                // ### ADB ###
+
+                // Filtering apps
+                _apps.value =
+                    fullApps?.filter {
+                        it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
+                    }
+            }
+            is Either.Right -> {
+                // Play Store
+            }
+        }
     }
 
     fun onOpenMarketClicked() {

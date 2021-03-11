@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice

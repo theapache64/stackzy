@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.ui.feature.pathway
 
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

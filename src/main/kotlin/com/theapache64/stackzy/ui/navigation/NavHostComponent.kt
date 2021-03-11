@@ -7,7 +7,7 @@ import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
-import com.theapache64.gpa.model.Account
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
