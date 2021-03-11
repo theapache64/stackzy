@@ -2,7 +2,7 @@ package com.theapache64.stackzy.ui.feature.login
 
 import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
-import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

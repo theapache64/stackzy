@@ -2,6 +2,7 @@ package com.theapache64.stackzy.ui.feature.pathway
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
@@ -10,7 +11,7 @@ class PathwayScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onAdbSelected: () -> Unit,
-    private val onPlayStoreSelected: () -> Unit,
+    private val onPlayStoreSelected: (Account) -> Unit,
     private val onLogInNeeded: () -> Unit,
 ) : Component, ComponentContext by componentContext {
 

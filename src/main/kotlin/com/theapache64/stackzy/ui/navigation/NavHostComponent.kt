@@ -7,6 +7,7 @@ import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
@@ -18,6 +19,7 @@ import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
+import com.theapache64.stackzy.util.Either
 import java.awt.Desktop
 import java.net.URI
 
@@ -36,9 +38,12 @@ class NavHostComponent(
         object SelectPathway : Config()
         object LogIn : Config()
         object SelectDevice : Config()
-        data class SelectApp(val androidDevice: AndroidDevice) : Config()
+        data class SelectApp(
+            val source: Either<AndroidDevice, Account>
+        ) : Config()
+
         data class AppDetail(
-            val androidDevice: AndroidDevice,
+            val source: Either<AndroidDevice, Account>,
             val androidApp: AndroidApp
         ) : Config()
     }
@@ -87,7 +92,7 @@ class NavHostComponent(
             is Config.SelectApp -> SelectAppScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                selectedDevice = config.androidDevice,
+                source = config.source,
                 onAppSelected = ::onAppSelected,
                 onBackClicked = ::onBackClicked
             )
@@ -96,7 +101,7 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 selectedApp = config.androidApp,
-                selectedDevice = config.androidDevice,
+                source = config.source,
                 onLibrarySelected = ::onLibrarySelected,
                 onBackClicked = ::onBackClicked
             )
@@ -136,16 +141,16 @@ class NavHostComponent(
     /**
      * Invoked when play store selected from the pathway screen
      */
-    private fun onPathwayPlayStoreSelected() {
-        TODO()
+    private fun onPathwayPlayStoreSelected(account: Account) {
+        router.push(Config.SelectApp(Either.Right(account)))
     }
 
     private fun onLogInNeeded() {
         router.push(Config.LogIn)
     }
 
-    private fun onLoggedIn() {
-        onPathwayPlayStoreSelected()
+    private fun onLoggedIn(account: Account) {
+        onPathwayPlayStoreSelected(account)
     }
 
     /**
@@ -159,19 +164,19 @@ class NavHostComponent(
      * Invoked when a device selected
      */
     private fun onDeviceSelected(androidDevice: AndroidDevice) {
-        router.push(Config.SelectApp(androidDevice))
+        router.push(Config.SelectApp(Either.Left(androidDevice)))
     }
 
     /**
      * Invoked when the app got selected
      */
     private fun onAppSelected(
-        androidDevice: AndroidDevice,
+        source: Either<AndroidDevice, Account>,
         androidApp: AndroidApp
     ) {
         router.push(
             Config.AppDetail(
-                androidDevice = androidDevice,
+                source = source,
                 androidApp = androidApp
             )
         )

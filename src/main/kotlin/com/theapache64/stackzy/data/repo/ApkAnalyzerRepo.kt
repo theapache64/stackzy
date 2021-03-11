@@ -6,8 +6,8 @@ import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.util.AndroidVersionIdentifier
-import com.theapache64.stackzy.utils.StringUtils
-import com.theapache64.stackzy.utils.sizeInMb
+import com.theapache64.stackzy.util.StringUtils
+import com.theapache64.stackzy.util.sizeInMb
 import com.toxicbakery.logging.Arbor
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.representer.Representer

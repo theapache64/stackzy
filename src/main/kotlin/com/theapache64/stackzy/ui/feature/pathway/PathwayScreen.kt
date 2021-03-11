@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.addHoverEffect
 
 
@@ -20,20 +21,21 @@ import com.theapache64.stackzy.ui.common.addHoverEffect
 fun PathwayScreen(
     viewModel: PathwayViewModel,
     onAdbSelected: () -> Unit,
-    onPlayStoreSelected: () -> Unit,
+    onPlayStoreSelected: (Account) -> Unit,
     onLogInNeeded: () -> Unit,
 ) {
 
     val isLogInNeeded by viewModel.isLogInNeeded.collectAsState()
-    val shouldLaunchStoreSearch by viewModel.shouldLaunchStoreSearch.collectAsState()
+    val storeSearchAccount by viewModel.storeSearchAccount.collectAsState()
 
     if (isLogInNeeded) {
         onLogInNeeded()
         return
     }
 
-    if (shouldLaunchStoreSearch) {
-        onPlayStoreSelected()
+    if (storeSearchAccount != null) {
+        // Account is ready so move to store search
+        onPlayStoreSelected(storeSearchAccount!!)
         return
     }
 

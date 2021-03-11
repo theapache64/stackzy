@@ -1,12 +1,14 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.UntrackedLibrary
 import com.theapache64.stackzy.data.repo.*
+import com.theapache64.stackzy.util.Either
 import com.theapache64.stackzy.util.R
-import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -49,50 +51,56 @@ class AppDetailViewModel @Inject constructor(
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
 
     fun init(
-        androidDevice: AndroidDevice,
+        source: Either<AndroidDevice, Account>,
         androidApp: AndroidApp,
     ) {
-        startDecompile(androidDevice, androidApp)
+        startDecompile(source, androidApp)
     }
 
     private fun startDecompile(
-        androidDevice: AndroidDevice,
+        source: Either<AndroidDevice, Account>,
         androidApp: AndroidApp
     ) {
 
         decompileJob = GlobalScope.launch {
             try {
-                _loadingMessage.value = R.string.app_detail_loading_fetching_apk
+                when(source){
+                    is Either.Left -> {
+                        val androidDevice = source.value
+                        _loadingMessage.value = R.string.app_detail_loading_fetching_apk
 
-                // First get APK path
-                val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
-                if (apkRemotePath != null) {
+                        // First get APK path
+                        val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
+                        if (apkRemotePath != null) {
 
-                    val apkFile = kotlin.io.path.createTempFile(
-                        suffix = ".apk"
-                    ).toFile()
+                            val apkFile = kotlin.io.path.createTempFile(
+                                suffix = ".apk"
+                            ).toFile()
 
-                    adbRepo.pullFile(
-                        androidDevice,
-                        apkRemotePath,
-                        apkFile
-                    ).distinctUntilChanged()
-                        .catch {
-                            _fatalError.value = it.message ?: "Something went wrong while pulling APK"
+                            adbRepo.pullFile(
+                                androidDevice,
+                                apkRemotePath,
+                                apkFile
+                            ).distinctUntilChanged()
+                                .catch {
+                                    _fatalError.value = it.message ?: "Something went wrong while pulling APK"
+                                }
+                                .collect { downloadPercentage ->
+                                    _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
+
+                                    if (downloadPercentage == 100) {
+                                        // Give some time to APK to prepare for decompile
+                                        _loadingMessage.value = "Preparing APK for decompiling..."
+                                        delay(2000)
+                                        onApkPulled(androidApp, apkFile)
+                                    }
+
+                                }
+                        } else {
+                            _fatalError.value = R.string.app_detail_error_apk_remote_path
                         }
-                        .collect { downloadPercentage ->
-                            _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
-
-                            if (downloadPercentage == 100) {
-                                // Give some time to APK to prepare for decompile
-                                _loadingMessage.value = "Preparing APK for decompiling..."
-                                delay(2000)
-                                onApkPulled(androidApp, apkFile)
-                            }
-
-                        }
-                } else {
-                    _fatalError.value = R.string.app_detail_error_apk_remote_path
+                    }
+                    is Either.Right -> TODO()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

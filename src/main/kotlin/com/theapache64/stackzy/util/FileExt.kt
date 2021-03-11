@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.utils
+package com.theapache64.stackzy.util
 
 import java.io.File
 

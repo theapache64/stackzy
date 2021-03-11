@@ -12,8 +12,8 @@ import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.malinskiy.adam.request.sync.v1.PullFileRequest
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.utils.OSType
-import com.theapache64.stackzy.utils.OsCheck
+import com.theapache64.stackzy.util.OSType
+import com.theapache64.stackzy.util.OsCheck
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel

@@ -1,8 +1,10 @@
 package com.theapache64.stackzy.ui.feature.selectapp
 
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.util.Either
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,11 +30,18 @@ class SelectAppViewModel @Inject constructor(
     private val _apps = MutableStateFlow<List<AndroidApp>?>(null)
     val apps: StateFlow<List<AndroidApp>?> = _apps
 
-    fun init(selectedDevice: AndroidDevice) {
-        this.selectedDevice = selectedDevice
-        GlobalScope.launch {
-            fullApps = adbRepo.getInstalledApps(selectedDevice.device).also {
-                _apps.value = it
+    fun init(source: Either<AndroidDevice, Account>) {
+        when (source) {
+            is Either.Left -> {
+                this.selectedDevice = source.value
+                GlobalScope.launch {
+                    fullApps = adbRepo.getInstalledApps(selectedDevice.device).also {
+                        _apps.value = it
+                    }
+                }
+            }
+            is Either.Right -> {
+                // TODO:
             }
         }
     }

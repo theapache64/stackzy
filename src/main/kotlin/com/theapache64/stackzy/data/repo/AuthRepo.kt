@@ -3,7 +3,7 @@ package com.theapache64.stackzy.data.repo
 import com.squareup.moshi.Moshi
 import com.theapache64.gpa.api.Play
 import com.theapache64.gpa.model.Account
-import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext

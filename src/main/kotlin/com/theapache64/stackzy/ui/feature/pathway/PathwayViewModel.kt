@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.feature.pathway
 
+import com.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +13,8 @@ class PathwayViewModel @Inject constructor(
     private val _isLogInNeeded = MutableStateFlow(false)
     val isLogInNeeded: StateFlow<Boolean> = _isLogInNeeded
 
-    private val _shouldLaunchStoreSearch = MutableStateFlow(false)
-    val shouldLaunchStoreSearch: StateFlow<Boolean> = _shouldLaunchStoreSearch
+    private val _storeSearchAccount = MutableStateFlow<Account?>(null)
+    val storeSearchAccount: StateFlow<Account?> = _storeSearchAccount
 
     fun onPlayStoreClicked() {
         // Check if user is logged in
@@ -23,7 +24,7 @@ class PathwayViewModel @Inject constructor(
             _isLogInNeeded.value = true
         } else {
             // logged in
-            _shouldLaunchStoreSearch.value = true
+            _storeSearchAccount.value = account
         }
     }
 

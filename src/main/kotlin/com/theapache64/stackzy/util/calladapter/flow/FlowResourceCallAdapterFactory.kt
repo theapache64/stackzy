@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.utils.calladapter.flow
+package com.theapache64.stackzy.util.calladapter.flow
 
 
 import kotlinx.coroutines.flow.Flow

@@ -4,7 +4,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
-import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
+import com.theapache64.stackzy.util.calladapter.flow.FlowResourceCallAdapterFactory
 import com.toxicbakery.logging.Arbor
 import dagger.Module
 import dagger.Provides

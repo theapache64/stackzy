@@ -21,7 +21,7 @@ import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.LoadingText
 import com.theapache64.stackzy.ui.theme.R
-import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 
 fun main(args: Array<String>) {
@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
 @Composable
 fun LogInScreen(
     viewModel: LogInScreenViewModel,
-    onLoggedIn: () -> Unit,
+    onLoggedIn: (Account) -> Unit,
     onBackClicked: () -> Unit
 ) {
 
@@ -71,7 +71,10 @@ fun LogInScreen(
                     )
                 }
 
-                is Resource.Success -> onLoggedIn()
+                is Resource.Success -> {
+                    val account = (logInResponse as Resource.Success<Account>).data
+                    onLoggedIn(account)
+                }
 
                 null, is Resource.Error -> {
                     //Show form
