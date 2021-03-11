@@ -5,7 +5,9 @@ package com.theapache64.stackzy.util.calladapter.flow
  */
 sealed class Resource<T> {
 
-    class Loading<T> : Resource<T>()
+    class Loading<T>(
+        val message: String? = null
+    ) : Resource<T>()
 
     data class Success<T>(
         val message: String?,

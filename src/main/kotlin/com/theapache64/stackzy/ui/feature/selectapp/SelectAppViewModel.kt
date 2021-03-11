@@ -5,10 +5,12 @@ import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
-import com.theapache64.stackzy.data.repo.AuthRepo
 import com.theapache64.stackzy.data.repo.PlayStoreRepo
 import com.theapache64.stackzy.util.ApkSource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,9 +18,10 @@ import javax.inject.Inject
 
 class SelectAppViewModel @Inject constructor(
     private val adbRepo: AdbRepo,
-    private val playStoreRepo: PlayStoreRepo,
-    private val authRepo: AuthRepo,
+    private val playStoreRepo: PlayStoreRepo
 ) {
+
+    private var searchJob: Job? = null
 
     /**
      * APK source can be either from an AndroidDevice or from a google Account
@@ -36,19 +39,22 @@ class SelectAppViewModel @Inject constructor(
     /**
      * Filtered apps
      */
-    private val _apps = MutableStateFlow<List<AndroidApp>?>(null)
-    val apps: StateFlow<List<AndroidApp>?> = _apps
+    private val _apps = MutableStateFlow<Resource<List<AndroidApp>>?>(null)
+    val apps: StateFlow<Resource<List<AndroidApp>>?> = _apps
 
     fun init(apkSource: ApkSource<AndroidDevice, Account>) {
         this.apkSource = apkSource
+
+        // Updating state
+        _apps.value = Resource.Loading("Loading trending apps...")
+
         when (apkSource) {
             is ApkSource.Adb -> {
                 // ### ADB ###
-
                 this.selectedDevice = apkSource.value
                 GlobalScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device).also {
-                        _apps.value = it
+                        _apps.value = Resource.Success(null, it)
                     }
                 }
             }
@@ -56,8 +62,8 @@ class SelectAppViewModel @Inject constructor(
                 // ### PLAY STORE ###
                 GlobalScope.launch {
                     val api = Play.getApi(apkSource.value)
-                    _apps.value = playStoreRepo.search("WhatsApp", api)
-                    println("FullApps : ${fullApps?.size}")
+                    val apps = playStoreRepo.search(" ", api)
+                    _apps.value = Resource.Success(null, apps)
                 }
             }
         }
@@ -71,14 +77,37 @@ class SelectAppViewModel @Inject constructor(
                 // ### ADB ###
 
                 // Filtering apps
-                _apps.value =
-                    fullApps?.filter {
-                        it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
-                    }
+                val filteredApps = fullApps?.filter {
+                    it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
+                } ?: listOf()
+
+                _apps.value = Resource.Success(null, filteredApps)
             }
             is ApkSource.PlayStore -> {
                 // Play Store
-                println("Loading playstore apps")
+                searchJob?.cancel()
+                searchJob = GlobalScope.launch {
+                    delay(500)
+                    val account = (apkSource as ApkSource.PlayStore<Account>).value
+                    val api = Play.getApi(account)
+                    val keyword = searchKeyword.value.let {
+                        if (it.isBlank()) {
+                            " "
+                        } else {
+                            it
+                        }
+                    }
+                    val loadingMsg = if (keyword.isBlank()) {
+                        "Loading trending apps"
+                    } else {
+                        "Searching for '$keyword'"
+                    }
+
+                    _apps.value = Resource.Loading(loadingMsg)
+
+                    val apps = playStoreRepo.search(keyword, api)
+                    _apps.value = Resource.Success(null, apps)
+                }
             }
         }
     }
