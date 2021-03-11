@@ -49,7 +49,6 @@ fun SelectAppScreen(
         onBackClicked = onBackClicked,
         topRightSlot = {
 
-
             // SearchBox
             OutlinedTextField(
                 leadingIcon = {

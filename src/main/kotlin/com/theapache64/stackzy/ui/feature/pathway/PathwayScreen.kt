@@ -5,39 +5,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
-import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.addHoverEffect
 
 
 @Composable
 fun PathwayScreen(
     viewModel: PathwayViewModel,
-    onAdbSelected: () -> Unit,
-    onPlayStoreSelected: (Account) -> Unit,
-    onLogInNeeded: () -> Unit,
+    onAdbSelected: () -> Unit
 ) {
-
-    val isLogInNeeded by viewModel.isLogInNeeded.collectAsState()
-    val storeSearchAccount by viewModel.storeSearchAccount.collectAsState()
-
-    if (isLogInNeeded) {
-        onLogInNeeded()
-        return
-    }
-
-    if (storeSearchAccount != null) {
-        // Account is ready so move to store search
-        onPlayStoreSelected(storeSearchAccount!!)
-        return
-    }
 
     Column(
         modifier = Modifier.fillMaxSize(),

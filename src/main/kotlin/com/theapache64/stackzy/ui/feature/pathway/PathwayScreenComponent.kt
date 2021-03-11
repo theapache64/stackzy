@@ -11,8 +11,8 @@ class PathwayScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onAdbSelected: () -> Unit,
-    private val onPlayStoreSelected: (Account) -> Unit,
-    private val onLogInNeeded: () -> Unit,
+    onPlayStoreSelected: (Account) -> Unit,
+    onLogInNeeded: () -> Unit,
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -20,15 +20,17 @@ class PathwayScreenComponent(
 
     init {
         appComponent.inject(this)
+        viewModel.init(
+            onPlayStoreSelected = onPlayStoreSelected,
+            onLogInNeeded = onLogInNeeded
+        )
     }
 
     @Composable
     override fun render() {
         PathwayScreen(
             viewModel = viewModel,
-            onAdbSelected = onAdbSelected,
-            onPlayStoreSelected = onPlayStoreSelected,
-            onLogInNeeded = onLogInNeeded
+            onAdbSelected = onAdbSelected
         )
     }
 

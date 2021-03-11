@@ -92,7 +92,7 @@ class NavHostComponent(
             is Config.SelectApp -> SelectAppScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                source = config.apkSource,
+                apkSource = config.apkSource,
                 onAppSelected = ::onAppSelected,
                 onBackClicked = ::onBackClicked
             )
@@ -142,6 +142,7 @@ class NavHostComponent(
      * Invoked when play store selected from the pathway screen
      */
     private fun onPathwayPlayStoreSelected(account: Account) {
+        println("Showing select app")
         router.push(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
@@ -150,6 +151,7 @@ class NavHostComponent(
     }
 
     private fun onLoggedIn(account: Account) {
+        println("Logged in")
         onPathwayPlayStoreSelected(account)
     }
 
@@ -193,6 +195,7 @@ class NavHostComponent(
      * Invoked when back arrow pressed
      */
     private fun onBackClicked() {
+        println("Back clicked popping")
         router.pop()
     }
 
