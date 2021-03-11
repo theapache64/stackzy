@@ -7,14 +7,14 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
-import com.theapache64.stackzy.util.Either
+import com.theapache64.stackzy.util.ApkSource
 import javax.inject.Inject
 
 class SelectAppScreenComponent(
     componentContext: ComponentContext,
     appComponent: AppComponent,
-    private val source: Either<AndroidDevice, Account>,
-    val onAppSelected: (Either<AndroidDevice, Account>, AndroidApp) -> Unit,
+    private val apkSource: ApkSource<AndroidDevice, Account>,
+    val onAppSelected: (ApkSource<AndroidDevice, Account>, AndroidApp) -> Unit,
     val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 
@@ -23,7 +23,7 @@ class SelectAppScreenComponent(
 
     init {
         appComponent.inject(this)
-        selectAppViewModel.init(source)
+        selectAppViewModel.init(apkSource)
     }
 
     @Composable
@@ -32,7 +32,7 @@ class SelectAppScreenComponent(
             selectAppViewModel = selectAppViewModel,
             onBackClicked = onBackClicked,
             onAppSelected = {
-                onAppSelected(source, it)
+                onAppSelected(apkSource, it)
             }
         )
     }

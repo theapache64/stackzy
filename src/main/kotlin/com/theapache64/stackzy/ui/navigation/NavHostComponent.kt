@@ -19,7 +19,7 @@ import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
-import com.theapache64.stackzy.util.Either
+import com.theapache64.stackzy.util.ApkSource
 import java.awt.Desktop
 import java.net.URI
 
@@ -39,11 +39,11 @@ class NavHostComponent(
         object LogIn : Config()
         object SelectDevice : Config()
         data class SelectApp(
-            val source: Either<AndroidDevice, Account>
+            val apkSource: ApkSource<AndroidDevice, Account>
         ) : Config()
 
         data class AppDetail(
-            val source: Either<AndroidDevice, Account>,
+            val apkSource: ApkSource<AndroidDevice, Account>,
             val androidApp: AndroidApp
         ) : Config()
     }
@@ -92,7 +92,7 @@ class NavHostComponent(
             is Config.SelectApp -> SelectAppScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                source = config.source,
+                source = config.apkSource,
                 onAppSelected = ::onAppSelected,
                 onBackClicked = ::onBackClicked
             )
@@ -101,7 +101,7 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 selectedApp = config.androidApp,
-                source = config.source,
+                apkSource = config.apkSource,
                 onLibrarySelected = ::onLibrarySelected,
                 onBackClicked = ::onBackClicked
             )
@@ -142,7 +142,7 @@ class NavHostComponent(
      * Invoked when play store selected from the pathway screen
      */
     private fun onPathwayPlayStoreSelected(account: Account) {
-        router.push(Config.SelectApp(Either.Right(account)))
+        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
     private fun onLogInNeeded() {
@@ -164,19 +164,19 @@ class NavHostComponent(
      * Invoked when a device selected
      */
     private fun onDeviceSelected(androidDevice: AndroidDevice) {
-        router.push(Config.SelectApp(Either.Left(androidDevice)))
+        router.push(Config.SelectApp(ApkSource.Adb(androidDevice)))
     }
 
     /**
      * Invoked when the app got selected
      */
     private fun onAppSelected(
-        source: Either<AndroidDevice, Account>,
+        apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp
     ) {
         router.push(
             Config.AppDetail(
-                source = source,
+                apkSource = apkSource,
                 androidApp = androidApp
             )
         )

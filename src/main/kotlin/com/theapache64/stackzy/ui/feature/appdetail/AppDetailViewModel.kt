@@ -6,7 +6,7 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.UntrackedLibrary
 import com.theapache64.stackzy.data.repo.*
-import com.theapache64.stackzy.util.Either
+import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
@@ -51,22 +51,22 @@ class AppDetailViewModel @Inject constructor(
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
 
     fun init(
-        source: Either<AndroidDevice, Account>,
+        apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp,
     ) {
-        startDecompile(source, androidApp)
+        startDecompile(apkSource, androidApp)
     }
 
     private fun startDecompile(
-        source: Either<AndroidDevice, Account>,
+        apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp
     ) {
 
         decompileJob = GlobalScope.launch {
             try {
-                when(source){
-                    is Either.Left -> {
-                        val androidDevice = source.value
+                when(apkSource){
+                    is ApkSource.Adb -> {
+                        val androidDevice = apkSource.value
                         _loadingMessage.value = R.string.app_detail_loading_fetching_apk
 
                         // First get APK path
@@ -100,7 +100,7 @@ class AppDetailViewModel @Inject constructor(
                             _fatalError.value = R.string.app_detail_error_apk_remote_path
                         }
                     }
-                    is Either.Right -> TODO()
+                    is ApkSource.PlayStore -> TODO()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

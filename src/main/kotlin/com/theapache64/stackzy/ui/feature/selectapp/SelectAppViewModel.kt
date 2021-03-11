@@ -4,7 +4,7 @@ import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
-import com.theapache64.stackzy.util.Either
+import com.theapache64.stackzy.util.ApkSource
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +15,11 @@ class SelectAppViewModel @Inject constructor(
     val adbRepo: AdbRepo
 ) {
 
-    private lateinit var source: Either<AndroidDevice, Account>
-    private lateinit var selectedDevice: AndroidDevice
+    /**
+     * APK source can be either from an AndroidDevice or from a google Account
+     */
+    private lateinit var apkSource: ApkSource<AndroidDevice, Account>
+    private var selectedDevice: AndroidDevice? = null
 
     /**
      * To store all apps instaled in the device (used for search filtering)
@@ -31,20 +34,20 @@ class SelectAppViewModel @Inject constructor(
     private val _apps = MutableStateFlow<List<AndroidApp>?>(null)
     val apps: StateFlow<List<AndroidApp>?> = _apps
 
-    fun init(source: Either<AndroidDevice, Account>) {
-        this.source = source
-        when (source) {
-            is Either.Left -> {
+    fun init(apkSource: ApkSource<AndroidDevice, Account>) {
+        this.apkSource = apkSource
+        when (apkSource) {
+            is ApkSource.Adb -> {
                 // ### ADB ###
 
-                this.selectedDevice = source.value
+                this.selectedDevice = apkSource.value
                 GlobalScope.launch {
-                    fullApps = adbRepo.getInstalledApps(selectedDevice.device).also {
+                    fullApps = adbRepo.getInstalledApps(selectedDevice!!.device).also {
                         _apps.value = it
                     }
                 }
             }
-            is Either.Right -> {
+            is ApkSource.PlayStore -> {
                 // ### PLAY STORE ###
 
             }
@@ -54,8 +57,8 @@ class SelectAppViewModel @Inject constructor(
     fun onSearchKeywordChanged(newKeyword: String) {
         _searchKeyword.value = newKeyword.trim().replace("\n", "")
 
-        when (source) {
-            is Either.Left -> {
+        when (apkSource) {
+            is ApkSource.Adb -> {
                 // ### ADB ###
 
                 // Filtering apps
@@ -64,15 +67,22 @@ class SelectAppViewModel @Inject constructor(
                         it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
                     }
             }
-            is Either.Right -> {
+            is ApkSource.PlayStore -> {
                 // Play Store
             }
         }
     }
 
     fun onOpenMarketClicked() {
-        GlobalScope.launch {
-            adbRepo.launchMarket(selectedDevice, searchKeyword.value)
+        when (apkSource) {
+            is ApkSource.Adb -> {
+                GlobalScope.launch {
+                    val androidDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
+                    adbRepo.launchMarket(androidDevice, searchKeyword.value)
+                }
+            }
+            is ApkSource.PlayStore -> TODO()
         }
+
     }
 }
