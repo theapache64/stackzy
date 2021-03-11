@@ -32,4 +32,5 @@ data class Library(
         return category
     }
 
+    override fun imageUrl(): String? = null
 }

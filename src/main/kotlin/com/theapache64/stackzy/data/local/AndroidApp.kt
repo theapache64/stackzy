@@ -5,7 +5,8 @@ import com.theapache64.stackzy.ui.common.AlphabetCircle
 
 class AndroidApp(
     val appPackage: Package,
-    val appTitle: String? = null
+    val appTitle: String? = null,
+    val imageUrl: String? = null
 ) : AlphabetCircle() {
 
     override fun getTitle(): String {
@@ -15,6 +16,8 @@ class AndroidApp(
     override fun getSubtitle(): String {
         return appPackage.name
     }
+
+    override fun imageUrl(): String? = imageUrl
 
     override fun getAlphabet(): Char {
         return getTitle().first()

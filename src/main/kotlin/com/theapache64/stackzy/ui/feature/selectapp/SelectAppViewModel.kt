@@ -56,7 +56,7 @@ class SelectAppViewModel @Inject constructor(
                 // ### PLAY STORE ###
                 GlobalScope.launch {
                     val api = Play.getApi(apkSource.value)
-                    _apps.value = playStoreRepo.search(" ", api)
+                    _apps.value = playStoreRepo.search("WhatsApp", api)
                     println("FullApps : ${fullApps?.size}")
                 }
             }

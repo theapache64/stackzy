@@ -8,22 +8,31 @@ import javax.inject.Inject
 
 class PlayStoreRepo @Inject constructor() {
 
-    suspend fun search(keyword: String, api: GooglePlayAPI): List<AndroidApp> {
+    suspend fun search(
+        keyword: String,
+        api: GooglePlayAPI,
+        maxSearchResult: Int = 30
+    ): List<AndroidApp> {
         return mutableListOf<AndroidApp>()
             .apply {
-                val serp = Play.search(query = keyword, api = api).apply {
-                    // search again for more result
-                    Play.search(keyword, api, this)
+                var serp = Play.search(query = keyword, api = api)
+
+                // either no more page or loaded 100 or more items
+                while (serp.nextPageUrl?.isNotBlank() == true && serp.content.distinctBy { it.docid }.size <= maxSearchResult) {
+                    serp = Play.search(query = keyword, api = api, serp)
                 }
-                serp.content.forEach { item ->
-                    println(item.docid)
-                    add(
-                        AndroidApp(
-                            appPackage = Package(item.docid),
-                            appTitle = item.title
+
+                serp.content
+                    .distinctBy { it.docid }
+                    .forEach { item ->
+                        add(
+                            AndroidApp(
+                                appPackage = Package(item.docid),
+                                appTitle = item.title,
+                                imageUrl = item.imageList[1].imageUrl
+                            )
                         )
-                    )
-                }
+                    }
             }
     }
 

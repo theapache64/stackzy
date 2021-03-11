@@ -78,6 +78,8 @@ dependencies {
 
     // Moshi Kotlin : A modern JSON API for Android and Java
     implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
+
+    implementation("com.alialbaali.kamel:kamel-image:0.2.0")
 }
 
 tasks.test {

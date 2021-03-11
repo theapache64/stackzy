@@ -3,24 +3,30 @@ package com.theapache64.stackzy.ui.common
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.util.ColorUtil
+import io.kamel.image.KamelImage
+import io.kamel.image.lazyImageResource
 
 abstract class AlphabetCircle {
 
     abstract fun getTitle(): String
     abstract fun getSubtitle(): String
+    abstract fun imageUrl(): String?
     open fun getAlphabet() = getTitle().first()
 
     val randomColor = ColorUtil.getRandomColor()
@@ -83,11 +89,26 @@ fun <T : AlphabetCircle> Selectable(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        AlphabetCircle(
-            data.getAlphabet(),
-            data.getGradientColor(),
-            modifier = Modifier.size(60.dp)
-        )
+        if (data.imageUrl() == null) {
+            // Show only alphabet
+            AlphabetCircle(data)
+        } else {
+            // Show alphabet then image
+            KamelImage(
+                resource = lazyImageResource(data.imageUrl()!!),
+                contentScale = ContentScale.Inside,
+                contentDescription = "app logo",
+                onLoading = {
+                    AlphabetCircle(data)
+                },
+                onFailure = {
+                    AlphabetCircle(data)
+                },
+                modifier = Modifier.size(60.dp).clip(CircleShape)
+            )
+        }
+
+
 
         Spacer(
             modifier = Modifier.width(10.dp)
@@ -115,4 +136,13 @@ fun <T : AlphabetCircle> Selectable(
             )
         }
     }
+}
+
+@Composable
+private fun <T : AlphabetCircle> AlphabetCircle(data: T) {
+    AlphabetCircle(
+        data.getAlphabet(),
+        data.getGradientColor(),
+        modifier = Modifier.size(60.dp)
+    )
 }

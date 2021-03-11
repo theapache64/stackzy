@@ -16,4 +16,6 @@ data class AndroidDevice(
     override fun getSubtitle(): String {
         return name
     }
+
+    override fun imageUrl(): String? = null
 }
