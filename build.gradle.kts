@@ -104,7 +104,11 @@ compose.desktop {
         nativeDistributions {
             packageName = "Stackzy"
             packageVersion = (project.version as String).split("-")[0]
-            modules("java.logging", "jdk.crypto.ec")
+            modules(
+                "java.logging",
+                "java.naming",
+                "jdk.crypto.ec"
+            )
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
 
             val iconsRoot = project.file("src/main/resources/drawables")

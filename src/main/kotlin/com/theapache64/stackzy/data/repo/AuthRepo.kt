@@ -12,6 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+// TODO : Write test for this class
 class AuthRepo @Inject constructor(
     private val moshi: Moshi
 ) {
