@@ -57,8 +57,25 @@ dependencies {
     // Arbor : Like Timber, just different.
     implementation("com.ToxicBakery.logging:arbor-jvm:1.34.109")
 
+    // Color naming (dev purpose only)
+    implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
+
+    // GooglePlay API
+    implementation("com.github.theapache64:google-play-api:0.0.3")
+
+    // SnakeYAML : YAML 1.1 parser and emitter for Java
+    implementation("org.yaml:snakeyaml:1.28")
+
+    // Moshi Kotlin : A modern JSON API for Android and Java
+    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
+
+    // Kamel : Image loading library
+    implementation("com.alialbaali.kamel:kamel-image:0.2.0")
+
+    /*TEST DEPENDENCIES*/
     testImplementation("org.mockito:mockito-inline:3.7.7")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+
     // DaggerMock
     testImplementation("com.github.fabioCollini.daggermock:daggermock:0.8.5")
     testImplementation("com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5")
@@ -68,18 +85,6 @@ dependencies {
 
     // Expekt : An assertion library for Kotlin
     testImplementation("com.theapache64:expekt:0.0.1")
-
-    implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
-    implementation("com.github.theapache64:google-play-api:0.0.3")
-
-
-    // SnakeYAML : YAML 1.1 parser and emitter for Java
-    implementation("org.yaml:snakeyaml:1.28")
-
-    // Moshi Kotlin : A modern JSON API for Android and Java
-    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
-
-    implementation("com.alialbaali.kamel:kamel-image:0.2.0")
 }
 
 tasks.test {

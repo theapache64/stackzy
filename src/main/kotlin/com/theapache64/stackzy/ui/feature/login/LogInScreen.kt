@@ -24,20 +24,6 @@ import com.theapache64.stackzy.ui.theme.R
 import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 
-fun main(args: Array<String>) {
-    /*Preview {
-        LogInScreen(
-            viewModel = LogInScreenViewModel(),
-            onLoggedIn = {
-
-            },
-            onBackClicked = {
-
-            }
-        )
-    }*/
-}
-
 @Composable
 fun LogInScreen(
     viewModel: LogInScreenViewModel,

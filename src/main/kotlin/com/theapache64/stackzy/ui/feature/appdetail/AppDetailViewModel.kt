@@ -69,69 +69,93 @@ class AppDetailViewModel @Inject constructor(
         decompileJob = GlobalScope.launch {
             try {
                 when (apkSource) {
+
+                    // User wants to decompile using adb
                     is ApkSource.Adb -> {
-                        val androidDevice = apkSource.value
-                        _loadingMessage.value = R.string.app_detail_loading_fetching_apk
-
-                        // First get APK path
-                        val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
-                        if (apkRemotePath != null) {
-
-                            val apkFile = kotlin.io.path.createTempFile(
-                                suffix = ".apk"
-                            ).toFile()
-
-                            adbRepo.pullFile(
-                                androidDevice,
-                                apkRemotePath,
-                                apkFile
-                            ).distinctUntilChanged()
-                                .catch {
-                                    _fatalError.value = it.message ?: "Something went wrong while pulling APK"
-                                }
-                                .collect { downloadPercentage ->
-                                    _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
-
-                                    if (downloadPercentage == 100) {
-                                        // Give some time to APK to prepare for decompile
-                                        _loadingMessage.value = "Preparing APK for decompiling..."
-                                        delay(2000)
-                                        onApkPulled(androidApp, apkFile)
-                                    }
-
-                                }
-                        } else {
-                            _fatalError.value = R.string.app_detail_error_apk_remote_path
-                        }
+                        decompileViaAdb(apkSource, androidApp)
                     }
 
                     // User wants to pull APK from PlayStore
                     is ApkSource.PlayStore -> {
-                        _loadingMessage.value = "Initialising download..."
-
-                        val packageName = androidApp.appPackage.name
-                        val apkFile = kotlin.io.path.createTempFile(packageName, ".apk").toFile()
-
-                        playStoreRepo.downloadApk(
-                            apkFile,
-                            apkSource.value,
-                            packageName
-                        ).distinctUntilChanged().collect { downloadPercentage ->
-                            _loadingMessage.value = "Downloading APK... $downloadPercentage%"
-
-                            if (downloadPercentage == 100) {
-                                // Give some time to APK to prepare for decompile
-                                _loadingMessage.value = "Preparing APK for decompiling..."
-                                delay(2000)
-                                onApkPulled(androidApp, apkFile)
-                            }
-                        }
+                        decompileViaPlayStore(apkSource, androidApp)
                     }
+
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 _fatalError.value = e.message
             }
+        }
+    }
+
+    /**
+     * Downloads APK from playstore and decompile it
+     */
+    private suspend fun decompileViaPlayStore(
+        apkSource: ApkSource.PlayStore<Account>,
+        androidApp: AndroidApp
+    ) {
+        _loadingMessage.value = "Initialising download..."
+
+        val packageName = androidApp.appPackage.name
+        val apkFile = kotlin.io.path.createTempFile(packageName, ".apk").toFile()
+
+        // Download APK from playstore
+        playStoreRepo.downloadApk(
+            apkFile,
+            apkSource.value,
+            packageName
+        ).distinctUntilChanged().collect { downloadPercentage ->
+            _loadingMessage.value = "Downloading APK... $downloadPercentage%"
+
+            if (downloadPercentage == 100) {
+                // Give some time to APK to prepare for decompile
+                _loadingMessage.value = "Preparing APK for decompiling..."
+                delay(2000)
+                onApkPulled(androidApp, apkFile)
+            }
+        }
+    }
+
+    /**
+     * Downloads APK from device using and decompile it
+     */
+    private suspend fun decompileViaAdb(
+        apkSource: ApkSource.Adb<AndroidDevice>,
+        androidApp: AndroidApp
+    ) {
+        val androidDevice = apkSource.value
+        _loadingMessage.value = R.string.app_detail_loading_fetching_apk
+
+        // First get APK path
+        val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
+        if (apkRemotePath != null) {
+
+            val apkFile = kotlin.io.path.createTempFile(
+                suffix = ".apk"
+            ).toFile()
+
+            adbRepo.pullFile(
+                androidDevice,
+                apkRemotePath,
+                apkFile
+            ).distinctUntilChanged()
+                .catch {
+                    _fatalError.value = it.message ?: "Something went wrong while pulling APK"
+                }
+                .collect { downloadPercentage ->
+                    _loadingMessage.value = "Pulling APK $downloadPercentage% ..."
+
+                    if (downloadPercentage == 100) {
+                        // Give some time to APK to prepare for decompile
+                        _loadingMessage.value = "Preparing APK for decompiling..."
+                        delay(2000)
+                        onApkPulled(androidApp, apkFile)
+                    }
+
+                }
+        } else {
+            _fatalError.value = R.string.app_detail_error_apk_remote_path
         }
     }
 

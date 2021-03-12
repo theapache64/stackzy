@@ -12,6 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.util.R
 
+/**
+ * To show an error SnackBar with retry button at bottom of the screen.
+ */
 @Composable
 fun BoxScope.ErrorSnackBar(
     syncFailedReason: String,

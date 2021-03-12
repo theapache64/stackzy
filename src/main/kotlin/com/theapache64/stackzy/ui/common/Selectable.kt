@@ -39,6 +39,9 @@ abstract class AlphabetCircle {
     fun getGradientColor(): Brush = bgColor
 }
 
+/**
+ * Once this applied, when you hover the mouse over the item, it's background color will be changed.
+ */
 @Composable
 fun Modifier.addHoverEffect(
     onClicked: () -> Unit,
@@ -109,14 +112,13 @@ fun <T : AlphabetCircle> Selectable(
             )
         }
 
-
-
         Spacer(
             modifier = Modifier.width(10.dp)
         )
 
         Column {
 
+            // App Title
             Text(
                 text = data.getTitle(),
                 maxLines = 1,
@@ -124,6 +126,7 @@ fun <T : AlphabetCircle> Selectable(
                 overflow = TextOverflow.Ellipsis
             )
 
+            // Subtitle
             Text(
                 text = data.getSubtitle(),
                 maxLines = 1,
@@ -132,6 +135,7 @@ fun <T : AlphabetCircle> Selectable(
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
             )
 
+            // Subtitle 2
             data.getSubtitle2()?.let { subTitle2 ->
                 Text(
                     text = subTitle2,

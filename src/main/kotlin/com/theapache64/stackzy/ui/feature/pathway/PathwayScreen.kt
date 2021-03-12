@@ -54,7 +54,7 @@ fun PathwayScreen(
             }
         }
 
-        // Contnet
+        // Content
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

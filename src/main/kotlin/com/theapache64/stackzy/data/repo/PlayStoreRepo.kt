@@ -16,40 +16,48 @@ import javax.inject.Inject
 
 class PlayStoreRepo @Inject constructor() {
 
+    /**
+     * To search with the given keyword in play store
+     */
     suspend fun search(
         keyword: String,
         api: GooglePlayAPI,
         maxSearchResult: Int = 30
     ): List<AndroidApp> {
-        return mutableListOf<AndroidApp>()
-            .apply {
-                var serp = Play.search(query = keyword, api = api)
+        // First search
+        var serp = Play.search(query = keyword, api = api)
 
-                // either no more page or loaded 100 or more items
-                while (serp.nextPageUrl?.isNotBlank() == true && serp.content.distinctBy { it.docid }.size <= maxSearchResult) {
-                    serp = Play.search(query = keyword, api = api, serp)
+        // loading more pages until "either no more page" or "maxSearchResult or more items"
+        while (
+            serp.nextPageUrl?.isNotBlank() == true &&
+            serp.content.distinctBy { it.docid }.size <= maxSearchResult
+        ) {
+            serp = Play.search(query = keyword, api = api, serp)
+        }
+
+        // We've loaded all results from network. Now let's sanitize and convert it to AndroidApp class
+        return serp.content
+            .distinctBy { it.docid } // To remove duplicates
+            .map { item ->
+
+                // Convert bytes to MB (to readable format)
+                val sizeInMb = item.details.appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
+                    "%.2f".format(Locale.US, sizeInMb).toFloat()
                 }
 
-                serp.content
-                    .distinctBy { it.docid }
-                    .forEach { item ->
-
-                        val sizeInMb = item.details.appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
-                            "%.2f".format(Locale.US, sizeInMb).toFloat()
-                        }
-
-                        add(
-                            AndroidApp(
-                                appPackage = Package(item.docid),
-                                appTitle = item.title,
-                                imageUrl = item.imageList[1].imageUrl,
-                                appSize = "$sizeInMb MB"
-                            )
-                        )
-                    }
+                // Adding app to final list
+                AndroidApp(
+                    appPackage = Package(item.docid), // Package name
+                    appTitle = item.title, // App title
+                    imageUrl = item.imageList[1].imageUrl, // Logo URL
+                    appSize = "$sizeInMb MB" // APK Size
+                )
             }
     }
 
+    /**
+     * To download APK for the given packageName and write to given apkFile using given account
+     */
     @Suppress("BlockingMethodInNonBlockingContext")
     fun downloadApk(
         apkFile: File,
@@ -66,6 +74,7 @@ class PlayStoreRepo @Inject constructor() {
 
         val totalSize = downloadData.appSize
 
+        // Starting download
         downloadData.openApp().use { input ->
             FileOutputStream(apkFile).use { output ->
                 val buffer = ByteArray(1024)

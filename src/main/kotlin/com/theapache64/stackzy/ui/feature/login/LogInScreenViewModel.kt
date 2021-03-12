@@ -15,12 +15,11 @@ class LogInScreenViewModel @Inject constructor(
     private val authRepo: AuthRepo
 ) {
 
-    // TODO: Using env vars for debug purpose only. Remove getEnv calls
-
-    private val _username = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_USERNAME"))
+    // Using env vars for debug purpose only.
+    private val _username = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_USERNAME") ?: "")
     val username: StateFlow<String> = _username
 
-    private val _password = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_PASSWORD"))
+    private val _password = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_PASSWORD") ?: "")
     val password: StateFlow<String> = _password
 
     private val _isUsernameError = MutableStateFlow(false)

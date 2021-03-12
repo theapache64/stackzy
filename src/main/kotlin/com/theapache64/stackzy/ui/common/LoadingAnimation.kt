@@ -15,19 +15,22 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 
+/**
+ * To show a rotating icon at the center and blinking text at the bottom of the screen
+ */
 @Composable
 fun LoadingAnimation(message: String) {
 
     var enabled by remember { mutableStateOf(true) }
 
-    val alpha = if (enabled) {
+    val targetAlpha = if (enabled) {
         0f
     } else {
         180f
     }
 
     val animatedValue by animateFloatAsState(
-        targetValue = alpha,
+        targetValue = targetAlpha,
         animationSpec = tween(200),
         finishedListener = {
             enabled = !enabled
