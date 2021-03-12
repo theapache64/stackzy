@@ -13,11 +13,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Badge(
     title: String,
-    padding: Dp = 5.dp
+    padding: Dp = 5.dp,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = title,
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colors.secondary, RoundedCornerShape(5.dp))
             .padding(padding),
         style = MaterialTheme.typography.caption,

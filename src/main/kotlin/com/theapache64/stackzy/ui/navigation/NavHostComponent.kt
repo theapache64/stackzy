@@ -151,8 +151,10 @@ class NavHostComponent(
     }
 
     private fun onLoggedIn(account: Account) {
-        println("Logged in")
-        onPathwayPlayStoreSelected(account)
+        router.pop() // remove login screen from stack
+
+        // then go to select app screen
+        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
     /**

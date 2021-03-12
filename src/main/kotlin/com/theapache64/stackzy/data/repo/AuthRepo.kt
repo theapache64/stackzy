@@ -61,5 +61,9 @@ class AuthRepo @Inject constructor(
         pref.put(KEY_ACCOUNT, accountJson)
     }
 
+    fun logout() {
+        pref.remove(KEY_ACCOUNT)
+    }
+
 
 }

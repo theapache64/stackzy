@@ -2,11 +2,16 @@ package com.theapache64.stackzy.ui.feature.pathway
 
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class PathwayViewModel @Inject constructor(
     private val authRepo: AuthRepo
 ) {
+
+    private val _loggedInAccount = MutableStateFlow<Account?>(null)
+    val loggedInAccount: StateFlow<Account?> = _loggedInAccount
 
     private lateinit var onPlayStoreSelected: (Account) -> Unit
     private lateinit var onLogInNeeded: () -> Unit
@@ -19,16 +24,24 @@ class PathwayViewModel @Inject constructor(
         this.onLogInNeeded = onLogInNeeded
     }
 
+    fun refreshAccount() {
+        _loggedInAccount.value = authRepo.getAccount()
+    }
+
     fun onPlayStoreClicked() {
         // Check if user is logged in
-        val account = authRepo.getAccount()
-        if (account == null) {
+        if (loggedInAccount.value == null) {
             // not logged in
             onLogInNeeded.invoke()
         } else {
             // logged in
-            onPlayStoreSelected.invoke(account)
+            onPlayStoreSelected.invoke(loggedInAccount.value!!)
         }
+    }
+
+    fun onLogoutClicked() {
+        authRepo.logout()
+        _loggedInAccount.value = null
     }
 
 }

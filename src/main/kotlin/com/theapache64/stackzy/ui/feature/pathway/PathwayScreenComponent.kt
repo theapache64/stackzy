@@ -28,6 +28,8 @@ class PathwayScreenComponent(
 
     @Composable
     override fun render() {
+        viewModel.refreshAccount()
+
         PathwayScreen(
             viewModel = viewModel,
             onAdbSelected = onAdbSelected

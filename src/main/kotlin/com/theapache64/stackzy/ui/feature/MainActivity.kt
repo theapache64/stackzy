@@ -12,6 +12,8 @@ import androidx.compose.desktop.Window as setContent
 
 class MainActivity : Activity() {
     companion object {
+        const val CUSTOM_TOOLBAR = true
+
         fun getStartIntent(): Intent {
             return Intent(MainActivity::class).apply {
                 // data goes here
@@ -24,11 +26,12 @@ class MainActivity : Activity() {
 
         setContent(
             title = R.string.app_name,
-            undecorated = true,
+            undecorated = CUSTOM_TOOLBAR,
             size = IntSize(1024, 600),
         ) {
             StackzyTheme(
-                title = R.string.app_name
+                title = R.string.app_name,
+                customToolbar = CUSTOM_TOOLBAR
             ) {
                 // Igniting navigation
                 rootComponent(factory = ::NavHostComponent)

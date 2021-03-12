@@ -19,7 +19,7 @@ fun Preview(
         undecorated = undecorated
     ) {
         StackzyTheme(
-            displayToolbar = undecorated
+            customToolbar = undecorated
         ) {
             Row(
                 modifier = modifier.fillMaxSize()

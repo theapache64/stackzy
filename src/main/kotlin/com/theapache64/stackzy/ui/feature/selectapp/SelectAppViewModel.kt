@@ -1,5 +1,9 @@
 package com.theapache64.stackzy.ui.feature.selectapp
 
+import androidx.compose.desktop.AppManager
+import androidx.compose.ui.window.Menu
+import androidx.compose.ui.window.MenuBar
+import androidx.compose.ui.window.MenuItem
 import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -59,6 +63,21 @@ class SelectAppViewModel @Inject constructor(
                 }
             }
             is ApkSource.PlayStore -> {
+
+                AppManager.setMenu(
+                    MenuBar(
+                        Menu(
+                            "Play Store",
+                            MenuItem(
+                                "Log Out",
+                                onClick = {
+
+                                }
+                            )
+                        )
+                    )
+                )
+
                 // ### PLAY STORE ###
                 GlobalScope.launch {
                     val api = Play.getApi(apkSource.value)
