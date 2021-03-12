@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.theapache64"
-version = "1.0.0"
+version = "1.0.0-beta01"
 
 repositories {
     mavenLocal()
