@@ -58,6 +58,9 @@ class AppDetailViewModel @Inject constructor(
         startDecompile(apkSource, androidApp)
     }
 
+    /**
+     * To start the decompiling and analysis from given source
+     */
     private fun startDecompile(
         apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp
@@ -101,14 +104,28 @@ class AppDetailViewModel @Inject constructor(
                             _fatalError.value = R.string.app_detail_error_apk_remote_path
                         }
                     }
+
+                    // User wants to pull APK from PlayStore
                     is ApkSource.PlayStore -> {
-                        val apkFile = playStoreRepo.downloadApk(
+                        _loadingMessage.value = R.string.app_detail_loading_fetching_apk
+
+                        val packageName = androidApp.appPackage.name
+                        val apkFile = kotlin.io.path.createTempFile(packageName, ".apk").toFile()
+
+                        playStoreRepo.downloadApk(
+                            apkFile,
                             apkSource.value,
-                            androidApp.appPackage.name
-                        )
-                        onApkPulled(
-                            androidApp, apkFile
-                        )
+                            packageName
+                        ).distinctUntilChanged().collect { downloadPercentage ->
+                            _loadingMessage.value = "Downloading APK $downloadPercentage% ..."
+
+                            if (downloadPercentage == 100) {
+                                // Give some time to APK to prepare for decompile
+                                _loadingMessage.value = "Preparing APK for decompiling..."
+                                delay(2000)
+                                onApkPulled(androidApp, apkFile)
+                            }
+                        }
                     }
                 }
             } catch (e: Exception) {

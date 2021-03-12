@@ -6,6 +6,9 @@ import com.github.theapache64.gpa.model.Account
 import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.util.bytesToMb
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -47,11 +50,12 @@ class PlayStoreRepo @Inject constructor() {
             }
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     fun downloadApk(
+        apkFile: File,
         account: Account,
         packageName: String
-    ): File {
-        val apkFile = kotlin.io.path.createTempFile(packageName, ".apk").toFile()
+    ) = flow {
         val api = Play.getApi(account)
         val appDetails = api.details(packageName)
         val downloadData = api.purchaseAndDeliver(
@@ -59,12 +63,28 @@ class PlayStoreRepo @Inject constructor() {
             appDetails.docV2.details.appDetails.versionCode,
             1
         )
+
+        val totalSize = downloadData.appSize
+
         downloadData.openApp().use { input ->
             FileOutputStream(apkFile).use { output ->
-                input.copyTo(output)
+                val buffer = ByteArray(1024)
+                var read: Int
+                var counter = 0f
+                while (input.read(buffer).also { read = it } != -1) {
+                    // Write
+                    output.write(buffer, 0, read)
+
+                    // Update progress
+                    counter += read
+                    val percentage = (counter / totalSize) * 100
+                    emit(percentage.toInt())
+                }
+
+                // Finish progress
+                emit(100)
             }
         }
-        return apkFile
-    }
+    }.flowOn(Dispatchers.IO)
 
 }
