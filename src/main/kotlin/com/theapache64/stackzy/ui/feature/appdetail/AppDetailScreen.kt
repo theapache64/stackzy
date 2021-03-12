@@ -1,8 +1,9 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,6 +15,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.ui.common.Badge
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.LoadingAnimation
@@ -120,18 +122,4 @@ private fun PlayStoreIcon(onClicked: () -> Unit) {
             tint = MaterialTheme.colors.onSurface
         )
     }
-}
-
-
-@Composable
-private fun Badge(
-    title: String
-) {
-    Text(
-        text = title,
-        modifier = Modifier
-            .background(MaterialTheme.colors.secondary, RoundedCornerShape(5.dp))
-            .padding(5.dp),
-        style = MaterialTheme.typography.caption,
-    )
 }

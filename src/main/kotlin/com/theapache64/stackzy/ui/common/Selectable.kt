@@ -26,6 +26,7 @@ abstract class AlphabetCircle {
 
     abstract fun getTitle(): String
     abstract fun getSubtitle(): String
+    open fun getSubtitle2(): String? = null
     abstract fun imageUrl(): String?
     open fun getAlphabet() = getTitle().first()
 
@@ -123,10 +124,6 @@ fun <T : AlphabetCircle> Selectable(
                 overflow = TextOverflow.Ellipsis
             )
 
-            Spacer(
-                modifier = Modifier.width(12.dp)
-            )
-
             Text(
                 text = data.getSubtitle(),
                 maxLines = 1,
@@ -134,6 +131,15 @@ fun <T : AlphabetCircle> Selectable(
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
             )
+
+            data.getSubtitle2()?.let { subTitle2 ->
+                Text(
+                    text = subTitle2,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+                )
+            }
         }
     }
 }

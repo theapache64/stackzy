@@ -5,8 +5,10 @@ import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
+import com.theapache64.stackzy.util.bytesToMb
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 import javax.inject.Inject
 
 class PlayStoreRepo @Inject constructor() {
@@ -28,11 +30,17 @@ class PlayStoreRepo @Inject constructor() {
                 serp.content
                     .distinctBy { it.docid }
                     .forEach { item ->
+
+                        val sizeInMb = item.details.appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
+                            "%.2f".format(Locale.US, sizeInMb).toFloat()
+                        }
+
                         add(
                             AndroidApp(
                                 appPackage = Package(item.docid),
                                 appTitle = item.title,
-                                imageUrl = item.imageList[1].imageUrl
+                                imageUrl = item.imageList[1].imageUrl,
+                                appSize = "$sizeInMb MB"
                             )
                         )
                     }
