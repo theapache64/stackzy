@@ -16,7 +16,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingAnimation(loadingMessage: String) {
+fun LoadingAnimation(message: String) {
 
     var enabled by remember { mutableStateOf(true) }
 
@@ -49,7 +49,7 @@ fun LoadingAnimation(loadingMessage: String) {
 
         LoadingText(
             modifier = Modifier.align(Alignment.BottomCenter),
-            message = loadingMessage
+            message = message
         )
     }
 }

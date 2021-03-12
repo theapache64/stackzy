@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
-import com.theapache64.stackzy.ui.common.LoadingText
+import com.theapache64.stackzy.ui.common.LoadingAnimation
 import com.theapache64.stackzy.ui.theme.R
 import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
@@ -65,9 +65,8 @@ fun LogInScreen(
             when (logInResponse) {
 
                 is Resource.Loading -> {
-                    LoadingText(
-                        message = "Authenticating",
-                        modifier = Modifier.align(Alignment.Center)
+                    LoadingAnimation(
+                        message = "Authenticating..."
                     )
                 }
 

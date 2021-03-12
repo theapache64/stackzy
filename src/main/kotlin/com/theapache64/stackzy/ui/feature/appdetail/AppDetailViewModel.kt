@@ -107,7 +107,7 @@ class AppDetailViewModel @Inject constructor(
 
                     // User wants to pull APK from PlayStore
                     is ApkSource.PlayStore -> {
-                        _loadingMessage.value = R.string.app_detail_loading_fetching_apk
+                        _loadingMessage.value = "Initialising download..."
 
                         val packageName = androidApp.appPackage.name
                         val apkFile = kotlin.io.path.createTempFile(packageName, ".apk").toFile()
@@ -117,7 +117,7 @@ class AppDetailViewModel @Inject constructor(
                             apkSource.value,
                             packageName
                         ).distinctUntilChanged().collect { downloadPercentage ->
-                            _loadingMessage.value = "Downloading APK $downloadPercentage% ..."
+                            _loadingMessage.value = "Downloading APK... $downloadPercentage%"
 
                             if (downloadPercentage == 100) {
                                 // Give some time to APK to prepare for decompile
