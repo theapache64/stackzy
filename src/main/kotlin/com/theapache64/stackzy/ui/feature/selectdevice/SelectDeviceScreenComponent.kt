@@ -10,7 +10,8 @@ import javax.inject.Inject
 class SelectDeviceScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
-    private val onDeviceSelected: (AndroidDevice) -> Unit
+    private val onDeviceSelected: (AndroidDevice) -> Unit,
+    private val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -27,6 +28,7 @@ class SelectDeviceScreenComponent(
 
         SelectDeviceScreen(
             selectDeviceViewModel,
+            onBackClicked = onBackClicked,
             onDeviceSelected = {
                 // Stop watching devices
                 selectDeviceViewModel.removeConnectionWatcher()

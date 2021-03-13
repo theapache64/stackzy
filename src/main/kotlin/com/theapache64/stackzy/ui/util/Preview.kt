@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.theapache64.stackzy.App
 import com.theapache64.stackzy.ui.theme.StackzyTheme
 
 /**
@@ -12,12 +13,15 @@ import com.theapache64.stackzy.ui.theme.StackzyTheme
  */
 fun Preview(
     modifier: Modifier = Modifier,
+    undecorated: Boolean = App.CUSTOM_TOOLBAR,
     content: @Composable () -> Unit
 ) {
     Window(
-        undecorated = true
+        undecorated = undecorated
     ) {
-        StackzyTheme {
+        StackzyTheme(
+            customToolbar = undecorated
+        ) {
             Row(
                 modifier = modifier.fillMaxSize()
             ) {

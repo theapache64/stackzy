@@ -6,14 +6,14 @@ plugins {
     val kotlinVersion = "1.4.31"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.4.0-build171"
+    id("org.jetbrains.compose") version "0.4.0-build173"
 }
 
 group = "com.theapache64"
-version = "1.0.0"
+version = "1.0.0-beta01"
 
 repositories {
-    mavenLocal()
+    // mavenLocal()
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
@@ -25,10 +25,6 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
-
-    // Skiko : Temp -> due to : https://github.com/JetBrains/compose-jb/issues/275#issuecomment-785962291
-    implementation("org.jetbrains.skiko:skiko-jvm-runtime-linux-x64:0.2.16")
-    implementation("org.jetbrains.skiko:skiko-jvm:0.2.16")
 
     // Cyclone
     implementation("com.github.theapache64:cyclone:1.0.0-alpha02")
@@ -61,8 +57,26 @@ dependencies {
     // Arbor : Like Timber, just different.
     implementation("com.ToxicBakery.logging:arbor-jvm:1.34.109")
 
+    // Color naming (dev purpose only)
+    implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
+
+    // GooglePlay API
+    implementation("com.google.protobuf:protobuf-java:3.14.0")
+    implementation("com.github.theapache64:google-play-api:0.0.5")
+
+    // SnakeYAML : YAML 1.1 parser and emitter for Java
+    implementation("org.yaml:snakeyaml:1.28")
+
+    // Moshi Kotlin : A modern JSON API for Android and Java
+    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
+
+    // Kamel : Image loading library
+    implementation("com.alialbaali.kamel:kamel-image:0.2.0")
+
+    /*TEST DEPENDENCIES*/
     testImplementation("org.mockito:mockito-inline:3.7.7")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+
     // DaggerMock
     testImplementation("com.github.fabioCollini.daggermock:daggermock:0.8.5")
     testImplementation("com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5")
@@ -73,15 +87,12 @@ dependencies {
     // Expekt : An assertion library for Kotlin
     testImplementation("com.theapache64:expekt:0.0.1")
 
-    implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
-
-
-    // SnakeYAML : YAML 1.1 parser and emitter for Java
-    implementation("org.yaml:snakeyaml:1.28")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
 }
 
 tasks.test {
     useJUnit()
+    // useJUnitPlatform()
     environment("ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "/home/theapache64/Android/Sdk")
 }
 
@@ -97,7 +108,11 @@ compose.desktop {
         nativeDistributions {
             packageName = "Stackzy"
             packageVersion = (project.version as String).split("-")[0]
-            modules("java.logging", "jdk.crypto.ec")
+            modules(
+                "java.logging",
+                "java.naming",
+                "jdk.crypto.ec"
+            )
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
 
             val iconsRoot = project.file("src/main/resources/drawables")

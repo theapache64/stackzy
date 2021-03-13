@@ -7,15 +7,19 @@ import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
+import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.di.DaggerAppComponent
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
+import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
+import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
+import com.theapache64.stackzy.util.ApkSource
 import java.awt.Desktop
 import java.net.URI
 
@@ -31,10 +35,15 @@ class NavHostComponent(
      */
     private sealed class Config : Parcelable {
         object Splash : Config()
+        object SelectPathway : Config()
+        object LogIn : Config()
         object SelectDevice : Config()
-        data class SelectApp(val androidDevice: AndroidDevice) : Config()
+        data class SelectApp(
+            val apkSource: ApkSource<AndroidDevice, Account>
+        ) : Config()
+
         data class AppDetail(
-            val androidDevice: AndroidDevice,
+            val apkSource: ApkSource<AndroidDevice, Account>,
             val androidApp: AndroidApp
         ) : Config()
     }
@@ -60,15 +69,30 @@ class NavHostComponent(
                 componentContext = componentContext,
                 onSyncFinished = ::onSplashSyncFinished
             )
+            is Config.SelectPathway -> PathwayScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext,
+                onAdbSelected = ::onPathwayAdbSelected,
+                onLogInNeeded = ::onLogInNeeded,
+                onPlayStoreSelected = ::onPathwayPlayStoreSelected
+            )
+            is Config.LogIn -> LogInScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext,
+                onLoggedIn = ::onLoggedIn,
+                onBackClicked = ::onBackClicked
+            )
+
             is Config.SelectDevice -> SelectDeviceScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                onDeviceSelected = ::onDeviceSelected
+                onDeviceSelected = ::onDeviceSelected,
+                onBackClicked = ::onBackClicked,
             )
             is Config.SelectApp -> SelectAppScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                selectedDevice = config.androidDevice,
+                apkSource = config.apkSource,
                 onAppSelected = ::onAppSelected,
                 onBackClicked = ::onBackClicked
             )
@@ -77,7 +101,7 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 selectedApp = config.androidApp,
-                selectedDevice = config.androidDevice,
+                apkSource = config.apkSource,
                 onLibrarySelected = ::onLibrarySelected,
                 onBackClicked = ::onBackClicked
             )
@@ -95,7 +119,7 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        router.push(Config.SelectDevice)
+        router.push(Config.SelectPathway)
         /*router.push(
             Config.AppDetail(
                 AndroidDevice(
@@ -115,22 +139,48 @@ class NavHostComponent(
     }
 
     /**
+     * Invoked when play store selected from the pathway screen
+     */
+    private fun onPathwayPlayStoreSelected(account: Account) {
+        println("Showing select app")
+        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
+    }
+
+    private fun onLogInNeeded() {
+        router.push(Config.LogIn)
+    }
+
+    private fun onLoggedIn(account: Account) {
+        router.pop() // remove login screen from stack
+
+        // then go to select app screen
+        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
+    }
+
+    /**
+     * Invoked when adb selected from the pathway screen
+     */
+    private fun onPathwayAdbSelected() {
+        router.push(Config.SelectDevice)
+    }
+
+    /**
      * Invoked when a device selected
      */
     private fun onDeviceSelected(androidDevice: AndroidDevice) {
-        router.push(Config.SelectApp(androidDevice))
+        router.push(Config.SelectApp(ApkSource.Adb(androidDevice)))
     }
 
     /**
      * Invoked when the app got selected
      */
     private fun onAppSelected(
-        androidDevice: AndroidDevice,
+        apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp
     ) {
         router.push(
             Config.AppDetail(
-                androidDevice = androidDevice,
+                apkSource = apkSource,
                 androidApp = androidApp
             )
         )
@@ -147,6 +197,9 @@ class NavHostComponent(
      * Invoked when back arrow pressed
      */
     private fun onBackClicked() {
+        println("Back clicked popping")
         router.pop()
     }
+
+
 }

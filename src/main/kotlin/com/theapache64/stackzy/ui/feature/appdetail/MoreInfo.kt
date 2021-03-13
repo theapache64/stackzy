@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.GradleInfo
-import com.theapache64.stackzy.ui.theme.*
+import com.theapache64.stackzy.ui.theme.R
 
 
 private val firaCode by lazy {
@@ -85,61 +85,61 @@ private fun BuildGradleGroovy(
             text = with(AnnotatedString.Builder("")) {
 
                 // line #1
-                pushStyle(SpanStyle(JordyBlue))
+                pushStyle(SpanStyle(R.color.JordyBlue))
                 append("android")
                 pushStyle(SpanStyle(Color.White))
                 append(" {\n")
 
                 // line #2
-                pushStyle(SpanStyle(JordyBlue))
+                pushStyle(SpanStyle(R.color.JordyBlue))
                 append("  defaultConfig")
                 pushStyle(SpanStyle(Color.White))
                 append(" {\n")
 
                 // line #3
-                pushStyle(SpanStyle(JordyBlue))
+                pushStyle(SpanStyle(R.color.JordyBlue))
                 append("    applicationId")
-                pushStyle(SpanStyle(YellowGreen))
+                pushStyle(SpanStyle(R.color.YellowGreen))
                 append(" \"${packageName}\"")
 
                 gradleInfo.minSdk?.let { (minSdkInt, minSdkVersionName) ->
                     // line #4
-                    pushStyle(SpanStyle(JordyBlue))
+                    pushStyle(SpanStyle(R.color.JordyBlue))
                     append("\n    minSdkVersion")
-                    pushStyle(SpanStyle(WildWatermelon))
+                    pushStyle(SpanStyle(R.color.WildWatermelon))
                     append(" $minSdkInt")
 
                     // sdk version as comment
-                    pushStyle(SpanStyle(BlueBayoux))
+                    pushStyle(SpanStyle(R.color.BlueBayoux))
                     append(" // $minSdkVersionName")
                 }
 
                 gradleInfo.targetSdk?.let { (targetSdkInt, targerSdkVersionName) ->
                     // line #5
-                    pushStyle(SpanStyle(JordyBlue))
+                    pushStyle(SpanStyle(R.color.JordyBlue))
                     append("\n    targetSdkVersion")
-                    pushStyle(SpanStyle(WildWatermelon))
+                    pushStyle(SpanStyle(R.color.WildWatermelon))
                     append(" $targetSdkInt")
 
                     // sdk version as comment
-                    pushStyle(SpanStyle(BlueBayoux))
+                    pushStyle(SpanStyle(R.color.BlueBayoux))
                     append(" // $targerSdkVersionName")
                 }
 
                 gradleInfo.versionCode?.let { versionCode ->
                     // line #6
-                    pushStyle(SpanStyle(JordyBlue))
+                    pushStyle(SpanStyle(R.color.JordyBlue))
                     append("\n    versionCode")
-                    pushStyle(SpanStyle(WildWatermelon))
+                    pushStyle(SpanStyle(R.color.WildWatermelon))
                     append(" $versionCode")
                 }
 
 
                 gradleInfo.versionName?.let { versionName ->
                     // line #6
-                    pushStyle(SpanStyle(JordyBlue))
+                    pushStyle(SpanStyle(R.color.JordyBlue))
                     append("\n    versionName")
-                    pushStyle(SpanStyle(YellowGreen))
+                    pushStyle(SpanStyle(R.color.YellowGreen))
                     append(" \"$versionName\"")
                 }
 
@@ -182,15 +182,15 @@ private fun PermissionsXml(
             permission.forEach { permission ->
                 Text(
                     text = with(AnnotatedString.Builder("")) {
-                        pushStyle(SpanStyle(color = WildWatermelon))
+                        pushStyle(SpanStyle(color = R.color.WildWatermelon))
                         append("<uses-permission ")
-                        pushStyle(SpanStyle(color = Goldenrod))
+                        pushStyle(SpanStyle(color = R.color.Goldenrod))
                         append("android:name")
                         pushStyle(SpanStyle(color = Color.White))
                         append("=")
-                        pushStyle(SpanStyle(color = YellowGreen))
+                        pushStyle(SpanStyle(color = R.color.YellowGreen))
                         append("\"$permission\"")
-                        pushStyle(SpanStyle(color = WildWatermelon))
+                        pushStyle(SpanStyle(color = R.color.WildWatermelon))
                         append("/>")
                         toAnnotatedString()
                     },

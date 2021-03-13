@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.utils
+package com.theapache64.stackzy.util
 
 object StringUtils {
     private val apostropheRegEx by lazy {

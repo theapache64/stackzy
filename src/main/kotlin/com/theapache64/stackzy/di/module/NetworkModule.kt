@@ -1,8 +1,10 @@
 package com.theapache64.stackzy.di.module
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
-import com.theapache64.stackzy.utils.calladapter.flow.FlowResourceCallAdapterFactory
+import com.theapache64.stackzy.util.calladapter.flow.FlowResourceCallAdapterFactory
 import com.toxicbakery.logging.Arbor
 import dagger.Module
 import dagger.Provides
@@ -54,12 +56,20 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
 
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl("https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(FlowResourceCallAdapterFactory())
             .build()
     }

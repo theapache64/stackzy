@@ -2,7 +2,7 @@ package com.theapache64.stackzy.ui.feature.splash
 
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
-import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow

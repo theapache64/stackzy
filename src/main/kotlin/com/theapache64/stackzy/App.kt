@@ -7,6 +7,13 @@ import com.toxicbakery.logging.Seedling
 
 
 class App : Application() {
+
+    companion object{
+        // GLOBAL CONFIGS
+        const val CUSTOM_TOOLBAR = true // TODO: Should be managed according to platform. As of now, in windows,
+        // the window is not resizable.
+    }
+
     override fun onCreate() {
         super.onCreate()
         Arbor.sow(Seedling())

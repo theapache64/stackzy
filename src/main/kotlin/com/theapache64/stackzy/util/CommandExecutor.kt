@@ -1,7 +1,5 @@
 package com.theapache64.stackzy.util
 
-import com.theapache64.stackzy.utils.OSType
-import com.theapache64.stackzy.utils.OsCheck
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader

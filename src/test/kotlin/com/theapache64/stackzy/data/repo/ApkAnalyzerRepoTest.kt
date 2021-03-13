@@ -4,7 +4,7 @@ import com.theapache64.expekt.should
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.test.*
-import com.theapache64.stackzy.utils.calladapter.flow.Resource
+import com.theapache64.stackzy.util.calladapter.flow.Resource
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.collect
 import org.junit.Rule
@@ -36,7 +36,7 @@ class ApkAnalyzerRepoTest {
                 report.packageName.should.equal("com.theapache64.topcorn")
                 report.platform.should.instanceof(Platform.NativeKotlin::class.java)
                 report.libraries.size.should.above(0)
-                report.apkSizeInMb.should.closeTo(6.5, 0.5)
+                report.apkSizeInMb.toDouble().should.closeTo(6.5, 0.5)
                 report.assetsDir?.exists().should.`true`
                 report.permissions.size.should.equal(1) // INTERNET only
                 report.gradleInfo.run {
@@ -65,8 +65,7 @@ class ApkAnalyzerRepoTest {
     fun `Parse permissions`() = runBlockingUnitTest {
         getCachedDecompiledApk { _, decompiledDir ->
             val permissions = apkAnalyzerRepo.getPermissions(decompiledDir)
-            println(permissions)
-            permissions.size.should.above(1)
+            permissions.size.should.above(0)
         }
     }
 

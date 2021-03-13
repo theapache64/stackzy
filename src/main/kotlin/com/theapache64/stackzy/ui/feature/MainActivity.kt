@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.IntSize
 import com.arkivanov.decompose.extensions.compose.jetbrains.rootComponent
 import com.theapache64.cyclone.core.Activity
 import com.theapache64.cyclone.core.Intent
+import com.theapache64.stackzy.App
 import com.theapache64.stackzy.ui.navigation.NavHostComponent
 import com.theapache64.stackzy.ui.theme.StackzyTheme
 import com.theapache64.stackzy.util.R
@@ -24,11 +25,12 @@ class MainActivity : Activity() {
 
         setContent(
             title = R.string.app_name,
-            undecorated = true,
+            undecorated = App.CUSTOM_TOOLBAR,
             size = IntSize(1024, 600),
         ) {
             StackzyTheme(
-                title = R.string.app_name
+                title = R.string.app_name,
+                customToolbar = App.CUSTOM_TOOLBAR
             ) {
                 // Igniting navigation
                 rootComponent(factory = ::NavHostComponent)

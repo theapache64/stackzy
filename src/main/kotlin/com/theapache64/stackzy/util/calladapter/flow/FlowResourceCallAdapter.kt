@@ -1,7 +1,7 @@
-package com.theapache64.stackzy.utils.calladapter.flow
+package com.theapache64.stackzy.util.calladapter.flow
 
-import com.theapache64.stackzy.utils.calladapter.flow.Resource.Error
-import com.theapache64.stackzy.utils.calladapter.flow.Resource.Success
+import com.theapache64.stackzy.util.calladapter.flow.Resource.Error
+import com.theapache64.stackzy.util.calladapter.flow.Resource.Success
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
