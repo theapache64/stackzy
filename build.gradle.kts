@@ -61,7 +61,7 @@ dependencies {
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
 
     // GooglePlay API
-    implementation("com.github.theapache64:google-play-api:0.0.3")
+    implementation("com.github.theapache64:google-play-api:0.0.2")
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
     implementation("org.yaml:snakeyaml:1.28")
