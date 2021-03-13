@@ -30,4 +30,8 @@ interface ApiInterface {
     @GET(NetworkModule.TABLE_CONFIG)
     fun getConfig(): Flow<Resource<Config>>
 
+    @Write
+    @POST(NetworkModule.TABLE_RESULTS)
+    fun addResult(@Body result: Result): Flow<Resource<Result>>
+
 }

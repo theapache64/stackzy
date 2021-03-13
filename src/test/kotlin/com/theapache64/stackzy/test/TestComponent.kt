@@ -22,6 +22,7 @@ interface TestComponent {
     fun adbRepo(): AdbRepo
     fun authRepo(): AuthRepo
     fun configRepo(): ConfigRepo
+    fun resultRepo(): ResultRepo
     fun playStoreRepo(): PlayStoreRepo
     fun apkToolRepo(): ApkToolRepo
     fun apkAnalyzerRepo(): ApkAnalyzerRepo
