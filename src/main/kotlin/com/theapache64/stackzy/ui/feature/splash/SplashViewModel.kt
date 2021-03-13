@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.splash
 
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.data.repo.ConfigRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
@@ -17,7 +18,8 @@ import javax.inject.Inject
  */
 class SplashViewModel @Inject constructor(
     private val librariesRepo: LibrariesRepo,
-    private val adbRepo: AdbRepo
+    private val adbRepo: AdbRepo,
+    private val configRepo: ConfigRepo
 ) {
 
     private val _isSyncFinished = MutableStateFlow(false)
@@ -39,30 +41,11 @@ class SplashViewModel @Inject constructor(
     private fun syncData() {
         GlobalScope.launch {
             try {
-
-                _syncMsg.value = "Syncing library definitions..."
-
-                librariesRepo.getRemoteLibraries().collect {
-                    when (it) {
-                        is Resource.Loading -> {
-                            // Both request are loading
-                            _isSyncFinished.value = false
-                            _syncFailedMsg.value = null
+                syncAndCacheLibraries { // first cache libs
+                    syncAndStoreConfig { // then sync config
+                        checkAndFixAdb { // then check adb
+                            _isSyncFinished.value = true // all done
                         }
-
-                        is Resource.Success -> {
-
-                            // Cache libraries
-                            librariesRepo.cacheLibraries(it.data)
-                            Arbor.d("${librariesRepo.getCachedLibraries()?.size} libraries cached")
-
-                            checkAdb()
-                        }
-
-                        is Resource.Error -> {
-                            _syncFailedMsg.value = it.errorData
-                        }
-
                     }
                 }
             } catch (e: IllegalArgumentException) {
@@ -72,7 +55,60 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private suspend fun checkAdb() {
+
+    private suspend fun syncAndCacheLibraries(
+        onSuccess: suspend () -> Unit
+    ) {
+        librariesRepo.getRemoteLibraries().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _syncMsg.value = "Syncing library definitions..."
+
+                    // Both request are loading
+                    _isSyncFinished.value = false
+                    _syncFailedMsg.value = null
+                }
+
+                is Resource.Success -> {
+
+                    // Cache libraries
+                    librariesRepo.cacheLibraries(it.data)
+                    Arbor.d("${librariesRepo.getCachedLibraries()?.size} libraries cached")
+
+
+                    onSuccess()
+                }
+
+                is Resource.Error -> {
+                    _syncFailedMsg.value = it.errorData
+                }
+
+            }
+        }
+    }
+
+    private suspend fun syncAndStoreConfig(
+        onSuccess: suspend () -> Unit
+    ) {
+        configRepo.getRemoteConfig().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _syncMsg.value = "Syncing config..."
+                }
+                is Resource.Success -> {
+                    configRepo.saveConfigToLocal(it.data)
+                    onSuccess()
+                }
+                is Resource.Error -> {
+                    _syncFailedMsg.value = it.errorData
+                }
+            }
+        }
+    }
+
+    private suspend fun checkAndFixAdb(
+        onSuccess: suspend () -> Unit
+    ) {
 
         if (adbRepo.isAdbStarted()) {
             _isSyncFinished.value = true
@@ -81,7 +117,7 @@ class SplashViewModel @Inject constructor(
 
             try {
                 adbRepo.downloadAdb()
-                _isSyncFinished.value = true
+                onSuccess()
             } catch (e: IOException) {
                 e.printStackTrace()
                 _syncFailedMsg.value = e.message
