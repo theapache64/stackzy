@@ -60,6 +60,7 @@
 Before executing any test, ensure
 
 - A device has connected to the adb
+- a valid `PLAY_API_GOOGLE_USERNAME` and `PLAY_API_GOOGLE_PASSWORD` defined in your environment.
 
 ## ✍️ Author
 
