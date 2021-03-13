@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class GradleInfo(
-    val versionCode: Long?,
+    val versionCode: Int?,
     val versionName: String?,
     val minSdk: Sdk?,
     val targetSdk: Sdk?,

@@ -51,7 +51,7 @@ class PlayStoreRepo @Inject constructor() {
                 AndroidApp(
                     appPackage = Package(item.docid), // Package name
                     appTitle = item.title, // App title
-                    versionCode = appDetails.versionCode.toLong(),
+                    versionCode = appDetails.versionCode,
                     imageUrl = item.imageList[1].imageUrl, // Logo URL
                     appSize = "$sizeInMb MB" // APK Size
                 )

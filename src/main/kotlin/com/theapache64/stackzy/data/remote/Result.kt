@@ -12,7 +12,7 @@ data class Result(
     @Json(name = "package_name")
     val packageName: String, // comma-sep
     @Json(name = "version_code")
-    val versionCode: Long,
+    val versionCode: Int,
     @Json(name = "version_name")
     val versionName: String,
     @Json(name = "platform")

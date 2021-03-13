@@ -13,7 +13,7 @@ data class MetaInfo(
     )
 
     data class VersionInfo(
-        var versionCode: Long? = null,
+        var versionCode: Int? = null,
         var versionName: String? = null
     )
 }

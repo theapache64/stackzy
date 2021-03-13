@@ -39,7 +39,7 @@ interface ApiInterface {
     @GET(NetworkModule.TABLE_RESULTS)
     fun getResult(
         @Query("package_name") packageName: String,
-        @Query("version_code") versionCode: Long
+        @Query("version_code") versionCode: Int
     ): Flow<Resource<Result>>
 
 }
