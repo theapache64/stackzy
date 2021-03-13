@@ -13,7 +13,7 @@ group = "com.theapache64"
 version = "1.0.0-beta01"
 
 repositories {
-    mavenLocal()
+    // mavenLocal()
     jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
