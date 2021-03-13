@@ -9,6 +9,7 @@ import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
 
 class ResultRepoTest {
 
@@ -23,13 +24,18 @@ class ResultRepoTest {
     private lateinit var resultRepo: ResultRepo
 
     @Test
+    @BeforeAll
     fun `Add result`() = runBlockingUnitTest {
         val result = Result(
             appName = "Test App",
             packageName = TEST_PACKAGE_NAME,
             libPackages = "okhttp3, retrofit2",
             versionCode = 1234,
-            versionName = "v1.2.3-alpha04"
+            versionName = "v1.2.3-alpha04",
+            platform = "NativeKotlin",
+            apkSizeInMb = 5.6f,
+            gradleInfoJson = "{}",
+            permissions = "android.permission.INTERNET"
         )
 
         resultRepo.add(result).collect {
