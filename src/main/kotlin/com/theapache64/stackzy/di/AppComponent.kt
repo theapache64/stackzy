@@ -2,6 +2,7 @@ package com.theapache64.stackzy.di
 
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.di.module.ApkToolModule
+import com.theapache64.stackzy.di.module.CryptoModule
 import com.theapache64.stackzy.di.module.NetworkModule
 import com.theapache64.stackzy.di.module.PreferenceModule
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
@@ -18,7 +19,8 @@ import javax.inject.Singleton
     modules = [
         NetworkModule::class,
         ApkToolModule::class,
-        PreferenceModule::class
+        PreferenceModule::class,
+        CryptoModule::class
     ]
 )
 interface AppComponent {

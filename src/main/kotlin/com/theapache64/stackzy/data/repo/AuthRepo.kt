@@ -3,6 +3,7 @@ package com.theapache64.stackzy.data.repo
 import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.squareup.moshi.Moshi
+import com.theapache64.stackzy.util.Crypto
 import com.theapache64.stackzy.util.calladapter.flow.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -13,28 +14,27 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthRepo @Inject constructor(
-    private val moshi: Moshi
+    private val moshi: Moshi,
+    private val pref: Preferences,
+    private val crypto: Crypto
 ) {
 
     companion object {
-        private const val KEY_ACCOUNT = "account"
+        private const val KEY_ENC_ACCOUNT = "enc_account"
     }
 
     private val accountAdapter by lazy {
         moshi.adapter(Account::class.java)
     }
 
-    private val pref by lazy {
-        Preferences.userRoot().node(AuthRepo::class.java.simpleName)
-    }
-
     /**
      * To get active account
      */
     fun getAccount(): Account? {
-        val accountJson = pref.get(KEY_ACCOUNT, null)
-        return if (accountJson != null) {
+        val encAccountJson = pref.get(KEY_ENC_ACCOUNT, null)
+        return if (encAccountJson != null) {
             // Parse
+            val accountJson = crypto.decrypt(encAccountJson)
             accountAdapter.fromJson(accountJson)
         } else {
             null
@@ -63,15 +63,15 @@ class AuthRepo @Inject constructor(
      * To persist account
      */
     fun storeAccount(account: Account) {
-        val accountJson = accountAdapter.toJson(account)
-        pref.put(KEY_ACCOUNT, accountJson)
+        val encAccountJson = crypto.encrypt(accountAdapter.toJson(account))
+        pref.put(KEY_ENC_ACCOUNT, encAccountJson)
     }
 
     /**
      * To logout and remove account details from preference
      */
     fun logout() {
-        pref.remove(KEY_ACCOUNT)
+        pref.remove(KEY_ENC_ACCOUNT)
     }
 
 

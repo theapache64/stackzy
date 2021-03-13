@@ -12,6 +12,6 @@ class PreferenceModule {
     @Singleton
     @Provides
     fun providePreference(): Preferences {
-        return Preferences.userRoot().node(PreferenceModule::class.java.simpleName)
+        return Preferences.userRoot().node("Stackzy")
     }
 }
