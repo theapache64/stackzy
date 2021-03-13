@@ -11,6 +11,7 @@ import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.first
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
 
 
 class AdbRepoTest {
@@ -19,6 +20,15 @@ class AdbRepoTest {
 
     @InjectFromComponent
     private lateinit var adbRepo: AdbRepo
+
+    @BeforeAll
+    @Test
+    fun beforeAll() = runBlockingUnitTest {
+        val devices = adbRepo.watchConnectedDevice().first()
+        assert(devices.isNotEmpty()) {
+            "No device found. Please connect a device to run this test"
+        }
+    }
 
     @Test
     fun `Device list works`() = runBlockingUnitTest {

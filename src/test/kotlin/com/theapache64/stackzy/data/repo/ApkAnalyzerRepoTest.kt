@@ -65,8 +65,7 @@ class ApkAnalyzerRepoTest {
     fun `Parse permissions`() = runBlockingUnitTest {
         getCachedDecompiledApk { _, decompiledDir ->
             val permissions = apkAnalyzerRepo.getPermissions(decompiledDir)
-            println(permissions)
-            permissions.size.should.above(1)
+            permissions.size.should.above(0)
         }
     }
 

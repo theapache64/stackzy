@@ -6,6 +6,7 @@ import com.theapache64.expekt.should
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import it.cosenonjaviste.daggermock.InjectFromComponent
+import kotlinx.coroutines.delay
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
@@ -32,6 +33,7 @@ class PlayStoreRepoTest {
 
         val account = Play.login(username, password)
         println("Logging in...")
+        delay(3000) // delay to sync account
         api = Play.getApi(account)
         println("Setting API : $api")
     }
