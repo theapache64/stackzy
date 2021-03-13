@@ -7,6 +7,9 @@ import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.data.remote.Result
 import javax.inject.Inject
 
+/**
+ * To store/retrieve to/from global Results sheet
+ */
 class ResultRepo @Inject constructor(
     private val apiInterface: ApiInterface,
     private val moshi: Moshi

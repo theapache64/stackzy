@@ -8,6 +8,9 @@ import java.util.prefs.Preferences
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * To manage global config flags
+ */
 @Singleton
 open class ConfigRepo @Inject constructor(
     private val apiInterface: ApiInterface,
