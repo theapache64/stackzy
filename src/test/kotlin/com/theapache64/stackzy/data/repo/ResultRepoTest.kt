@@ -11,6 +11,11 @@ import org.junit.Rule
 import org.junit.Test
 
 class ResultRepoTest {
+
+    companion object {
+        private const val TEST_PACKAGE_NAME = "com.theapache64.test.app"
+    }
+
     @get:Rule
     val daggerMockRule = MyDaggerMockRule()
 
@@ -21,7 +26,7 @@ class ResultRepoTest {
     fun `Add result`() = runBlockingUnitTest {
         val result = Result(
             appName = "Test App",
-            packageName = "com.theapache64.test.app",
+            packageName = TEST_PACKAGE_NAME,
             libPackages = "okhttp3, retrofit2",
             versionCode = 1234,
             versionName = "v1.2.3-alpha04"
@@ -42,5 +47,51 @@ class ResultRepoTest {
                 }
             }
         }
+    }
+
+    @Test
+    fun `Find result with valid package name`() = runBlockingUnitTest {
+        resultRepo
+            .findResult(TEST_PACKAGE_NAME, 123456)
+            .collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        println("Finding...")
+                    }
+
+                    is Resource.Success -> {
+                        it.data.packageName.should.equal(TEST_PACKAGE_NAME)
+                    }
+
+                    is Resource.Error -> {
+                        assert(false) {
+                            it.errorData
+                        }
+                    }
+                }
+            }
+    }
+
+    @Test
+    fun `Find result with invalid package name`() = runBlockingUnitTest {
+        resultRepo
+            .findResult("com.theapache64.this.app.does.not.exist", 111111)
+            .collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        println("Finding...")
+                    }
+
+                    is Resource.Success -> {
+                        assert(false) {
+                            "This app shouldn't exist but returned $it"
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        assert(true)
+                    }
+                }
+            }
     }
 }

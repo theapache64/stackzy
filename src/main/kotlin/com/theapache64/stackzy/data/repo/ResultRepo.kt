@@ -8,5 +8,6 @@ class ResultRepo @Inject constructor(
     private val apiInterface: ApiInterface
 ) {
     fun add(result: Result) = apiInterface.addResult(result)
+    fun findResult(packageName: String, versionCode: Long) = apiInterface.getResult(packageName, versionCode)
 
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiInterface {
 
@@ -33,5 +34,12 @@ interface ApiInterface {
     @Write
     @POST(NetworkModule.TABLE_RESULTS)
     fun addResult(@Body result: Result): Flow<Resource<Result>>
+
+    @Read("SELECT * WHERE package_name = :package_name AND version_code = :version_code LIMIT 1")
+    @GET(NetworkModule.TABLE_RESULTS)
+    fun getResult(
+        @Query("package_name") packageName: String,
+        @Query("version_code") versionCode: Long
+    ): Flow<Resource<Result>>
 
 }
