@@ -21,6 +21,8 @@ class NetworkModule {
         const val TABLE_CATEGORIES = "categories"
         const val TABLE_LIBRARIES = "libraries"
         const val TABLE_UNTRACKED_LIBS = "untracked_libs"
+        const val TABLE_RESULTS = "results"
+        const val TABLE_CONFIG = "config"
     }
 
     @Singleton
@@ -39,9 +41,21 @@ class NetworkModule {
                 sheetName = TABLE_UNTRACKED_LIBS,
                 "created_at", "package_names"
             )
+            .addSheet(
+                sheetName = TABLE_CONFIG,
+                "should_consider_result_cache"
+            )
             .addForm(
                 TABLE_UNTRACKED_LIBS,
                 "https://docs.google.com/forms/d/e/1FAIpQLSdWuRkjXqBkL-w5NfktA_ju_sI2bJTDVb4LoYco4mxEpskU9g/viewform?usp=sf_link"
+            )
+            .addSheet(
+                sheetName = TABLE_RESULTS,
+                "created_at", "app_name", "package_name", "version_name", "version_code", "lib_packages"
+            )
+            .addForm(
+                endPoint = TABLE_RESULTS,
+                formLink = "https://docs.google.com/forms/d/e/1FAIpQLSdiTZz47N2FHUXLSvsdzAxVRKqzWq30xjkpCOQugKbHLJuRGg/viewform?usp=sf_link"
             )
             .build()
     }

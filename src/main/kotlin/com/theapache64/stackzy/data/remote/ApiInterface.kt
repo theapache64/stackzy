@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.data.remote
 
+import com.theapache64.retrosheet.core.KeyValue
 import com.theapache64.retrosheet.core.Read
 import com.theapache64.retrosheet.core.Write
 import com.theapache64.stackzy.di.module.NetworkModule
@@ -24,5 +25,9 @@ interface ApiInterface {
     @Read("SELECT *")
     @GET(NetworkModule.TABLE_UNTRACKED_LIBS)
     fun getUntrackedLibraries(): Flow<Resource<List<UntrackedLibrary>>>
+
+    @KeyValue
+    @GET(NetworkModule.TABLE_CONFIG)
+    fun getConfig(): Flow<Resource<Config>>
 
 }

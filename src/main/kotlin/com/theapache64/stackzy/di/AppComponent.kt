@@ -3,6 +3,7 @@ package com.theapache64.stackzy.di
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.di.module.ApkToolModule
 import com.theapache64.stackzy.di.module.NetworkModule
+import com.theapache64.stackzy.di.module.PreferenceModule
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
 import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         NetworkModule::class,
-        ApkToolModule::class
+        ApkToolModule::class,
+        PreferenceModule::class
     ]
 )
 interface AppComponent {
