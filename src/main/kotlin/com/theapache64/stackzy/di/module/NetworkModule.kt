@@ -51,7 +51,16 @@ class NetworkModule {
             )
             .addSheet(
                 sheetName = TABLE_RESULTS,
-                "created_at", "app_name", "package_name", "version_name", "version_code", "lib_packages"
+                "created_at",
+                "app_name",
+                "package_name",
+                "version_name",
+                "version_code",
+                "platform",
+                "apk_size_in_mb",
+                "permissions",
+                "gradle_info_json",
+                "lib_packages"
             )
             .addForm(
                 endPoint = TABLE_RESULTS,

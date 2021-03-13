@@ -5,6 +5,7 @@ import com.theapache64.stackzy.ui.common.AlphabetCircle
 
 class AndroidApp(
     val appPackage: Package,
+    val versionCode: Long? = null,
     val appTitle: String? = null,
     val imageUrl: String? = null,
     val appSize: String? = null

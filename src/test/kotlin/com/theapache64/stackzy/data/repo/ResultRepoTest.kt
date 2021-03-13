@@ -89,6 +89,7 @@ class ResultRepoTest {
                     }
 
                     is Resource.Error -> {
+                        println(it.errorData)
                         assert(true)
                     }
                 }

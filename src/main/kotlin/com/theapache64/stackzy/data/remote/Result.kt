@@ -10,9 +10,17 @@ data class Result(
     @Json(name = "lib_packages")
     val libPackages: String,
     @Json(name = "package_name")
-    val packageName: String,
+    val packageName: String, // comma-sep
     @Json(name = "version_code")
-    val versionCode: Int,
+    val versionCode: Long,
     @Json(name = "version_name")
-    val versionName: String
+    val versionName: String,
+    @Json(name = "platform")
+    val platform: String,
+    @Json(name = "apk_size_in_mb")
+    val apkSizeInMb: Float,
+    @Json(name = "permissions")
+    val permissions: String, // comma-sep
+    @Json(name = "gradle_info_json")
+    val gradleInfoJson: String,
 )
