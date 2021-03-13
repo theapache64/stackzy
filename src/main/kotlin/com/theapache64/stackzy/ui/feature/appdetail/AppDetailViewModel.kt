@@ -5,6 +5,7 @@ import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.local.Platform
+import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.data.remote.Result
 import com.theapache64.stackzy.data.remote.UntrackedLibrary
@@ -32,7 +33,8 @@ class AppDetailViewModel @Inject constructor(
     private val librariesRepo: LibrariesRepo,
     private val untrackedLibsRepo: UntrackedLibsRepo,
     private val playStoreRepo: PlayStoreRepo,
-    private val resultRepo: ResultRepo
+    private val resultRepo: ResultRepo,
+    private val configRepo: ConfigRepo
 ) {
 
     companion object {
@@ -42,6 +44,7 @@ class AppDetailViewModel @Inject constructor(
         )
     }
 
+    private lateinit var config: Config
     private var decompileJob: Job? = null
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
@@ -59,6 +62,7 @@ class AppDetailViewModel @Inject constructor(
         apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp,
     ) {
+        this.config = configRepo.getLocalConfig()!! // shouldn't be null
         startDecompile(apkSource, androidApp)
     }
 
@@ -71,7 +75,7 @@ class AppDetailViewModel @Inject constructor(
     ) {
 
         decompileJob = GlobalScope.launch {
-            if (androidApp.versionCode != null) {
+            if (androidApp.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
                 resultRepo.findResult(androidApp.appPackage.name, androidApp.versionCode)
                     .collect {
@@ -189,7 +193,7 @@ class AppDetailViewModel @Inject constructor(
                 // Give some time to APK to prepare for decompile
                 _loadingMessage.value = "Preparing APK for decompiling..."
                 delay(2000)
-                onApkPulled(androidApp, apkFile, shouldStoreResult = true)
+                onApkPulled(androidApp, apkFile, shouldStoreResult = config.shouldConsiderResultCache)
             }
         }
     }
