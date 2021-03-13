@@ -85,10 +85,13 @@ dependencies {
 
     // Expekt : An assertion library for Kotlin
     testImplementation("com.theapache64:expekt:0.0.1")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
 }
 
 tasks.test {
     useJUnit()
+    // useJUnitPlatform()
     environment("ANDROID_HOME", System.getenv("ANDROID_HOME") ?: "/home/theapache64/Android/Sdk")
 }
 

@@ -9,6 +9,7 @@ import com.theapache64.stackzy.util.bytesToMb
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -23,7 +24,7 @@ class PlayStoreRepo @Inject constructor() {
         keyword: String,
         api: GooglePlayAPI,
         maxSearchResult: Int = 30
-    ): List<AndroidApp> {
+    ): List<AndroidApp> = withContext(Dispatchers.IO) {
         // First search
         var serp = Play.search(query = keyword, api = api)
 
@@ -36,7 +37,7 @@ class PlayStoreRepo @Inject constructor() {
         }
 
         // We've loaded all results from network. Now let's sanitize and convert it to AndroidApp class
-        return serp.content
+        serp.content
             .distinctBy { it.docid } // To remove duplicates
             .map { item ->
 
