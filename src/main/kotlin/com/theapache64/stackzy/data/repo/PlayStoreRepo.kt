@@ -42,7 +42,8 @@ class PlayStoreRepo @Inject constructor() {
             .map { item ->
 
                 // Convert bytes to MB (to readable format)
-                val sizeInMb = item.details.appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
+                val appDetails = item.details.appDetails
+                val sizeInMb = appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
                     "%.2f".format(Locale.US, sizeInMb).toFloat()
                 }
 
@@ -50,6 +51,7 @@ class PlayStoreRepo @Inject constructor() {
                 AndroidApp(
                     appPackage = Package(item.docid), // Package name
                     appTitle = item.title, // App title
+                    versionCode = appDetails.versionCode,
                     imageUrl = item.imageList[1].imageUrl, // Logo URL
                     appSize = "$sizeInMb MB" // APK Size
                 )

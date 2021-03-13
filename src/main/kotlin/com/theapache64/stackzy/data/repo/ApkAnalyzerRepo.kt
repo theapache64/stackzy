@@ -72,11 +72,11 @@ class ApkAnalyzerRepo @Inject constructor() {
             versionName = metaInfo.versionInfo?.versionName,
             minSdk = metaInfo.sdkInfo?.minSdkVersion?.let {
                 val androidVersionName = AndroidVersionIdentifier.getVersion(it)
-                Pair(it, androidVersionName)
+                GradleInfo.Sdk(it, androidVersionName)
             },
             targetSdk = metaInfo.sdkInfo?.targetSdkVersion?.let {
                 val androidVersionName = AndroidVersionIdentifier.getVersion(it)
-                Pair(it, androidVersionName)
+                GradleInfo.Sdk(it, androidVersionName)
             }
         )
     }

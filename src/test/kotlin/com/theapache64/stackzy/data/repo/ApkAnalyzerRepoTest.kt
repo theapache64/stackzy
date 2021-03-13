@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.data.repo
 
 import com.theapache64.expekt.should
+import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.test.*
@@ -40,10 +41,10 @@ class ApkAnalyzerRepoTest {
                 report.assetsDir?.exists().should.`true`
                 report.permissions.size.should.equal(1) // INTERNET only
                 report.gradleInfo.run {
-                    minSdk.should.equal(Pair(16, "Jelly Bean"))
-                    targetSdk.should.equal(Pair(29, "Android 10"))
+                    minSdk.should.equal(GradleInfo.Sdk(16, "Jelly Bean"))
+                    targetSdk.should.equal(GradleInfo.Sdk(29, "Android 10"))
                     versionName.should.equal("1.0.4-alpha03")
-                    versionCode.should.equal("10403")
+                    versionCode.should.equal(10403)
                 }
 
             }
@@ -73,11 +74,11 @@ class ApkAnalyzerRepoTest {
     fun `Parse gradle info`() = runBlockingUnitTest {
         getCachedDecompiledApk { _, decompiledDir ->
             val gradleInfo = apkAnalyzerRepo.getGradleInfo(decompiledDir)
-            gradleInfo.versionCode.should.equal("10403")
+            gradleInfo.versionCode.should.equal(10403)
             gradleInfo.versionName.should.equal("1.0.4-alpha03")
             gradleInfo.run {
-                minSdk.should.equal(Pair(16, "Jelly Bean"))
-                targetSdk.should.equal(Pair(29, "Android 10"))
+                minSdk.should.equal(GradleInfo.Sdk(16, "Jelly Bean"))
+                targetSdk.should.equal(GradleInfo.Sdk(29, "Android 10"))
             }
         }
     }
