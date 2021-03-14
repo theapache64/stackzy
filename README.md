@@ -23,8 +23,10 @@
 1. Enjoy the report 😎
 
 ## 💻 Install
+| Platform | Download | Status |
+|----------|----------|--------|
+| Linux    | ![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/theapache64/stackzy/latest/stackzy_1.0.0-1_amd64.deb)| ✅ Stable | 
 
-- Executables for windows, linux and mac will be released soon. 😇
 
 ## 🏋 Dependency
 
