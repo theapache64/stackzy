@@ -7,14 +7,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Password
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.CustomScaffold
@@ -94,6 +94,8 @@ private fun Form(
     onPasswordChanged: (password: String) -> Unit,
     onLogInClicked: () -> Unit,
 ) {
+    var isPasswordVisible by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -151,7 +153,7 @@ private fun Form(
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Password,
-                        contentDescription = ""
+                        contentDescription = "Password"
                     )
                 },
                 singleLine = true,
@@ -163,8 +165,24 @@ private fun Form(
                 },
                 onValueChange = onPasswordChanged,
                 modifier = Modifier.fillMaxWidth(),
-                visualTransformation = PasswordVisualTransformation(),
-                isError = isPasswordError
+                visualTransformation = if (isPasswordVisible) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                isError = isPasswordError,
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            isPasswordVisible = !isPasswordVisible
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Visibility,
+                            contentDescription = "Toggle password visibility"
+                        )
+                    }
+                }
             )
 
             Spacer(
