@@ -26,9 +26,9 @@
 
 | Platform | Download | Status |
 |----------|----------|--------|
-| Linux    |[![Download Button](https://img.shields.io/static/v1?label=Linux&message=stackzy_1.0.0-1_amd64.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest/download/stackzy_1.0.0-1_amd64.deb)| ✅ Stable | 
-| Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy-1.0.0.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest/download/Stackzy-1.0.0.msi)| 🔬 Experimental | 
-| MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy-1.0.0.dmg&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest/download/Stackzy-1.0.0.dmg)| 🔬 Not Ready | 
+| Linux    |[![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| ✅ Stable | 
+| Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| 🔬 Experimental | 
+| MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.dmg&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| 🔬 Not Ready | 
 
 ## 🏋 Dependency
 
