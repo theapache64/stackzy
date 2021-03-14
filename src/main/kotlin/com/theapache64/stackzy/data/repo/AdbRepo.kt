@@ -273,10 +273,16 @@ class AdbRepo @Inject constructor(
                     if (zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL || zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL) {
                         println("It's windows ${zipEntry.name}")
                         val dllFile = File(zipEntry.name.split("/").last())
-                        FileOutputStream(dllFile).use {
-                            zis.copyTo(it)
+
+                        with(dllFile) {
+                            FileOutputStream(this).use {
+                                zis.copyTo(it)
+                            }
+
+                            setExecutable(true, false)
+                            setReadable(true, false)
+                            setWritable(true, false)
                         }
-                        dllFile.setExecutable(true)
                     }
                 }
 
