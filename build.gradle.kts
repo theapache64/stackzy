@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.theapache64"
-version = "1.0.0-beta01"
+version = "1.0.0-beta03"
 
 repositories {
     // mavenLocal()
@@ -107,6 +107,17 @@ compose.desktop {
         mainClass = "com.theapache64.stackzy.AppKt"
         nativeDistributions {
             packageName = "Stackzy"
+
+            // Passing gradle variables to program
+            args(
+                """
+                {
+                   "app_name":"$packageName",
+                   "version":"${getVersion()}"
+                }
+            """.trimIndent()
+            )
+
             packageVersion = (project.version as String).split("-")[0]
             modules(
                 "java.logging",

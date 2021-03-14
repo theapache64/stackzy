@@ -7,7 +7,6 @@ import com.theapache64.cyclone.core.Intent
 import com.theapache64.stackzy.App
 import com.theapache64.stackzy.ui.navigation.NavHostComponent
 import com.theapache64.stackzy.ui.theme.StackzyTheme
-import com.theapache64.stackzy.util.R
 import androidx.compose.desktop.Window as setContent
 
 
@@ -24,12 +23,13 @@ class MainActivity : Activity() {
         super.onCreate()
 
         setContent(
-            title = R.string.app_name,
+            title = App.appArgs.appName,
             undecorated = App.CUSTOM_TOOLBAR,
             size = IntSize(1024, 600),
         ) {
             StackzyTheme(
-                title = R.string.app_name,
+                title = App.appArgs.appName,
+                subTitle = "(${App.appArgs.version})",
                 customToolbar = App.CUSTOM_TOOLBAR
             ) {
                 // Igniting navigation

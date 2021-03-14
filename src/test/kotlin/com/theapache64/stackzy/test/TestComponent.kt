@@ -3,6 +3,7 @@ package com.theapache64.stackzy.test
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.data.repo.*
 import com.theapache64.stackzy.di.module.ApkToolModule
+import com.theapache64.stackzy.di.module.CryptoModule
 import com.theapache64.stackzy.di.module.NetworkModule
 import com.theapache64.stackzy.di.module.PreferenceModule
 import dagger.Component
@@ -14,6 +15,7 @@ import javax.inject.Singleton
         NetworkModule::class,
         ApkToolModule::class,
         PreferenceModule::class,
+        CryptoModule::class
     ]
 )
 interface TestComponent {

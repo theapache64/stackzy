@@ -269,10 +269,10 @@ class AppDetailViewModel @Inject constructor(
             allLibraries
         )
 
-        // Delete decompiled dir
         _loadingMessage.value = "Hold on please..."
-        decompiledDir.deleteRecursively()
-        apkFile.delete()
+
+        // Move APK to decompiled dir, so that when user opens the source code dir, he can also see the APK.
+        moveApkToDecompiledDir(report, decompiledDir, apkFile)
 
         if (shouldStoreResult) {
             // Converting AnalysisReport to Result
@@ -308,6 +308,16 @@ class AppDetailViewModel @Inject constructor(
             onReportReady(report)
         }
 
+    }
+
+    private fun moveApkToDecompiledDir(
+        report: AnalysisReport,
+        decompiledDir: File,
+        apkFile: File
+    ) {
+        val newApkName = "${report.packageName}_${report.gradleInfo.versionName}.apk"
+        val newApkFile = File("${decompiledDir.absolutePath}${File.separator}$newApkName")
+        apkFile.renameTo(newApkFile)
     }
 
     private suspend fun onReportReady(report: AnalysisReport) {

@@ -113,7 +113,7 @@ class SplashViewModel @Inject constructor(
         if (adbRepo.isAdbStarted()) {
             _isSyncFinished.value = true
         } else {
-            _syncMsg.value = "Setting up for first time..."
+            _syncMsg.value = "Setting up for the first time..."
 
             try {
                 adbRepo.downloadAdb()

@@ -15,8 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.WindowDraggableArea
 
 /**
@@ -26,6 +29,7 @@ import androidx.compose.ui.window.WindowDraggableArea
 @Composable
 fun ToolBar(
     title: String = "",
+    subTitle: String = "",
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -66,13 +70,13 @@ fun ToolBar(
             )*/
 
         ) {
-            Title(title)
+            Title(title, subTitle)
         }
     }
 }
 
 @Composable
-private fun Title(title: String) {
+private fun Title(title: String, subTitle: String) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -80,7 +84,7 @@ private fun Title(title: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = title,
+            text = getCombinedString(title, subTitle),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 10.dp),
@@ -88,6 +92,31 @@ private fun Title(title: String) {
             textAlign = TextAlign.End
         )
     }
+}
+/**
+ * To return AnnotatedString
+ */
+@Composable
+private fun getCombinedString(title: String, subTitle: String) = with(AnnotatedString.Builder("")) {
+
+    // Title
+    pushStyle(
+        SpanStyle(
+            color = MaterialTheme.colors.onSurface, fontSize = 14.sp
+        )
+    )
+    append(title)
+    append("  ") // some space
+    // Subtitle
+    pushStyle(
+        SpanStyle(
+            color = MaterialTheme.colors.onSurface.copy(0.5f),
+            fontSize = 12.sp
+        )
+    )
+    append(subTitle)
+
+    toAnnotatedString()
 }
 
 @Composable

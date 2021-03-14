@@ -3,7 +3,6 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
-        const val app_detail_cd_meta = "Meta data"
         const val app_detail_action_open_market = "SEARCH IN MARKET"
         const val any_error_title_damn_it: String = "Damn It!"
         const val app_detail_loading_fetching_apk: String = "Fetching APK..."
@@ -17,9 +16,7 @@ object R {
         const val device_select_the_device = "Select the device"
         const val device_no_device_message = "Looks like you're not connected your phone"
         const val device_no_device_title = "No device connected"
-        const val all_error_unknown = "Something went wrong"
         const val all_action_retry = "RETRY"
-        const val app_name = "Stackzy"
         const val logo = "Logo"
     }
 }
