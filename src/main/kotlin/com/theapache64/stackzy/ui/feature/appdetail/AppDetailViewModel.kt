@@ -44,6 +44,8 @@ class AppDetailViewModel @Inject constructor(
         )
     }
 
+    private lateinit var androidApp: AndroidApp
+    private lateinit var apkSource: ApkSource<AndroidDevice, Account>
     private var decompiledDir: File? = null
     private lateinit var config: Config
     private var decompileJob: Job? = null
@@ -64,21 +66,20 @@ class AppDetailViewModel @Inject constructor(
         androidApp: AndroidApp,
     ) {
         this.config = configRepo.getLocalConfig()!! // shouldn't be null
-        startDecompile(apkSource, androidApp)
+        this.apkSource = apkSource
+        this.androidApp = androidApp
+        startDecompile()
     }
 
     /**
      * To start the decompiling and analysis from given source
      */
-    private fun startDecompile(
-        apkSource: ApkSource<AndroidDevice, Account>,
-        androidApp: AndroidApp
-    ) {
+    private fun startDecompile() {
 
         decompileJob = GlobalScope.launch {
             if (androidApp.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
-                resultRepo.findResult(androidApp.appPackage.name, androidApp.versionCode)
+                resultRepo.findResult(androidApp.appPackage.name, androidApp.versionCode!!)
                     .collect {
                         when (it) {
                             is Resource.Loading -> {
@@ -93,9 +94,7 @@ class AppDetailViewModel @Inject constructor(
                                 if (it.errorData == "No data found") {
                                     // Its a new app, no one didn't decompiled it before
                                     println("Decompiling it from scratch...")
-                                    startDecompileFromScratch(
-                                        apkSource, androidApp
-                                    )
+                                    startDecompileFromScratch()
                                 } else {
                                     // Some network error
                                     _fatalError.value = it.errorData
@@ -105,9 +104,7 @@ class AppDetailViewModel @Inject constructor(
                     }
             } else {
                 // We don't have versionCode, so we've to decompile it from scratch
-                startDecompileFromScratch(
-                    apkSource, androidApp
-                )
+                startDecompileFromScratch()
             }
         }
     }
@@ -146,21 +143,18 @@ class AppDetailViewModel @Inject constructor(
     /**
      * To start decompile from scratch (download APK and decompile using apk-tool)
      */
-    private suspend fun startDecompileFromScratch(
-        apkSource: ApkSource<AndroidDevice, Account>,
-        androidApp: AndroidApp
-    ) {
+    private suspend fun startDecompileFromScratch() {
         try {
             when (apkSource) {
 
                 // User wants to decompile using adb
                 is ApkSource.Adb -> {
-                    decompileViaAdb(apkSource, androidApp)
+                    decompileViaAdb()
                 }
 
                 // User wants to pull APK from PlayStore
                 is ApkSource.PlayStore -> {
-                    decompileViaPlayStore(apkSource, androidApp)
+                    decompileViaPlayStore(config.shouldConsiderResultCache)
                 }
 
             }
@@ -174,8 +168,7 @@ class AppDetailViewModel @Inject constructor(
      * Downloads APK from playstore and decompile it
      */
     private suspend fun decompileViaPlayStore(
-        apkSource: ApkSource.PlayStore<Account>,
-        androidApp: AndroidApp
+        shouldStoreResult: Boolean
     ) {
         _loadingMessage.value = "Initialising download..."
 
@@ -185,7 +178,7 @@ class AppDetailViewModel @Inject constructor(
         // Download APK from playstore
         playStoreRepo.downloadApk(
             apkFile,
-            apkSource.value,
+            (apkSource as ApkSource.PlayStore<Account>).value,
             packageName
         ).distinctUntilChanged().collect { downloadPercentage ->
             _loadingMessage.value = "Downloading APK... $downloadPercentage%"
@@ -194,7 +187,7 @@ class AppDetailViewModel @Inject constructor(
                 // Give some time to APK to prepare for decompile
                 _loadingMessage.value = "Preparing APK for decompiling..."
                 delay(2000)
-                onApkPulled(androidApp, apkFile, shouldStoreResult = config.shouldConsiderResultCache)
+                onApkPulled(androidApp, apkFile, shouldStoreResult = shouldStoreResult)
             }
         }
     }
@@ -202,11 +195,8 @@ class AppDetailViewModel @Inject constructor(
     /**
      * Downloads APK from device using and decompile it
      */
-    private suspend fun decompileViaAdb(
-        apkSource: ApkSource.Adb<AndroidDevice>,
-        androidApp: AndroidApp
-    ) {
-        val androidDevice = apkSource.value
+    private suspend fun decompileViaAdb() {
+        val androidDevice = (apkSource as ApkSource.Adb).value
         _loadingMessage.value = R.string.app_detail_loading_fetching_apk
 
         // First get APK path
@@ -254,7 +244,10 @@ class AppDetailViewModel @Inject constructor(
     ) {
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
-        this.decompiledDir = apkToolRepo.decompile(apkFile)
+        this.decompiledDir = apkToolRepo.decompile(
+            destinationFile = apkFile,
+            targetDir = File(getDecompiledDirPath(androidApp.appPackage.name))
+        )
         // val decompiledDir = File("build/topcorn_decompiled")
 
         // Analyse
@@ -397,6 +390,33 @@ class AppDetailViewModel @Inject constructor(
     }
 
     fun onCodeIconClicked() {
-        Desktop.getDesktop().open(decompiledDir)
+        if (decompiledDir?.exists() == true) {
+            // Decompiled exists
+            Desktop.getDesktop().open(decompiledDir)
+        } else {
+            // Let's construct possible decompiledDir and check it exist
+            val possibleDecompiledDir = File(getDecompiledDirPath(androidApp.appPackage.name))
+
+            if (possibleDecompiledDir.exists()) {
+                // Gotcha! There's one dir available for this package. lets show it
+                decompiledDir = possibleDecompiledDir
+                onCodeIconClicked() // go again
+            } else {
+                // We're currently showing cached result, so there won't be any decompiled dir. so let's go decompile
+                decompileJob = GlobalScope.launch {
+                    decompileViaPlayStore(
+                        shouldStoreResult = false // Because, we already have the result in `results` table. We are decompiling to show the source only.
+                    )
+                    onCodeIconClicked()
+                }
+            }
+        }
+    }
+
+    private fun getDecompiledDirPath(
+        packageName: String
+    ): String {
+        val tempDir = System.getProperty("java.io.tmpdir")
+        return "$tempDir${File.separator}stackzy${File.separator}$packageName"
     }
 }
