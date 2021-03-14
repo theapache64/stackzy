@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.svgResource
@@ -20,6 +22,8 @@ import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
+
+private val GRADIENT_HEIGHT = 50.dp
 
 @Composable
 fun AppDetailScreen(
@@ -81,41 +85,71 @@ fun AppDetailScreen(
                 LoadingAnimation(message)
             } else if (_report != null) {
 
-                // Decompile and analysis done
-                TabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    backgroundColor = Color.Transparent,
-                    contentColor = MaterialTheme.colors.primary,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    // Tabs
-                    AppDetailViewModel.TABS.forEachIndexed { index, title ->
-                        Tab(
-                            selected = index == selectedTabIndex,
-                            onClick = {
-                                viewModel.onTabClicked(index)
-                            },
-                            text = { Text(text = title) }
+                    Column {
+                        // Decompile and analysis done
+                        TabRow(
+                            selectedTabIndex = selectedTabIndex,
+                            backgroundColor = Color.Transparent,
+                            contentColor = MaterialTheme.colors.primary,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            // Tabs
+                            AppDetailViewModel.TABS.forEachIndexed { index, title ->
+                                Tab(
+                                    selected = index == selectedTabIndex,
+                                    onClick = {
+                                        viewModel.onTabClicked(index)
+                                    },
+                                    text = { Text(text = title) }
+                                )
+                            }
+                        }
+
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
                         )
+
+                        if (selectedTabIndex == 0) {
+                            // Libraries Tab
+                            Libraries(_report, onLibrarySelected)
+                        } else {
+                            // More Info tab
+                            MoreInfo(_report)
+                        }
                     }
-                }
 
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
-
-                if (selectedTabIndex == 0) {
-                    // Libraries Tab
-                    Libraries(_report, onLibrarySelected)
-                } else {
-                    // More Info tab
-                    MoreInfo(_report)
+                    // Bottom gradient
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(GRADIENT_HEIGHT)
+                            .align(Alignment.BottomCenter)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        com.theapache64.stackzy.ui.theme.R.color.BigStone
+                                    )
+                                )
+                            )
+                    )
                 }
 
             }
         }
     }
+}
+
+@Composable
+fun GradientMargin() {
+    Spacer(
+        modifier = Modifier
+            .height(GRADIENT_HEIGHT)
+    )
 }
 
 @Composable

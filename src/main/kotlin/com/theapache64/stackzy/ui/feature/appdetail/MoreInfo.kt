@@ -37,7 +37,8 @@ fun MoreInfo(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
     ) {
         item {
             BuildGradleGroovy(
@@ -56,6 +57,10 @@ fun MoreInfo(
                     permission = report.permissions
                 )
             }
+        }
+
+        item {
+            GradientMargin()
         }
     }
 }

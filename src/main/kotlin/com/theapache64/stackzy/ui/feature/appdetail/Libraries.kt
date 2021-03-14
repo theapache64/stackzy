@@ -73,6 +73,11 @@ fun Libraries(
                     modifier = Modifier.height(10.dp)
                 )
             }
+
+            item {
+                // Gradient margin
+                GradientMargin()
+            }
         }
     }
 }
