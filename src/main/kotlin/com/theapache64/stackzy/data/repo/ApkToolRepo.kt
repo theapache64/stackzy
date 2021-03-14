@@ -21,7 +21,7 @@ class ApkToolRepo @Inject constructor(
         val command =
             "java -jar \"${apkToolJarFile.absolutePath}\" d \"${destinationFile.absolutePath}\" -o \"${targetDir.absolutePath}\" -f"
         println("Decompiling : \n$command && code-insiders '${targetDir.absolutePath}'")
-        CommandExecutor.executeCommand(command)
+        CommandExecutor.executeCommand(command = command, isSkipException = true, isLivePrint = false)
         targetDir
     }
 }
