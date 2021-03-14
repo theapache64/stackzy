@@ -23,10 +23,12 @@
 1. Enjoy the report 😎
 
 ## 💻 Install
+
 | Platform | Download | Status |
 |----------|----------|--------|
-| Linux    | ![GitHub release (latest by date and asset)](https://img.shields.io/github/downloads/theapache64/stackzy/latest/stackzy_1.0.0-1_amd64.deb)| ✅ Stable | 
-
+| Linux    |[![Download Button](https://img.shields.io/static/v1?label=Linux&message=stackzy_1.0.0-1_amd64.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest/download/stackzy_1.0.0-1_amd64.deb)| ✅ Stable | 
+| Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy-1.0.0.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest/download/Stackzy-1.0.0.msi)| 🔬 Experimental | 
+| MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy-1.0.0.dmg&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest/download/Stackzy-1.0.0.dmg)| 🔬 Not Ready | 
 
 ## 🏋 Dependency
 
