@@ -24,7 +24,6 @@ import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.LoadingAnimation
 import com.theapache64.stackzy.ui.theme.R
 import com.theapache64.stackzy.util.calladapter.flow.Resource
-import com.toxicbakery.logging.Arbor
 
 @Composable
 fun LogInScreen(
@@ -39,7 +38,6 @@ fun LogInScreen(
     val isPasswordError by viewModel.isPasswordError.collectAsState()
 
     val logInResponse by viewModel.logInResponse.collectAsState()
-    Arbor.e("LogIn -> $logInResponse")
 
     CustomScaffold(
         title = "Configure Profile",

@@ -50,7 +50,7 @@ fun MoreInfo(
             Spacer(modifier = Modifier.height(10.dp))
         }
 
-        if(report.permissions.isNotEmpty()){
+        if (report.permissions.isNotEmpty()) {
             item {
                 PermissionsXml(
                     permission = report.permissions
