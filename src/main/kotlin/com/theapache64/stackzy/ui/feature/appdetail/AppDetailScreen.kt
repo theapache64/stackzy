@@ -1,10 +1,9 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,14 +23,14 @@ import com.theapache64.stackzy.util.R
 
 @Composable
 fun AppDetailScreen(
-    appDetailViewModel: AppDetailViewModel,
+    viewModel: AppDetailViewModel,
     onLibrarySelected: (Library) -> Unit,
     onBackClicked: () -> Unit
 ) {
-    val fatalError by appDetailViewModel.fatalError.collectAsState()
-    val loadingMessage by appDetailViewModel.loadingMessage.collectAsState()
-    val report by appDetailViewModel.analysisReport.collectAsState()
-    val selectedTabIndex by appDetailViewModel.selectedTabIndex.collectAsState()
+    val fatalError by viewModel.fatalError.collectAsState()
+    val loadingMessage by viewModel.loadingMessage.collectAsState()
+    val report by viewModel.analysisReport.collectAsState()
+    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
 
     val title = report?.appName ?: R.string.app_detail_title
 
@@ -39,7 +38,7 @@ fun AppDetailScreen(
         title = title,
         subTitle = report?.platform?.name,
         onBackClicked = {
-            appDetailViewModel.onBackPressed() // to cancel on going works
+            viewModel.onBackPressed() // to cancel on going works
             onBackClicked()
         },
         topRightSlot = {
@@ -52,9 +51,17 @@ fun AppDetailScreen(
                     // Badge
                     Badge("APK SIZE: ${it.apkSizeInMb} MB")
 
+                    Spacer(
+                        modifier = Modifier.width(5.dp)
+                    )
+
                     // Launch app in play-store icon
                     PlayStoreIcon {
-                        appDetailViewModel.onPlayStoreIconClicked()
+                        viewModel.onPlayStoreIconClicked()
+                    }
+
+                    CodeIcon {
+                        viewModel.onCodeIconClicked()
                     }
                 }
             }
@@ -87,7 +94,7 @@ fun AppDetailScreen(
                         Tab(
                             selected = index == selectedTabIndex,
                             onClick = {
-                                appDetailViewModel.onTabClicked(index)
+                                viewModel.onTabClicked(index)
                             },
                             text = { Text(text = title) }
                         )
@@ -120,6 +127,18 @@ private fun PlayStoreIcon(onClicked: () -> Unit) {
             painter = svgResource("drawables/playstore.svg"),
             contentDescription = "open play store",
             tint = MaterialTheme.colors.onSurface
+        )
+    }
+}
+
+@Composable
+private fun CodeIcon(onClicked: () -> Unit) {
+    IconButton(
+        onClick = onClicked
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Code,
+            contentDescription = "Browse Code"
         )
     }
 }

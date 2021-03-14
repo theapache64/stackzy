@@ -36,7 +36,7 @@ class AppDetailScreenComponent(
     @Composable
     override fun render() {
         AppDetailScreen(
-            appDetailViewModel = appDetailViewModel,
+            viewModel = appDetailViewModel,
             onLibrarySelected = onLibrarySelected,
             onBackClicked = onBackClicked
         )

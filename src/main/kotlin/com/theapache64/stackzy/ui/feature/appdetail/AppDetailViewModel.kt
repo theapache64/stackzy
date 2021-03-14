@@ -44,6 +44,7 @@ class AppDetailViewModel @Inject constructor(
         )
     }
 
+    private var decompiledDir: File? = null
     private lateinit var config: Config
     private var decompileJob: Job? = null
     private val _fatalError = MutableStateFlow<String?>(null)
@@ -253,7 +254,7 @@ class AppDetailViewModel @Inject constructor(
     ) {
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
-        val decompiledDir = apkToolRepo.decompile(apkFile)
+        this.decompiledDir = apkToolRepo.decompile(apkFile)
         // val decompiledDir = File("build/topcorn_decompiled")
 
         // Analyse
@@ -265,14 +266,14 @@ class AppDetailViewModel @Inject constructor(
         val report = apkAnalyzerRepo.analyze(
             androidApp.appPackage.name,
             apkFile,
-            decompiledDir,
+            decompiledDir!!,
             allLibraries
         )
 
         _loadingMessage.value = "Hold on please..."
 
         // Move APK to decompiled dir, so that when user opens the source code dir, he can also see the APK.
-        moveApkToDecompiledDir(report, decompiledDir, apkFile)
+        moveApkToDecompiledDir(report, decompiledDir!!, apkFile)
 
         if (shouldStoreResult) {
             // Converting AnalysisReport to Result
@@ -393,5 +394,9 @@ class AppDetailViewModel @Inject constructor(
             val playStoreUrl = URI("https://play.google.com/store/apps/details?id=${report.packageName}")
             Desktop.getDesktop().browse(playStoreUrl)
         }
+    }
+
+    fun onCodeIconClicked() {
+        Desktop.getDesktop().open(decompiledDir)
     }
 }

@@ -17,7 +17,7 @@ import com.theapache64.stackzy.util.R
  * To show a basic content page
  */
 const val CONTENT_PADDING_VERTICAL = 15
-const val CONTENT_PADDING_HORIZONTAL = 30
+const val CONTENT_PADDING_HORIZONTAL = 15
 
 @Composable
 fun CustomScaffold(
