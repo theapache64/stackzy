@@ -1,6 +1,6 @@
 # stackzy
 
-![](extras/screenshot.png)
+![](extras/libs.png)
 
 👷 This project is under active development.
 
@@ -15,12 +15,22 @@
 
 - [Watch](https://www.youtube.com/watch?v=HjHQGcKxXaM&ab_channel=theapache64) demo
 
-## ⌨️ Usage
+### 📽️ Usage
 
-1. Open `Stackzy`
-1. Choose `Device`
-1. Choose `Application` to perform the analysis
-1. Enjoy the report 😎
+1. Select pathway
+
+![](extras/pathway.png)
+
+2. Select App
+
+![](extras/select_app.png)
+
+3. Enjoy result ;)
+
+![](extras/libs.png)
+
+![](extras/meta.png)
+
 
 ## 💻 Install
 
