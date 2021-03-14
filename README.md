@@ -9,28 +9,23 @@
 <img alt="Twitter: theapache64" src="https://img.shields.io/twitter/follow/theapache64.svg?style=social" />
 </a>
 
-> A desktop app to identify the app stack. Built using Compose desktop
+> A desktop app to analyse APK. Built using Compose desktop
 
 ### ✨ Demo
 
-- [Watch](https://www.youtube.com/watch?v=HjHQGcKxXaM&ab_channel=theapache64) demo
+- [Watch](https://www.youtube.com/watch?v=XtM-sRLxLLc&ab_channel=theapache64) demo
+
+### 🚀 Highlights
+
+> Stackzfy = Decompile and analyse
+
+- Stackzfy any apps available in Play Store
+- Stackzfy any apps available in your device (including system apps)
+
 
 ### 📽️ Usage
 
-1. Select pathway
-
-![](extras/pathway.png)
-
-2. Select App
-
-![](extras/select_app.png)
-
-3. Enjoy result ;)
-
-![](extras/libs.png)
-
-![](extras/meta.png)
-
+- [Show](docs/USAGE.md) usage
 
 ## 💻 Install
 
