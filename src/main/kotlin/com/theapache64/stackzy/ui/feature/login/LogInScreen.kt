@@ -11,6 +11,8 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusOrder
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -124,6 +126,8 @@ private fun Form(
                 modifier = Modifier.height(20.dp)
             )
 
+            val (usernameRef, passwordRef) = FocusRequester.createRefs()
+
             // Username
             OutlinedTextField(
                 leadingIcon = {
@@ -140,7 +144,10 @@ private fun Form(
                     )
                 },
                 onValueChange = onUsernameChanged,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .focusOrder(usernameRef) {
+                        next = passwordRef
+                    },
                 isError = isUsernameError
             )
 
@@ -164,7 +171,7 @@ private fun Form(
                     )
                 },
                 onValueChange = onPasswordChanged,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().focusOrder(passwordRef),
                 visualTransformation = if (isPasswordVisible) {
                     VisualTransformation.None
                 } else {
@@ -195,6 +202,11 @@ private fun Form(
                 onClick = onLogInClicked
             ) {
                 Text(text = "LOGIN")
+            }
+
+            DisposableEffect(Unit) {
+                usernameRef.requestFocus()
+                onDispose { }
             }
         }
 
