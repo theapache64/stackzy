@@ -8,6 +8,8 @@ import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.NATIVE_KOTLIN_PACKAGE_NAME
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import it.cosenonjaviste.daggermock.InjectFromComponent
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import org.junit.Rule
 import org.junit.Test
@@ -92,5 +94,17 @@ class AdbRepoTest {
             )
         )
         apkPath.should.`null`
+    }
+
+    @Test
+    fun `Download ADB works`() = runBlockingUnitTest {
+        var lastProgress = 0
+        adbRepo.downloadAdb()
+            .distinctUntilChanged()
+            .collect {
+                lastProgress = it
+            }
+
+        lastProgress.should.equal(100)
     }
 }

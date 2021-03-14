@@ -14,12 +14,10 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.util.OSType
 import com.theapache64.stackzy.util.OsCheck
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -227,7 +225,7 @@ class AdbRepo @Inject constructor(
 
     @ExperimentalPathApi
     @Suppress("BlockingMethodInNonBlockingContext") // suppressing due to invalid IDE warning (bug)
-    suspend fun downloadAdb() = withContext(Dispatchers.IO) {
+    suspend fun downloadAdb() = flow {
 
         // Getting platform tools download url
         val pToolsUrl = pToolsMap[OsCheck.operatingSystemType]
@@ -236,11 +234,28 @@ class AdbRepo @Inject constructor(
         // Download file
         val pToolZipFile = kotlin.io.path.createTempFile().toFile()
 
-        URL(pToolsUrl).openStream().use { input ->
-            FileOutputStream(pToolZipFile)
-                .use { output ->
-                    input.copyTo(output)
+        val urlConnection = URL(pToolsUrl).openConnection()
+        val totalBytes = urlConnection.contentLengthLong
+
+        urlConnection.getInputStream().use { input ->
+            FileOutputStream(pToolZipFile).use { output ->
+                val buffer = ByteArray(1024)
+                var read: Int
+                var counter = 0f
+                emit(0) // start progress
+                while (input.read(buffer).also { read = it } != -1) {
+                    // Write
+                    output.write(buffer, 0, read)
+
+                    // Update progress
+                    counter += read
+                    val percentage = (counter / totalBytes) * 100
+                    emit(percentage.toInt())
                 }
+
+                // Finish progress
+                emit(100)
+            }
         }
 
         // Unzip and create adbFile

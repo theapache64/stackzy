@@ -111,13 +111,17 @@ class SplashViewModel @Inject constructor(
     ) {
 
         if (adbRepo.isAdbStarted()) {
-            _isSyncFinished.value = true
+            onSuccess()
         } else {
-            _syncMsg.value = "Setting up for the first time..."
-
             try {
-                adbRepo.downloadAdb()
-                onSuccess()
+                adbRepo.downloadAdb().collect { downloadProgress ->
+
+                    _syncMsg.value = "Setting up for the first time... $downloadProgress%"
+
+                    if (downloadProgress == 100) {
+                        onSuccess()
+                    }
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
                 _syncFailedMsg.value = e.message
