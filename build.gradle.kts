@@ -116,8 +116,6 @@ compose.desktop {
             // Passing gradle variables to program
             args += listOf("--app-name $packageName --version ${getVersion()}")
 
-
-
             modules(
                 "java.logging",
                 "java.naming",

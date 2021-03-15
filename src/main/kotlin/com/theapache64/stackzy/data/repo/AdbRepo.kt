@@ -46,7 +46,7 @@ class AdbRepo @Inject constructor(
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL = "platform-tools/AdbWinApi.dll"
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL = "platform-tools/AdbWinUsbApi.dll"
 
-        private val ADB_ROOT_DIR = System.getProperty("user.home")
+        private val ADB_ROOT_DIR = "${System.getProperty("user.home")}${File.separator}.stackzy"
 
         // platform-tools url map
         private val pToolsMap by lazy {
