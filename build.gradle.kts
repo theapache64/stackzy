@@ -110,7 +110,7 @@ compose.desktop {
             packageName = "Stackzy"
 
             // Passing gradle variables to program
-            args("--app-name $packageName --version ${getVersion()}")
+            args += listOf("--app-name $packageName --version ${getVersion()}")
 
             packageVersion = (project.version as String).split("-")[0]
             modules(
@@ -133,7 +133,7 @@ compose.desktop {
             }
 
             macOS {
-                iconFile.set(iconsRoot.resolve("launcher_icons/linux.png"))
+                iconFile.set(iconsRoot.resolve("launcher_icons/macos.icns"))
             }
         }
     }
