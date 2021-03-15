@@ -46,6 +46,8 @@ class AdbRepo @Inject constructor(
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL = "platform-tools/AdbWinApi.dll"
         private const val ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL = "platform-tools/AdbWinUsbApi.dll"
 
+        private val ADB_ROOT_DIR = System.getProperty("user.home")
+
         // platform-tools url map
         private val pToolsMap by lazy {
             mapOf(
@@ -220,7 +222,8 @@ class AdbRepo @Inject constructor(
 
     private val adbFile by lazy {
         // only the filename (platform-tools/'adb/adb.exe')
-        File(adbZipEntryName.split("/").last())
+        val fileName = adbZipEntryName.split("/").last()
+        File("${ADB_ROOT_DIR}${File.separator}$fileName")
     }
 
     @ExperimentalPathApi
@@ -286,8 +289,8 @@ class AdbRepo @Inject constructor(
                 if (isWindows) {
                     // If windows, we need dll files also.
                     if (zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_DLL || zipEntry.name == ADB_ZIP_ENTRY_NAME_WINDOWS_API_USB_DLL) {
-                        println("It's windows ${zipEntry.name}")
-                        val dllFile = File(zipEntry.name.split("/").last())
+                        val dllFileName = zipEntry.name.split("/").last()
+                        val dllFile = File("$ADB_ROOT_DIR${File.separator}$dllFileName")
 
                         with(dllFile) {
                             FileOutputStream(this).use {
