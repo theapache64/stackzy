@@ -108,11 +108,16 @@ compose.desktop {
         mainClass = "com.theapache64.stackzy.AppKt"
         nativeDistributions {
             packageName = "Stackzy"
+            packageVersion = (project.version as String).split("-")[0]
+            description = "An application to identify libraries used inside an android application"
+            copyright = "© 2021 theapache64. All rights reserved."
+            vendor = "theapache64"
 
             // Passing gradle variables to program
             args += listOf("--app-name $packageName --version ${getVersion()}")
 
-            packageVersion = (project.version as String).split("-")[0]
+
+
             modules(
                 "java.logging",
                 "java.naming",
