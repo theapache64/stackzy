@@ -57,7 +57,7 @@ object CommandExecutor {
         }
 
         if (!isSkipException) {
-            if (error.isNotBlank()) {
+            if (error.isNotBlank() && result.isEmpty()) { // throw error only if result is empty
                 // has error
                 throw IOException(error.toString())
             }
