@@ -223,7 +223,13 @@ class AdbRepo @Inject constructor(
     private val adbFile by lazy {
         // only the filename (platform-tools/'adb/adb.exe')
         val fileName = adbZipEntryName.split("/").last()
-        File("${ADB_ROOT_DIR}${File.separator}$fileName")
+        File("${ADB_ROOT_DIR}${File.separator}$fileName").also {
+            it.parentFile.let { parentDir ->
+                if(parentDir.exists().not()){
+                    parentDir.mkdirs()
+                }
+            }
+        }
     }
 
     @ExperimentalPathApi

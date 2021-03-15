@@ -43,7 +43,8 @@ class NetworkModule {
             )
             .addSheet(
                 sheetName = TABLE_CONFIG,
-                "should_consider_result_cache"
+                "should_consider_result_cache",
+                "current_lib_version_code"
             )
             .addForm(
                 TABLE_UNTRACKED_LIBS,
@@ -56,6 +57,7 @@ class NetworkModule {
                 "package_name",
                 "version_name",
                 "version_code",
+                "stackzy_lib_version",
                 "platform",
                 "apk_size_in_mb",
                 "permissions",

@@ -15,7 +15,11 @@ class ResultRepo @Inject constructor(
     private val moshi: Moshi
 ) {
     fun add(result: Result) = apiInterface.addResult(result)
-    fun findResult(packageName: String, versionCode: Int) = apiInterface.getResult(packageName, versionCode)
+    fun findResult(
+        packageName: String,
+        versionCode: Int,
+        libVersionCode: Int
+    ) = apiInterface.getResult(packageName, versionCode, libVersionCode)
 
     private val gradleInfoAdapter by lazy {
         GradleInfoJsonAdapter(moshi)

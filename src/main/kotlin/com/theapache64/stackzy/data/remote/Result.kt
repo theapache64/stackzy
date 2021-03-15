@@ -23,4 +23,6 @@ data class Result(
     val permissions: String, // comma-sep
     @Json(name = "gradle_info_json")
     val gradleInfoJson: String,
+    @Json(name = "stackzy_lib_version")
+    val stackzyLibVersion: Int,
 )

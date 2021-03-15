@@ -7,4 +7,6 @@ import com.squareup.moshi.JsonClass
 data class Config(
     @Json(name = "should_consider_result_cache")
     val shouldConsiderResultCache: Boolean,
+    @Json(name = "latest_stackzy_lib_version")
+    val latestStackzyLibVersion: Int,
 )

@@ -79,7 +79,11 @@ class AppDetailViewModel @Inject constructor(
         decompileJob = GlobalScope.launch {
             if (androidApp.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
-                resultRepo.findResult(androidApp.appPackage.name, androidApp.versionCode!!)
+                resultRepo.findResult(
+                    androidApp.appPackage.name,
+                    androidApp.versionCode!!,
+                    config.latestStackzyLibVersion
+                )
                     .collect {
                         when (it) {
                             is Resource.Loading -> {
@@ -279,7 +283,8 @@ class AppDetailViewModel @Inject constructor(
                 platform = report.platform::class.simpleName!!,
                 apkSizeInMb = report.apkSizeInMb,
                 permissions = report.permissions.joinToString(","),
-                gradleInfoJson = resultRepo.jsonify(report.gradleInfo)
+                gradleInfoJson = resultRepo.jsonify(report.gradleInfo),
+                stackzyLibVersion = config.latestStackzyLibVersion,
             )
 
             // Add result to remove

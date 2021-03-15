@@ -34,8 +34,9 @@ class App(
 /**
  * The magic begins here
  */
-fun main(args: Array<String>) {
+fun main(_args: Array<String>) {
     // Parsing application arguments
+    val args = _args.first().split(" ")
     val appArgs = AppArgs(
         appName = args[1],
         version = args[3]

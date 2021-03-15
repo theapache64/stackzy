@@ -35,11 +35,12 @@ interface ApiInterface {
     @POST(NetworkModule.TABLE_RESULTS)
     fun addResult(@Body result: Result): Flow<Resource<Result>>
 
-    @Read("SELECT * WHERE package_name = :package_name AND version_code = :version_code LIMIT 1")
+    @Read("SELECT * WHERE package_name = :package_name AND version_code = :version_code AND stackzy_lib_version = :stackzy_lib_version LIMIT 1")
     @GET(NetworkModule.TABLE_RESULTS)
     fun getResult(
         @Query("package_name") packageName: String,
-        @Query("version_code") versionCode: Int
+        @Query("version_code") versionCode: Int,
+        @Query("stackzy_lib_version") stackzyLibVersion: Int,
     ): Flow<Resource<Result>>
 
 }
