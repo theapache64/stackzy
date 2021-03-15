@@ -1,4 +1,4 @@
-# stackzy
+# 🚀 stackzy
 
 ![](extras/libs.png)
 
@@ -15,13 +15,6 @@
 
 - [Watch](https://www.youtube.com/watch?v=XtM-sRLxLLc&ab_channel=theapache64) demo
 
-### 🚀 Highlights
-
-> Stackzfy = Decompile and analyse
-
-- Stackzfy any apps available in Play Store
-- Stackzfy any apps available in your device (including system apps)
-
 
 ### 📽️ Usage
 
@@ -37,7 +30,7 @@
 
 ## 🏋 Dependency
 
-- Java 8 (JRE 1.8)
+- Java 8 or above
 
 ## 🏗️️ Built with
 
@@ -109,9 +102,9 @@ Give a ⭐️ if this project helped you!
 
 ## ☑️ TODO
 
-- [ ] Release the first public version with basic features
+- [x] Release the first public version with basic features
 - [ ] Theme switching
-- [ ] Playstore integration (Download APK from playstore)
+- [x] Playstore integration (Download APK from playstore)
 - [ ] Support more libraries
 
 ## 📝 License
