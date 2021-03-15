@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.theapache64"
-version = "1.0.0-beta03"
+version = "1.0.0-beta03" // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
@@ -112,9 +112,6 @@ compose.desktop {
             description = "An application to identify libraries used inside an android application"
             copyright = "© 2021 theapache64. All rights reserved."
             vendor = "theapache64"
-
-            // Passing gradle variables to program
-            args += listOf("--app-name $packageName --version ${getVersion()}")
 
             modules(
                 "java.logging",
