@@ -110,14 +110,7 @@ compose.desktop {
             packageName = "Stackzy"
 
             // Passing gradle variables to program
-            args(
-                """
-                {
-                   "app_name":"$packageName",
-                   "version":"${getVersion()}"
-                }
-            """.trimIndent()
-            )
+            args("--app-name $packageName --version ${getVersion()}")
 
             packageVersion = (project.version as String).split("-")[0]
             modules(

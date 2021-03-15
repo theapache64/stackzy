@@ -1,9 +1,7 @@
 package com.theapache64.stackzy
 
-import com.squareup.moshi.Moshi
 import com.theapache64.cyclone.core.Application
 import com.theapache64.stackzy.data.local.AppArgs
-import com.theapache64.stackzy.data.local.AppArgsJsonAdapter
 import com.theapache64.stackzy.ui.feature.MainActivity
 import com.toxicbakery.logging.Arbor
 import com.toxicbakery.logging.Seedling
@@ -38,8 +36,10 @@ class App(
  */
 fun main(args: Array<String>) {
     // Parsing application arguments
-    val argsJson = args.first()
-    val appArgs = AppArgsJsonAdapter(Moshi.Builder().build()).fromJson(argsJson)!!
+    val appArgs = AppArgs(
+        appName = args[1],
+        version = args[3]
+    )
 
     // Passing args
     App(appArgs).onCreate()
