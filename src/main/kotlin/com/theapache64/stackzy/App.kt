@@ -34,15 +34,11 @@ class App(
 /**
  * The magic begins here
  */
-fun main(_args: Array<String>) {
+fun main(args: Array<String>) {
     // Parsing application arguments
-    /*var args = _args.toList()
-    if(OsCheck.operatingSystemType== OSType.Windows){
-        args = args[0].split(" ")
-    }*/
     val appArgs = AppArgs(
-        appName = "Stackzy",
-        version = "v1.0.0-beta04"
+        appName = args[1],
+        version = args[3]
     )
 
     // Passing args
