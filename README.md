@@ -28,6 +28,8 @@
 | Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| 🔬 WIP | 
 | MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.dmg&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| 🔬 WIP | 
 
+*Need help to stablize Windows and MacOS version. PRs are highly appreciated*
+
 ## 🏋 Dependency
 
 - Java 8 or above
