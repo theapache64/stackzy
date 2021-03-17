@@ -13,8 +13,7 @@ class App(
 
     companion object {
         // GLOBAL CONFIGS
-        const val CUSTOM_TOOLBAR =
-            true // TODO: Should be managed according to platform. As of now, in Windows the window is not resizable.
+        val CUSTOM_TOOLBAR = false
         lateinit var appArgs: AppArgs
     }
 
