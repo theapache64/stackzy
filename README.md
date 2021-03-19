@@ -51,6 +51,13 @@
 | 💻 ADB            | [Adam](https://malinskiy.github.io/adam/)                            |
 | 🧪 Testing            | [DaggerMock](https://github.com/fabioCollini/DaggerMock) + [JUnit](https://github.com/junit-team/junit5)    |
 
+## 😂 Fun Facts
+
+- Stackzy uses [a google sheet](https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/edit#gid=284770392) as the backend, thanks to [Retrosheet](https://github.com/theapache64/retrosheet)
+
+- The initial name of Stackzy was `Which Stack`
+- Stackzy uses a gloabl cache mechanism which works as centralized caching system. Means, if someone decompiled `WhatsApp`, the next time you try to find the stack, it won't be decompiled and the result will be served from the cache.
+
 ## 🙇 Credits
 
 - Special thanks to [@mikepenz](https://github.com/mikepenz) for contributing 200+ libraries from his
