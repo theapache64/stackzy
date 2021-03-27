@@ -118,7 +118,6 @@ jobs:
           name: distributable-${{ matrix.os }}
           if-no-files-found: ignore
           path: |
-            build/**/*.dmg
             build/**/*.deb
             build/**/*.msi
             build/compose/jars/*.jar
@@ -128,7 +127,6 @@ jobs:
         with:
           prerelease: ${{ contains(github.event.inputs.version, '-rc') || contains(github.event.inputs.version, '-b') || contains(github.event.inputs.version, '-a') }}
           files: |
-            build/**/*.dmg
             build/**/*.deb
             build/**/*.msi
             build/compose/jars/*.jar
