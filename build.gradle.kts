@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.theapache64"
-version = "1.0.0-beta04" // TODO : Change in App.kt also
+version = "1.0.0-beta05" // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
@@ -102,6 +102,17 @@ tasks.withType<KotlinCompile>() {
     kotlinOptions.freeCompilerArgs += "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi"
     kotlinOptions.freeCompilerArgs += "-Xuse-experimental=kotlin.io.path.ExperimentalPathApi"
 }
+
+tasks.withType<org.gradle.jvm.tasks.Jar>() {
+    exclude("META-INF/BC1024KE.RSA", "META-INF/BC1024KE.SF", "META-INF/BC1024KE.DSA")
+    exclude("META-INF/BC2048KE.RSA", "META-INF/BC2048KE.SF", "META-INF/BC2048KE.DSA")
+}
+
+tasks.jar {
+    exclude("META-INF/BC1024KE.RSA", "META-INF/BC1024KE.SF", "META-INF/BC1024KE.DSA")
+    exclude("META-INF/BC2048KE.RSA", "META-INF/BC2048KE.SF", "META-INF/BC2048KE.DSA")
+}
+
 
 compose.desktop {
     application {
