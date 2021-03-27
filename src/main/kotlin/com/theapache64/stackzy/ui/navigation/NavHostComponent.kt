@@ -20,6 +20,7 @@ import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 import com.theapache64.stackzy.util.ApkSource
+import com.toxicbakery.logging.Arbor
 import java.awt.Desktop
 import java.net.URI
 
@@ -142,7 +143,7 @@ class NavHostComponent(
      * Invoked when play store selected from the pathway screen
      */
     private fun onPathwayPlayStoreSelected(account: Account) {
-        println("Showing select app")
+        Arbor.d("Showing select app")
         router.push(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
@@ -197,7 +198,7 @@ class NavHostComponent(
      * Invoked when back arrow pressed
      */
     private fun onBackClicked() {
-        println("Back clicked popping")
+        Arbor.d("Back clicked popping")
         router.pop()
     }
 

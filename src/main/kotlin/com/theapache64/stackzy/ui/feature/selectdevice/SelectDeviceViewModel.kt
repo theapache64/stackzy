@@ -46,7 +46,7 @@ class SelectDeviceViewModel @Inject constructor(
      * To stop watching connected devices
      */
     fun stopWatchConnectedDevices() {
-        println("Removing watcher")
+        Arbor.d("Removing watcher")
         adbRepo.cancelWatchConnectedDevice()
     }
 

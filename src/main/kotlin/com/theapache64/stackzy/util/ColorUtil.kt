@@ -14,10 +14,10 @@ object ColorUtil {
         val newGreen = min(1f, (randomColor.green + (randomColor.green + 1 * BRIGHT_FRACTION)))
         val newBlue = min(1f, (randomColor.blue + (randomColor.blue + 1 * BRIGHT_FRACTION)))
 
-        /*println("Red : ${randomColor.red} -> $newRed")
-        println("Blue : ${randomColor.blue} -> $newBlue")
-        println("Green : ${randomColor.green} -> $newGreen")
-        println("----------------------------------")*/
+        /*Arbor.d("Red : ${randomColor.red} -> $newRed")
+        Arbor.d("Blue : ${randomColor.blue} -> $newBlue")
+        Arbor.d("Green : ${randomColor.green} -> $newGreen")
+        Arbor.d("----------------------------------")*/
         return Color(
             red = newRed,
             green = newGreen,

@@ -139,6 +139,7 @@ compose.desktop {
 
             windows {
                 iconFile.set(iconsRoot.resolve("launcher_icons/windows.ico"))
+                // Wondering what the heck is this? See : https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
                 upgradeUuid = "31575EDF-D0D5-4CEF-A4D2-7562083D6D88"
                 menuGroup = packageName
                 perUserInstall = true

@@ -14,6 +14,7 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.util.OSType
 import com.theapache64.stackzy.util.OsCheck
+import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +36,7 @@ class AdbRepo @Inject constructor(
 ) {
 
     init {
-        println("Creating new adbRepo instance")
+        Arbor.d("Creating new adbRepo instance")
     }
 
     companion object {
@@ -139,7 +140,7 @@ class AdbRepo @Inject constructor(
             .map {
                 AndroidApp(it)
             }.apply {
-                println("Total apps : $size")
+                Arbor.d("Total apps : $size")
             }
     }
 
@@ -316,7 +317,7 @@ class AdbRepo @Inject constructor(
 
         if (isAdbExtracted) {
             adbFile.setExecutable(true)
-            println("Adb created '${adbFile.absolutePath}'")
+            Arbor.d("Adb created '${adbFile.absolutePath}'")
         } else {
             throw IOException("Failed to find $adbZipEntryName from ${pToolZipFile.absolutePath}")
         }

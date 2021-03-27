@@ -6,6 +6,7 @@ import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.test.*
 import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.collect
 import org.junit.Rule
@@ -87,7 +88,7 @@ class ApkAnalyzerRepoTest {
     fun `Analysis Report - Native`() = runBlockingUnitTest {
         // First, lets decompile a native kotlin apk file
         loadLibs { libs ->
-            println("Starting test... ;)")
+            Arbor.d("Starting test... ;)")
             val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(nativeApkFile)
             val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
@@ -219,7 +220,7 @@ class ApkAnalyzerRepoTest {
         librariesRepo.getRemoteLibraries().collect {
             when (it) {
                 is Resource.Loading -> {
-                    println("Loading libs")
+                    Arbor.d("Loading libs")
                 }
                 is Resource.Success -> {
                     onLibsLoaded(it.data)

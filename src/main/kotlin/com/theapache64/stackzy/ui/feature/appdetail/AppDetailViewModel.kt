@@ -13,6 +13,7 @@ import com.theapache64.stackzy.data.repo.*
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -96,7 +97,7 @@ class AppDetailViewModel @Inject constructor(
                                 // Not found
                                 if (it.errorData == "No data found") {
                                     // Its a new app, no one didn't decompiled it before
-                                    println("Decompiling it from scratch...")
+                                    Arbor.d("Decompiling it from scratch...")
                                     startDecompileFromScratch()
                                 } else {
                                     // Some network error
@@ -358,12 +359,12 @@ class AppDetailViewModel @Inject constructor(
                                                     "Adding ${ut.packageNames} to untracked libs... ${percentage.roundToInt()}%"
                                             }
                                             is Resource.Success -> {
-                                                println("Done!! -> ${ut.packageNames}")
+                                                Arbor.d("Done!! -> ${ut.packageNames}")
                                                 syncedLibs++
                                             }
 
                                             is Resource.Error -> {
-                                                println("Failed to sync: ${it.errorData}")
+                                                Arbor.d("Failed to sync: ${it.errorData}")
                                             }
                                         }
                                     }

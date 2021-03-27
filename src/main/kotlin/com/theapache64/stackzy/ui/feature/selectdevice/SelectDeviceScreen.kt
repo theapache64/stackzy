@@ -12,6 +12,7 @@ import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.util.R
+import com.toxicbakery.logging.Arbor
 
 /**
  * To select a device from connected devices
@@ -25,11 +26,11 @@ fun SelectDeviceScreen(
     val scope = rememberCoroutineScope()
 
     DisposableEffect(scope) {
-        println("Init scope")
+        Arbor.d("Init scope")
         selectDeviceViewModel.init(scope)
         selectDeviceViewModel.watchConnectedDevices()
         onDispose {
-            println("Dispose scope")
+            Arbor.d("Dispose scope")
             selectDeviceViewModel.stopWatchConnectedDevices()
         }
     }

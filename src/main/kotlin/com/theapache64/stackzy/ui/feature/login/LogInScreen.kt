@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.ui.common.CustomScaffold
@@ -70,7 +72,8 @@ fun LogInScreen(
                         isPasswordError = isPasswordError,
                         onUsernameChanged = viewModel::onUsernameChanged,
                         onPasswordChanged = viewModel::onPasswordChanged,
-                        onLogInClicked = viewModel::onLogInClicked
+                        onLogInClicked = viewModel::onLogInClicked,
+                        onCreateAccountClicked = viewModel::onCreateAccountClicked
                     )
 
                     if (logInResponse is Resource.Error) {
@@ -93,6 +96,7 @@ private fun Form(
     onUsernameChanged: (username: String) -> Unit,
     onPasswordChanged: (password: String) -> Unit,
     onLogInClicked: () -> Unit,
+    onCreateAccountClicked: () -> Unit
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
 
@@ -201,6 +205,21 @@ private fun Form(
             ) {
                 Text(text = "LOGIN")
             }
+
+            // Create account button
+            Text(
+                text = "CREATE ACCOUNT",
+                style = MaterialTheme.typography.button,
+                modifier = Modifier
+                    .padding(top = 10.dp) // top margin
+                    .clickable {
+                        onCreateAccountClicked()
+                    }
+                    .padding(15.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
+            )
 
             DisposableEffect(Unit) {
                 usernameRef.requestFocus()

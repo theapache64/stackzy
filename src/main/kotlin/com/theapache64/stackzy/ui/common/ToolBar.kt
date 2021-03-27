@@ -62,10 +62,10 @@ fun ToolBar(
             // Commenting due to https://github.com/JetBrains/compose-jb/issues/357. Feel free to uncomment once fixed.
             .combinedClickable(
                 onClick = {
-                    println("Clicked!")
+                    Arbor.d("Clicked!")
                 },
                 onDoubleClick = {
-                    println("Double clicked")
+                    Arbor.d("Double clicked")
                 }
             )*/
 

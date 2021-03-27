@@ -25,7 +25,7 @@ class AuthRepoTest {
         authRepo.logIn(username, password).collect {
             when (it) {
                 is Resource.Loading -> {
-                    println("logging in...")
+                    Arbor.d("logging in...")
                 }
                 is Resource.Success -> {
                     it.data.username.should.equal(username)
@@ -43,7 +43,7 @@ class AuthRepoTest {
         authRepo.logIn("", "").collect {
             when (it) {
                 is Resource.Loading -> {
-                    println("logging in...")
+                    Arbor.d("logging in...")
                 }
                 is Resource.Success -> {
                     assert(false)

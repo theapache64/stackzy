@@ -16,6 +16,7 @@ import com.github.theapache64.namethatcolor.manager.ColorNameFinder
 import com.github.theapache64.namethatcolor.model.HexColor
 import com.theapache64.stackzy.ui.common.AlphabetCircle
 import com.theapache64.stackzy.util.ColorUtil
+import com.toxicbakery.logging.Arbor
 import java.util.*
 
 private val addedNameColorNames = mutableSetOf<String>()
@@ -56,7 +57,7 @@ fun main() {
                         val colorName = ColorNameFinder.findColor(HexColor(color.first)).second.name
                         if (!addedNameColorNames.contains(colorName)) {
                             addedNameColorNames.add(colorName)
-                            println(
+                            Arbor.d(
                                 "Color(0xff${color.first.replace("#", "")}), // $colorName"
                             )
                         }

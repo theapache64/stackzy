@@ -32,10 +32,10 @@ class PlayStoreRepoTest {
         val password = System.getenv("PLAY_API_GOOGLE_PASSWORD")!!
 
         val account = Play.login(username, password)
-        println("Logging in...")
+        Arbor.d("Logging in...")
         delay(3000) // delay to sync account
         api = Play.getApi(account)
-        println("Setting API : $api")
+        Arbor.d("Setting API : $api")
     }
 
     @Test

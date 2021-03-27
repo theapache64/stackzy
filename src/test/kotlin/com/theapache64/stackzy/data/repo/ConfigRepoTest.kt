@@ -22,7 +22,7 @@ class ConfigRepoTest {
         configRepo.getRemoteConfig().collect {
             when (it) {
                 is Resource.Loading -> {
-                    println("Loading config")
+                    Arbor.d("Loading config")
                 }
                 is Resource.Success -> {
                     val remoteConfig = it.data

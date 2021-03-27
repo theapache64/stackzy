@@ -5,6 +5,7 @@ import com.theapache64.stackzy.data.remote.Result
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.collect
 import org.junit.Rule
@@ -41,7 +42,7 @@ class ResultRepoTest {
         resultRepo.add(result).collect {
             when (it) {
                 is Resource.Loading -> {
-                    println("Adding...")
+                    Arbor.d("Adding...")
                 }
                 is Resource.Success -> {
                     it.data.should.equal(result)
@@ -62,7 +63,7 @@ class ResultRepoTest {
             .collect {
                 when (it) {
                     is Resource.Loading -> {
-                        println("Finding...")
+                        Arbor.d("Finding...")
                     }
 
                     is Resource.Success -> {
@@ -85,7 +86,7 @@ class ResultRepoTest {
             .collect {
                 when (it) {
                     is Resource.Loading -> {
-                        println("Finding...")
+                        Arbor.d("Finding...")
                     }
 
                     is Resource.Success -> {
@@ -95,7 +96,7 @@ class ResultRepoTest {
                     }
 
                     is Resource.Error -> {
-                        println(it.errorData)
+                        Arbor.d(it.errorData)
                         assert(true)
                     }
                 }

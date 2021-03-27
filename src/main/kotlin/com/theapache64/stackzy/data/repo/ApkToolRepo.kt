@@ -2,6 +2,7 @@ package com.theapache64.stackzy.data.repo
 
 import com.theapache64.stackzy.di.ApkToolJarFile
 import com.theapache64.stackzy.util.CommandExecutor
+import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -20,7 +21,7 @@ class ApkToolRepo @Inject constructor(
 
         val command =
             "java -jar \"${apkToolJarFile.absolutePath}\" d \"${destinationFile.absolutePath}\" -o \"${targetDir.absolutePath}\" -f"
-        println("Decompiling : \n$command && code-insiders '${targetDir.absolutePath}'")
+        Arbor.d("Decompiling : \n$command && code-insiders '${targetDir.absolutePath}'")
         CommandExecutor.executeCommand(command = command, isSkipException = false, isLivePrint = true)
         targetDir
     }

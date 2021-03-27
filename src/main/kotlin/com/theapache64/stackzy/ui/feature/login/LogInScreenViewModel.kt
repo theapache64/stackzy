@@ -9,11 +9,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.awt.Desktop
+import java.net.URI
 import javax.inject.Inject
 
 class LogInScreenViewModel @Inject constructor(
     private val authRepo: AuthRepo
 ) {
+
+    companion object {
+        const val URL_GOOGLE_CREATE_ACCOUNT = "https://accounts.google.com/Signup"
+    }
 
     private lateinit var viewModelScope: CoroutineScope
 
@@ -78,5 +84,9 @@ class LogInScreenViewModel @Inject constructor(
 
     private fun isValidUsername(newUsername: String) = newUsername.isEmpty()
     private fun isValidPassword(newPassword: String) = newPassword.isEmpty()
+
+    fun onCreateAccountClicked() {
+        Desktop.getDesktop().browse(URI(URL_GOOGLE_CREATE_ACCOUNT))
+    }
 
 }

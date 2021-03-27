@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.util
 
+import com.toxicbakery.logging.Arbor
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -42,7 +43,7 @@ object CommandExecutor {
         val result = mutableListOf<String>()
         stdInput.forEachLine { line ->
             if (isLivePrint) {
-                println(line)
+                Arbor.d(line)
             }
             result.add(line)
         }
@@ -51,7 +52,7 @@ object CommandExecutor {
         val error = StringBuilder()
         stdError.forEachLine { line ->
             if (isLivePrint) {
-                println(line)
+                Arbor.d(line)
             }
             error.append(line).append("\n")
         }
