@@ -36,7 +36,8 @@ class ResultRepoTest {
             platform = "NativeKotlin",
             apkSizeInMb = 5.6f,
             gradleInfoJson = "{}",
-            permissions = "android.permission.INTERNET"
+            permissions = "android.permission.INTERNET",
+            stackzyLibVersion = 1
         )
 
         resultRepo.add(result).collect {
@@ -59,7 +60,11 @@ class ResultRepoTest {
     @Test
     fun `Find result with valid package name`() = runBlockingUnitTest {
         resultRepo
-            .findResult(TEST_PACKAGE_NAME, 123456)
+            .findResult(
+                packageName = TEST_PACKAGE_NAME,
+                versionCode = 123456,
+                libVersionCode = 1
+            )
             .collect {
                 when (it) {
                     is Resource.Loading -> {
@@ -82,7 +87,11 @@ class ResultRepoTest {
     @Test
     fun `Find result with invalid package name`() = runBlockingUnitTest {
         resultRepo
-            .findResult("com.theapache64.this.app.does.not.exist", 111111)
+            .findResult(
+                packageName = "com.theapache64.this.app.does.not.exist",
+                versionCode = 11111,
+                libVersionCode = 1
+            )
             .collect {
                 when (it) {
                     is Resource.Loading -> {

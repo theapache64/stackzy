@@ -5,6 +5,7 @@ import com.github.theapache64.gpa.api.Play
 import com.theapache64.expekt.should
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
+import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.delay
 import org.junit.Rule
