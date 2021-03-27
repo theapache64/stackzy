@@ -16,6 +16,7 @@ class ResultRepoTest {
 
     companion object {
         private const val TEST_PACKAGE_NAME = "com.theapache64.test.app"
+        private const val TEST_VERSION_CODE = 11111
     }
 
     @get:Rule
@@ -31,7 +32,7 @@ class ResultRepoTest {
             appName = "Test App",
             packageName = TEST_PACKAGE_NAME,
             libPackages = "okhttp3, retrofit2",
-            versionCode = 1234,
+            versionCode = TEST_VERSION_CODE,
             versionName = "v1.2.3-alpha04",
             platform = "NativeKotlin",
             apkSizeInMb = 5.6f,
@@ -62,7 +63,7 @@ class ResultRepoTest {
         resultRepo
             .findResult(
                 packageName = TEST_PACKAGE_NAME,
-                versionCode = 123456,
+                versionCode = TEST_VERSION_CODE,
                 libVersionCode = 1
             )
             .collect {

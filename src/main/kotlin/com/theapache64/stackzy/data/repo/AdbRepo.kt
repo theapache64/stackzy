@@ -226,7 +226,7 @@ class AdbRepo @Inject constructor(
         val fileName = adbZipEntryName.split("/").last()
         File("${ADB_ROOT_DIR}${File.separator}$fileName").also {
             it.parentFile.let { parentDir ->
-                if(parentDir.exists().not()){
+                if (parentDir.exists().not()) {
                     parentDir.mkdirs()
                 }
             }
@@ -287,6 +287,7 @@ class AdbRepo @Inject constructor(
             while (zipEntry != null) {
                 if (zipEntry.name == adbZipEntryName) {
                     // Found adb
+                    adbFile.delete()
                     FileOutputStream(adbFile).use {
                         zis.copyTo(it)
                     }
