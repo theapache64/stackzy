@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -14,8 +15,8 @@ import javax.inject.Inject
 class AppDetailScreenComponent(
     appComponent: AppComponent,
     componentContext: ComponentContext,
-    selectedApp: AndroidApp,
-    apkSource: ApkSource<AndroidDevice, Account>,
+    private val selectedApp: AndroidApp,
+    private val apkSource: ApkSource<AndroidDevice, Account>,
     val onLibrarySelected: (Library) -> Unit,
     private val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
@@ -26,15 +27,21 @@ class AppDetailScreenComponent(
     init {
 
         appComponent.inject(this)
-
-        appDetailViewModel.init(
-            apkSource = apkSource,
-            androidApp = selectedApp
-        )
     }
 
     @Composable
     override fun render() {
+
+
+        appDetailViewModel.init(
+            scope = rememberCoroutineScope(),
+            apkSource = apkSource,
+            androidApp = selectedApp,
+        )
+
+        appDetailViewModel.startDecompile()
+
+
         AppDetailScreen(
             viewModel = appDetailViewModel,
             onLibrarySelected = onLibrarySelected,

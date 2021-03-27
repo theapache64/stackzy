@@ -8,7 +8,7 @@ import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.PlayStoreRepo
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.calladapter.flow.Resource
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +21,7 @@ class SelectAppViewModel @Inject constructor(
     private val playStoreRepo: PlayStoreRepo
 ) {
 
+    private lateinit var viewModelScope: CoroutineScope
     private var searchJob: Job? = null
 
     /**
@@ -42,17 +43,23 @@ class SelectAppViewModel @Inject constructor(
     private val _apps = MutableStateFlow<Resource<List<AndroidApp>>?>(null)
     val apps: StateFlow<Resource<List<AndroidApp>>?> = _apps
 
-    fun init(apkSource: ApkSource<AndroidDevice, Account>) {
+    fun init(
+        scope: CoroutineScope,
+        apkSource: ApkSource<AndroidDevice, Account>
+    ) {
+        this.viewModelScope = scope
         this.apkSource = apkSource
+    }
 
+    fun loadApps() {
         // Updating state
         _apps.value = Resource.Loading("Loading trending apps...")
 
         when (apkSource) {
             is ApkSource.Adb -> {
                 // ### ADB ###
-                this.selectedDevice = apkSource.value
-                GlobalScope.launch {
+                this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
+                viewModelScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device).also {
                         _apps.value = Resource.Success(null, it)
                     }
@@ -61,8 +68,8 @@ class SelectAppViewModel @Inject constructor(
             is ApkSource.PlayStore -> {
 
                 // ### PLAY STORE ###
-                GlobalScope.launch {
-                    val api = Play.getApi(apkSource.value)
+                viewModelScope.launch {
+                    val api = Play.getApi((apkSource as ApkSource.PlayStore<Account>).value)
                     val apps = playStoreRepo.search(" ", api)
                     _apps.value = Resource.Success(null, apps)
                 }
@@ -87,7 +94,7 @@ class SelectAppViewModel @Inject constructor(
             is ApkSource.PlayStore -> {
                 // Play Store
                 searchJob?.cancel()
-                searchJob = GlobalScope.launch {
+                searchJob = viewModelScope.launch {
                     delay(500)
                     val account = (apkSource as ApkSource.PlayStore<Account>).value
                     val api = Play.getApi(account)
@@ -116,7 +123,7 @@ class SelectAppViewModel @Inject constructor(
     fun onOpenMarketClicked() {
         when (apkSource) {
             is ApkSource.Adb -> {
-                GlobalScope.launch {
+                viewModelScope.launch {
                     val androidDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
                     adbRepo.launchMarket(androidDevice, searchKeyword.value)
                 }

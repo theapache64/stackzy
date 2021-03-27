@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.login
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.di.AppComponent
@@ -23,6 +24,7 @@ class LogInScreenComponent(
 
     @Composable
     override fun render() {
+        viewModel.init(rememberCoroutineScope())
         LogInScreen(
             viewModel = viewModel,
             onLoggedIn = onLoggedIn,

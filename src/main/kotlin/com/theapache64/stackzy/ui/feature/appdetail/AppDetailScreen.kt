@@ -41,10 +41,7 @@ fun AppDetailScreen(
     CustomScaffold(
         title = title,
         subTitle = report?.platform?.name,
-        onBackClicked = {
-            viewModel.onBackPressed() // to cancel on going works
-            onBackClicked()
-        },
+        onBackClicked = onBackClicked,
         topRightSlot = {
             Row(
                 verticalAlignment = Alignment.CenterVertically

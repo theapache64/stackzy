@@ -5,7 +5,7 @@ import com.theapache64.stackzy.data.repo.ConfigRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -22,6 +22,7 @@ class SplashViewModel @Inject constructor(
     private val configRepo: ConfigRepo
 ) {
 
+    private lateinit var viewModelScope: CoroutineScope
     private val _isSyncFinished = MutableStateFlow(false)
     val isSyncFinished: StateFlow<Boolean> = _isSyncFinished
 
@@ -31,15 +32,16 @@ class SplashViewModel @Inject constructor(
     private val _syncFailedMsg = MutableStateFlow<String?>(null)
     val syncFailedMsg: StateFlow<String?> = _syncFailedMsg
 
-    init {
-        syncData()
+
+    fun init(scope: CoroutineScope) {
+        this.viewModelScope = scope
     }
 
     /**
      * To sync remote data with local
      */
-    private fun syncData() {
-        GlobalScope.launch {
+    fun syncData() {
+        viewModelScope.launch {
             try {
                 syncAndCacheLibraries { // first cache libs
                     syncAndStoreConfig { // then sync config
@@ -132,4 +134,5 @@ class SplashViewModel @Inject constructor(
     fun onRetryClicked() {
         syncData()
     }
+
 }

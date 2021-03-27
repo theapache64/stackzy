@@ -13,9 +13,7 @@ import com.theapache64.stackzy.data.repo.*
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 import com.theapache64.stackzy.util.calladapter.flow.Resource
-import com.toxicbakery.logging.Arbor
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -44,11 +42,11 @@ class AppDetailViewModel @Inject constructor(
         )
     }
 
+    private lateinit var viewModelScope: CoroutineScope
     private lateinit var androidApp: AndroidApp
     private lateinit var apkSource: ApkSource<AndroidDevice, Account>
     private var decompiledDir: File? = null
     private lateinit var config: Config
-    private var decompileJob: Job? = null
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
 
@@ -62,21 +60,22 @@ class AppDetailViewModel @Inject constructor(
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
 
     fun init(
+        scope: CoroutineScope,
         apkSource: ApkSource<AndroidDevice, Account>,
         androidApp: AndroidApp,
     ) {
+        this.viewModelScope = scope
         this.config = configRepo.getLocalConfig()!! // shouldn't be null
         this.apkSource = apkSource
         this.androidApp = androidApp
-        startDecompile()
     }
 
     /**
      * To start the decompiling and analysis from given source
      */
-    private fun startDecompile() {
+    fun startDecompile() {
 
-        decompileJob = GlobalScope.launch {
+        viewModelScope.launch {
             if (androidApp.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
                 resultRepo.findResult(
@@ -235,11 +234,6 @@ class AppDetailViewModel @Inject constructor(
         }
     }
 
-    fun onBackPressed() {
-        decompileJob?.cancel()
-        Arbor.d("Cancelled decompile job")
-        decompileJob = null
-    }
 
     private suspend fun onApkPulled(
         androidApp: AndroidApp,
@@ -408,7 +402,7 @@ class AppDetailViewModel @Inject constructor(
                 onCodeIconClicked() // go again
             } else {
                 // We're currently showing cached result, so there won't be any decompiled dir. so let's go decompile
-                decompileJob = GlobalScope.launch {
+                viewModelScope.launch {
                     decompileViaPlayStore(
                         shouldStoreResult = false // Because, we already have the result in `results` table. We are decompiling to show the source only.
                     )

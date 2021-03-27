@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.splash
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
@@ -24,6 +25,10 @@ class SplashScreenComponent(
 
     @Composable
     override fun render() {
+
+        splashViewModel.init(rememberCoroutineScope())
+        splashViewModel.syncData()
+
         SplashScreen(
             splashViewModel = splashViewModel,
             onSyncFinished = onSyncFinished

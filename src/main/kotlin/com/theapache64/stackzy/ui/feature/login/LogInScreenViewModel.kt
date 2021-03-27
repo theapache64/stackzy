@@ -3,7 +3,7 @@ package com.theapache64.stackzy.ui.feature.login
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
 import com.theapache64.stackzy.util.calladapter.flow.Resource
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -14,6 +14,8 @@ import javax.inject.Inject
 class LogInScreenViewModel @Inject constructor(
     private val authRepo: AuthRepo
 ) {
+
+    private lateinit var viewModelScope: CoroutineScope
 
     // Using env vars for debug purpose only.
     private val _username = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_USERNAME") ?: "")
@@ -32,6 +34,10 @@ class LogInScreenViewModel @Inject constructor(
     val logInResponse: StateFlow<Resource<Account>?> = _logInResponse
 
     private var isSubmitted = false
+
+    fun init(scope: CoroutineScope) {
+        this.viewModelScope = scope
+    }
 
     fun onUsernameChanged(newUsername: String) {
         _username.value = newUsername
@@ -57,7 +63,7 @@ class LogInScreenViewModel @Inject constructor(
         _isUsernameError.value = isValidUsername(username)
         _isPasswordError.value = isValidPassword(password)
 
-        GlobalScope.launch {
+        viewModelScope.launch {
             authRepo.logIn(username, password)
                 .onEach {
                     if (it is Resource.Success) {
@@ -72,4 +78,5 @@ class LogInScreenViewModel @Inject constructor(
 
     private fun isValidUsername(newUsername: String) = newUsername.isEmpty()
     private fun isValidPassword(newPassword: String) = newPassword.isEmpty()
+
 }
