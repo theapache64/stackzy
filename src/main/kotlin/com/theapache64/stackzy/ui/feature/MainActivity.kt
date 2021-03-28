@@ -1,7 +1,7 @@
 package com.theapache64.stackzy.ui.feature
 
 import androidx.compose.ui.unit.IntSize
-import com.arkivanov.decompose.extensions.compose.jetbrains.rootComponent
+import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
 import com.theapache64.cyclone.core.Activity
 import com.theapache64.cyclone.core.Intent
 import com.theapache64.stackzy.App
@@ -33,7 +33,7 @@ class MainActivity : Activity() {
                 customToolbar = App.CUSTOM_TOOLBAR
             ) {
                 // Igniting navigation
-                rootComponent(factory = ::NavHostComponent)
+                rememberRootComponent(factory = ::NavHostComponent)
                     .render()
             }
         }

@@ -3,6 +3,7 @@ package com.theapache64.stackzy.ui.navigation
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
+import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.slide
 import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
@@ -57,7 +58,7 @@ class NavHostComponent(
      */
     private val router = router<Config, Component>(
         initialConfiguration = Config.Splash,
-        componentFactory = ::createScreenComponent
+        childFactory = ::createScreenComponent
     )
 
     /**
@@ -111,8 +112,11 @@ class NavHostComponent(
 
     @Composable
     override fun render() {
-        Children(routerState = router.state) { child, _ ->
-            child.render()
+        Children(
+            routerState = router.state,
+            animation = slide()
+        ) { child ->
+            child.instance.render()
         }
     }
 

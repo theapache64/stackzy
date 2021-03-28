@@ -41,7 +41,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.1.8"
+    val decomposeVersion = "0.2.0"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
