@@ -1,0 +1,14 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'com.theapache64'
+version '1.0.0-beta05'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+}

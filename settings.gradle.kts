@@ -7,4 +7,4 @@ pluginManagement {
 
 }
 rootProject.name = "stackzy"
-
+include("backend-cli")
