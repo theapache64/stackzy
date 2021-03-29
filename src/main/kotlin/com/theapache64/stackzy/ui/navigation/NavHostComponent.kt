@@ -151,10 +151,16 @@ class NavHostComponent(
         router.push(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
+    /**
+     * This method will be invoked when login is needed (either login pressed or authentication failed)
+     */
     private fun onLogInNeeded() {
         router.push(Config.LogIn)
     }
 
+    /**
+     * Invoked when login succeeded.
+     */
     private fun onLoggedIn(account: Account) {
         router.pop() // remove login screen from stack
 
