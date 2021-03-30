@@ -65,59 +65,55 @@ fun AppDetailScreen(
             }
         }
     ) {
-        val error = fatalError
-        if (error != null) {
+        @Suppress("LocalVariableName")
+        fatalError?.let { fatalError -> // if fatalError!=null, show error
             FullScreenError(
                 image = imageResource("drawables/ic_error_code.png"),
                 title = R.string.any_error_title_damn_it,
-                message = error
+                message = fatalError
             )
-        } else {
-            val _report = report
-            val message = loadingMessage
-            if (message != null) {
-                LoadingAnimation(message)
-            } else if (_report != null) {
+        } ?: loadingMessage?.let { loadingMessage -> // else if loadingMsg!=null show loading msg
+            LoadingAnimation(loadingMessage)
+        } ?: report?.let { report -> // else if report != null, show report
 
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Column {
-                        // Decompile and analysis done
-                        TabRow(
-                            selectedTabIndex = selectedTabIndex,
-                            backgroundColor = Color.Transparent,
-                            contentColor = MaterialTheme.colors.primary,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            // Tabs
-                            AppDetailViewModel.TABS.forEachIndexed { index, title ->
-                                Tab(
-                                    selected = index == selectedTabIndex,
-                                    onClick = {
-                                        viewModel.onTabClicked(index)
-                                    },
-                                    text = { Text(text = title) }
-                                )
-                            }
-                        }
-
-                        Spacer(
-                            modifier = Modifier.height(10.dp)
-                        )
-
-                        if (selectedTabIndex == 0) {
-                            // Libraries Tab
-                            Libraries(_report, onLibrarySelected)
-                        } else {
-                            // More Info tab
-                            MoreInfo(_report)
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column {
+                    // Decompile and analysis done
+                    TabRow(
+                        selectedTabIndex = selectedTabIndex,
+                        backgroundColor = Color.Transparent,
+                        contentColor = MaterialTheme.colors.primary,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        // Tabs
+                        AppDetailViewModel.TABS.forEachIndexed { index, title ->
+                            Tab(
+                                selected = index == selectedTabIndex,
+                                onClick = {
+                                    viewModel.onTabClicked(index)
+                                },
+                                text = { Text(text = title) }
+                            )
                         }
                     }
-                }
 
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
+                    )
+
+                    if (selectedTabIndex == 0) {
+                        // Libraries Tab
+                        Libraries(report, onLibrarySelected)
+                    } else {
+                        // More Info tab
+                        MoreInfo(report)
+                    }
+                }
             }
+
         }
     }
 }
