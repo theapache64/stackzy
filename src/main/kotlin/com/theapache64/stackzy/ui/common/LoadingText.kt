@@ -32,4 +32,8 @@ fun LoadingText(
         text = message,
         modifier = modifier.alpha(animatedAlpha)
     )
+
+    LaunchedEffect(Unit){
+        enabled = !enabled
+    }
 }

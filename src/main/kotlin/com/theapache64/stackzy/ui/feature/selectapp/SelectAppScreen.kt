@@ -42,6 +42,7 @@ fun SelectAppScreen(
     CustomScaffold(
         title = R.string.select_app_title,
         onBackClicked = onBackClicked,
+        bottomGradient = appsResponse is Resource.Success, // only for success
         topRightSlot = {
 
             // SearchBox

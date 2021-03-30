@@ -1,6 +1,5 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.svgResource
@@ -22,8 +20,6 @@ import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
-
-private val GRADIENT_HEIGHT = 50.dp
 
 @Composable
 fun AppDetailScreen(
@@ -42,6 +38,7 @@ fun AppDetailScreen(
         title = title,
         subTitle = report?.platform?.name,
         onBackClicked = onBackClicked,
+        bottomGradient = report != null, // only for report
         topRightSlot = {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -118,22 +115,6 @@ fun AppDetailScreen(
                             MoreInfo(_report)
                         }
                     }
-
-                    // Bottom gradient
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(GRADIENT_HEIGHT)
-                            .align(Alignment.BottomCenter)
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        com.theapache64.stackzy.ui.theme.R.color.BigStone
-                                    )
-                                )
-                            )
-                    )
                 }
 
             }
@@ -141,13 +122,6 @@ fun AppDetailScreen(
     }
 }
 
-@Composable
-fun GradientMargin() {
-    Spacer(
-        modifier = Modifier
-            .height(GRADIENT_HEIGHT)
-    )
-}
 
 @Composable
 private fun PlayStoreIcon(onClicked: () -> Unit) {
