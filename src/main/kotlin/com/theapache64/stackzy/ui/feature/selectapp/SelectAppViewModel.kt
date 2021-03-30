@@ -94,9 +94,9 @@ class SelectAppViewModel @Inject constructor(
             }
             is ApkSource.PlayStore -> {
                 // Play Store
-                // searchJob?.cancel()
+                searchJob?.cancel()
                 println("initiating search")
-                viewModelScope.launch {
+                searchJob = viewModelScope.launch {
                     println("Waiting for delay")
                     delay(500)
                     println("Delay done.. let's search ${searchKeyword.value}")

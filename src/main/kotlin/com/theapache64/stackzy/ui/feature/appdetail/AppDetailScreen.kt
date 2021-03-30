@@ -38,82 +38,95 @@ fun AppDetailScreen(
         title = title,
         subTitle = report?.platform?.name,
         onBackClicked = onBackClicked,
-        bottomGradient = report != null, // only for report
+        bottomGradient = loadingMessage == null, // hide when loading message shows
         topRightSlot = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            if (loadingMessage == null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                report?.let {
+                    report?.let {
 
-                    // Badge
-                    Badge("APK SIZE: ${it.apkSizeInMb} MB")
+                        // Badge
+                        Badge("APK SIZE: ${it.apkSizeInMb} MB")
 
-                    Spacer(
-                        modifier = Modifier.width(5.dp)
-                    )
+                        Spacer(
+                            modifier = Modifier.width(5.dp)
+                        )
 
-                    // Launch app in play-store icon
-                    PlayStoreIcon {
-                        viewModel.onPlayStoreIconClicked()
-                    }
+                        // Launch app in play-store icon
+                        PlayStoreIcon {
+                            viewModel.onPlayStoreIconClicked()
+                        }
 
-                    CodeIcon {
-                        viewModel.onCodeIconClicked()
+                        CodeIcon {
+                            viewModel.onCodeIconClicked()
+                        }
                     }
                 }
             }
         }
     ) {
-        @Suppress("LocalVariableName")
-        fatalError?.let { fatalError -> // if fatalError!=null, show error
+
+        // Using backing property to prevent double bang usage.
+        @Suppress("UnnecessaryVariable")
+        val roFatalError = fatalError
+        if (roFatalError != null) {
             FullScreenError(
                 image = imageResource("drawables/ic_error_code.png"),
                 title = R.string.any_error_title_damn_it,
-                message = fatalError
+                message = roFatalError
             )
-        } ?: loadingMessage?.let { loadingMessage -> // else if loadingMsg!=null show loading msg
-            LoadingAnimation(loadingMessage)
-        } ?: report?.let { report -> // else if report != null, show report
+        } else {
 
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Column {
-                    // Decompile and analysis done
-                    TabRow(
-                        selectedTabIndex = selectedTabIndex,
-                        backgroundColor = Color.Transparent,
-                        contentColor = MaterialTheme.colors.primary,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        // Tabs
-                        AppDetailViewModel.TABS.forEachIndexed { index, title ->
-                            Tab(
-                                selected = index == selectedTabIndex,
-                                onClick = {
-                                    viewModel.onTabClicked(index)
-                                },
-                                text = { Text(text = title) }
-                            )
+            @Suppress("UnnecessaryVariable")
+            val roReport = report
+            @Suppress("UnnecessaryVariable")
+            val roLoadingMsg = loadingMessage
+
+            if (roLoadingMsg != null) {
+                LoadingAnimation(roLoadingMsg)
+            } else if (roReport != null) {
+
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Column {
+                        // Decompile and analysis done
+                        TabRow(
+                            selectedTabIndex = selectedTabIndex,
+                            backgroundColor = Color.Transparent,
+                            contentColor = MaterialTheme.colors.primary,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            // Tabs
+                            AppDetailViewModel.TABS.forEachIndexed { index, title ->
+                                Tab(
+                                    selected = index == selectedTabIndex,
+                                    onClick = {
+                                        viewModel.onTabClicked(index)
+                                    },
+                                    text = { Text(text = title) }
+                                )
+                            }
+                        }
+
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+
+                        if (selectedTabIndex == 0) {
+                            // Libraries Tab
+                            Libraries(roReport, onLibrarySelected)
+                        } else {
+                            // More Info tab
+                            MoreInfo(roReport)
                         }
                     }
-
-                    Spacer(
-                        modifier = Modifier.height(10.dp)
-                    )
-
-                    if (selectedTabIndex == 0) {
-                        // Libraries Tab
-                        Libraries(report, onLibrarySelected)
-                    } else {
-                        // More Info tab
-                        MoreInfo(report)
-                    }
                 }
-            }
 
+            }
         }
     }
 }
