@@ -2,6 +2,7 @@ package com.theapache64.stackzy.ui.feature.splash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
@@ -27,9 +28,10 @@ class SplashScreenComponent(
     @Composable
     override fun render() {
 
+        val scope = rememberCoroutineScope()
         LaunchedEffect(splashViewModel) {
             Arbor.d("Syncing data...")
-            splashViewModel.init(this)
+            splashViewModel.init(scope)
             splashViewModel.syncData()
         }
 

@@ -28,7 +28,6 @@ class SelectDeviceScreenComponent(
     override fun render() {
 
         val scope = rememberCoroutineScope()
-
         DisposableEffect(selectDeviceViewModel) {
             Arbor.d("Init scope")
             selectDeviceViewModel.init(scope)

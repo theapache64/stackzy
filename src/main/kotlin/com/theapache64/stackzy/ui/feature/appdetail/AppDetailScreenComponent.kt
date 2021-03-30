@@ -2,6 +2,7 @@ package com.theapache64.stackzy.ui.feature.appdetail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -31,9 +32,10 @@ class AppDetailScreenComponent(
     @Composable
     override fun render() {
 
+        val scope = rememberCoroutineScope()
         LaunchedEffect(appDetailViewModel) {
             appDetailViewModel.init(
-                scope = this,
+                scope = scope,
                 apkSource = apkSource,
                 androidApp = selectedApp,
             )
