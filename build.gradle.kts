@@ -6,11 +6,11 @@ plugins {
     val kotlinVersion = "1.4.31"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.4.0-build173"
+    id("org.jetbrains.compose") version "0.4.0-build178"
 }
 
 group = "com.theapache64"
-version = "1.0.0-beta05" // TODO : Change in App.kt also
+version = "1.0.0-beta06" // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
@@ -41,7 +41,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.2.0"
+    val decomposeVersion = "0.2.1"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 

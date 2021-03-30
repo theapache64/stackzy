@@ -3,7 +3,7 @@ package com.theapache64.stackzy.ui.navigation
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
-import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.slide
+import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
 import com.arkivanov.decompose.router
@@ -114,7 +114,7 @@ class NavHostComponent(
     override fun render() {
         Children(
             routerState = router.state,
-            animation = slide()
+            animation = crossfadeScale()
         ) { child ->
             child.instance.render()
         }

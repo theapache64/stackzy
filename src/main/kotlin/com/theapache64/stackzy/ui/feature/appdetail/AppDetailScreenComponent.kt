@@ -1,7 +1,7 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -25,22 +25,20 @@ class AppDetailScreenComponent(
     lateinit var appDetailViewModel: AppDetailViewModel
 
     init {
-
         appComponent.inject(this)
     }
 
     @Composable
     override fun render() {
 
-
-        appDetailViewModel.init(
-            scope = rememberCoroutineScope(),
-            apkSource = apkSource,
-            androidApp = selectedApp,
-        )
-
-        appDetailViewModel.startDecompile()
-
+        LaunchedEffect(appDetailViewModel) {
+            appDetailViewModel.init(
+                scope = this,
+                apkSource = apkSource,
+                androidApp = selectedApp,
+            )
+            appDetailViewModel.startDecompile()
+        }
 
         AppDetailScreen(
             viewModel = appDetailViewModel,

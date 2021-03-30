@@ -52,6 +52,7 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun loadApps() {
+
         // Updating state
         _apps.value = Resource.Loading("Loading trending apps...")
 

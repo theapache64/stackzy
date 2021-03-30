@@ -1,10 +1,11 @@
 package com.theapache64.stackzy.ui.feature.splash
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
+import com.toxicbakery.logging.Arbor
 import javax.inject.Inject
 
 /**
@@ -26,8 +27,12 @@ class SplashScreenComponent(
     @Composable
     override fun render() {
 
-        splashViewModel.init(rememberCoroutineScope())
-        splashViewModel.syncData()
+        LaunchedEffect(splashViewModel) {
+            Arbor.d("Syncing data...")
+            splashViewModel.init(this)
+            splashViewModel.syncData()
+        }
+
 
         SplashScreen(
             splashViewModel = splashViewModel,

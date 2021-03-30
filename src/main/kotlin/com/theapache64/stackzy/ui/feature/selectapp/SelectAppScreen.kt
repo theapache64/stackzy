@@ -131,7 +131,9 @@ fun SelectAppScreen(
                     )
                 }
             }
-            null -> TODO()
+            null -> {
+                LoadingAnimation("Preparing apps...")
+            }
         }
     }
 }
