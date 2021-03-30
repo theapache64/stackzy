@@ -14,6 +14,15 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
+import com.theapache64.stackzy.ui.util.Preview
+
+// Preview
+fun main() {
+    Preview {
+        LoadingAnimation("Test")
+    }
+}
+
 
 /**
  * To show a rotating icon at the center and blinking text at the bottom of the screen
@@ -21,28 +30,29 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LoadingAnimation(message: String) {
 
-    var enabled by remember { mutableStateOf(true) }
+    var isRotated by remember { mutableStateOf(false) }
 
-    val targetAlpha = if (enabled) {
+    val targetRotation = if (isRotated) {
         0f
     } else {
-        180f
+        90f
     }
 
-    val animatedValue by animateFloatAsState(
-        targetValue = targetAlpha,
+    val animatedRotation by animateFloatAsState(
+        targetValue = targetRotation,
         animationSpec = tween(200),
         finishedListener = {
-            enabled = !enabled
+            isRotated = !isRotated
         }
     )
+
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
             modifier = Modifier
-                .rotate(animatedValue)
+                .rotate(animatedRotation)
                 .align(Alignment.Center)
                 .size(50.dp),
             colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
@@ -54,5 +64,10 @@ fun LoadingAnimation(message: String) {
             modifier = Modifier.align(Alignment.BottomCenter),
             message = message
         )
+    }
+
+    LaunchedEffect(Unit){
+        // Ignite the animation
+        isRotated = !isRotated
     }
 }
