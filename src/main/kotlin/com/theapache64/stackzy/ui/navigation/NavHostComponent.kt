@@ -6,6 +6,7 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.pop
 import com.arkivanov.decompose.push
+import com.arkivanov.decompose.replaceCurrent
 import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.github.theapache64.gpa.model.Account
@@ -124,7 +125,7 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        router.push(Config.SelectPathway)
+        router.replaceCurrent(Config.SelectPathway)
         /*router.push(
             Config.AppDetail(
                 AndroidDevice(
@@ -162,10 +163,7 @@ class NavHostComponent(
      * Invoked when login succeeded.
      */
     private fun onLoggedIn(account: Account) {
-        router.pop() // remove login screen from stack
-
-        // then go to select app screen
-        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
+        router.replaceCurrent(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
     /**
