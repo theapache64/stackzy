@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -96,6 +97,8 @@ fun SelectAppScreen(
                     if (selectedTabIndex != SelectAppViewModel.TAB_NO_TAB) {
                         TabRow(
                             selectedTabIndex = selectedTabIndex,
+                            backgroundColor = Color.Transparent,
+                            contentColor = MaterialTheme.colors.primary,
                             modifier = Modifier.padding(
                                 top = 5.dp,
                                 bottom = 10.dp,
