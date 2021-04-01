@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.theapache64"
-version = "1.0.0-beta08" // TODO : Change in App.kt also
+version = "1.0.0-beta09" // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
@@ -62,7 +62,7 @@ dependencies {
 
     // GooglePlay API
     implementation("com.google.protobuf:protobuf-java:3.14.0")
-    implementation("com.github.theapache64:google-play-api:0.0.5")
+    implementation("com.github.theapache64:google-play-api:0.0.6")
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
     implementation("org.yaml:snakeyaml:1.28")
