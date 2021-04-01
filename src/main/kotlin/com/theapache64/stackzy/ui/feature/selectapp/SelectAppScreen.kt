@@ -96,7 +96,10 @@ fun SelectAppScreen(
                     if (selectedTabIndex != SelectAppViewModel.TAB_NO_TAB) {
                         TabRow(
                             selectedTabIndex = selectedTabIndex,
-                            modifier = Modifier.padding(bottom = 10.dp)
+                            modifier = Modifier.padding(
+                                top = 5.dp,
+                                bottom = 10.dp,
+                            )
                         ) {
                             SelectAppViewModel.tabsMap.entries.forEach { tabEntry ->
                                 Tab(

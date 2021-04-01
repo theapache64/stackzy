@@ -12,8 +12,14 @@ class AndroidApp(
     val appSize: String? = null
 ) : AlphabetCircle() {
 
+    companion object{
+        private val titleNegRegEx = "(\\.app|\\.android|\\.beta|\\.com)".toRegex()
+    }
+
     override fun getTitle(): String {
-        return appTitle ?: appPackage.name.split(".").last().capitalize()
+        return appTitle ?: appPackage.name
+            .replace(titleNegRegEx,"")
+            .split(".").last().capitalize()
     }
 
     override fun getSubtitle(): String {
