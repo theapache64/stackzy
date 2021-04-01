@@ -21,6 +21,17 @@ class SelectAppViewModel @Inject constructor(
     private val playStoreRepo: PlayStoreRepo
 ) {
 
+    companion object {
+        const val TAB_NO_TAB = -1
+        private const val TAB_THIRD_PARTY_APPS_ID = 0
+        private const val TAB_SYSTEM_APPS_ID = 1
+
+        val tabsMap = mapOf(
+            TAB_THIRD_PARTY_APPS_ID to "3rd Party Apps",
+            TAB_SYSTEM_APPS_ID to "System Apps"
+        )
+    }
+
     private lateinit var viewModelScope: CoroutineScope
     private var searchJob: Job? = null
 
@@ -36,6 +47,9 @@ class SelectAppViewModel @Inject constructor(
     private var fullApps: List<AndroidApp>? = null
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword: StateFlow<String> = _searchKeyword
+
+    private val _selectedTabIndex = MutableStateFlow(TAB_NO_TAB)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
 
     /**
      * Filtered apps
@@ -61,9 +75,8 @@ class SelectAppViewModel @Inject constructor(
                 // ### ADB ###
                 this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
                 viewModelScope.launch {
-                    fullApps = adbRepo.getInstalledApps(selectedDevice!!.device).also {
-                        _apps.value = Resource.Success(null, it)
-                    }
+                    fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
+                    onTabClicked(TAB_THIRD_PARTY_APPS_ID)
                 }
             }
             is ApkSource.PlayStore -> {
@@ -86,9 +99,16 @@ class SelectAppViewModel @Inject constructor(
                 // ### ADB ###
 
                 // Filtering apps
-                val filteredApps = fullApps?.filter {
-                    it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
-                } ?: listOf()
+                val filteredApps = fullApps
+                    ?.filter {
+                        // search with keyword
+                        it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
+                    }
+                    ?.filter {
+                        // filter for active tab
+                        it.isSystemApp == (selectedTabIndex.value == TAB_SYSTEM_APPS_ID)
+                    }
+                    ?: listOf()
 
                 _apps.value = Resource.Success(null, filteredApps)
             }
@@ -135,5 +155,17 @@ class SelectAppViewModel @Inject constructor(
             is ApkSource.PlayStore -> TODO()
         }
 
+    }
+
+    /**
+     * Invoked when any of the tabs clicked
+     */
+    fun onTabClicked(tabIndex: Int) {
+        _selectedTabIndex.value = tabIndex
+
+        // utilising existing filter logic : since we've already filter logic inside search,
+        // passing empty string would filter the tab accordingly and passing search keyword would
+        // filter the apps accordingly.
+        onSearchKeywordChanged(searchKeyword.value)
     }
 }

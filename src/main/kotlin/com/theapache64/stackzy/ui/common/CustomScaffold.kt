@@ -30,7 +30,7 @@ fun CustomScaffold(
     onBackClicked: (() -> Unit)? = null,
     topRightSlot: (@Composable () -> Unit)? = null,
     bottomGradient: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
     Column(
         modifier = modifier

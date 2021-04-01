@@ -1,13 +1,9 @@
 package com.theapache64.stackzy.ui.navigation
 
 import androidx.compose.runtime.Composable
-import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.*
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
-import com.arkivanov.decompose.pop
-import com.arkivanov.decompose.push
-import com.arkivanov.decompose.replaceCurrent
-import com.arkivanov.decompose.router
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -34,7 +30,7 @@ class NavHostComponent(
 ) : Component, ComponentContext by componentContext {
 
     /**
-     * Available screens
+     * Available screensSelectApp
      */
     private sealed class Config : Parcelable {
         object Splash : Config()

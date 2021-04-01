@@ -4,10 +4,7 @@ import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
@@ -35,14 +32,18 @@ fun SelectAppScreen(
 
     val searchKeyword by selectAppViewModel.searchKeyword.collectAsState()
     val appsResponse by selectAppViewModel.apps.collectAsState()
+    val selectedTabIndex by selectAppViewModel.selectedTabIndex.collectAsState()
 
     // Calculating item width based on screen width
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
+    val hasData = appsResponse is Resource.Success
+            && (appsResponse as Resource.Success<List<AndroidApp>>).data.isNotEmpty()
+
     CustomScaffold(
         title = R.string.select_app_title,
         onBackClicked = onBackClicked,
-        bottomGradient = appsResponse is Resource.Success, // only for success
+        bottomGradient = hasData, // only for success
         topRightSlot = {
 
             // SearchBox
@@ -88,50 +89,74 @@ fun SelectAppScreen(
             }
             is Resource.Success -> {
                 val apps = (appsResponse as Resource.Success<List<AndroidApp>>).data
-                if (apps.isNotEmpty()) {
-                    // Grid
-                    LazyColumn {
-                        items(
-                            items = if (apps.size > GRID_SIZE) {
-                                apps.chunked(GRID_SIZE)
-                            } else {
-                                listOf(apps)
-                            }
-                        ) { appSet ->
-                            Row {
-                                appSet.map { app ->
 
-                                    // GridItem
-                                    Selectable(
-                                        modifier = Modifier.width(appItemWidth.dp),
-                                        data = app,
-                                        onSelected = onAppSelected
-                                    )
-                                }
-                            }
 
-                            Spacer(
-                                modifier = Modifier.height(10.dp)
-                            )
+                Column {
+
+                    if (selectedTabIndex != SelectAppViewModel.TAB_NO_TAB) {
+                        TabRow(
+                            selectedTabIndex = selectedTabIndex,
+                            modifier = Modifier.padding(bottom = 10.dp)
+                        ) {
+                            SelectAppViewModel.tabsMap.entries.forEach { tabEntry ->
+                                Tab(
+                                    selected = tabEntry.key == selectedTabIndex,
+                                    onClick = { selectAppViewModel.onTabClicked(tabEntry.key) },
+                                    text = { Text(tabEntry.value) }
+                                )
+                            }
                         }
                     }
-                } else {
-                    // No app found
-                    FullScreenError(
-                        title = "App not found",
-                        message = "Couldn't find any app with $searchKeyword",
-                        image = imageResource("drawables/woman_desk.png"),
-                        action = {
-                            Button(
-                                onClick = {
-                                    selectAppViewModel.onOpenMarketClicked()
-                                },
-                            ) {
-                                Text(text = R.string.app_detail_action_open_market)
+
+                    if (apps.isNotEmpty()) {
+                        // Grid
+                        LazyColumn {
+                            items(
+                                items = if (apps.size > GRID_SIZE) {
+                                    apps.chunked(GRID_SIZE)
+                                } else {
+                                    listOf(apps)
+                                }
+                            ) { appSet ->
+                                Row {
+                                    appSet.map { app ->
+
+                                        // GridItem
+                                        Selectable(
+                                            modifier = Modifier.width(appItemWidth.dp),
+                                            data = app,
+                                            onSelected = onAppSelected
+                                        )
+                                    }
+                                }
+
+                                Spacer(
+                                    modifier = Modifier.height(10.dp)
+                                )
                             }
                         }
-                    )
+
+                    } else {
+                        // No app found
+                        FullScreenError(
+                            title = "App not found",
+                            message = "Couldn't find any app with $searchKeyword",
+                            image = imageResource("drawables/woman_desk.png"),
+                            action = {
+                                Button(
+                                    onClick = {
+                                        selectAppViewModel.onOpenMarketClicked()
+                                    },
+                                ) {
+                                    Text(text = R.string.app_detail_action_open_market)
+                                }
+                            }
+                        )
+                    }
+
+
                 }
+
             }
             null -> {
                 LoadingAnimation("Preparing apps...")
