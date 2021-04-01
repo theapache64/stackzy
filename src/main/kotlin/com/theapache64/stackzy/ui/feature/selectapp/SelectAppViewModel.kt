@@ -82,11 +82,12 @@ class SelectAppViewModel @Inject constructor(
             is ApkSource.PlayStore -> {
 
                 // ### PLAY STORE ###
-                viewModelScope.launch {
+                /*viewModelScope.launch {
                     val api = Play.getApi((apkSource as ApkSource.PlayStore<Account>).value)
                     val apps = playStoreRepo.search(" ", api)
                     _apps.value = Resource.Success(null, apps)
-                }
+                }*/
+                onSearchKeywordChanged(_searchKeyword.value)
             }
         }
     }

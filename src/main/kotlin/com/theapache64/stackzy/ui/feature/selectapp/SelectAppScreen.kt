@@ -63,7 +63,6 @@ fun SelectAppScreen(
                     )
                 },
                 onValueChange = {
-                    println("Searching for $it")
                     selectAppViewModel.onSearchKeywordChanged(it)
                 },
                 modifier = Modifier

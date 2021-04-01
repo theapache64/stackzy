@@ -24,14 +24,15 @@ class SelectAppScreenComponent(
     lateinit var selectAppViewModel: SelectAppViewModel
 
     init {
+        println("Create new select app screen component")
         appComponent.inject(this)
-
     }
 
     @Composable
     override fun render() {
         val scope = rememberCoroutineScope()
         LaunchedEffect(selectAppViewModel) {
+            println("Creating select app screen...")
             selectAppViewModel.init(scope, apkSource)
             selectAppViewModel.loadApps()
         }
