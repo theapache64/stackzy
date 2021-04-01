@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.theapache64"
-version = "1.0.0-beta07" // TODO : Change in App.kt also
+version = "1.0.0-beta08" // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
