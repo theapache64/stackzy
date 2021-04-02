@@ -89,14 +89,19 @@ fun CustomScaffold(
             }
         }
 
+        Spacer(
+            modifier = Modifier.height(10.dp)
+        )
+
         Box {
             // Content slot
             content()
 
-            if(bottomGradient){
+            if (bottomGradient) {
                 BottomGradient()
             }
         }
+
     }
 
 }

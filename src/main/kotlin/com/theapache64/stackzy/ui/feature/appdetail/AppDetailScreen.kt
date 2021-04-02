@@ -112,10 +112,6 @@ fun AppDetailScreen(
                             }
                         }
 
-                        Spacer(
-                            modifier = Modifier.height(10.dp)
-                        )
-
                         if (selectedTabIndex == 0) {
                             // Libraries Tab
                             Libraries(roReport, onLibrarySelected)
