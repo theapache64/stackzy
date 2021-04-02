@@ -76,7 +76,12 @@ class SelectAppViewModel @Inject constructor(
                 this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
                 viewModelScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
-                    onTabClicked(TAB_THIRD_PARTY_APPS_ID)
+                    val tab = if (selectedTabIndex.value == TAB_NO_TAB) {
+                        TAB_THIRD_PARTY_APPS_ID // first time
+                    } else {
+                        _selectedTabIndex.value // going back from detail page
+                    }
+                    onTabClicked(tab)
                 }
             }
             is ApkSource.PlayStore -> {
