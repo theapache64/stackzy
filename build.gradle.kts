@@ -62,7 +62,7 @@ dependencies {
 
     // GooglePlay API
     implementation("com.google.protobuf:protobuf-java:3.14.0")
-    implementation("com.github.theapache64:google-play-api:0.0.6")
+    implementation("com.github.theapache64:google-play-api:0.0.7")
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
     implementation("org.yaml:snakeyaml:1.28")
@@ -73,7 +73,9 @@ dependencies {
     // Kamel : Image loading library
     implementation("com.alialbaali.kamel:kamel-image:0.2.0")
 
-    /*TEST DEPENDENCIES*/
+    /**
+     * Testing Dependencies
+     */
     testImplementation("org.mockito:mockito-inline:3.7.7")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 
@@ -87,6 +89,7 @@ dependencies {
     // Expekt : An assertion library for Kotlin
     testImplementation("com.theapache64:expekt:0.0.1")
 
+    // JUnit
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
 }
 

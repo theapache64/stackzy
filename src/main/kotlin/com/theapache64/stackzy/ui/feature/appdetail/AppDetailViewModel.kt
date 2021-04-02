@@ -1,10 +1,7 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
 import com.github.theapache64.gpa.model.Account
-import com.theapache64.stackzy.data.local.AnalysisReport
-import com.theapache64.stackzy.data.local.AndroidApp
-import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.data.local.Platform
+import com.theapache64.stackzy.data.local.*
 import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.data.remote.Result
@@ -133,8 +130,8 @@ class AppDetailViewModel @Inject constructor(
     }
 
 
-    private fun getFullPermissionsFromPermissions(permissions: String): List<String> {
-        return permissions.split(",")
+    private fun getFullPermissionsFromPermissions(permissions: String?): List<String> {
+        return permissions?.split(",") ?: listOf()
     }
 
     private fun getLibrariesFromPackages(libPackages: String): List<Library> {
@@ -226,7 +223,7 @@ class AppDetailViewModel @Inject constructor(
                         // Give some time to APK to prepare for decompile
                         _loadingMessage.value = "Preparing APK for decompiling..."
                         delay(2000)
-                        onApkPulled(androidApp, apkFile, shouldStoreResult = false)
+                        onApkPulled(androidApp, apkFile, shouldStoreResult = true)
                     }
 
                 }
@@ -269,18 +266,7 @@ class AppDetailViewModel @Inject constructor(
 
         if (shouldStoreResult) {
             // Converting AnalysisReport to Result
-            val result = Result(
-                appName = report.appName ?: report.packageName,
-                packageName = report.packageName,
-                libPackages = report.libraries.joinToString(",") { it.packageName },
-                versionName = report.gradleInfo.versionName ?: "Unknown",
-                versionCode = report.gradleInfo.versionCode ?: -1,
-                platform = report.platform::class.simpleName!!,
-                apkSizeInMb = report.apkSizeInMb,
-                permissions = report.permissions.joinToString(","),
-                gradleInfoJson = resultRepo.jsonify(report.gradleInfo),
-                stackzyLibVersion = config.latestStackzyLibVersion,
-            )
+            val result = report.toResult(resultRepo, config)
 
             // Add result to remove
             resultRepo.add(result).collect {

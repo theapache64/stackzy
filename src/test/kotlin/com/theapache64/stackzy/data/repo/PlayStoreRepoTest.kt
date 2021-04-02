@@ -5,9 +5,7 @@ import com.github.theapache64.gpa.api.Play
 import com.theapache64.expekt.should
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
-import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
-import kotlinx.coroutines.delay
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
@@ -22,6 +20,9 @@ class PlayStoreRepoTest {
     @InjectFromComponent
     private lateinit var playStoreRepo: PlayStoreRepo
 
+    @InjectFromComponent
+    private lateinit var authRepo: AuthRepo
+
     companion object {
         private lateinit var api: GooglePlayAPI
     }
@@ -29,14 +30,8 @@ class PlayStoreRepoTest {
     @BeforeAll
     @Test
     fun beforeAll() = runBlockingUnitTest {
-        val username = System.getenv("PLAY_API_GOOGLE_USERNAME")!!
-        val password = System.getenv("PLAY_API_GOOGLE_PASSWORD")!!
-
-        val account = Play.login(username, password)
-        Arbor.d("Logging in...")
-        delay(3000) // delay to sync account
+        val account = authRepo.getAccountOrThrow()
         api = Play.getApi(account)
-        Arbor.d("Setting API : $api")
     }
 
     @Test

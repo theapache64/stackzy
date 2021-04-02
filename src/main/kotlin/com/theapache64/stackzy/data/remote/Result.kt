@@ -20,7 +20,7 @@ data class Result(
     @Json(name = "apk_size_in_mb")
     val apkSizeInMb: Float,
     @Json(name = "permissions")
-    val permissions: String, // comma-sep
+    val permissions: String?, // comma-sep
     @Json(name = "gradle_info_json")
     val gradleInfoJson: String,
     @Json(name = "stackzy_lib_version")
