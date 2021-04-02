@@ -34,7 +34,9 @@ class SelectAppScreenComponent(
         LaunchedEffect(selectAppViewModel) {
             println("Creating select app screen...")
             selectAppViewModel.init(scope, apkSource)
-            selectAppViewModel.loadApps()
+            if (selectAppViewModel.apps.value == null) {
+                selectAppViewModel.loadApps()
+            }
         }
 
         SelectAppScreen(

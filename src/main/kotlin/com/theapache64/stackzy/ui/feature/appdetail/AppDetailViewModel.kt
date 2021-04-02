@@ -131,7 +131,7 @@ class AppDetailViewModel @Inject constructor(
 
 
     private fun getFullPermissionsFromPermissions(permissions: String?): List<String> {
-        return permissions?.split(",") ?: listOf()
+        return permissions?.split(",")?.filter{ it.isNotBlank() } ?: listOf()
     }
 
     private fun getLibrariesFromPackages(libPackages: String): List<Library> {
