@@ -30,6 +30,8 @@ class SelectAppViewModel @Inject constructor(
             TAB_THIRD_PARTY_APPS_ID to "3rd Party Apps",
             TAB_SYSTEM_APPS_ID to "System Apps"
         )
+
+        private const val MSG_LOADING_TRENDING_APPS = "Loading trending apps..."
     }
 
     private lateinit var viewModelScope: CoroutineScope
@@ -68,7 +70,7 @@ class SelectAppViewModel @Inject constructor(
     fun loadApps() {
 
         // Updating state
-        _apps.value = Resource.Loading("Loading trending apps...")
+        _apps.value = Resource.Loading(MSG_LOADING_TRENDING_APPS)
 
         when (apkSource) {
             is ApkSource.Adb -> {
@@ -136,7 +138,7 @@ class SelectAppViewModel @Inject constructor(
                         }
                     }
                     val loadingMsg = if (keyword.isBlank()) {
-                        "Loading trending apps"
+                        MSG_LOADING_TRENDING_APPS
                     } else {
                         "Searching for '$keyword'"
                     }
