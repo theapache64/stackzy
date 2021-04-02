@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.common
 
+import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.theapache64.stackzy.ui.theme.StackzyTheme
 import com.theapache64.stackzy.util.ColorUtil
 import io.kamel.image.KamelImage
 import io.kamel.image.lazyImageResource
@@ -74,6 +76,26 @@ fun Modifier.addHoverEffect(
         )
 }
 
+// Preview
+fun main(args: Array<String>) {
+
+    Window {
+        StackzyTheme {
+            Selectable(
+                data = object : AlphabetCircle() {
+                    override fun getTitle() = "WhatsApp"
+                    override fun getSubtitle() = "v1.0.0"
+                    override fun imageUrl() =
+                        "https://play-lh.googleusercontent.com/X64En0aW6jkvDnd5kr16u-YuUsoJ1W2cBzJab3CQ5lObLeQ3T61DpB7AwIoZ7uqgCn4"
+                },
+                onSelected = {
+
+                }
+            )
+        }
+    }
+}
+
 @Composable
 fun <T : AlphabetCircle> Selectable(
     data: T,
@@ -100,7 +122,7 @@ fun <T : AlphabetCircle> Selectable(
             // Show alphabet then image
             KamelImage(
                 resource = lazyImageResource(data.imageUrl()!!),
-                contentScale = ContentScale.Inside,
+                contentScale = ContentScale.FillBounds,
                 contentDescription = "app logo",
                 onLoading = {
                     AlphabetCircle(data)
@@ -108,7 +130,15 @@ fun <T : AlphabetCircle> Selectable(
                 onFailure = {
                     AlphabetCircle(data)
                 },
-                modifier = Modifier.size(60.dp).clip(CircleShape)
+
+                modifier = Modifier.size(60.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colors.primary) // outer blue
+                    .padding(2.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colors.secondary) // gap
+                    .padding(4.dp)
+                    .clip(CircleShape) // logo
             )
         }
 
