@@ -17,6 +17,7 @@ import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
+import com.theapache64.stackzy.ui.feature.update.UpdateScreenComponent
 import com.theapache64.stackzy.util.ApkSource
 import com.toxicbakery.logging.Arbor
 import java.awt.Desktop
@@ -45,6 +46,8 @@ class NavHostComponent(
             val apkSource: ApkSource<AndroidDevice, Account>,
             val androidApp: AndroidApp
         ) : Config()
+
+        object Update : Config()
     }
 
     private val appComponent: AppComponent = DaggerAppComponent
@@ -66,7 +69,8 @@ class NavHostComponent(
             is Config.Splash -> SplashScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                onSyncFinished = ::onSplashSyncFinished
+                onSyncFinished = ::onSplashSyncFinished,
+                onUpdateNeeded = ::onUpdateNeeded
             )
             is Config.SelectPathway -> PathwayScreenComponent(
                 appComponent = appComponent,
@@ -103,6 +107,11 @@ class NavHostComponent(
                 apkSource = config.apkSource,
                 onLibrarySelected = ::onLibrarySelected,
                 onBackClicked = ::onBackClicked
+            )
+
+            is Config.Update -> UpdateScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext
             )
         }
     }
@@ -196,6 +205,13 @@ class NavHostComponent(
      */
     private fun onLibrarySelected(library: Library) {
         Desktop.getDesktop().browse(URI(library.website))
+    }
+
+    /**
+     * Invoked when an update is necessary
+     */
+    private fun onUpdateNeeded() {
+        router.push(Config.Update)
     }
 
     /**

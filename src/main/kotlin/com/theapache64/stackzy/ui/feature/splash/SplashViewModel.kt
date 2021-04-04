@@ -1,5 +1,7 @@
 package com.theapache64.stackzy.ui.feature.splash
 
+import com.theapache64.stackzy.App
+import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.ConfigRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
@@ -98,13 +100,31 @@ class SplashViewModel @Inject constructor(
                     _syncMsg.value = "Syncing config..."
                 }
                 is Resource.Success -> {
-                    configRepo.saveConfigToLocal(it.data)
-                    onSuccess()
+                    val config = it.data
+                    val isConfigVerified = verifyConfig(config)
+                    if (isConfigVerified) {
+                        configRepo.saveConfigToLocal(config)
+                        onSuccess()
+                    }
                 }
                 is Resource.Error -> {
                     _syncFailedMsg.value = it.errorData
                 }
             }
+        }
+    }
+
+
+    private val _shouldUpdate = MutableStateFlow(false)
+    val shouldUpdate: StateFlow<Boolean> = _shouldUpdate
+
+    private fun verifyConfig(config: Config): Boolean {
+        val isUpdateNeeded = App.appArgs.versionCode < config.mandatoryVersionCode // currentVersion < mandatoryVersion
+        return if (isUpdateNeeded) {
+            _shouldUpdate.value = true
+            false
+        } else {
+            true
         }
     }
 

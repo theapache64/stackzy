@@ -11,6 +11,7 @@ import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
+import com.theapache64.stackzy.ui.feature.update.UpdateScreenComponent
 import dagger.Component
 import javax.inject.Singleton
 
@@ -30,7 +31,7 @@ interface AppComponent {
     fun inject(selectAppScreenComponent: SelectAppScreenComponent)
     fun inject(appDetailScreenComponent: AppDetailScreenComponent)
     fun inject(selectDeviceScreenComponent: SelectDeviceScreenComponent)
-
+    fun inject(updateScreenComponent: UpdateScreenComponent)
     // bind repo to this component
     fun bind(): AdbRepo
 }

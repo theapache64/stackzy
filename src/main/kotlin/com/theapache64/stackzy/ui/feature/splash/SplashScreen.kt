@@ -22,12 +22,19 @@ import com.theapache64.stackzy.ui.common.Logo
 @Composable
 fun SplashScreen(
     splashViewModel: SplashViewModel,
-    onSyncFinished: () -> Unit
+    onSyncFinished: () -> Unit,
+    onUpdateNeeded: () -> Unit
 ) {
 
     val isSyncFinished by splashViewModel.isSyncFinished.collectAsState()
     val syncFailedReason by splashViewModel.syncFailedMsg.collectAsState()
     val syncMessage by splashViewModel.syncMsg.collectAsState()
+    val shouldUpdate by splashViewModel.shouldUpdate.collectAsState()
+
+    if (shouldUpdate) {
+        onUpdateNeeded()
+        return
+    }
 
     if (isSyncFinished) {
         onSyncFinished()

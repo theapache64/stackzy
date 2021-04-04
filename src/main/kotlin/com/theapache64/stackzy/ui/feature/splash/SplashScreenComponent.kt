@@ -15,7 +15,8 @@ import javax.inject.Inject
 class SplashScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
-    private val onSyncFinished: () -> Unit
+    private val onSyncFinished: () -> Unit,
+    private val onUpdateNeeded: () -> Unit,
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -38,7 +39,8 @@ class SplashScreenComponent(
 
         SplashScreen(
             splashViewModel = splashViewModel,
-            onSyncFinished = onSyncFinished
+            onSyncFinished = onSyncFinished,
+            onUpdateNeeded = onUpdateNeeded
         )
     }
 
