@@ -9,8 +9,11 @@ plugins {
     id("org.jetbrains.compose") version "0.4.0-build178"
 }
 
+val daggerVersion by extra("2.31.2")
+val stackzyVersion by extra("1.0.0-rc2")
+
 group = "com.theapache64"
-version = "1.0.0-rc2" // TODO : Change in App.kt also
+version = stackzyVersion // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
@@ -26,49 +29,23 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
 
+    // Module dependencies
+    implementation(project(":data"))
+
     // Cyclone
     implementation("com.github.theapache64:cyclone:1.0.0-alpha02")
 
     // Dagger : A fast dependency injector for Android and Java.
-    val daggerVersion = "2.31.2"
-    implementation("com.google.dagger:dagger:$daggerVersion")
     kapt("com.google.dagger:dagger-compiler:$daggerVersion")
     kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
-
-    // Retrofit : A type-safe HTTP client for Android and Java.
-    val retrofitVersion = "2.9.0"
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofitVersion")
 
     // Decompose : Decompose
     val decomposeVersion = "0.2.1"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
-    // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
-    implementation("com.theapache64:retrosheet:1.2.2")
-
-    // Kotlinx.Serialization
-    implementation("com.squareup.moshi:moshi:1.11.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
-
-    implementation("com.malinskiy:adam:0.2.3")
-
-    // Arbor : Like Timber, just different.
-    implementation("com.ToxicBakery.logging:arbor-jvm:1.34.109")
-
     // Color naming (dev purpose only)
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
-
-    // GooglePlay API
-    implementation("com.google.protobuf:protobuf-java:3.14.0")
-    implementation("com.github.theapache64:google-play-api:0.0.7")
-
-    // SnakeYAML : YAML 1.1 parser and emitter for Java
-    implementation("org.yaml:snakeyaml:1.28")
-
-    // Moshi Kotlin : A modern JSON API for Android and Java
-    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
 
     // Kamel : Image loading library
     implementation("com.alialbaali.kamel:kamel-image:0.2.0")

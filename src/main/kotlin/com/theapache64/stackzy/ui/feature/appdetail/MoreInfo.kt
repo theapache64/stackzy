@@ -15,8 +15,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.GradleInfo
+import com.theapache64.stackzy.model.AnalysisReportWrapper
 import com.theapache64.stackzy.ui.common.GradientMargin
 import com.theapache64.stackzy.ui.theme.R
 
@@ -34,7 +34,7 @@ private val codeViewerFontSize = 14.sp
 
 @Composable
 fun MoreInfo(
-    report: AnalysisReport,
+    report: AnalysisReportWrapper,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -122,7 +122,7 @@ private fun BuildGradleGroovy(
                     append(" // $minSdkVersionName")
                 }
 
-                gradleInfo.targetSdk?.let { (targetSdkInt, targerSdkVersionName) ->
+                gradleInfo.targetSdk?.let { (targetSdkInt, targetSdkVersionName) ->
                     // line #5
                     pushStyle(SpanStyle(R.color.JordyBlue))
                     append("\n    targetSdkVersion")
@@ -131,7 +131,7 @@ private fun BuildGradleGroovy(
 
                     // sdk version as comment
                     pushStyle(SpanStyle(R.color.BlueBayoux))
-                    append(" // $targerSdkVersionName")
+                    append(" // $targetSdkVersionName")
                 }
 
                 gradleInfo.versionCode?.let { versionCode ->

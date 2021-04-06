@@ -5,9 +5,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
-import com.theapache64.stackzy.data.local.AndroidApp
-import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.di.AppComponent
+import com.theapache64.stackzy.data.di.AppComponent
+import com.theapache64.stackzy.model.AndroidAppWrapper
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.ui.navigation.Component
 import com.theapache64.stackzy.util.ApkSource
 import javax.inject.Inject
@@ -15,8 +15,8 @@ import javax.inject.Inject
 class SelectAppScreenComponent(
     componentContext: ComponentContext,
     appComponent: AppComponent,
-    private val apkSource: ApkSource<AndroidDevice, Account>,
-    val onAppSelected: (ApkSource<AndroidDevice, Account>, AndroidApp) -> Unit,
+    private val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+    val onAppSelected: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit,
     val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 

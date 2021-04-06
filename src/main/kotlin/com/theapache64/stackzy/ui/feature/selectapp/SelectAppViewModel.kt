@@ -6,8 +6,10 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.PlayStoreRepo
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
+import com.theapache64.stackzy.model.AndroidAppWrapper
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.util.ApkSource
-import com.theapache64.stackzy.util.calladapter.flow.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -40,7 +42,7 @@ class SelectAppViewModel @Inject constructor(
     /**
      * APK source can be either from an AndroidDevice or from a google Account
      */
-    private lateinit var apkSource: ApkSource<AndroidDevice, Account>
+    private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
     private var selectedDevice: AndroidDevice? = null
 
     /**
@@ -56,12 +58,12 @@ class SelectAppViewModel @Inject constructor(
     /**
      * Filtered apps
      */
-    private val _apps = MutableStateFlow<Resource<List<AndroidApp>>?>(null)
-    val apps: StateFlow<Resource<List<AndroidApp>>?> = _apps
+    private val _apps = MutableStateFlow<Resource<List<AndroidAppWrapper>>?>(null)
+    val apps: StateFlow<Resource<List<AndroidAppWrapper>>?> = _apps
 
     fun init(
         scope: CoroutineScope,
-        apkSource: ApkSource<AndroidDevice, Account>
+        apkSource: ApkSource<AndroidDeviceWrapper, Account>
     ) {
         this.viewModelScope = scope
         this.apkSource = apkSource
@@ -118,7 +120,7 @@ class SelectAppViewModel @Inject constructor(
                     }
                     ?: listOf()
 
-                _apps.value = Resource.Success(null, filteredApps)
+                _apps.value = Resource.Success(null, filteredApps.map { AndroidAppWrapper(it) })
             }
             is ApkSource.PlayStore -> {
                 // Play Store
@@ -146,7 +148,7 @@ class SelectAppViewModel @Inject constructor(
                     _apps.value = Resource.Loading(loadingMsg)
 
                     val apps = playStoreRepo.search(keyword, api)
-                    _apps.value = Resource.Success(null, apps)
+                    _apps.value = Resource.Success(null, apps.map { AndroidAppWrapper(it) })
                 }
             }
         }

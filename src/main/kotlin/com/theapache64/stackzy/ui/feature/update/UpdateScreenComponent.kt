@@ -2,7 +2,7 @@ package com.theapache64.stackzy.ui.feature.update
 
 import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.ComponentContext
-import com.theapache64.stackzy.di.AppComponent
+import com.theapache64.stackzy.data.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 

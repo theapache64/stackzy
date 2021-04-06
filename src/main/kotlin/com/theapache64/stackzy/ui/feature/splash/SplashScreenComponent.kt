@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
-import com.theapache64.stackzy.di.AppComponent
+import com.theapache64.stackzy.data.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
 import com.toxicbakery.logging.Arbor
 import javax.inject.Inject

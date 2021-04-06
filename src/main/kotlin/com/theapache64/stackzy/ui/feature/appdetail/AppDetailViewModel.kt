@@ -1,15 +1,21 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
 import com.github.theapache64.gpa.model.Account
-import com.theapache64.stackzy.data.local.*
+import com.theapache64.stackzy.data.local.AnalysisReport
+import com.theapache64.stackzy.data.local.Platform
+import com.theapache64.stackzy.data.local.toResult
 import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.data.remote.Result
 import com.theapache64.stackzy.data.remote.UntrackedLibrary
 import com.theapache64.stackzy.data.repo.*
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
+import com.theapache64.stackzy.model.AnalysisReportWrapper
+import com.theapache64.stackzy.model.AndroidAppWrapper
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
+import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
-import com.theapache64.stackzy.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -41,15 +47,15 @@ class AppDetailViewModel @Inject constructor(
     }
 
     private lateinit var viewModelScope: CoroutineScope
-    private lateinit var androidApp: AndroidApp
-    private lateinit var apkSource: ApkSource<AndroidDevice, Account>
+    private lateinit var androidAppWrapper: AndroidAppWrapper
+    private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
     private var decompiledDir: File? = null
     private lateinit var config: Config
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
 
-    private val _analysisReport = MutableStateFlow<AnalysisReport?>(null)
-    val analysisReport: StateFlow<AnalysisReport?> = _analysisReport
+    private val _analysisReport = MutableStateFlow<AnalysisReportWrapper?>(null)
+    val analysisReport: StateFlow<AnalysisReportWrapper?> = _analysisReport
 
     private val _loadingMessage = MutableStateFlow<String?>(null)
     val loadingMessage: StateFlow<String?> = _loadingMessage
@@ -59,13 +65,13 @@ class AppDetailViewModel @Inject constructor(
 
     fun init(
         scope: CoroutineScope,
-        apkSource: ApkSource<AndroidDevice, Account>,
-        androidApp: AndroidApp,
+        apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+        androidApp: AndroidAppWrapper,
     ) {
         this.viewModelScope = scope
         this.config = configRepo.getLocalConfig()!! // shouldn't be null
         this.apkSource = apkSource
-        this.androidApp = androidApp
+        this.androidAppWrapper = androidApp
     }
 
     /**
@@ -74,11 +80,11 @@ class AppDetailViewModel @Inject constructor(
     fun startDecompile() {
 
         viewModelScope.launch {
-            if (androidApp.versionCode != null && config.shouldConsiderResultCache) {
+            if (androidAppWrapper.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
                 resultRepo.findResult(
-                    androidApp.appPackage.name,
-                    androidApp.versionCode!!,
+                    androidAppWrapper.appPackage.name,
+                    androidAppWrapper.versionCode!!,
                     config.latestStackzyLibVersion
                 )
                     .collect {
@@ -173,7 +179,7 @@ class AppDetailViewModel @Inject constructor(
     ) {
         _loadingMessage.value = "Initialising download..."
 
-        val packageName = androidApp.appPackage.name
+        val packageName = androidAppWrapper.appPackage.name
         val apkFile = kotlin.io.path.createTempFile(packageName, ".apk").toFile()
 
         // Download APK from playstore
@@ -188,7 +194,7 @@ class AppDetailViewModel @Inject constructor(
                 // Give some time to APK to prepare for decompile
                 _loadingMessage.value = "Preparing APK for decompiling..."
                 delay(2000)
-                onApkPulled(androidApp, apkFile, shouldStoreResult = shouldStoreResult)
+                onApkPulled(androidAppWrapper, apkFile, shouldStoreResult = shouldStoreResult)
             }
         }
     }
@@ -197,11 +203,11 @@ class AppDetailViewModel @Inject constructor(
      * Downloads APK from device using and decompile it
      */
     private suspend fun decompileViaAdb() {
-        val androidDevice = (apkSource as ApkSource.Adb).value
+        val androidDeviceWrapper = (apkSource as ApkSource.Adb).value
         _loadingMessage.value = R.string.app_detail_loading_fetching_apk
 
         // First get APK path
-        val apkRemotePath = adbRepo.getApkPath(androidDevice, androidApp)
+        val apkRemotePath = adbRepo.getApkPath(androidDeviceWrapper.androidDevice, androidAppWrapper.androidApp)
         if (apkRemotePath != null) {
 
             val apkFile = kotlin.io.path.createTempFile(
@@ -209,7 +215,7 @@ class AppDetailViewModel @Inject constructor(
             ).toFile()
 
             adbRepo.pullFile(
-                androidDevice,
+                androidDeviceWrapper.androidDevice,
                 apkRemotePath,
                 apkFile
             ).distinctUntilChanged()
@@ -223,7 +229,7 @@ class AppDetailViewModel @Inject constructor(
                         // Give some time to APK to prepare for decompile
                         _loadingMessage.value = "Preparing APK for decompiling..."
                         delay(2000)
-                        onApkPulled(androidApp, apkFile, shouldStoreResult = true)
+                        onApkPulled(androidAppWrapper, apkFile, shouldStoreResult = true)
                     }
 
                 }
@@ -234,7 +240,7 @@ class AppDetailViewModel @Inject constructor(
 
 
     private suspend fun onApkPulled(
-        androidApp: AndroidApp,
+        androidApp: AndroidAppWrapper,
         apkFile: File,
         shouldStoreResult: Boolean
     ) {
@@ -302,7 +308,10 @@ class AppDetailViewModel @Inject constructor(
 
     private suspend fun onReportReady(report: AnalysisReport) {
         trackUntrackedLibs(report)
-        _analysisReport.value = report
+        _analysisReport.value = AnalysisReportWrapper(
+            report,
+            report.libraries.map { LibraryWrapper(it) }
+        )
         _loadingMessage.value = null
     }
 
@@ -381,7 +390,7 @@ class AppDetailViewModel @Inject constructor(
             Desktop.getDesktop().open(decompiledDir)
         } else {
             // Let's construct possible decompiledDir and check it exist
-            val possibleDecompiledDir = File(getDecompiledDirPath(androidApp.appPackage.name))
+            val possibleDecompiledDir = File(getDecompiledDirPath(androidAppWrapper.appPackage.name))
 
             if (possibleDecompiledDir.exists()) {
                 // Gotcha! There's one dir available for this package. lets show it

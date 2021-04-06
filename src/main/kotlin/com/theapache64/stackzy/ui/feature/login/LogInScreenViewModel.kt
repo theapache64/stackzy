@@ -2,7 +2,7 @@ package com.theapache64.stackzy.ui.feature.login
 
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
-import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,8 +75,7 @@ class LogInScreenViewModel @Inject constructor(
                     if (it is Resource.Success) {
                         authRepo.storeAccount(it.data)
                     }
-                }
-                .collect { logInResponse ->
+                }.collect { logInResponse ->
                     _logInResponse.value = logInResponse
                 }
         }

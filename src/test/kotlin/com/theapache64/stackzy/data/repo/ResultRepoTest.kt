@@ -7,7 +7,7 @@ import com.theapache64.stackzy.data.local.toResult
 import com.theapache64.stackzy.data.remote.Result
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
-import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.util.loadLibs
 import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent

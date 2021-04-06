@@ -12,34 +12,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.theapache64.stackzy.model.AlphabetCircle
 import com.theapache64.stackzy.ui.theme.StackzyTheme
-import com.theapache64.stackzy.util.ColorUtil
 import io.kamel.image.KamelImage
 import io.kamel.image.lazyImageResource
 
-abstract class AlphabetCircle {
-
-    abstract fun getTitle(): String
-    abstract fun getSubtitle(): String
-    open fun getSubtitle2(): String? = null
-    abstract fun imageUrl(): String?
-    open fun getAlphabet() = getTitle().first()
-
-    val randomColor = ColorUtil.getRandomColor()
-    val brighterColor = ColorUtil.getBrightenedColor(randomColor)
-    val bgColor = Brush.horizontalGradient(
-        colors = listOf(randomColor, brighterColor)
-    )
-
-    fun getGradientColor(): Brush = bgColor
-}
 
 /**
  * Once this applied, when you hover the mouse over the item, it's background color will be changed.

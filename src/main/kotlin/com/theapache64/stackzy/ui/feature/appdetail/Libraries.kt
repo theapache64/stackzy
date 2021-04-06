@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.Platform
-import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.model.AnalysisReportWrapper
+import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.common.CONTENT_PADDING_HORIZONTAL
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.GradientMargin
@@ -23,8 +23,8 @@ private const val GRID_SIZE = 4
 
 @Composable
 fun Libraries(
-    report: AnalysisReport,
-    onLibrarySelected: (Library) -> Unit
+    report: AnalysisReportWrapper,
+    onLibrarySelected: (LibraryWrapper) -> Unit
 ) {
 
     if (report.libraries.isEmpty()) {
@@ -52,22 +52,22 @@ fun Libraries(
 
         LazyColumn {
             items(
-                items = if (report.libraries.size > GRID_SIZE) {
-                    report.libraries.chunked(GRID_SIZE)
+                items = if (report.libraryWrappers.size > GRID_SIZE) {
+                    report.libraryWrappers.chunked(GRID_SIZE)
                 } else {
-                    listOf(report.libraries)
+                    listOf(report.libraryWrappers)
                 }
             ) { appSet ->
                 Row {
-                    appSet.map { app ->
-
-                        // GridItem
-                        Selectable(
-                            modifier = Modifier.width(appItemWidth.dp),
-                            data = app,
-                            onSelected = onLibrarySelected
-                        )
-                    }
+                    appSet
+                        .map { app ->
+                            // GridItem
+                            Selectable(
+                                modifier = Modifier.width(appItemWidth.dp),
+                                data = app,
+                                onSelected = onLibrarySelected
+                            )
+                        }
                 }
 
                 Spacer(

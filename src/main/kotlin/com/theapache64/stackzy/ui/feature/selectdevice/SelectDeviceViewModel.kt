@@ -1,7 +1,7 @@
 package com.theapache64.stackzy.ui.feature.selectdevice
 
-import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,8 @@ class SelectDeviceViewModel @Inject constructor(
 ) {
 
     private lateinit var viewModelScope: CoroutineScope
-    private val _connectedDevices = MutableStateFlow<List<AndroidDevice>?>(null)
-    val connectedDevices: StateFlow<List<AndroidDevice>?> = _connectedDevices
+    private val _connectedDevices = MutableStateFlow<List<AndroidDeviceWrapper>?>(null)
+    val connectedDevices: StateFlow<List<AndroidDeviceWrapper>?> = _connectedDevices
 
 
     fun init(scope: CoroutineScope) {
@@ -36,7 +36,7 @@ class SelectDeviceViewModel @Inject constructor(
                 }
                 .collect {
                     Arbor.d("Devices : $it")
-                    _connectedDevices.value = it
+                    _connectedDevices.value = it.map { device -> AndroidDeviceWrapper(device) }
                 }
         }
     }

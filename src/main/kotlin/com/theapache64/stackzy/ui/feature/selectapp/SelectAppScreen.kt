@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import com.theapache64.stackzy.data.local.AndroidApp
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
+import com.theapache64.stackzy.model.AndroidAppWrapper
 import com.theapache64.stackzy.ui.common.*
 import com.theapache64.stackzy.util.R
-import com.theapache64.stackzy.util.calladapter.flow.Resource
 
 private const val GRID_SIZE = 3
 
@@ -28,7 +28,7 @@ private const val GRID_SIZE = 3
 fun SelectAppScreen(
     selectAppViewModel: SelectAppViewModel,
     onBackClicked: () -> Unit,
-    onAppSelected: (AndroidApp) -> Unit
+    onAppSelected: (AndroidAppWrapper) -> Unit
 ) {
 
     val searchKeyword by selectAppViewModel.searchKeyword.collectAsState()
@@ -39,7 +39,7 @@ fun SelectAppScreen(
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
     val hasData = appsResponse is Resource.Success
-            && (appsResponse as Resource.Success<List<AndroidApp>>).data.isNotEmpty()
+            && (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data.isNotEmpty()
 
     CustomScaffold(
         title = R.string.select_app_title,
@@ -77,18 +77,18 @@ fun SelectAppScreen(
 
         when (appsResponse) {
             is Resource.Loading -> {
-                val message = (appsResponse as Resource.Loading<List<AndroidApp>>).message ?: ""
+                val message = (appsResponse as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
                 LoadingAnimation(message)
             }
             is Resource.Error -> {
                 Box {
                     ErrorSnackBar(
-                        (appsResponse as Resource.Error<List<AndroidApp>>).errorData
+                        (appsResponse as Resource.Error<List<AndroidAppWrapper>>).errorData
                     )
                 }
             }
             is Resource.Success -> {
-                val apps = (appsResponse as Resource.Success<List<AndroidApp>>).data
+                val apps = (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data
 
 
                 Column {

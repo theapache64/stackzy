@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
-import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.di.AppComponent
+import com.theapache64.stackzy.data.di.AppComponent
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.ui.navigation.Component
 import com.toxicbakery.logging.Arbor
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class SelectDeviceScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
-    private val onDeviceSelected: (AndroidDevice) -> Unit,
+    private val onDeviceSelected: (AndroidDeviceWrapper) -> Unit,
     private val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 

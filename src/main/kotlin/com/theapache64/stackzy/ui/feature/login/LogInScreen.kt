@@ -25,7 +25,7 @@ import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.LoadingAnimation
 import com.theapache64.stackzy.ui.theme.R
-import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 
 @Composable
 fun LogInScreen(

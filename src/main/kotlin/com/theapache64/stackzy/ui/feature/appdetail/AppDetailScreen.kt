@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
-import com.theapache64.stackzy.data.remote.Library
+import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.common.Badge
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
@@ -24,7 +24,7 @@ import com.theapache64.stackzy.util.R
 @Composable
 fun AppDetailScreen(
     viewModel: AppDetailViewModel,
-    onLibrarySelected: (Library) -> Unit,
+    onLibrarySelected: (LibraryWrapper) -> Unit,
     onBackClicked: () -> Unit
 ) {
     val fatalError by viewModel.fatalError.collectAsState()

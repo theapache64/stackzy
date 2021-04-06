@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import com.theapache64.stackzy.data.local.AndroidDevice
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
@@ -22,7 +22,7 @@ import com.theapache64.stackzy.util.R
 fun SelectDeviceScreen(
     selectDeviceViewModel: SelectDeviceViewModel,
     onBackClicked: () -> Unit,
-    onDeviceSelected: (AndroidDevice) -> Unit
+    onDeviceSelected: (AndroidDeviceWrapper) -> Unit
 ) {
     val devices by selectDeviceViewModel.connectedDevices.collectAsState()
 
@@ -35,8 +35,8 @@ fun SelectDeviceScreen(
 
 @Composable
 fun Content(
-    devices: List<AndroidDevice>?,
-    onDeviceSelected: (AndroidDevice) -> Unit,
+    devices: List<AndroidDeviceWrapper>?,
+    onDeviceSelected: (AndroidDeviceWrapper) -> Unit,
     onBackClicked: () -> Unit
 ) {
     if (devices == null) {

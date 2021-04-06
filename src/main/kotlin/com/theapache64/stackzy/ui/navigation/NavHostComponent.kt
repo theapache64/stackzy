@@ -6,11 +6,11 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.github.theapache64.gpa.model.Account
-import com.theapache64.stackzy.data.local.AndroidApp
-import com.theapache64.stackzy.data.local.AndroidDevice
-import com.theapache64.stackzy.data.remote.Library
-import com.theapache64.stackzy.di.AppComponent
-import com.theapache64.stackzy.di.DaggerAppComponent
+import com.theapache64.stackzy.data.di.AppComponent
+import com.theapache64.stackzy.data.di.DaggerAppComponent
+import com.theapache64.stackzy.model.AndroidAppWrapper
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
+import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
 import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
@@ -39,12 +39,12 @@ class NavHostComponent(
         object LogIn : Config()
         object SelectDevice : Config()
         data class SelectApp(
-            val apkSource: ApkSource<AndroidDevice, Account>
+            val apkSource: ApkSource<AndroidDeviceWrapper, Account>
         ) : Config()
 
         data class AppDetail(
-            val apkSource: ApkSource<AndroidDevice, Account>,
-            val androidApp: AndroidApp
+            val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+            val androidApp: AndroidAppWrapper
         ) : Config()
 
         object Update : Config()
@@ -181,7 +181,7 @@ class NavHostComponent(
     /**
      * Invoked when a device selected
      */
-    private fun onDeviceSelected(androidDevice: AndroidDevice) {
+    private fun onDeviceSelected(androidDevice: AndroidDeviceWrapper) {
         router.push(Config.SelectApp(ApkSource.Adb(androidDevice)))
     }
 
@@ -189,13 +189,13 @@ class NavHostComponent(
      * Invoked when the app got selected
      */
     private fun onAppSelected(
-        apkSource: ApkSource<AndroidDevice, Account>,
-        androidApp: AndroidApp
+        apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+        androidAppWrapper: AndroidAppWrapper
     ) {
         router.push(
             Config.AppDetail(
                 apkSource = apkSource,
-                androidApp = androidApp
+                androidApp = androidAppWrapper
             )
         )
     }
@@ -203,8 +203,8 @@ class NavHostComponent(
     /**
      * Invoked when library selected
      */
-    private fun onLibrarySelected(library: Library) {
-        Desktop.getDesktop().browse(URI(library.website))
+    private fun onLibrarySelected(libraryWrapper: LibraryWrapper) {
+        Desktop.getDesktop().browse(URI(libraryWrapper.website))
     }
 
     /**

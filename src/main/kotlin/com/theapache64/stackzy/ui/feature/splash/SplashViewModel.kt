@@ -5,7 +5,7 @@ import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.ConfigRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
-import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
