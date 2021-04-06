@@ -1,10 +1,12 @@
 package com.theapache64.stackzy.ui.feature.splash
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.ui.navigation.Component
+import com.toxicbakery.logging.Arbor
 import javax.inject.Inject
 
 /**
@@ -13,7 +15,8 @@ import javax.inject.Inject
 class SplashScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
-    private val onSyncFinished: () -> Unit
+    private val onSyncFinished: () -> Unit,
+    private val onUpdateNeeded: () -> Unit,
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -26,12 +29,18 @@ class SplashScreenComponent(
     @Composable
     override fun render() {
 
-        splashViewModel.init(rememberCoroutineScope())
-        splashViewModel.syncData()
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(splashViewModel) {
+            Arbor.d("Syncing data...")
+            splashViewModel.init(scope)
+            splashViewModel.syncData()
+        }
+
 
         SplashScreen(
             splashViewModel = splashViewModel,
-            onSyncFinished = onSyncFinished
+            onSyncFinished = onSyncFinished,
+            onUpdateNeeded = onUpdateNeeded
         )
     }
 

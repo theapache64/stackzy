@@ -21,6 +21,19 @@ class SelectAppViewModel @Inject constructor(
     private val playStoreRepo: PlayStoreRepo
 ) {
 
+    companion object {
+        const val TAB_NO_TAB = -1
+        private const val TAB_THIRD_PARTY_APPS_ID = 0
+        private const val TAB_SYSTEM_APPS_ID = 1
+
+        val tabsMap = mapOf(
+            TAB_THIRD_PARTY_APPS_ID to "3rd Party Apps",
+            TAB_SYSTEM_APPS_ID to "System Apps"
+        )
+
+        private const val MSG_LOADING_TRENDING_APPS = "Loading trending apps..."
+    }
+
     private lateinit var viewModelScope: CoroutineScope
     private var searchJob: Job? = null
 
@@ -37,6 +50,9 @@ class SelectAppViewModel @Inject constructor(
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword: StateFlow<String> = _searchKeyword
 
+    private val _selectedTabIndex = MutableStateFlow(TAB_NO_TAB)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
+
     /**
      * Filtered apps
      */
@@ -52,27 +68,33 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun loadApps() {
+
         // Updating state
-        _apps.value = Resource.Loading("Loading trending apps...")
+        _apps.value = Resource.Loading(MSG_LOADING_TRENDING_APPS)
 
         when (apkSource) {
             is ApkSource.Adb -> {
                 // ### ADB ###
                 this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
                 viewModelScope.launch {
-                    fullApps = adbRepo.getInstalledApps(selectedDevice!!.device).also {
-                        _apps.value = Resource.Success(null, it)
+                    fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
+                    val tab = if (selectedTabIndex.value == TAB_NO_TAB) {
+                        TAB_THIRD_PARTY_APPS_ID // first time
+                    } else {
+                        _selectedTabIndex.value // going back from detail page
                     }
+                    onTabClicked(tab)
                 }
             }
             is ApkSource.PlayStore -> {
 
                 // ### PLAY STORE ###
-                viewModelScope.launch {
+                /*viewModelScope.launch {
                     val api = Play.getApi((apkSource as ApkSource.PlayStore<Account>).value)
                     val apps = playStoreRepo.search(" ", api)
                     _apps.value = Resource.Success(null, apps)
-                }
+                }*/
+                onSearchKeywordChanged(_searchKeyword.value)
             }
         }
     }
@@ -85,17 +107,27 @@ class SelectAppViewModel @Inject constructor(
                 // ### ADB ###
 
                 // Filtering apps
-                val filteredApps = fullApps?.filter {
-                    it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
-                } ?: listOf()
+                val filteredApps = fullApps
+                    ?.filter {
+                        // search with keyword
+                        it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
+                    }
+                    ?.filter {
+                        // filter for active tab
+                        it.isSystemApp == (selectedTabIndex.value == TAB_SYSTEM_APPS_ID)
+                    }
+                    ?: listOf()
 
                 _apps.value = Resource.Success(null, filteredApps)
             }
             is ApkSource.PlayStore -> {
                 // Play Store
                 searchJob?.cancel()
+                println("initiating search")
                 searchJob = viewModelScope.launch {
+                    println("Waiting for delay")
                     delay(500)
+                    println("Delay done.. let's search ${searchKeyword.value}")
                     val account = (apkSource as ApkSource.PlayStore<Account>).value
                     val api = Play.getApi(account)
                     val keyword = searchKeyword.value.let {
@@ -106,7 +138,7 @@ class SelectAppViewModel @Inject constructor(
                         }
                     }
                     val loadingMsg = if (keyword.isBlank()) {
-                        "Loading trending apps"
+                        MSG_LOADING_TRENDING_APPS
                     } else {
                         "Searching for '$keyword'"
                     }
@@ -131,5 +163,17 @@ class SelectAppViewModel @Inject constructor(
             is ApkSource.PlayStore -> TODO()
         }
 
+    }
+
+    /**
+     * Invoked when any of the tabs clicked
+     */
+    fun onTabClicked(tabIndex: Int) {
+        _selectedTabIndex.value = tabIndex
+
+        // utilising existing filter logic : since we've already filter logic inside search,
+        // passing empty string would filter the tab accordingly and passing search keyword would
+        // filter the apps accordingly.
+        onSearchKeywordChanged(searchKeyword.value)
     }
 }

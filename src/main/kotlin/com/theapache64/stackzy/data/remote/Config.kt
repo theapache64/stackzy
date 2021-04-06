@@ -9,4 +9,6 @@ data class Config(
     val shouldConsiderResultCache: Boolean,
     @Json(name = "latest_stackzy_lib_version")
     val latestStackzyLibVersion: Int,
+    @Json(name = "mandatory_version_code")
+    val mandatoryVersionCode: Int,
 )

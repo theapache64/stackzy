@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.outlined.ChevronLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.util.R
 
@@ -26,7 +29,8 @@ fun CustomScaffold(
     modifier: Modifier = Modifier,
     onBackClicked: (() -> Unit)? = null,
     topRightSlot: (@Composable () -> Unit)? = null,
-    content: @Composable () -> Unit
+    bottomGradient: Boolean = false,
+    content: @Composable BoxScope.() -> Unit
 ) {
     Column(
         modifier = modifier
@@ -85,8 +89,48 @@ fun CustomScaffold(
             }
         }
 
-        // Content slot
-        content()
+        Spacer(
+            modifier = Modifier.height(10.dp)
+        )
+
+        Box {
+            // Content slot
+            content()
+
+            if (bottomGradient) {
+                BottomGradient()
+            }
+        }
+
     }
 
+}
+
+val BOTTOM_GRADIENT_HEIGHT = 50.dp
+
+@Composable
+fun BoxScope.BottomGradient() {
+    // Bottom gradient
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(BOTTOM_GRADIENT_HEIGHT)
+            .align(Alignment.BottomCenter)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Transparent,
+                        com.theapache64.stackzy.ui.theme.R.color.BigStone
+                    )
+                )
+            )
+    )
+}
+
+@Composable
+fun GradientMargin() {
+    Spacer(
+        modifier = Modifier
+            .height(BOTTOM_GRADIENT_HEIGHT)
+    )
 }

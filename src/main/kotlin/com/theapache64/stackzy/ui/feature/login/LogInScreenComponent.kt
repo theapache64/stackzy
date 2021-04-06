@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.login
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
@@ -24,7 +25,12 @@ class LogInScreenComponent(
 
     @Composable
     override fun render() {
-        viewModel.init(rememberCoroutineScope())
+
+        val scope = rememberCoroutineScope()
+        LaunchedEffect(viewModel) {
+            viewModel.init(scope)
+        }
+
         LogInScreen(
             viewModel = viewModel,
             onLoggedIn = onLoggedIn,

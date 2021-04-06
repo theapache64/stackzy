@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.selectapp
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.github.theapache64.gpa.model.Account
@@ -23,16 +24,20 @@ class SelectAppScreenComponent(
     lateinit var selectAppViewModel: SelectAppViewModel
 
     init {
+        println("Create new select app screen component")
         appComponent.inject(this)
-
     }
 
     @Composable
     override fun render() {
         val scope = rememberCoroutineScope()
-
-        selectAppViewModel.init(scope, apkSource)
-        selectAppViewModel.loadApps()
+        LaunchedEffect(selectAppViewModel) {
+            println("Creating select app screen...")
+            selectAppViewModel.init(scope, apkSource)
+            if (selectAppViewModel.apps.value == null) {
+                selectAppViewModel.loadApps()
+            }
+        }
 
         SelectAppScreen(
             selectAppViewModel = selectAppViewModel,

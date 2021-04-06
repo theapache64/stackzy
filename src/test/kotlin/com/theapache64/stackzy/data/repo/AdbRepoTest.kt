@@ -54,6 +54,11 @@ class AdbRepoTest {
                 "Are you sure you've at least one device connected"
             }
         } else {
+            //verify both system apps and 3rd apps are available
+            val (systemApps, thirdPartyApps) = installedApps.partition { it.isSystemApp }
+            systemApps.size.should.above(0)
+            thirdPartyApps.size.should.above(0)
+
             // not empty. one or more devices are connected
             assert(true)
         }
@@ -65,7 +70,8 @@ class AdbRepoTest {
         val apkPath = adbRepo.getApkPath(
             device,
             AndroidApp(
-                Package(NATIVE_KOTLIN_PACKAGE_NAME)
+                Package(NATIVE_KOTLIN_PACKAGE_NAME),
+                isSystemApp = false,
             )
         )
         apkPath.should.startWith("/data/app/")
@@ -77,7 +83,8 @@ class AdbRepoTest {
         val apkPath = adbRepo.getApkPath(
             device,
             AndroidApp(
-                Package(FLUTTER_PACKAGE_NAME)
+                Package(FLUTTER_PACKAGE_NAME),
+                isSystemApp = false,
             )
         )
         apkPath.should.startWith("/data/app/")
@@ -90,7 +97,8 @@ class AdbRepoTest {
         val apkPath = adbRepo.getApkPath(
             device,
             AndroidApp(
-                Package(app)
+                Package(app),
+                isSystemApp = false,
             )
         )
         apkPath.should.`null`

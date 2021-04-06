@@ -6,7 +6,7 @@ import com.malinskiy.adam.request.device.AsyncDeviceMonitorRequest
 import com.malinskiy.adam.request.device.Device
 import com.malinskiy.adam.request.device.DeviceState
 import com.malinskiy.adam.request.device.ListDevicesRequest
-import com.malinskiy.adam.request.pkg.PmListRequest
+import com.malinskiy.adam.request.pkg.Package
 import com.malinskiy.adam.request.prop.GetPropRequest
 import com.malinskiy.adam.request.shell.v1.ShellCommandRequest
 import com.malinskiy.adam.request.sync.v1.PullFileRequest
@@ -50,7 +50,7 @@ class AdbRepo @Inject constructor(
         private val ADB_ROOT_DIR = "${System.getProperty("user.home")}${File.separator}.stackzy"
 
         // platform-tools url map
-        private val pToolsMap by lazy {
+        private val platformToolsUrlMap by lazy {
             mapOf(
                 OSType.Linux to "https://dl.google.com/android/repository/platform-tools-latest-linux.zip",
                 OSType.Windows to "https://dl.google.com/android/repository/platform-tools-latest-windows.zip",
@@ -128,20 +128,27 @@ class AdbRepo @Inject constructor(
      */
     suspend fun getInstalledApps(device: Device): List<AndroidApp> {
 
-        val installedPackages = adb.execute(
-            request = PmListRequest(
-                includePath = false
-            ),
-            serial = device.serial
-        )
+        val installedApps = mutableListOf<AndroidApp>()
 
-        return installedPackages
-            .filter { it.name.isNotBlank() }
-            .map {
-                AndroidApp(it)
-            }.apply {
-                Arbor.d("Total apps : $size")
-            }
+        for (flag in arrayOf("-3", "-s")) {
+
+            val installedPackages = adb.execute(
+                request = ShellCommandRequest("pm list packages $flag"),
+                serial = device.serial
+            ).output
+
+            val isSystemApp = flag == "-s"
+            installedPackages
+                .split("\n") // parse line by line
+                .map { it.replace("package:", "").trim() } // filter package name
+                .forEach { packageName ->
+                    val androidApp = AndroidApp(Package(packageName), isSystemApp = isSystemApp)
+                    installedApps.add(androidApp)
+                }
+        }
+
+
+        return installedApps
     }
 
 
@@ -238,7 +245,7 @@ class AdbRepo @Inject constructor(
     suspend fun downloadAdb() = flow {
 
         // Getting platform tools download url
-        val pToolsUrl = pToolsMap[OsCheck.operatingSystemType]
+        val pToolsUrl = platformToolsUrlMap[OsCheck.operatingSystemType]
         require(pToolsUrl != null) { "${OsCheck.operatingSystemType} doesn't have adb binary defined." }
 
         // Download file

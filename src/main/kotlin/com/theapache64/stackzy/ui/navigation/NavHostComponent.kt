@@ -1,12 +1,9 @@
 package com.theapache64.stackzy.ui.navigation
 
 import androidx.compose.runtime.Composable
-import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.*
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
-import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.slide
-import com.arkivanov.decompose.pop
-import com.arkivanov.decompose.push
-import com.arkivanov.decompose.router
+import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
@@ -20,6 +17,7 @@ import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
 import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
+import com.theapache64.stackzy.ui.feature.update.UpdateScreenComponent
 import com.theapache64.stackzy.util.ApkSource
 import com.toxicbakery.logging.Arbor
 import java.awt.Desktop
@@ -33,7 +31,7 @@ class NavHostComponent(
 ) : Component, ComponentContext by componentContext {
 
     /**
-     * Available screens
+     * Available screensSelectApp
      */
     private sealed class Config : Parcelable {
         object Splash : Config()
@@ -48,6 +46,8 @@ class NavHostComponent(
             val apkSource: ApkSource<AndroidDevice, Account>,
             val androidApp: AndroidApp
         ) : Config()
+
+        object Update : Config()
     }
 
     private val appComponent: AppComponent = DaggerAppComponent
@@ -69,7 +69,8 @@ class NavHostComponent(
             is Config.Splash -> SplashScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                onSyncFinished = ::onSplashSyncFinished
+                onSyncFinished = ::onSplashSyncFinished,
+                onUpdateNeeded = ::onUpdateNeeded
             )
             is Config.SelectPathway -> PathwayScreenComponent(
                 appComponent = appComponent,
@@ -107,6 +108,11 @@ class NavHostComponent(
                 onLibrarySelected = ::onLibrarySelected,
                 onBackClicked = ::onBackClicked
             )
+
+            is Config.Update -> UpdateScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext
+            )
         }
     }
 
@@ -114,7 +120,7 @@ class NavHostComponent(
     override fun render() {
         Children(
             routerState = router.state,
-            animation = slide()
+            animation = crossfadeScale()
         ) { child ->
             child.instance.render()
         }
@@ -124,7 +130,7 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        router.push(Config.SelectPathway)
+        router.replaceCurrent(Config.SelectPathway)
         /*router.push(
             Config.AppDetail(
                 AndroidDevice(
@@ -162,10 +168,7 @@ class NavHostComponent(
      * Invoked when login succeeded.
      */
     private fun onLoggedIn(account: Account) {
-        router.pop() // remove login screen from stack
-
-        // then go to select app screen
-        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
+        router.replaceCurrent(Config.SelectApp(ApkSource.PlayStore(account)))
     }
 
     /**
@@ -202,6 +205,13 @@ class NavHostComponent(
      */
     private fun onLibrarySelected(library: Library) {
         Desktop.getDesktop().browse(URI(library.website))
+    }
+
+    /**
+     * Invoked when an update is necessary
+     */
+    private fun onUpdateNeeded() {
+        router.push(Config.Update)
     }
 
     /**

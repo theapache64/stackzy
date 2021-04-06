@@ -3,7 +3,9 @@ package com.theapache64.stackzy.ui.feature.selectdevice
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
@@ -12,7 +14,6 @@ import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.util.R
-import com.toxicbakery.logging.Arbor
 
 /**
  * To select a device from connected devices
@@ -23,18 +24,6 @@ fun SelectDeviceScreen(
     onBackClicked: () -> Unit,
     onDeviceSelected: (AndroidDevice) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-
-    DisposableEffect(scope) {
-        Arbor.d("Init scope")
-        selectDeviceViewModel.init(scope)
-        selectDeviceViewModel.watchConnectedDevices()
-        onDispose {
-            Arbor.d("Dispose scope")
-            selectDeviceViewModel.stopWatchConnectedDevices()
-        }
-    }
-
     val devices by selectDeviceViewModel.connectedDevices.collectAsState()
 
     Content(

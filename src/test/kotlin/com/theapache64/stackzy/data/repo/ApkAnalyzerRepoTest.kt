@@ -3,12 +3,10 @@ package com.theapache64.stackzy.data.repo
 import com.theapache64.expekt.should
 import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.data.local.Platform
-import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.test.*
-import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.theapache64.stackzy.util.loadLibs
 import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
-import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
@@ -31,7 +29,7 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Analysis Report - Native - Cached`() = runBlockingUnitTest {
-        loadLibs { libs ->
+        librariesRepo.loadLibs { libs ->
             getCachedDecompiledApk { nativeApkFile, decompiledDir ->
                 val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
                 report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
@@ -87,7 +85,7 @@ class ApkAnalyzerRepoTest {
     @Test
     fun `Analysis Report - Native`() = runBlockingUnitTest {
         // First, lets decompile a native kotlin apk file
-        loadLibs { libs ->
+        librariesRepo.loadLibs { libs ->
             Arbor.d("Starting test... ;)")
             val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(nativeApkFile)
@@ -101,7 +99,7 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Analysis Report - Flutter`() = runBlockingUnitTest {
-        loadLibs { libs ->
+        librariesRepo.loadLibs { libs ->
             val sampleApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
             val report = apkAnalyzerRepo.analyze(FLUTTER_PACKAGE_NAME, sampleApkFile, decompiledDir, libs)
@@ -112,7 +110,7 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Analysis Report - React Native`() = runBlockingUnitTest {
-        loadLibs {
+        librariesRepo.loadLibs {
             val sampleApkFile = getTestResource(REACT_NATIVE_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
             val report = apkAnalyzerRepo.analyze(REACT_NATIVE_APP_NAME, sampleApkFile, decompiledDir, it)
@@ -192,7 +190,7 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Get libraries - native kotlin`() = runBlockingUnitTest {
-        loadLibs { libs ->
+        librariesRepo.loadLibs { libs ->
             val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
             val (appLibraries, untrackedLibs) = apkAnalyzerRepo.getAppLibraries(decompiledDir, libs)
@@ -203,7 +201,7 @@ class ApkAnalyzerRepoTest {
 
     @Test
     fun `Get categorized libraries - native kotlin`() = runBlockingUnitTest {
-        loadLibs { libs ->
+        librariesRepo.loadLibs { libs ->
             val sampleApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
             val decompiledDir = apkToolRepo.decompile(sampleApkFile)
             val (untrackedLibs, appLibraries) = apkAnalyzerRepo.getLibraries(
@@ -216,19 +214,11 @@ class ApkAnalyzerRepoTest {
         }
     }
 
-    private suspend fun loadLibs(onLibsLoaded: suspend (List<Library>) -> Unit) {
-        librariesRepo.getRemoteLibraries().collect {
-            when (it) {
-                is Resource.Loading -> {
-                    Arbor.d("Loading libs")
-                }
-                is Resource.Success -> {
-                    onLibsLoaded(it.data)
-                }
-                is Resource.Error -> {
-                    throw IllegalArgumentException(it.errorData)
-                }
-            }
-        }
+    @Test
+    fun `Manifest permission parsing`() {
+        val manifestFile = getTestResource("com.netflix.mediaclient_AndroidManifest.xml")
+        val permission = apkAnalyzerRepo.getPermissionsFromManifestFile(manifestFile)
+        println(permission)
+        permission.size.should.above(0)
     }
 }

@@ -23,9 +23,7 @@ class ApkAnalyzerRepo @Inject constructor() {
 
         private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
-        private val USER_PERMISSION_REGEX = "<uses-permission android:name=\"(?<permission>.+?)\"\\/>".toRegex()
-
-
+        private val USER_PERMISSION_REGEX = "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"\\/>".toRegex()
     }
 
     /**
@@ -85,8 +83,12 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get permissions used inside decompiled dir.
      */
     fun getPermissions(decompiledDir: File): List<String> {
-        val permissions = mutableListOf<String>()
         val manifestFile = File("${decompiledDir.absolutePath}${File.separator}AndroidManifest.xml")
+        return getPermissionsFromManifestFile(manifestFile)
+    }
+
+    fun getPermissionsFromManifestFile(manifestFile: File): List<String> {
+        val permissions = mutableListOf<String>()
         val manifestRead = manifestFile.readText()
         var matchResult = USER_PERMISSION_REGEX.find(manifestRead)
         while (matchResult != null) {

@@ -74,5 +74,11 @@ class AuthRepo @Inject constructor(
         pref.remove(KEY_ENC_ACCOUNT)
     }
 
+    /**
+     * To get account or throw exception
+     */
+    fun getAccountOrThrow() = getAccount()
+        ?: throw IllegalArgumentException("Couldn't get account. Are you sure you've logged in via the app?")
+
 
 }

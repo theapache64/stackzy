@@ -7,6 +7,8 @@ import com.theapache64.cyclone.core.Intent
 import com.theapache64.stackzy.App
 import com.theapache64.stackzy.ui.navigation.NavHostComponent
 import com.theapache64.stackzy.ui.theme.StackzyTheme
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
 import androidx.compose.desktop.Window as setContent
 
 
@@ -23,7 +25,8 @@ class MainActivity : Activity() {
         super.onCreate()
 
         setContent(
-            title = App.appArgs.appName,
+            title = "${App.appArgs.appName} (${App.appArgs.version})",
+            icon = getAppIcon(),
             undecorated = App.CUSTOM_TOOLBAR,
             size = IntSize(1024, 600),
         ) {
@@ -38,5 +41,30 @@ class MainActivity : Activity() {
             }
         }
 
+    }
+
+    /**
+     * To get app icon for toolbar and system tray
+     */
+    private fun getAppIcon(): BufferedImage {
+
+        // Retrieving image
+        val resourceFile = MainActivity::class.java.classLoader.getResourceAsStream(
+            "drawables/launcher_icons/linux.png"
+        )
+        val imageInput = ImageIO.read(resourceFile)
+
+        val newImage = BufferedImage(
+            imageInput.width,
+            imageInput.height,
+            BufferedImage.TYPE_INT_ARGB
+        )
+
+        // Drawing
+        val canvas = newImage.createGraphics()
+        canvas.drawImage(imageInput, 0, 0, null)
+        canvas.dispose()
+
+        return newImage
     }
 }

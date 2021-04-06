@@ -1,16 +1,23 @@
 package com.theapache64.stackzy.data.repo
 
+import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.expekt.should
+import com.theapache64.stackzy.data.local.AndroidApp
+import com.theapache64.stackzy.data.local.toResult
 import com.theapache64.stackzy.data.remote.Result
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import com.theapache64.stackzy.util.calladapter.flow.Resource
+import com.theapache64.stackzy.util.loadLibs
 import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
+import kotlin.io.path.createTempDirectory
 
 class ResultRepoTest {
 
@@ -24,6 +31,18 @@ class ResultRepoTest {
 
     @InjectFromComponent
     private lateinit var resultRepo: ResultRepo
+
+    @InjectFromComponent
+    private lateinit var adbRepo: AdbRepo
+
+    @InjectFromComponent
+    private lateinit var apkAnalyzerRepo: ApkAnalyzerRepo
+
+    @InjectFromComponent
+    private lateinit var librariesRepo: LibrariesRepo
+
+    @InjectFromComponent
+    private lateinit var apkToolRepo: ApkToolRepo
 
     @Test
     @BeforeAll
@@ -52,6 +71,35 @@ class ResultRepoTest {
                 is Resource.Error -> {
                     assert(false) {
                         it.errorData
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `Pull, Decompile and Add (complex)`() = runBlocking {
+
+        val androidDevice = adbRepo.watchConnectedDevice().first().first()
+        val apkFile = kotlin.io.path.createTempFile(suffix = ".apk").toFile()
+        val packageName = "com.netflix.mediaclient"
+        adbRepo.pullFile(
+            androidDevice,
+            adbRepo.getApkPath(androidDevice, AndroidApp(Package(packageName), false))!!,
+            apkFile
+        ).collect { pullPercentage ->
+            if (pullPercentage == 100) {
+                // pulled
+                println("Pulled")
+                val decompiledDir = createTempDirectory().toFile()
+                apkToolRepo.decompile(apkFile, decompiledDir)
+                librariesRepo.loadLibs { allLibs ->
+                    val report = apkAnalyzerRepo.analyze(packageName, apkFile, decompiledDir, allLibs)
+                    val result = report.toResult(resultRepo, null)
+                    resultRepo.add(result).collect {
+                        if (it is Resource.Error) {
+                            assert(false) { it.errorData }
+                        }
                     }
                 }
             }

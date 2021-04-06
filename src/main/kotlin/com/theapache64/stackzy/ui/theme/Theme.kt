@@ -25,7 +25,7 @@ val DarkTheme = darkColors(
 fun StackzyTheme(
     title: String = "",
     subTitle: String = "",
-    customToolbar: Boolean = true,
+    customToolbar: Boolean = false,
     isDark: Boolean = true,
     content: @Composable (ColumnScope) -> Unit
 ) {
