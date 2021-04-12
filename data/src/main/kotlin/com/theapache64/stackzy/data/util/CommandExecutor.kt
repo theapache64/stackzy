@@ -13,15 +13,22 @@ import java.io.InputStreamReader
 object CommandExecutor {
 
     @Throws
-    fun executeCommand(command: String): String = executeCommand(command, isLivePrint = false, isSkipException = false)
-
-    @Throws
-    fun executeCommand(command: String, isLivePrint: Boolean, isSkipException: Boolean): String =
-        executeCommands(arrayOf(command), isLivePrint, isSkipException).joinToString(separator = "\n")
+    fun executeCommand(
+        command: String,
+        isLivePrint: Boolean,
+        isSkipException: Boolean,
+        onPrintLine: ((String) -> Unit)? = null
+    ): String =
+        executeCommands(arrayOf(command), isLivePrint, isSkipException, onPrintLine).joinToString(separator = "\n")
 
 
     @Throws(IOException::class)
-    fun executeCommands(commands: Array<String>, isLivePrint: Boolean, isSkipException: Boolean): List<String> {
+    fun executeCommands(
+        commands: Array<String>,
+        isLivePrint: Boolean,
+        isSkipException: Boolean,
+        onPrintLine: ((String) -> Unit)? = null
+    ): List<String> {
 
         val rt = Runtime.getRuntime()
 
@@ -41,12 +48,12 @@ object CommandExecutor {
         val stdError = BufferedReader(InputStreamReader(proc.errorStream))
 
         // Read the output from the command
-        var lastLine: String?
         val result = mutableListOf<String>()
         stdInput.forEachLine { line ->
             if (isLivePrint) {
                 Arbor.d(line)
             }
+            onPrintLine?.invoke(line)
             result.add(line)
         }
 
@@ -56,6 +63,7 @@ object CommandExecutor {
             if (isLivePrint) {
                 Arbor.d(line)
             }
+            onPrintLine?.invoke(line)
             error.append(line).append("\n")
         }
 

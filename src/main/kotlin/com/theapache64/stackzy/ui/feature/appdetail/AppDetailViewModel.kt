@@ -137,7 +137,7 @@ class AppDetailViewModel @Inject constructor(
 
 
     private fun getFullPermissionsFromPermissions(permissions: String?): List<String> {
-        return permissions?.split(",")?.filter{ it.isNotBlank() } ?: listOf()
+        return permissions?.split(",")?.filter { it.isNotBlank() } ?: listOf()
     }
 
     private fun getLibrariesFromPackages(libPackages: String): List<Library> {
@@ -248,7 +248,10 @@ class AppDetailViewModel @Inject constructor(
         _loadingMessage.value = R.string.app_detail_loading_decompiling
         this.decompiledDir = apkToolRepo.decompile(
             destinationFile = apkFile,
-            targetDir = File(getDecompiledDirPath(androidApp.appPackage.name))
+            targetDir = File(getDecompiledDirPath(androidApp.appPackage.name)),
+            onDecompileMessage = {
+                _loadingMessage.value = "Decompiling... (${it.replace("I: ", "")})"
+            }
         )
         // val decompiledDir = File("build/topcorn_decompiled")
 
