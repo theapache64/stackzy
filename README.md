@@ -109,13 +109,6 @@ Give a ⭐️ if this project helped you!
     <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" alt="Donation" width="160">
 </a>
 
-## ☑️ TODO
-
-- [x] Release the first public version with basic features
-- [ ] Theme switching
-- [x] Playstore integration (Download APK from playstore)
-- [ ] Support more libraries
-
 ## 📝 License
 
 - [Fira Code](https://github.com/tonsky/FiraCode) : [OFL-1.1 Licence](https://github.com/tonsky/FiraCode/blob/master/LICENSE)
