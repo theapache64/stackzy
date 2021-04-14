@@ -77,7 +77,7 @@ class SelectAppViewModel @Inject constructor(
         when (apkSource) {
             is ApkSource.Adb -> {
                 // ### ADB ###
-                this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
+                this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value.androidDevice
                 viewModelScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
                     val tab = if (selectedTabIndex.value == TAB_NO_TAB) {
