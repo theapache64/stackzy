@@ -10,7 +10,7 @@ plugins {
 }
 
 val daggerVersion by extra("2.31.2")
-val stackzyVersion by extra("1.0.0")
+val stackzyVersion by extra("1.0.1")
 
 group = "com.theapache64"
 version = stackzyVersion // TODO : Change in App.kt also
@@ -99,7 +99,7 @@ compose.desktop {
         mainClass = "com.theapache64.stackzy.AppKt"
         nativeDistributions {
             packageName = "Stackzy"
-            packageVersion = (project.version as String).split("-")[0]
+            packageVersion = project.version as String
             description = "An application to identify libraries used inside an android application"
             copyright = "© 2021 theapache64. All rights reserved."
             vendor = "theapache64"
