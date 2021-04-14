@@ -67,7 +67,7 @@ fun PathwayScreen(
             )
 
             Text(
-                text = "find APK using",
+                text = "get APK from",
                 style = MaterialTheme.typography.subtitle2,
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f)
             )
