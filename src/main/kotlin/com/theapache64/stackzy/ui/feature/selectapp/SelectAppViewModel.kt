@@ -43,7 +43,7 @@ class SelectAppViewModel @Inject constructor(
      * APK source can be either from an AndroidDevice or from a google Account
      */
     private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
-    private var selectedDevice: AndroidDevice? = null
+    private var selectedDevice: AndroidDeviceWrapper? = null
 
     /**
      * To store all apps instaled in the device (used for search filtering)
@@ -77,7 +77,7 @@ class SelectAppViewModel @Inject constructor(
         when (apkSource) {
             is ApkSource.Adb -> {
                 // ### ADB ###
-                this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value.androidDevice
+                this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value
                 viewModelScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
                     val tab = if (selectedTabIndex.value == TAB_NO_TAB) {

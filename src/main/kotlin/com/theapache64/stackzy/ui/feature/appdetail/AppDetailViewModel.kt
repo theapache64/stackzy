@@ -229,7 +229,7 @@ class AppDetailViewModel @Inject constructor(
                         // Give some time to APK to prepare for decompile
                         _loadingMessage.value = "Preparing APK for decompiling..."
                         delay(2000)
-                        onApkPulled(androidAppWrapper, apkFile, shouldStoreResult = true)
+                        onApkPulled(androidAppWrapper, apkFile, shouldStoreResult = false)
                     }
 
                 }
