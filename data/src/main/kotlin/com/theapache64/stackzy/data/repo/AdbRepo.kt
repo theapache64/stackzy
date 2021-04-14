@@ -126,31 +126,23 @@ class AdbRepo @Inject constructor(
     /**
      * To get installed app from given device
      */
-    suspend fun getInstalledApps(device: Device): List<AndroidApp> {
+    suspend fun getInstalledApps(device: Device): List<AndroidApp> = arrayOf("-3", "-s").flatMap { flag ->
+        val installedPackages = getInstalledPackagesByFlag(device, flag)
+        val isSystemApp = flag == "-s"
 
-        val installedApps = mutableListOf<AndroidApp>()
-
-        for (flag in arrayOf("-3", "-s")) {
-
-            val installedPackages = adb.execute(
-                request = ShellCommandRequest("pm list packages $flag"),
-                serial = device.serial
-            ).output
-
-            val isSystemApp = flag == "-s"
-            installedPackages
-                .split("\n") // parse line by line
-                .map { it.replace("package:", "").trim() } // filter package name
-                .forEach { packageName ->
-                    val androidApp = AndroidApp(Package(packageName), isSystemApp = isSystemApp)
-                    installedApps.add(androidApp)
-                }
-        }
-
-
-        return installedApps
+        installedPackages
+            .split("\n") // parse line by line
+            .filter { packageName -> packageName.isNotBlank() }
+            .map { it.replace("package:", "").trim() } // filter package name
+            .map { packageName ->
+                AndroidApp(Package(packageName), isSystemApp = isSystemApp)
+            }
     }
 
+    private suspend fun getInstalledPackagesByFlag(device: Device, flag: String): String = adb.execute(
+        request = ShellCommandRequest("pm list packages $flag"),
+        serial = device.serial
+    ).output
 
     private fun String.singleLine(): String {
         return this.replace("\n", "")
