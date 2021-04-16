@@ -36,10 +36,8 @@ fun CustomScaffold(
         modifier = modifier
             .fillMaxSize()
             .padding(
-                start = CONTENT_PADDING_HORIZONTAL.dp,
-                end = CONTENT_PADDING_HORIZONTAL.dp,
-                top = CONTENT_PADDING_VERTICAL.dp,
-                bottom = CONTENT_PADDING_VERTICAL.dp,
+                horizontal = CONTENT_PADDING_HORIZONTAL.dp,
+                vertical = CONTENT_PADDING_VERTICAL.dp,
             )
     ) {
 

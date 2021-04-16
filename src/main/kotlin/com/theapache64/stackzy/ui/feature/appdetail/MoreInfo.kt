@@ -73,7 +73,7 @@ private fun BuildGradleGroovy(
     gradleInfo: GradleInfo
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.padding(top = 10.dp)
     ) {
 
         // Title

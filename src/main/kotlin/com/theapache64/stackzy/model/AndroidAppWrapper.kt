@@ -5,6 +5,9 @@ import com.theapache64.stackzy.data.local.AndroidAppDefinition
 
 class AndroidAppWrapper(val androidApp: AndroidApp) : AndroidAppDefinition by androidApp, AlphabetCircle() {
     companion object {
+        /**
+         * Remove these keywords when to GUESS app name from package name
+         */
         private val titleNegRegEx = "(\\.app|\\.android|\\.beta|\\.com)".toRegex()
     }
 
