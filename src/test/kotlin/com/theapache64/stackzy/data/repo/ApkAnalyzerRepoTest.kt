@@ -177,7 +177,10 @@ class ApkAnalyzerRepoTest {
         val sampleApkFile = getTestResource(CORDOVA_APK_FILE_NAME)
         sampleApkFile.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-        apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Cordova::class.java)
+        with(apkAnalyzerRepo) {
+            getPlatform(decompiledDir).should.instanceof(Platform.Cordova::class.java)
+            getAppName(decompiledDir).should.equal(CORDOVA_APP_NAME)
+        }
     }
 
     @Test
@@ -185,7 +188,10 @@ class ApkAnalyzerRepoTest {
         val sampleApkFile = getTestResource(XAMARIN_APK_FILE_NAME)
         sampleApkFile.exists().should.`true`
         val decompiledDir = apkToolRepo.decompile(sampleApkFile)
-        apkAnalyzerRepo.getPlatform(decompiledDir).should.instanceof(Platform.Xamarin::class.java)
+        with(apkAnalyzerRepo) {
+            getPlatform(decompiledDir).should.instanceof(Platform.Xamarin::class.java)
+            getAppName(decompiledDir).should.equal(XAMARIN_APP_NAME)
+        }
     }
 
     @Test

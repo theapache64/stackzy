@@ -17,7 +17,7 @@ const val CORDOVA_APP_NAME = "FinC Financial Calculators"
 const val CORDOVA_PACKAGE_NAME = "com.swot.emicalculator"
 const val CORDOVA_APK_FILE_NAME = "com.swot.emicalculator_cordova.apk"
 
-const val XAMARIN_APP_NAME = "Xamarin Samples"
+const val XAMARIN_APP_NAME = "Xamarin Samaples"
 const val XAMARIN_PACKAGE_NAME = "com.mobmaxime.xamarin"
 const val XAMARIN_APK_FILE_NAME = "com.mobmaxime.xamarin_xamarin.apk"
 
