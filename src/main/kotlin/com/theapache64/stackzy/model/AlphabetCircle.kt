@@ -6,9 +6,9 @@ import com.theapache64.stackzy.util.ColorUtil
 
 abstract class AlphabetCircle : BaseAlphabetCircle() {
 
-    val randomColor = ColorUtil.getRandomColor()
-    val brighterColor = ColorUtil.getBrightenedColor(randomColor)
-    val bgColor = Brush.horizontalGradient(
+    private val randomColor = ColorUtil.getRandomColor()
+    private val brighterColor = ColorUtil.getBrightenedColor(randomColor)
+    private val bgColor = Brush.horizontalGradient(
         colors = listOf(randomColor, brighterColor)
     )
 

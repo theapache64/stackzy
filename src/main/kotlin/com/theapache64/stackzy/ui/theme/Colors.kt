@@ -12,7 +12,6 @@ object R {
         val Goldenrod = Color(0xffFFCB6B)
         val YellowGreen = Color(0xffC3E88D)
         val JordyBlue = Color(0xff82B1FF)
-        val Bittersweet = Color(0xffF77669)
         val BlueBayoux = Color(0xff546E7A)
     }
 }

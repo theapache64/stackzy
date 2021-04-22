@@ -26,7 +26,7 @@ class FlowResourceCallAdapter<R>(
     override fun adapt(call: Call<R>) = flow<Resource<R>> {
 
         // Firing loading resource
-        emit(Resource.Loading<R>())
+        emit(Resource.Loading())
 
         val resp = call.awaitResponse()
 

@@ -51,7 +51,7 @@ dependencies {
     implementation("org.yaml:snakeyaml:1.28")
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>() {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
     kotlinOptions.freeCompilerArgs += "-Xuse-experimental=androidx.compose.foundation.ExperimentalFoundationApi"
     kotlinOptions.freeCompilerArgs += "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi"

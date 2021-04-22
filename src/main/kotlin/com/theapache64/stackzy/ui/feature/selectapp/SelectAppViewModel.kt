@@ -133,10 +133,8 @@ class SelectAppViewModel @Inject constructor(
                     val account = (apkSource as ApkSource.PlayStore<Account>).value
                     val api = Play.getApi(account)
                     val keyword = searchKeyword.value.let {
-                        if (it.isBlank()) {
+                        it.ifBlank {
                             " "
-                        } else {
-                            it
                         }
                     }
                     val loadingMsg = if (keyword.isBlank()) {

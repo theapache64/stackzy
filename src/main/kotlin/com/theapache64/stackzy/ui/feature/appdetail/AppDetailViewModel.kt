@@ -323,6 +323,7 @@ class AppDetailViewModel @Inject constructor(
      */
     private suspend fun trackUntrackedLibs(report: AnalysisReport) {
 
+        @Suppress("ConstantConditionIf")
         if (true) {
             return
         }

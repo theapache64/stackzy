@@ -13,7 +13,7 @@ class App(
 
     companion object {
         // GLOBAL CONFIGS
-        val CUSTOM_TOOLBAR = false // TODO: Implement a custom toolbar
+        const val CUSTOM_TOOLBAR = false // TODO: Implement a custom toolbar
         lateinit var appArgs: AppArgs
     }
 

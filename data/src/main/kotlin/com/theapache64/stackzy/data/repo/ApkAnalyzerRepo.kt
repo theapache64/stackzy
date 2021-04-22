@@ -23,7 +23,7 @@ class ApkAnalyzerRepo @Inject constructor() {
 
         private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
-        private val USER_PERMISSION_REGEX = "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"\\/>".toRegex()
+        private val USER_PERMISSION_REGEX = "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex()
     }
 
     /**

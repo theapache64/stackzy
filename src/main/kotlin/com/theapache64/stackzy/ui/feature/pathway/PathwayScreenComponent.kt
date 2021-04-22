@@ -9,7 +9,7 @@ import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
 class PathwayScreenComponent(
-    private val appComponent: AppComponent,
+    appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onAdbSelected: () -> Unit,
     onPlayStoreSelected: (Account) -> Unit,

@@ -60,7 +60,7 @@ fun Modifier.addHoverEffect(
 }
 
 // Preview
-fun main(args: Array<String>) {
+fun main() {
 
     Window {
         StackzyTheme {

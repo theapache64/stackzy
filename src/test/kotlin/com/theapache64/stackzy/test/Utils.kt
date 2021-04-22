@@ -29,7 +29,6 @@ const val REACT_NATIVE_APK_FILE_NAME = "com.reactnativeanimationexamples_react_n
 
 fun runBlockingUnitTest(block: suspend (scope: CoroutineScope) -> Unit) = runBlocking {
     block(this)
-    Unit
 }
 
 fun getTestResource(name: String): File {
