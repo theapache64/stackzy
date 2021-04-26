@@ -6,3 +6,8 @@ import javax.inject.Qualifier
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
 annotation class ApkToolJarFile
+
+@Qualifier
+@MustBeDocumented
+@Retention(AnnotationRetention.RUNTIME)
+annotation class JadxDirPath

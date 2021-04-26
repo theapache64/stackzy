@@ -162,3 +162,6 @@ adb.exe
 
 build/topcorn_decompiled
 gpm.json
+
+jadx-*
+!jadx-*.zip

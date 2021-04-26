@@ -1,11 +1,8 @@
 package com.theapache64.stackzy.test
 
+import com.theapache64.stackzy.data.di.module.*
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.data.repo.*
-import com.theapache64.stackzy.data.di.module.ApkToolModule
-import com.theapache64.stackzy.data.di.module.CryptoModule
-import com.theapache64.stackzy.data.di.module.NetworkModule
-import com.theapache64.stackzy.data.di.module.PreferenceModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -15,7 +12,8 @@ import javax.inject.Singleton
         NetworkModule::class,
         ApkToolModule::class,
         PreferenceModule::class,
-        CryptoModule::class
+        CryptoModule::class,
+        JadxModule::class,
     ]
 )
 interface TestComponent {
@@ -29,4 +27,5 @@ interface TestComponent {
     fun apkToolRepo(): ApkToolRepo
     fun apkAnalyzerRepo(): ApkAnalyzerRepo
     fun untrackedLibsRepo(): UntrackedLibsRepo
+    fun jadxRepo(): JadxRepo
 }

@@ -36,7 +36,8 @@ class AppDetailViewModel @Inject constructor(
     private val untrackedLibsRepo: UntrackedLibsRepo,
     private val playStoreRepo: PlayStoreRepo,
     private val resultRepo: ResultRepo,
-    private val configRepo: ConfigRepo
+    private val configRepo: ConfigRepo,
+    private val jadxRepo: JadxRepo
 ) {
 
     companion object {
@@ -50,6 +51,7 @@ class AppDetailViewModel @Inject constructor(
     private lateinit var androidAppWrapper: AndroidAppWrapper
     private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
     private var decompiledDir: File? = null
+    private var apkFile: File? = null
     private lateinit var config: Config
     private val _fatalError = MutableStateFlow<String?>(null)
     val fatalError: StateFlow<String?> = _fatalError
@@ -244,6 +246,7 @@ class AppDetailViewModel @Inject constructor(
         apkFile: File,
         shouldStoreResult: Boolean
     ) {
+
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
         this.decompiledDir = apkToolRepo.decompile(
@@ -307,6 +310,8 @@ class AppDetailViewModel @Inject constructor(
         val newApkName = "${report.packageName}_${report.gradleInfo.versionName}.apk"
         val newApkFile = File("${decompiledDir.absolutePath}${File.separator}$newApkName")
         apkFile.renameTo(newApkFile)
+
+        this.apkFile = newApkFile
     }
 
     private suspend fun onReportReady(report: AnalysisReport) {
@@ -389,7 +394,17 @@ class AppDetailViewModel @Inject constructor(
     }
 
     fun onCodeIconClicked() {
-        if (decompiledDir?.exists() == true) {
+
+        if (apkFile?.exists() == true) {
+            // Decompiled exists
+            viewModelScope.launch {
+                jadxRepo.open(apkFile!!)
+            }
+        } else {
+            _fatalError.value = "No APK found"
+        }
+
+        /*if (decompiledDir?.exists() == true) {
             // Decompiled exists
             Desktop.getDesktop().open(decompiledDir)
         } else {
@@ -409,7 +424,7 @@ class AppDetailViewModel @Inject constructor(
                     onCodeIconClicked()
                 }
             }
-        }
+        }*/
     }
 
     private fun getDecompiledDirPath(
