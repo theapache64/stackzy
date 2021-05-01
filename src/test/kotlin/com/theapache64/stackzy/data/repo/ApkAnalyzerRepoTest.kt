@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.data.repo
 
-import com.theapache64.expekt.should
+import com.github.theapache64.expekt.should
 import com.theapache64.stackzy.data.local.GradleInfo
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.test.*

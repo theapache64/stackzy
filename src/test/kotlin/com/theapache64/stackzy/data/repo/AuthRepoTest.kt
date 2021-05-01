@@ -1,7 +1,7 @@
 package com.theapache64.stackzy.data.repo
 
 import com.github.theapache64.gpa.model.Account
-import com.theapache64.expekt.should
+import com.github.theapache64.expekt.should
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest

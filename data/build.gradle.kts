@@ -7,7 +7,6 @@ group = "com.theapache64.stackzy"
 version = "1.0.0-beta05"
 
 repositories {
-    jcenter()
     mavenCentral()
     maven { url = uri("https://jitpack.io") }
 }

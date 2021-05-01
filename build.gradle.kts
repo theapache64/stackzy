@@ -17,7 +17,6 @@ version = stackzyVersion // TODO : Change in App.kt also
 
 repositories {
     // mavenLocal()
-    jcenter()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
     maven { url = uri("https://jitpack.io") }
@@ -64,7 +63,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.7.7")
 
     // Expekt : An assertion library for Kotlin
-    testImplementation("com.theapache64:expekt:0.0.1")
+    testImplementation("com.github.theapache64:expekt:1.0.0")
 
     // JUnit
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")

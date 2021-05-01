@@ -1,7 +1,7 @@
 package com.theapache64.stackzy.data.repo
 
 import com.malinskiy.adam.request.pkg.Package
-import com.theapache64.expekt.should
+import com.github.theapache64.expekt.should
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.test.FLUTTER_PACKAGE_NAME
 import com.theapache64.stackzy.test.MyDaggerMockRule

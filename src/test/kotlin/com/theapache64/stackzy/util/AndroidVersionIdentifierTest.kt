@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.util
 
-import com.theapache64.expekt.should
+import com.github.theapache64.expekt.should
 import com.theapache64.stackzy.data.util.AndroidVersionIdentifier
 import org.junit.Test
 

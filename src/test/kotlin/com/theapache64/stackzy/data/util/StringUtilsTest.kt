@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.data.util
 
-import com.theapache64.expekt.should
+import com.github.theapache64.expekt.should
 import org.junit.Test
 
 
