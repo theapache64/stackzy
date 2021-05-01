@@ -29,6 +29,7 @@ import java.nio.file.Path
 import javax.inject.Inject
 import kotlin.io.path.Path
 import kotlin.io.path.div
+import kotlin.io.path.exists
 import kotlin.math.roundToInt
 
 
@@ -410,39 +411,32 @@ class AppDetailViewModel @Inject constructor(
                 jadxRepo.open(apkFile!!)
             }
         } else {
-            // APK doesn't exist. We're currently showing cached result, so there won't be any APK. so let's go download it.
-            viewModelScope.launch {
-                downloadApkFromPlaystore(
-                    onApkDownloaded = { apkFile ->
-                        this@AppDetailViewModel.apkFile = apkFile
-                        _loadingMessage.value = null
-                        onCodeIconClicked()
-                    }
+
+            val possibleApkPath = if (androidAppWrapper.versionName != null) {
+                getDecompiledApkPath(
+                    androidAppWrapper.appPackage.name,
+                    androidAppWrapper.versionName!!
                 )
-            }
-        }
-
-        /*if (decompiledDir?.exists() == true) {
-            // Decompiled exists
-            Desktop.getDesktop().open(decompiledDir)
-        } else {
-            // Let's construct possible decompiledDir and check it exist
-            val possibleDecompiledDir = File(getDecompiledDirPath(androidAppWrapper.appPackage.name))
-
-            if (possibleDecompiledDir.exists()) {
-                // Gotcha! There's one dir available for this package. lets show it
-                decompiledDir = possibleDecompiledDir
-                onCodeIconClicked() // go again
             } else {
-                // We're currently showing cached result, so there won't be any decompiled dir. so let's go decompile
+                null
+            }
+
+            if (possibleApkPath?.exists() == true) {
+                apkFile = possibleApkPath.toFile()
+                onCodeIconClicked()
+            } else {
+                // APK doesn't exist. We're currently showing cached result, so there won't be any APK. so let's go download it.
                 viewModelScope.launch {
-                    decompileViaPlayStore(
-                        shouldStoreResult = false // Because, we already have the result in `results` table. We are decompiling to show the source only.
+                    downloadApkFromPlaystore(
+                        onApkDownloaded = { apkFile ->
+                            this@AppDetailViewModel.apkFile = apkFile
+                            _loadingMessage.value = null
+                            onCodeIconClicked()
+                        }
                     )
-                    onCodeIconClicked()
                 }
             }
-        }*/
+        }
     }
 
     private fun getDecompiledApkPath(
@@ -450,7 +444,7 @@ class AppDetailViewModel @Inject constructor(
         version: String
     ): Path {
         val tempDir = System.getProperty("java.io.tmpdir")
-        return Path(tempDir) / "stackzy" / "${packageName}_${version}.apk"
+        return Path(tempDir) / "stackzy" / packageName / "${packageName}_${version}.apk"
     }
 
     private fun getDecompiledDirPath(
