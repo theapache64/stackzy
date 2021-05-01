@@ -18,13 +18,17 @@ import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.awt.Desktop
 import java.io.File
 import java.net.URI
+import java.nio.file.Path
 import javax.inject.Inject
+import kotlin.io.path.Path
+import kotlin.io.path.div
 import kotlin.math.roundToInt
 
 
@@ -163,7 +167,15 @@ class AppDetailViewModel @Inject constructor(
 
                 // User wants to pull APK from PlayStore
                 is ApkSource.PlayStore -> {
-                    decompileViaPlayStore(config.shouldConsiderResultCache)
+                    downloadApkFromPlaystore { apkFile ->
+                        // Give some time to APK to prepare for decompile
+                        _loadingMessage.value = "Preparing APK for decompiling..."
+                        delay(2000)
+                        onApkPulled(
+                            androidAppWrapper, apkFile,
+                            shouldStoreResult = config.shouldConsiderResultCache, // Because, we already have the result in `results` table. We are decompiling to show the source only.)
+                        )
+                    }
                 }
 
             }
@@ -174,10 +186,10 @@ class AppDetailViewModel @Inject constructor(
     }
 
     /**
-     * Downloads APK from playstore and decompile it
+     * Downloads APK from playstore
      */
-    private suspend fun decompileViaPlayStore(
-        shouldStoreResult: Boolean
+    private suspend fun downloadApkFromPlaystore(
+        onApkDownloaded: suspend (apkFile: File) -> Unit
     ) {
         _loadingMessage.value = "Initialising download..."
 
@@ -193,10 +205,7 @@ class AppDetailViewModel @Inject constructor(
             _loadingMessage.value = "Downloading APK... $downloadPercentage%"
 
             if (downloadPercentage == 100) {
-                // Give some time to APK to prepare for decompile
-                _loadingMessage.value = "Preparing APK for decompiling..."
-                delay(2000)
-                onApkPulled(androidAppWrapper, apkFile, shouldStoreResult = shouldStoreResult)
+                onApkDownloaded(apkFile)
             }
         }
     }
@@ -394,14 +403,23 @@ class AppDetailViewModel @Inject constructor(
     }
 
     fun onCodeIconClicked() {
-
+        println("Code Icon Clicked")
         if (apkFile?.exists() == true) {
-            // Decompiled exists
-            viewModelScope.launch {
+            // APK file exists
+            GlobalScope.launch {
                 jadxRepo.open(apkFile!!)
             }
         } else {
-            _fatalError.value = "No APK found"
+            // APK doesn't exist. We're currently showing cached result, so there won't be any APK. so let's go download it.
+            viewModelScope.launch {
+                downloadApkFromPlaystore(
+                    onApkDownloaded = { apkFile ->
+                        this@AppDetailViewModel.apkFile = apkFile
+                        _loadingMessage.value = null
+                        onCodeIconClicked()
+                    }
+                )
+            }
         }
 
         /*if (decompiledDir?.exists() == true) {
@@ -425,6 +443,14 @@ class AppDetailViewModel @Inject constructor(
                 }
             }
         }*/
+    }
+
+    private fun getDecompiledApkPath(
+        packageName: String,
+        version: String
+    ): Path {
+        val tempDir = System.getProperty("java.io.tmpdir")
+        return Path(tempDir) / "stackzy" / "${packageName}_${version}.apk"
     }
 
     private fun getDecompiledDirPath(
