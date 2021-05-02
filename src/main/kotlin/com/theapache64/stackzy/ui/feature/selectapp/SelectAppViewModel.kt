@@ -3,7 +3,6 @@ package com.theapache64.stackzy.ui.feature.selectapp
 import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
-import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.PlayStoreRepo
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
@@ -153,16 +152,12 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun onOpenMarketClicked() {
-        when (apkSource) {
-            is ApkSource.Adb -> {
-                viewModelScope.launch {
-                    val androidDevice = (apkSource as ApkSource.Adb<AndroidDevice>).value
-                    adbRepo.launchMarket(androidDevice, searchKeyword.value)
-                }
+        if (apkSource is ApkSource.Adb) {
+            viewModelScope.launch {
+                val androidDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value.androidDevice
+                adbRepo.launchMarket(androidDevice, searchKeyword.value)
             }
-            is ApkSource.PlayStore -> TODO()
         }
-
     }
 
     /**
