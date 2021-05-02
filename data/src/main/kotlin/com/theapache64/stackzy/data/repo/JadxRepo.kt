@@ -2,6 +2,8 @@ package com.theapache64.stackzy.data.repo
 
 import com.theapache64.stackzy.data.di.JadxDirPath
 import com.theapache64.stackzy.data.util.CommandExecutor
+import com.theapache64.stackzy.util.OSType
+import com.theapache64.stackzy.util.OsCheck
 import java.io.File
 import java.nio.file.Path
 import javax.inject.Inject
@@ -11,12 +13,16 @@ import kotlin.io.path.div
 class JadxRepo @Inject constructor(
     @JadxDirPath val jadxDirPath: Path
 ) {
-    suspend fun open(
+    fun open(
         apkFile: File
     ) {
-        // TODO : Support Windows
         val jadxPath = jadxDirPath / "bin" / "jadx-gui"
-        val command = "sh '${jadxPath.absolutePathString()}' '${apkFile.absolutePath}'"
+        val jadX = if (OsCheck.operatingSystemType == OSType.Windows) {
+            "${jadxPath.absolutePathString()}.bat" // execute bat
+        } else {
+            "sh '${jadxPath.absolutePathString()}'" // execute shell script
+        }
+        val command = "$jadX '${apkFile.absolutePath}'"
         CommandExecutor.executeCommand(
             command,
             isLivePrint = false,
