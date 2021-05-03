@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -59,6 +60,10 @@ fun AppDetailScreen(
                             viewModel.onPlayStoreIconClicked()
                         }
 
+                        FilesIcon {
+                            viewModel.onFilesIconClicked()
+                        }
+
                         CodeIcon {
                             viewModel.onCodeIconClicked()
                         }
@@ -81,6 +86,7 @@ fun AppDetailScreen(
 
             @Suppress("UnnecessaryVariable")
             val roReport = report
+
             @Suppress("UnnecessaryVariable")
             val roLoadingMsg = loadingMessage
 
@@ -136,6 +142,19 @@ private fun PlayStoreIcon(onClicked: () -> Unit) {
         Icon(
             painter = svgResource("drawables/playstore.svg"),
             contentDescription = "open play store",
+            tint = MaterialTheme.colors.onSurface
+        )
+    }
+}
+
+@Composable
+private fun FilesIcon(onClicked: () -> Unit) {
+    IconButton(
+        onClick = onClicked
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Folder,
+            contentDescription = "open files",
             tint = MaterialTheme.colors.onSurface
         )
     }

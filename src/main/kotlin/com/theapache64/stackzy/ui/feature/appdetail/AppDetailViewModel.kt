@@ -168,21 +168,27 @@ class AppDetailViewModel @Inject constructor(
 
                 // User wants to pull APK from PlayStore
                 is ApkSource.PlayStore -> {
-                    downloadApkFromPlaystore { apkFile ->
-                        // Give some time to APK to prepare for decompile
-                        _loadingMessage.value = "Preparing APK for decompiling..."
-                        delay(2000)
-                        onApkPulled(
-                            androidAppWrapper, apkFile,
-                            shouldStoreResult = config.shouldConsiderResultCache, // Because, we already have the result in `results` table. We are decompiling to show the source only.)
-                        )
-                    }
+                    decompileViaPlayStore(shouldStoreResult = config.shouldConsiderResultCache)
                 }
 
             }
         } catch (e: Exception) {
             e.printStackTrace()
             _fatalError.value = e.message
+        }
+    }
+
+    private suspend fun decompileViaPlayStore(
+        shouldStoreResult: Boolean
+    ) {
+        downloadApkFromPlaystore { apkFile ->
+            // Give some time to APK to prepare for decompile
+            _loadingMessage.value = "Preparing APK for decompiling..."
+            delay(2000)
+            onApkPulled(
+                androidAppWrapper, apkFile,
+                shouldStoreResult = shouldStoreResult
+            )
         }
     }
 
@@ -452,5 +458,32 @@ class AppDetailViewModel @Inject constructor(
     ): String {
         val tempDir = System.getProperty("java.io.tmpdir")
         return "$tempDir${File.separator}stackzy${File.separator}$packageName"
+    }
+
+    /**
+     * To open apk-tool decompiled directory
+     */
+    fun onFilesIconClicked() {
+        if (decompiledDir?.exists() == true) {
+            // Decompiled exists
+            Desktop.getDesktop().open(decompiledDir)
+        } else {
+            // Let's construct possible decompiledDir and check it exist
+            val possibleDecompiledDir = File(getDecompiledDirPath(androidAppWrapper.appPackage.name))
+
+            if (possibleDecompiledDir.exists()) {
+                // Gotcha! There's one dir available for this package. lets show it
+                decompiledDir = possibleDecompiledDir
+                onFilesIconClicked() // go again
+            } else {
+                // We're currently showing cached result, so there won't be any decompiled dir. so let's go decompile
+                viewModelScope.launch {
+                    decompileViaPlayStore(
+                        shouldStoreResult = false // Because, we already have the result in `results` table. We are decompiling to show the source only.
+                    )
+                    onFilesIconClicked()
+                }
+            }
+        }
     }
 }
