@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.data.di.module
+package com.theapache64.stackzy.di.module
 
 import dagger.Module
 import dagger.Provides

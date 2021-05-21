@@ -6,8 +6,8 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
 import com.arkivanov.decompose.statekeeper.Parcelable
 import com.github.theapache64.gpa.model.Account
-import com.theapache64.stackzy.data.di.AppComponent
-import com.theapache64.stackzy.data.di.DaggerAppComponent
+import com.theapache64.stackzy.di.AppComponent
+import com.theapache64.stackzy.di.DaggerAppComponent
 import com.theapache64.stackzy.model.AndroidAppWrapper
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper

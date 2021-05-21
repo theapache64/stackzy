@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.data.di
+package com.theapache64.stackzy.di
 
 import javax.inject.Qualifier
 

@@ -1,6 +1,6 @@
-package com.theapache64.stackzy.data.di.module
+package com.theapache64.stackzy.di.module
 
-import com.theapache64.stackzy.data.di.ApkToolJarFile
+import com.theapache64.stackzy.di.ApkToolJarFile
 import dagger.Module
 import dagger.Provides
 import java.io.File

@@ -1,6 +1,6 @@
-package com.theapache64.stackzy.data.di.module
+package com.theapache64.stackzy.di.module
 
-import com.theapache64.stackzy.data.di.JadxDirPath
+import com.theapache64.stackzy.di.JadxDirPath
 import com.theapache64.stackzy.data.util.unzip
 import dagger.Module
 import dagger.Provides

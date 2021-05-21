@@ -1,8 +1,8 @@
 package com.theapache64.stackzy.test
 
-import com.theapache64.stackzy.data.di.module.*
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.data.repo.*
+import com.theapache64.stackzy.di.module.*
 import dagger.Component
 import javax.inject.Singleton
 

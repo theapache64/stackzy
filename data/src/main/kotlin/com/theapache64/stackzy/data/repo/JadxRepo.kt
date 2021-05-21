@@ -1,6 +1,6 @@
 package com.theapache64.stackzy.data.repo
 
-import com.theapache64.stackzy.data.di.JadxDirPath
+import com.theapache64.stackzy.di.JadxDirPath
 import com.theapache64.stackzy.data.util.CommandExecutor
 import com.theapache64.stackzy.util.OSType
 import com.theapache64.stackzy.util.OsCheck

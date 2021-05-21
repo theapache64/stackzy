@@ -1,7 +1,7 @@
-package com.theapache64.stackzy.data.di
+package com.theapache64.stackzy.di
 
-import com.theapache64.stackzy.data.di.module.*
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.di.module.*
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
 import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
