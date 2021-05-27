@@ -334,7 +334,7 @@ class AppDetailViewModel @Inject constructor(
         trackUntrackedLibs(report)
         _analysisReport.value = AnalysisReportWrapper(
             report,
-            report.libraries.map { LibraryWrapper(it) }
+            report.libraries.sortedBy { it.id }.map { LibraryWrapper(it) }
         )
         _loadingMessage.value = null
     }
