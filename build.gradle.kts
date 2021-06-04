@@ -3,14 +3,14 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.4.32"
+    val kotlinVersion = "1.5.10"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "0.4.0-build180"
+    id("org.jetbrains.compose") version "0.4.0"
 }
 
-val daggerVersion by extra("2.31.2")
-val stackzyVersion by extra("1.0.3") // TODO : Change in App.kt also
+val daggerVersion by extra("2.36")
+val stackzyVersion by extra("1.0.4") // TODO : Change in App.kt also
 
 group = "com.theapache64"
 version = stackzyVersion
@@ -40,7 +40,7 @@ dependencies {
     kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.2.1"
+    val decomposeVersion = "0.2.6"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 

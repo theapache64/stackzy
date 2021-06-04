@@ -19,9 +19,10 @@ dependencies {
     api("com.malinskiy:adam:0.2.3")
 
     // Moshi : A modern JSON API for Android and Java
-    api("com.squareup.moshi:moshi:1.11.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
+    val moshiVersion = "1.12.0"
+    api("com.squareup.moshi:moshi:$moshiVersion")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
 
     // Retrosheet : Turn Google Spreadsheet to JSO  N endpoint (for Android and JVM)
     api("com.github.theapache64:retrosheet:2.0.0-alpha02")
