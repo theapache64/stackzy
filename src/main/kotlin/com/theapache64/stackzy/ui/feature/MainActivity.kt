@@ -28,7 +28,7 @@ class MainActivity : Activity() {
             title = "${App.appArgs.appName} (${App.appArgs.version})",
             icon = getAppIcon(),
             undecorated = App.CUSTOM_TOOLBAR,
-            size = IntSize(1024, 600),
+            size = IntSize(1224, 800),
         ) {
             StackzyTheme(
                 title = App.appArgs.appName,
