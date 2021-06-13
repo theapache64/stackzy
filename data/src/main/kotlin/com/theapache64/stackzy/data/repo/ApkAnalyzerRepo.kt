@@ -283,9 +283,46 @@ class ApkAnalyzerRepo @Inject constructor() {
         allLibraries: List<Library>
     ): Pair<Set<Library>, Set<String>> {
         val appLibs = mutableSetOf<Library>()
-        val untrackedLibs = mutableSetOf<String>()
+        val untrackedLibs = mutableSetOf<String>() // TODO:
 
-        decompiledDir.walk().forEach { file ->
+        val nonLibSmaliFiles = decompiledDir
+            .walk()
+            .toList() // all files
+            .filter { it.extension == "smali" } // all smali files
+            .filter {
+                var isLibFile = false
+                for (library in allLibraries) {
+                    if (it.absolutePath.contains(library.packageName.replace(".", File.separator))) {
+                        isLibFile = true
+                        break
+                    }
+                }
+                !isLibFile
+            } // All non lib smali files
+
+        for (smaliFile in nonLibSmaliFiles) {
+            val fileContent = smaliFile.readText()
+            for (library in allLibraries) {
+                if (fileContent.contains(library.packageName.replace(".", "/"))) {
+                    // has lib usage
+                    appLibs.add(library)
+                    if (library.name == "okio") {
+                        println(smaliFile.absolutePath)
+                    }
+                }
+            }
+
+            if (allLibraries.size == appLibs.size) {
+                // All libraries detected, so no need to analyze further
+                break
+            }
+        }
+
+
+        /*
+        // Legacy algorithm
+        val allFiles = decompiledDir.walk().toList()
+        for(file in allFiles){
             if (file.isDirectory) {
                 var isLibFound = false
 
@@ -313,12 +350,12 @@ class ApkAnalyzerRepo @Inject constructor() {
                     }
                 }
             }
-        }
+        }*/
 
         return Pair(appLibs, untrackedLibs)
     }
 
-    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {
+/*    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {
         return dirRegEx.find(absolutePath) != null
     }
 
@@ -327,6 +364,8 @@ class ApkAnalyzerRepo @Inject constructor() {
             DIR_REGEX_FORMAT,
             packageAsPath
         ).toRegex()
-    }
+    }*/
 
 }
+
+

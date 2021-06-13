@@ -13,7 +13,7 @@ interface LibraryDefinition {
 }
 
 @JsonClass(generateAdapter = true)
-class Library(
+data class Library(
     @Json(name = "category")
     override val category: String,
     @Json(name = "id")

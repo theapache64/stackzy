@@ -48,7 +48,7 @@ dependencies {
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
 
     // Kamel : Image loading library
-    implementation("com.alialbaali.kamel:kamel-image:0.2.0")
+    implementation("com.alialbaali.kamel:kamel-image:0.2.1")
 
     /**
      * Testing Dependencies
