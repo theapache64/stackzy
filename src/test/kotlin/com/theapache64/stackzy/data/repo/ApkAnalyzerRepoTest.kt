@@ -222,7 +222,7 @@ class ApkAnalyzerRepoTest {
     @Test
     fun `Manifest permission parsing`() {
         val manifestFile = getTestResource("com.netflix.mediaclient_AndroidManifest.xml")
-        val permission = apkAnalyzerRepo.getPermissionsFromManifestFile(manifestFile)
+        val permission = apkAnalyzerRepo.getPermissionsFromManifestFile(manifestFile.toPath())
         println(permission)
         permission.size.should.above(0)
     }
