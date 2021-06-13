@@ -12,16 +12,19 @@ import com.toxicbakery.logging.Arbor
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.representer.Representer
 import java.io.File
+import java.nio.file.Path
 import java.util.*
 import javax.inject.Inject
+import kotlin.io.path.Path
+import kotlin.io.path.div
+import kotlin.io.path.exists
+import kotlin.io.path.readText
 
 class ApkAnalyzerRepo @Inject constructor() {
 
     companion object {
         private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
-
-        private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
         private val USER_PERMISSION_REGEX = "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex()
     }
@@ -83,11 +86,11 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get permissions used inside decompiled dir.
      */
     fun getPermissions(decompiledDir: File): List<String> {
-        val manifestFile = File("${decompiledDir.absolutePath}${File.separator}AndroidManifest.xml")
+        val manifestFile = Path(decompiledDir.absolutePath) / "AndroidManifest.xml"
         return getPermissionsFromManifestFile(manifestFile)
     }
 
-    fun getPermissionsFromManifestFile(manifestFile: File): List<String> {
+    fun getPermissionsFromManifestFile(manifestFile: Path): List<String> {
         val permissions = mutableListOf<String>()
         val manifestRead = manifestFile.readText()
         var matchResult = USER_PERMISSION_REGEX.find(manifestRead)
@@ -138,7 +141,7 @@ class ApkAnalyzerRepo @Inject constructor() {
                 Pair(it.replacementPackage, it.packageName)
             }
         for ((libToRemove, replacement) in mergePairs) {
-            val hasDepLib = appLibraries.find { it.packageName.toLowerCase() == replacement } != null
+            val hasDepLib = appLibraries.find { it.packageName.lowercase(Locale.getDefault()) == replacement } != null
             if (hasDepLib) {
                 // remove that lib
                 val library = appLibraries.find { it.packageName == libToRemove }
@@ -180,7 +183,7 @@ class ApkAnalyzerRepo @Inject constructor() {
      * Returns null if not found
      */
     fun getStringXmlValue(decompiledDir: File, labelKey: String): String? {
-        val stringXmlFile = File("${decompiledDir.absolutePath}/res/values/strings.xml")
+        val stringXmlFile = Path(decompiledDir.absolutePath) / "res" / "values" / "strings.xml"
         val stringXmlContent = stringXmlFile.readText()
         val stringKey = labelKey.replace("@string/", "")
         val regEx = "<string name=\"$stringKey\">(.+?)</string>".toRegex()
@@ -191,7 +194,7 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get `label`'s value from AndroidManifest.xml
      */
     fun getAppNameLabel(decompiledDir: File): String? {
-        val manifestFile = File("${decompiledDir.absolutePath}/AndroidManifest.xml")
+        val manifestFile = Path(decompiledDir.absolutePath) / "AndroidManifest.xml"
         val manifestContent = manifestFile.readText()
         val match = APP_LABEL_MANIFEST_REGEX.find(manifestContent)
         return if (match != null && match.groupValues.isNotEmpty()) {
@@ -217,7 +220,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     }
 
     private fun isWrittenKotlin(decompiledDir: File): Boolean {
-        return File("${decompiledDir.absolutePath}/kotlin").exists()
+        return (Path(decompiledDir.absolutePath) / "kotlin").exists()
     }
 
     private fun isFlutter(decompiledDir: File): Boolean {
@@ -245,7 +248,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         } != null
 
         if (hasWWW) {
-            return File("${assetsDir.absolutePath}/www/cordova.js").exists()
+            return (Path(assetsDir.absolutePath) / "www" / "cordova.js").exists()
         }
 
         return false
@@ -257,7 +260,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         } != null
 
         if (hasWWW) {
-            return File("${decompiledDir.absolutePath}/smali/com/adobe/phonegap/").exists() || decompiledDir.walk()
+            return (Path(decompiledDir.absolutePath) / "smali" / "com" / "adobe" / "phonegap").exists() || decompiledDir.walk()
                 .find { file ->
                     val filePath = file.absolutePath
                     isPhoneGapDirectory(filePath)
@@ -270,7 +273,8 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get asset directory from the given decompiledDir
      */
     private fun getAssetsDir(decompiledDir: File): File {
-        return File("${decompiledDir.absolutePath}/assets/")
+        //return File("${decompiledDir.absolutePath}/assets/")
+        return (Path(decompiledDir.absolutePath) / "assets").toFile()
     }
 
     private fun isPhoneGapDirectory(filePath: String) = PHONEGAP_FILE_PATH_REGEX.find(filePath) != null
