@@ -101,7 +101,7 @@ class SelectAppViewModel @Inject constructor(
     }
 
     fun onSearchKeywordChanged(newKeyword: String) {
-        _searchKeyword.value = newKeyword.trim().replace("\n", "")
+        _searchKeyword.value = newKeyword.replace("\n", "")
 
         when (apkSource) {
             is ApkSource.Adb -> {
