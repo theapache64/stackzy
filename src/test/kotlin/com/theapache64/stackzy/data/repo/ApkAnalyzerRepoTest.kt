@@ -97,26 +97,6 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
-    fun `Transitive dependency ignored`() = runBlockingUnitTest {
-        librariesRepo.loadLibs { libs ->
-            getCachedDecompiledApk { nativeApkFile, decompiledDir ->
-                val report = apkAnalyzerRepo.analyze(
-                    NATIVE_KOTLIN_PACKAGE_NAME,
-                    nativeApkFile,
-                    decompiledDir,
-                    libs
-                )
-                report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
-                report.platform.should.instanceof(Platform.NativeKotlin::class.java)
-                report.libraries.size.should.above(0)
-                report.libraries.filter { it.name == "okio" }.also {
-                    println(it)
-                }.should.empty // okio shouldn't be there in topcorn
-            }
-        }
-    }
-
-    @Test
     fun `Analysis Report - Flutter`() = runBlockingUnitTest {
         librariesRepo.loadLibs { libs ->
             val sampleApkFile = getTestResource(FLUTTER_APK_FILE_NAME)
