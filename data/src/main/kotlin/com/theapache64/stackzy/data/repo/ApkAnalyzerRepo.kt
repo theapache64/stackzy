@@ -9,6 +9,8 @@ import com.theapache64.stackzy.data.util.AndroidVersionIdentifier
 import com.theapache64.stackzy.data.util.StringUtils
 import com.theapache64.stackzy.data.util.sizeInMb
 import com.toxicbakery.logging.Arbor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.representer.Representer
 import java.io.File
@@ -32,15 +34,15 @@ class ApkAnalyzerRepo @Inject constructor() {
     /**
      * To get final report
      */
-    fun analyze(
+    suspend fun analyze(
         packageName: String,
         apkFile: File,
         decompiledDir: File,
         allLibraries: List<Library>
-    ): AnalysisReport {
+    ): AnalysisReport = withContext(Dispatchers.IO) {
         val platform = getPlatform(decompiledDir)
         val (untrackedLibs, libraries) = getLibraries(platform, decompiledDir, allLibraries)
-        return AnalysisReport(
+        AnalysisReport(
             appName = getAppName(decompiledDir) ?: packageName,
             packageName = packageName,
             platform = platform,
@@ -310,9 +312,6 @@ class ApkAnalyzerRepo @Inject constructor() {
                 if (fileContent.contains(library.packageName.replace(".", "/"))) {
                     // has lib usage
                     appLibs.add(library)
-                    if (library.name == "okio") {
-                        println(smaliFile.absolutePath)
-                    }
                 }
             }
 
