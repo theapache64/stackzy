@@ -29,6 +29,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
         private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
         private val USER_PERMISSION_REGEX = "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex()
+        private const val DIR_REGEX_FORMAT = "smali(_classes\\d+)?\\/%s"
     }
 
     /**
@@ -291,38 +292,6 @@ class ApkAnalyzerRepo @Inject constructor() {
         val appLibs = mutableSetOf<Library>()
         val untrackedLibs = mutableSetOf<String>() // TODO:
 
-        val nonLibSmaliFiles = decompiledDir
-            .walk()
-            .toList() // all files
-            .filter { it.extension == "smali" } // all smali files
-            .filter {
-                var isLibFile = false
-                for (library in allLibraries) {
-                    if (it.absolutePath.contains(library.packageName.replace(".", File.separator))) {
-                        isLibFile = true
-                        break
-                    }
-                }
-                !isLibFile
-            } // All non lib smali files
-
-        for (smaliFile in nonLibSmaliFiles) {
-            val fileContent = smaliFile.readText()
-            for (library in allLibraries) {
-                if (fileContent.contains(library.packageName.replace(".", "/"))) {
-                    // has lib usage
-                    appLibs.add(library)
-                }
-            }
-
-            if (allLibraries.size == appLibs.size) {
-                // All libraries detected, so no need to analyze further
-                break
-            }
-        }
-
-
-        /*
         // Legacy algorithm
         val allFiles = decompiledDir.walk().toList()
         for(file in allFiles){
@@ -353,12 +322,12 @@ class ApkAnalyzerRepo @Inject constructor() {
                     }
                 }
             }
-        }*/
+        }
 
         return Pair(appLibs, untrackedLibs)
     }
 
-/*    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {
+    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {
         return dirRegEx.find(absolutePath) != null
     }
 
@@ -367,7 +336,7 @@ class ApkAnalyzerRepo @Inject constructor() {
             DIR_REGEX_FORMAT,
             packageAsPath
         ).toRegex()
-    }*/
+    }
 
 }
 
