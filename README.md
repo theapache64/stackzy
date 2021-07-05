@@ -1,4 +1,4 @@
-# 🚀 stackzy
+1# 🚀 stackzy
 
 ![](extras/libs.png)
 
@@ -72,22 +72,6 @@ Before executing any test, ensure
 
 - A device has connected to the adb
 - a valid `PLAY_API_GOOGLE_USERNAME` and `PLAY_API_GOOGLE_PASSWORD` defined in your environment.
-
-## ✍️ Author
-
-👤 **theapache64**
-
-* Twitter: <a href="https://twitter.com/theapache64" target="_blank">@theapache64</a>
-* Email: theapache64@gmail.com
-
-Feel free to ping me 😉
-
-## 🤗 Contributors
-
-👤 **mikepenz**
-
-* Twitter: <a href="https://twitter.com/mike_penz" target="_blank">@mike_penz</a>
-* Email: mikepenz@gmail.com
 
 ## 🤝 Contributing
 
