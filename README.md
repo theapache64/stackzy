@@ -1,4 +1,4 @@
-1# 🚀 stackzy
+# 🚀 stackzy
 
 ![](extras/libs.png)
 
