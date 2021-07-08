@@ -2,6 +2,7 @@ package com.theapache64.stackzy.model
 
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidAppDefinition
+import java.util.*
 
 class AndroidAppWrapper(val androidApp: AndroidApp) : AndroidAppDefinition by androidApp, AlphabetCircle() {
     companion object {
@@ -14,7 +15,14 @@ class AndroidAppWrapper(val androidApp: AndroidApp) : AndroidAppDefinition by an
     override fun getTitle(): String {
         return appTitle ?: appPackage.name
             .replace(titleNegRegEx, "")
-            .split(".").last().capitalize()
+            .split(".").last()
+            .replaceFirstChar {
+                if (it.isLowerCase()) {
+                    it.titlecase(Locale.US)
+                } else {
+                    it.toString()
+                }
+            }
     }
 
     override fun getSubtitle(): String {
