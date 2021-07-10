@@ -217,8 +217,15 @@ class ApkAnalyzerRepo @Inject constructor() {
             isReactNative(decompiledDir) -> Platform.ReactNative()
             isFlutter(decompiledDir) -> Platform.Flutter()
             isWrittenKotlin(decompiledDir) -> Platform.NativeKotlin()
+            isUnity(decompiledDir) -> Platform.Unity()
             else -> Platform.NativeJava()
         }
+    }
+
+    private fun isUnity(decompiledDir: File): Boolean {
+        return decompiledDir.walk().find {
+            it.name == "unity default resources"
+        } != null
     }
 
     private fun isWrittenKotlin(decompiledDir: File): Boolean {

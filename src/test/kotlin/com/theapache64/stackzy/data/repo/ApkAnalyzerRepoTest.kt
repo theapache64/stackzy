@@ -183,6 +183,19 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
+    fun `Get platform - unity`() = runBlockingUnitTest {
+        val unityApkFile = getTestResource("com.Dani.Balls_1.18_unity.apk")
+        unityApkFile.exists().should.`true`
+        val decompiledDir = apkToolRepo.decompile(unityApkFile)
+        with(apkAnalyzerRepo) {
+            getPlatform(decompiledDir).should.instanceof(Platform.Unity::class.java)
+            getAppName(decompiledDir).should.equal("Balls?")
+        }
+    }
+
+
+
+    @Test
     fun `Get platform - xamarin`() = runBlockingUnitTest {
         val sampleApkFile = getTestResource(XAMARIN_APK_FILE_NAME)
         sampleApkFile.exists().should.`true`

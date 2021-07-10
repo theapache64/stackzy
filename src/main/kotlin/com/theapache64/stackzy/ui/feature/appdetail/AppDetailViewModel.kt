@@ -147,7 +147,9 @@ class AppDetailViewModel @Inject constructor(
         return permissions?.split(",")?.filter { it.isNotBlank() } ?: listOf()
     }
 
-    private fun getLibrariesFromPackages(libPackages: String): List<Library> {
+    private fun getLibrariesFromPackages(libPackages: String?): List<Library> {
+        if (libPackages == null) return listOf()
+
         val packages = libPackages.split(",")
             .map { it.trim() }
 

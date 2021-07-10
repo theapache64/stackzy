@@ -8,7 +8,7 @@ data class Result(
     @Json(name = "app_name")
     val appName: String,
     @Json(name = "lib_packages")
-    val libPackages: String,
+    val libPackages: String?,
     @Json(name = "package_name")
     val packageName: String, // comma-sep
     @Json(name = "version_code")

@@ -11,6 +11,7 @@ sealed class Platform(val name: String) {
                 Cordova::class.simpleName -> Cordova()
                 PhoneGap::class.simpleName -> PhoneGap()
                 Xamarin::class.simpleName -> Xamarin()
+                Unity::class.simpleName -> Unity()
                 else -> throw IllegalArgumentException("Undefined platform '$platformClassName'")
             }
         }
@@ -23,4 +24,5 @@ sealed class Platform(val name: String) {
     class Cordova : Platform("Apache Cordova")
     class PhoneGap : Platform("Adobe PhoneGap")
     class Xamarin : Platform("Xamarin")
+    class Unity : Platform("Unity")
 }
