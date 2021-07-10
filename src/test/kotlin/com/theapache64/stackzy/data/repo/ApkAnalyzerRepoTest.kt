@@ -50,7 +50,7 @@ class ApkAnalyzerRepoTest {
         }
     }
 
-    private suspend fun getCachedDecompiledApk(callback: (nativeApkFile: File, decompiledDir: File) -> Unit) {
+    private suspend fun getCachedDecompiledApk(callback: suspend (nativeApkFile: File, decompiledDir: File) -> Unit) {
         val decompiledDir = File("build${File.separator}topcorn_decompiled")
         val nativeApkFile = getTestResource(NATIVE_KOTLIN_APK_FILE_NAME)
         if (decompiledDir.exists().not()) {

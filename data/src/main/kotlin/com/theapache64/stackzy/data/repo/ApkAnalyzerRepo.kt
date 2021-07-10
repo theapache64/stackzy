@@ -239,7 +239,7 @@ class ApkAnalyzerRepo @Inject constructor() {
 
     private fun isXamarin(decompiledDir: File): Boolean {
         return decompiledDir.walk().find {
-            it.name == "libxamarin-app.so" || it.name == "libmonodroid.so"
+            it.name == "libxamarin-app.so" || it.name == "libmonodroid.so" || it.name == "Xamarin.Forms.Core.dll"
         } != null
     }
 
