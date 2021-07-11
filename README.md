@@ -43,6 +43,7 @@
 | 🧠 Backend    | [Retrosheet](https://github.com/theapache64/retrosheet)                            |
 | 💉 DI                | [Dagger2](https://github.com/google/dagger)                        |
 | 🛠️ APK Decompiling                | [ApkTool](https://github.com/iBotPeaches/Apktool)                        |
+| ☕ Dex to Java                | [jadx](https://github.com/skylot/jadx)                        |
 | 🛣️ Navigation        | [Decompose](https://github.com/arkivanov/Decompose)                        |
 | 🌊 Async            | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)                |
 | 🌐 Networking        | [Retrofit](https://github.com/square/retrofit)                        |
