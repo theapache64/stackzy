@@ -171,7 +171,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         } else {
             label
         }
-        if (appName == null) {
+        if (appName == null || appName.startsWith("@string/")) {
             Arbor.w("Could not retrieve app name")
             return null
         }
