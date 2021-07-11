@@ -189,7 +189,18 @@ class ApkAnalyzerRepo @Inject constructor() {
         val stringXmlContent = stringXmlFile.readText()
         val stringKey = labelKey.replace("@string/", "")
         val regEx = "<string name=\"$stringKey\">(.+?)</string>".toRegex()
-        return regEx.find(stringXmlContent)?.groups?.get(1)?.value
+        Arbor.d("@string regEx : '$regEx'")
+        val value = regEx.find(stringXmlContent)?.groups?.get(1)?.value
+        return if (value != null) {
+            if (value.startsWith("@string/")) {
+                // pointing to another string res, so go recursive
+                getStringXmlValue(decompiledDir, value)
+            } else {
+                value
+            }
+        } else {
+            null
+        }
     }
 
     /**
