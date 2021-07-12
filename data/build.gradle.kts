@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.theapache64.stackzy"
-version = "1.0.0-beta05"
+version = "1.0.6"
 
 repositories {
     jcenter()
@@ -24,7 +24,7 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
 
-    // Retrosheet : Turn Google Spreadsheet to JSO  N endpoint (for Android and JVM)
+    // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
     api("com.github.theapache64:retrosheet:2.0.0-alpha02")
 
     // Retrofit : A type-safe HTTP client for Android and Java.
