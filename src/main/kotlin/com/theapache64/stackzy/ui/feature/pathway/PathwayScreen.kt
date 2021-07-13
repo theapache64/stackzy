@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.ui.common.Badge
@@ -21,10 +22,12 @@ import com.theapache64.stackzy.ui.common.addHoverEffect
 @Composable
 fun PathwayScreen(
     viewModel: PathwayViewModel,
-    onAdbSelected: () -> Unit
+    onAdbSelected: () -> Unit,
+    onLibrariesSelected: () -> Unit,
 ) {
 
     val loggedInAccount by viewModel.loggedInAccount.collectAsState()
+    val focusedCardInfo by viewModel.focusedCardInfo.collectAsState()
 
     Box {
         // Logout
@@ -60,16 +63,12 @@ fun PathwayScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
+
             /*Title*/
             Text(
                 text = "Choose pathway",
                 style = MaterialTheme.typography.h3
-            )
-
-            Text(
-                text = "get APK from",
-                style = MaterialTheme.typography.subtitle2,
-                color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f)
             )
 
             Spacer(
@@ -81,7 +80,17 @@ fun PathwayScreen(
                 PathwayCard(
                     text = "Play Store",
                     icon = svgResource("drawables/playstore.svg"),
-                    onClicked = viewModel::onPlayStoreClicked
+                    onClicked = viewModel::onPlayStoreClicked,
+                    modifier = Modifier.pointerMoveFilter(
+                        onMove = {
+                            viewModel.onPlayStoreCardFocused()
+                            false
+                        },
+                        onExit = {
+                            viewModel.onCardFocusLost()
+                            false
+                        }
+                    )
                 )
 
                 Spacer(
@@ -91,9 +100,50 @@ fun PathwayScreen(
                 PathwayCard(
                     text = "ADB",
                     icon = svgResource("drawables/usb.svg"),
-                    onClicked = onAdbSelected
+                    onClicked = onAdbSelected,
+                    modifier = Modifier.pointerMoveFilter(
+                        onMove = {
+                            viewModel.onAdbCardFocused()
+                            false
+                        },
+                        onExit = {
+                            viewModel.onCardFocusLost()
+                            false
+                        }
+                    )
+                )
+
+                Spacer(
+                    modifier = Modifier.width(10.dp)
+                )
+
+                PathwayCard(
+                    text = "Libraries",
+                    icon = svgResource("drawables/books.svg"),
+                    onClicked = onLibrariesSelected,
+                    modifier = Modifier.pointerMoveFilter(
+                        onMove = {
+                            viewModel.onLibrariesCardFocused()
+                            false
+                        },
+                        onExit = {
+                            viewModel.onCardFocusLost()
+                            false
+                        }
+                    )
                 )
             }
+
+            Spacer(
+                modifier = Modifier.height(40.dp)
+            )
+
+            Text(
+                text = focusedCardInfo,
+                style = MaterialTheme.typography.subtitle2,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.2f)
+            )
+
         }
     }
 }
@@ -101,12 +151,14 @@ fun PathwayScreen(
 
 @Composable
 fun PathwayCard(
+    modifier: Modifier = Modifier,
     text: String,
     icon: Painter,
-    onClicked: () -> Unit,
+    onClicked: () -> Unit
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         /*Icon*/
         Image(

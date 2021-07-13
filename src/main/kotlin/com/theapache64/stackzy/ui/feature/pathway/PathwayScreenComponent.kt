@@ -36,7 +36,10 @@ class PathwayScreenComponent(
 
         PathwayScreen(
             viewModel = viewModel,
-            onAdbSelected = onAdbSelected
+            onAdbSelected = onAdbSelected,
+            onLibrariesSelected = {
+                TODO()
+            }
         )
     }
 
