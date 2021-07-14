@@ -10,7 +10,7 @@ import javax.inject.Inject
 /**
  * To store/retrieve to/from global Results sheet
  */
-class ResultRepo @Inject constructor(
+class ResultsRepo @Inject constructor(
     private val apiInterface: ApiInterface,
     private val moshi: Moshi
 ) {
@@ -32,4 +32,6 @@ class ResultRepo @Inject constructor(
     fun jsonify(gradleInfo: GradleInfo): String {
         return gradleInfoAdapter.toJson(gradleInfo)
     }
+
+    fun getAllLibPackages() = apiInterface.getAllLibPackages()
 }

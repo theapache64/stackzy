@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 class AppListViewModel @Inject constructor(
@@ -93,7 +94,7 @@ class AppListViewModel @Inject constructor(
                 /*viewModelScope.launch {
                     val api = Play.getApi((apkSource as ApkSource.PlayStore<Account>).value)
                     val apps = playStoreRepo.search(" ", api)
-                    _apps.value = Resource.Success(null, apps)
+                    _apps.value = Resource.Success( apps)
                 }*/
                 onSearchKeywordChanged(_searchKeyword.value)
             }
@@ -111,7 +112,7 @@ class AppListViewModel @Inject constructor(
                 val filteredApps = fullApps
                     ?.filter {
                         // search with keyword
-                        it.appPackage.name.toLowerCase().contains(newKeyword, ignoreCase = true)
+                        it.appPackage.name.lowercase(Locale.getDefault()).contains(newKeyword, ignoreCase = true)
                     }
                     ?.filter {
                         // filter for active tab
@@ -119,7 +120,7 @@ class AppListViewModel @Inject constructor(
                     }
                     ?: listOf()
 
-                _apps.value = Resource.Success(null, filteredApps.map { AndroidAppWrapper(it) })
+                _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
             }
             is ApkSource.PlayStore -> {
                 // Play Store
@@ -145,7 +146,7 @@ class AppListViewModel @Inject constructor(
                     _apps.value = Resource.Loading(loadingMsg)
 
                     val apps = playStoreRepo.search(keyword, api)
-                    _apps.value = Resource.Success(null, apps.map { AndroidAppWrapper(it) })
+                    _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
                 }
             }
         }

@@ -33,7 +33,7 @@ class FlowResourceCallAdapter<R>(
         if (resp.isSuccessful) {
             resp.body()?.let { data ->
                 // Success
-                emit(Success(null, data))
+                emit(Success(data))
             } ?: kotlin.run {
                 // Error
                 emit(Error("Response can't be null"))

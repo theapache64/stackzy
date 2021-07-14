@@ -1,13 +1,13 @@
 package com.theapache64.stackzy.data.repo
 
-import com.malinskiy.adam.request.pkg.Package
 import com.github.theapache64.expekt.should
+import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.toResult
 import com.theapache64.stackzy.data.remote.Result
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
-import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.util.loadLibs
 import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
@@ -19,7 +19,7 @@ import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
 import kotlin.io.path.createTempDirectory
 
-class ResultRepoTest {
+class ResultsRepoTest {
 
     companion object {
         private const val TEST_PACKAGE_NAME = "com.theapache64.test.app"
@@ -30,7 +30,7 @@ class ResultRepoTest {
     val daggerMockRule = MyDaggerMockRule()
 
     @InjectFromComponent
-    private lateinit var resultRepo: ResultRepo
+    private lateinit var resultsRepo: ResultsRepo
 
     @InjectFromComponent
     private lateinit var adbRepo: AdbRepo
@@ -60,7 +60,7 @@ class ResultRepoTest {
             stackzyLibVersion = 1
         )
 
-        resultRepo.add(result).collect {
+        resultsRepo.add(result).collect {
             when (it) {
                 is Resource.Loading -> {
                     Arbor.d("Adding...")
@@ -95,8 +95,8 @@ class ResultRepoTest {
                 apkToolRepo.decompile(apkFile, decompiledDir)
                 librariesRepo.loadLibs { allLibs ->
                     val report = apkAnalyzerRepo.analyze(packageName, apkFile, decompiledDir, allLibs)
-                    val result = report.toResult(resultRepo, null)
-                    resultRepo.add(result).collect {
+                    val result = report.toResult(resultsRepo, null)
+                    resultsRepo.add(result).collect {
                         if (it is Resource.Error) {
                             assert(false) { it.errorData }
                         }
@@ -108,7 +108,7 @@ class ResultRepoTest {
 
     @Test
     fun `Find result with valid package name`() = runBlockingUnitTest {
-        resultRepo
+        resultsRepo
             .findResult(
                 packageName = TEST_PACKAGE_NAME,
                 versionCode = TEST_VERSION_CODE,
@@ -135,7 +135,7 @@ class ResultRepoTest {
 
     @Test
     fun `Find result with invalid package name`() = runBlockingUnitTest {
-        resultRepo
+        resultsRepo
             .findResult(
                 packageName = "com.theapache64.this.app.does.not.exist",
                 versionCode = 11111,
@@ -159,5 +159,24 @@ class ResultRepoTest {
                     }
                 }
             }
+    }
+
+    @Test
+    fun `Get all lib packages`() = runBlockingUnitTest {
+        resultsRepo.getAllLibPackages().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    println("Finding...")
+                }
+
+                is Resource.Success -> {
+                    it.data.should.not.empty
+                }
+
+                is Resource.Error -> {
+                    assert(false)
+                }
+            }
+        }
     }
 }

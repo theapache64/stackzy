@@ -12,10 +12,11 @@ import com.theapache64.stackzy.model.AndroidAppWrapper
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
-import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
-import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
 import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
+import com.theapache64.stackzy.ui.feature.liblist.LibraryListScreenComponent
+import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
+import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 import com.theapache64.stackzy.ui.feature.update.UpdateScreenComponent
 import com.theapache64.stackzy.util.ApkSource
@@ -37,8 +38,8 @@ class NavHostComponent(
         object Splash : Config()
         object SelectPathway : Config()
         object LogIn : Config()
-        object SelectDevice : Config()
-        data class SelectApp(
+        object DeviceList : Config()
+        data class AppList(
             val apkSource: ApkSource<AndroidDeviceWrapper, Account>
         ) : Config()
 
@@ -48,6 +49,7 @@ class NavHostComponent(
         ) : Config()
 
         object Update : Config()
+        object LibraryList : Config()
     }
 
     private val appComponent: AppComponent = DaggerAppComponent
@@ -87,13 +89,13 @@ class NavHostComponent(
                 onBackClicked = ::onBackClicked
             )
 
-            is Config.SelectDevice -> DeviceListScreenComponent(
+            is Config.DeviceList -> DeviceListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 onDeviceSelected = ::onDeviceSelected,
                 onBackClicked = ::onBackClicked,
             )
-            is Config.SelectApp -> AppListScreenComponent(
+            is Config.AppList -> AppListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 apkSource = config.apkSource,
@@ -113,6 +115,11 @@ class NavHostComponent(
             is Config.Update -> UpdateScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext
+            )
+            is Config.LibraryList -> LibraryListScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext,
+                onBackClicked = ::onBackClicked
             )
         }
     }
@@ -156,7 +163,7 @@ class NavHostComponent(
      */
     private fun onPathwayPlayStoreSelected(account: Account) {
         Arbor.d("Showing select app")
-        router.push(Config.SelectApp(ApkSource.PlayStore(account)))
+        router.push(Config.AppList(ApkSource.PlayStore(account)))
     }
 
     /**
@@ -170,25 +177,25 @@ class NavHostComponent(
      * Invoked when login succeeded.
      */
     private fun onLoggedIn(account: Account) {
-        router.replaceCurrent(Config.SelectApp(ApkSource.PlayStore(account)))
+        router.replaceCurrent(Config.AppList(ApkSource.PlayStore(account)))
     }
 
     /**
      * Invoked when adb selected from the pathway screen
      */
     private fun onPathwayAdbSelected() {
-        router.push(Config.SelectDevice)
+        router.push(Config.DeviceList)
     }
 
     private fun onPathwayLibrariesSelected() {
-        TODO()
+        router.push(Config.LibraryList)
     }
 
     /**
      * Invoked when a device selected
      */
     private fun onDeviceSelected(androidDevice: AndroidDeviceWrapper) {
-        router.push(Config.SelectApp(ApkSource.Adb(androidDevice)))
+        router.push(Config.AppList(ApkSource.Adb(androidDevice)))
     }
 
     /**

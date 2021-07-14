@@ -15,7 +15,6 @@
 
 - [Watch](https://www.youtube.com/watch?v=XtM-sRLxLLc&ab_channel=theapache64) demo
 
-
 ### 📽️ Usage
 
 - [Show](docs/USAGE.md) usage
@@ -54,10 +53,14 @@
 
 ## 😂 Fun Facts
 
-- Stackzy uses [a google sheet](https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/edit#gid=284770392) as the backend, thanks to [Retrosheet](https://github.com/theapache64/retrosheet)
+- Stackzy
+  uses [a google sheet](https://docs.google.com/spreadsheets/d/1KBxVO5tXySbezBr-9rb2Y3qWo5PCMrvkD1aWQxZRepI/edit#gid=284770392)
+  as the backend, thanks to [Retrosheet](https://github.com/theapache64/retrosheet)
 
 - The initial name of Stackzy was `Which Stack`
-- Stackzy uses a gloabl caching mechanism, which works as a centralized caching system. Means, if **someone** decompiled `WhatsApp`, the next time you try to find the stack, it won't be decompiled and the result will be served from the cache.
+- Stackzy uses a gloabl caching mechanism, which works as a centralized caching system. Means, if **someone**
+  decompiled `WhatsApp`, the next time you try to find the stack, it won't be decompiled and the result will be served
+  from the cache.
 
 ## 🙇 Credits
 
@@ -89,7 +92,6 @@ Give a ⭐️ if this project helped you!
 <a href="https://www.buymeacoffee.com/theapache64" target="_blank">
     <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="160">
 </a>
-
 
 ## 📝 License
 

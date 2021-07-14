@@ -40,7 +40,7 @@ class AppDetailViewModel @Inject constructor(
     private val librariesRepo: LibrariesRepo,
     private val untrackedLibsRepo: UntrackedLibsRepo,
     private val playStoreRepo: PlayStoreRepo,
-    private val resultRepo: ResultRepo,
+    private val resultsRepo: ResultsRepo,
     private val configRepo: ConfigRepo,
     private val jadxRepo: JadxRepo
 ) {
@@ -89,7 +89,7 @@ class AppDetailViewModel @Inject constructor(
         viewModelScope.launch {
             if (androidAppWrapper.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
-                resultRepo.findResult(
+                resultsRepo.findResult(
                     androidAppWrapper.appPackage.name,
                     androidAppWrapper.versionCode!!,
                     config.latestStackzyLibVersion
@@ -136,7 +136,7 @@ class AppDetailViewModel @Inject constructor(
             apkSizeInMb = result.apkSizeInMb,
             assetsDir = null,
             permissions = getFullPermissionsFromPermissions(result.permissions),
-            gradleInfo = resultRepo.parseGradleInfo(result.gradleInfoJson)!! // this shouldn't be null
+            gradleInfo = resultsRepo.parseGradleInfo(result.gradleInfoJson)!! // this shouldn't be null
         )
 
         onReportReady(report)
@@ -296,10 +296,10 @@ class AppDetailViewModel @Inject constructor(
 
         if (shouldStoreResult) {
             // Converting AnalysisReport to Result
-            val result = report.toResult(resultRepo, config)
+            val result = report.toResult(resultsRepo, config)
 
             // Add result to remove
-            resultRepo.add(result).collect {
+            resultsRepo.add(result).collect {
                 when (it) {
                     is Resource.Loading -> {
                         _loadingMessage.value = "Saving result..."

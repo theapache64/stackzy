@@ -51,7 +51,7 @@ class AuthRepo @Inject constructor(
 
             try {
                 val account = Play.login(username, password)
-                emit(Resource.Success(null, account))
+                emit(Resource.Success(account))
             } catch (e: Exception) {
                 e.printStackTrace()
                 emit(Resource.Error(e.message ?: "Something went wrong"))

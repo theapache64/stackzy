@@ -3,7 +3,7 @@ package com.theapache64.stackzy.data.local
 import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.data.remote.Result
-import com.theapache64.stackzy.data.repo.ResultRepo
+import com.theapache64.stackzy.data.repo.ResultsRepo
 import java.io.File
 
 
@@ -32,7 +32,7 @@ class AnalysisReport(
 ) : AnalysisReportDefinition
 
 
-fun AnalysisReport.toResult(resultRepo: ResultRepo, config: Config? = null): Result {
+fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null): Result {
     println("Permissions : $permissions")
     return Result(
         appName = this.appName ?: this.packageName,
@@ -43,7 +43,7 @@ fun AnalysisReport.toResult(resultRepo: ResultRepo, config: Config? = null): Res
         platform = this.platform::class.simpleName!!,
         apkSizeInMb = this.apkSizeInMb,
         permissions = this.permissions.joinToString(","),
-        gradleInfoJson = resultRepo.jsonify(this.gradleInfo),
+        gradleInfoJson = resultsRepo.jsonify(this.gradleInfo),
         stackzyLibVersion = config?.latestStackzyLibVersion ?: 0,
     )
 }

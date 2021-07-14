@@ -66,7 +66,7 @@ fun LoadingAnimation(message: String) {
         )
     }
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         // Ignite the animation
         isRotated = !isRotated
     }

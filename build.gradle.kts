@@ -50,6 +50,9 @@ dependencies {
     // Kamel : Image loading library
     implementation("com.alialbaali.kamel:kamel-image:0.2.1")
 
+    val bouncyCastleVersion = 1.65
+    implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
+
     /**
      * Testing Dependencies
      */

@@ -13,7 +13,7 @@ fun UpdateScreen(
     FullScreenError(
         title = "Update",
         message = "Looks like you're using an older version of ${App.appArgs.appName}." +
-                  "Please download the latest version and update. Thank you :)",
+                "Please download the latest version and update. Thank you :)",
         action = {
             Button(
                 onClick = {

@@ -1,8 +1,8 @@
 package com.theapache64.stackzy.di.module
 
+import com.github.theapache64.retrosheet.RetrosheetInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.github.theapache64.retrosheet.RetrosheetInterceptor
 import com.theapache64.stackzy.data.remote.ApiInterface
 import com.theapache64.stackzy.data.util.calladapter.flow.FlowResourceCallAdapterFactory
 import com.toxicbakery.logging.Arbor
@@ -29,6 +29,7 @@ class NetworkModule {
     @Provides
     fun provideRetrosheetInterceptor(): RetrosheetInterceptor {
         return RetrosheetInterceptor.Builder()
+            .setLogging(true)
             .addSheet(
                 sheetName = TABLE_CATEGORIES,
                 "id", "name"
@@ -58,11 +59,11 @@ class NetworkModule {
                 "version_name",
                 "version_code",
                 "stackzy_lib_version",
+                "lib_packages",
                 "platform",
                 "apk_size_in_mb",
                 "permissions",
-                "gradle_info_json",
-                "lib_packages"
+                "gradle_info_json"
             )
             .addForm(
                 endPoint = TABLE_RESULTS,

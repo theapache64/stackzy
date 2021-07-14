@@ -194,7 +194,6 @@ class ApkAnalyzerRepoTest {
     }
 
 
-
     @Test
     fun `Get platform - xamarin`() = runBlockingUnitTest {
         val sampleApkFile = getTestResource(XAMARIN_APK_FILE_NAME)

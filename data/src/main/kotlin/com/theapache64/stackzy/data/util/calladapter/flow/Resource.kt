@@ -10,8 +10,8 @@ sealed class Resource<T> {
     ) : Resource<T>()
 
     data class Success<T>(
-        val message: String?,
-        val data: T
+        val data: T,
+        val message: String? = null
     ) : Resource<T>()
 
     data class Error<T>(

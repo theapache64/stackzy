@@ -21,11 +21,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.theapache64.gpa.model.Account
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.LoadingAnimation
 import com.theapache64.stackzy.ui.theme.R
-import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 
 @Composable
 fun LogInScreen(

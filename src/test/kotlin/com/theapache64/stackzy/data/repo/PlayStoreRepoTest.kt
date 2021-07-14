@@ -1,8 +1,8 @@
 package com.theapache64.stackzy.data.repo
 
 import com.akdeniz.googleplaycrawler.GooglePlayAPI
-import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.expekt.should
+import com.github.theapache64.gpa.api.Play
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import it.cosenonjaviste.daggermock.InjectFromComponent

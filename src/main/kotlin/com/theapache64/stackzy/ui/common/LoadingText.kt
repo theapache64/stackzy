@@ -33,7 +33,7 @@ fun LoadingText(
         modifier = modifier.alpha(animatedAlpha)
     )
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         enabled = !enabled
     }
 }
