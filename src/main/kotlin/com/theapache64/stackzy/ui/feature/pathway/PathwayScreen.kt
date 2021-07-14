@@ -81,16 +81,8 @@ fun PathwayScreen(
                     text = "Play Store",
                     icon = svgResource("drawables/playstore.svg"),
                     onClicked = viewModel::onPlayStoreClicked,
-                    modifier = Modifier.pointerMoveFilter(
-                        onMove = {
-                            viewModel.onPlayStoreCardFocused()
-                            false
-                        },
-                        onExit = {
-                            viewModel.onCardFocusLost()
-                            false
-                        }
-                    )
+                    onMouseEnter = viewModel::onPlayStoreCardFocused,
+                    onMouseLeave = viewModel::onCardFocusLost
                 )
 
                 Spacer(
@@ -101,16 +93,8 @@ fun PathwayScreen(
                     text = "ADB",
                     icon = svgResource("drawables/usb.svg"),
                     onClicked = onAdbSelected,
-                    modifier = Modifier.pointerMoveFilter(
-                        onMove = {
-                            viewModel.onAdbCardFocused()
-                            false
-                        },
-                        onExit = {
-                            viewModel.onCardFocusLost()
-                            false
-                        }
-                    )
+                    onMouseEnter = viewModel::onAdbCardFocused,
+                    onMouseLeave = viewModel::onCardFocusLost
                 )
 
                 Spacer(
@@ -121,16 +105,8 @@ fun PathwayScreen(
                     text = "Libraries",
                     icon = svgResource("drawables/books.svg"),
                     onClicked = onLibrariesSelected,
-                    modifier = Modifier.pointerMoveFilter(
-                        onMove = {
-                            viewModel.onLibrariesCardFocused()
-                            false
-                        },
-                        onExit = {
-                            viewModel.onCardFocusLost()
-                            false
-                        }
-                    )
+                    onMouseEnter = viewModel::onLibrariesCardFocused,
+                    onMouseLeave = viewModel::onCardFocusLost
                 )
             }
 
@@ -154,11 +130,22 @@ fun PathwayCard(
     modifier: Modifier = Modifier,
     text: String,
     icon: Painter,
+    onMouseEnter: () -> Unit,
+    onMouseLeave: () -> Unit,
     onClicked: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier.pointerMoveFilter(
+            onMove = {
+                onMouseEnter()
+                false
+            },
+            onExit = {
+                onMouseLeave
+                false
+            }
+        )
     ) {
         /*Icon*/
         Image(
