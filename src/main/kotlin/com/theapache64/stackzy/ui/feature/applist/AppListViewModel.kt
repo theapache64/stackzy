@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.selectapp
+package com.theapache64.stackzy.ui.feature.applist
 
 import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SelectAppViewModel @Inject constructor(
+class AppListViewModel @Inject constructor(
     private val adbRepo: AdbRepo,
     private val playStoreRepo: PlayStoreRepo
 ) {

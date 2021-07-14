@@ -14,8 +14,8 @@ import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
 import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
-import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
-import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
+import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
+import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 import com.theapache64.stackzy.ui.feature.update.UpdateScreenComponent
 import com.theapache64.stackzy.util.ApkSource
@@ -77,7 +77,8 @@ class NavHostComponent(
                 componentContext = componentContext,
                 onAdbSelected = ::onPathwayAdbSelected,
                 onLogInNeeded = ::onLogInNeeded,
-                onPlayStoreSelected = ::onPathwayPlayStoreSelected
+                onPlayStoreSelected = ::onPathwayPlayStoreSelected,
+                onLibrariesSelected = ::onPathwayLibrariesSelected
             )
             is Config.LogIn -> LogInScreenComponent(
                 appComponent = appComponent,
@@ -86,13 +87,13 @@ class NavHostComponent(
                 onBackClicked = ::onBackClicked
             )
 
-            is Config.SelectDevice -> SelectDeviceScreenComponent(
+            is Config.SelectDevice -> DeviceListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 onDeviceSelected = ::onDeviceSelected,
                 onBackClicked = ::onBackClicked,
             )
-            is Config.SelectApp -> SelectAppScreenComponent(
+            is Config.SelectApp -> AppListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 apkSource = config.apkSource,
@@ -115,6 +116,7 @@ class NavHostComponent(
             )
         }
     }
+
 
     @Composable
     override fun render() {
@@ -176,6 +178,10 @@ class NavHostComponent(
      */
     private fun onPathwayAdbSelected() {
         router.push(Config.SelectDevice)
+    }
+
+    private fun onPathwayLibrariesSelected() {
+        TODO()
     }
 
     /**

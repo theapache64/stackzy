@@ -12,6 +12,7 @@ class PathwayScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onAdbSelected: () -> Unit,
+    private val onLibrariesSelected: () -> Unit,
     onPlayStoreSelected: (Account) -> Unit,
     onLogInNeeded: () -> Unit,
 ) : Component, ComponentContext by componentContext {
@@ -37,9 +38,7 @@ class PathwayScreenComponent(
         PathwayScreen(
             viewModel = viewModel,
             onAdbSelected = onAdbSelected,
-            onLibrariesSelected = {
-                TODO()
-            }
+            onLibrariesSelected = onLibrariesSelected
         )
     }
 

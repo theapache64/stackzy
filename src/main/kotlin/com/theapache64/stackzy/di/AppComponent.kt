@@ -5,8 +5,8 @@ import com.theapache64.stackzy.di.module.*
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
 import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
-import com.theapache64.stackzy.ui.feature.selectapp.SelectAppScreenComponent
-import com.theapache64.stackzy.ui.feature.selectdevice.SelectDeviceScreenComponent
+import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
+import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
 import com.theapache64.stackzy.ui.feature.splash.SplashScreenComponent
 import com.theapache64.stackzy.ui.feature.update.UpdateScreenComponent
 import dagger.Component
@@ -26,9 +26,9 @@ interface AppComponent {
     fun inject(splashScreenComponent: SplashScreenComponent)
     fun inject(selectPathwayScreenComponent: PathwayScreenComponent)
     fun inject(logInScreenComponent: LogInScreenComponent)
-    fun inject(selectAppScreenComponent: SelectAppScreenComponent)
+    fun inject(appListScreenComponent: AppListScreenComponent)
     fun inject(appDetailScreenComponent: AppDetailScreenComponent)
-    fun inject(selectDeviceScreenComponent: SelectDeviceScreenComponent)
+    fun inject(deviceListScreenComponent: DeviceListScreenComponent)
     fun inject(updateScreenComponent: UpdateScreenComponent)
 
     // bind repo to this component

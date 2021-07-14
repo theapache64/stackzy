@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.selectapp
+package com.theapache64.stackzy.ui.feature.applist
 
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.layout.*
@@ -26,14 +26,14 @@ private const val GRID_SIZE = 3
  */
 @Composable
 fun SelectAppScreen(
-    selectAppViewModel: SelectAppViewModel,
+    appListViewModel: AppListViewModel,
     onBackClicked: () -> Unit,
     onAppSelected: (AndroidAppWrapper) -> Unit
 ) {
 
-    val searchKeyword by selectAppViewModel.searchKeyword.collectAsState()
-    val appsResponse by selectAppViewModel.apps.collectAsState()
-    val selectedTabIndex by selectAppViewModel.selectedTabIndex.collectAsState()
+    val searchKeyword by appListViewModel.searchKeyword.collectAsState()
+    val appsResponse by appListViewModel.apps.collectAsState()
+    val selectedTabIndex by appListViewModel.selectedTabIndex.collectAsState()
 
     // Calculating item width based on screen width
     val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
@@ -63,7 +63,7 @@ fun SelectAppScreen(
                     )
                 },
                 onValueChange = {
-                    selectAppViewModel.onSearchKeywordChanged(it)
+                    appListViewModel.onSearchKeywordChanged(it)
                 },
                 modifier = Modifier
                     .width(300.dp)
@@ -93,7 +93,7 @@ fun SelectAppScreen(
 
                 Column {
 
-                    if (selectedTabIndex != SelectAppViewModel.TAB_NO_TAB) {
+                    if (selectedTabIndex != AppListViewModel.TAB_NO_TAB) {
                         TabRow(
                             selectedTabIndex = selectedTabIndex,
                             backgroundColor = Color.Transparent,
@@ -103,10 +103,10 @@ fun SelectAppScreen(
                                 bottom = 10.dp,
                             )
                         ) {
-                            SelectAppViewModel.tabsMap.entries.forEach { tabEntry ->
+                            AppListViewModel.tabsMap.entries.forEach { tabEntry ->
                                 Tab(
                                     selected = tabEntry.key == selectedTabIndex,
-                                    onClick = { selectAppViewModel.onTabClicked(tabEntry.key) },
+                                    onClick = { appListViewModel.onTabClicked(tabEntry.key) },
                                     text = { Text(tabEntry.value) }
                                 )
                             }
@@ -150,7 +150,7 @@ fun SelectAppScreen(
                             action = {
                                 Button(
                                     onClick = {
-                                        selectAppViewModel.onOpenMarketClicked()
+                                        appListViewModel.onOpenMarketClicked()
                                     },
                                 ) {
                                     Text(text = R.string.app_detail_action_open_market)

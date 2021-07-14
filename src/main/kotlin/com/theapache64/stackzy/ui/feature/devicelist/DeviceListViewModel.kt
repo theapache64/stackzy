@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.selectdevice
+package com.theapache64.stackzy.ui.feature.devicelist
 
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SelectDeviceViewModel @Inject constructor(
+class DeviceListViewModel @Inject constructor(
     private val adbRepo: AdbRepo
 ) {
 

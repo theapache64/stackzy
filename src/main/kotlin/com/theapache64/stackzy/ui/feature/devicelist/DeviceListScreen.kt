@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.selectdevice
+package com.theapache64.stackzy.ui.feature.devicelist
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,11 +20,11 @@ import com.theapache64.stackzy.util.R
  */
 @Composable
 fun SelectDeviceScreen(
-    selectDeviceViewModel: SelectDeviceViewModel,
+    deviceListViewModel: DeviceListViewModel,
     onBackClicked: () -> Unit,
     onDeviceSelected: (AndroidDeviceWrapper) -> Unit
 ) {
-    val devices by selectDeviceViewModel.connectedDevices.collectAsState()
+    val devices by deviceListViewModel.connectedDevices.collectAsState()
 
     Content(
         devices = devices,

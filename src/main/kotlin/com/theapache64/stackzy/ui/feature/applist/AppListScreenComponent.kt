@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.selectapp
+package com.theapache64.stackzy.ui.feature.applist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +12,7 @@ import com.theapache64.stackzy.ui.navigation.Component
 import com.theapache64.stackzy.util.ApkSource
 import javax.inject.Inject
 
-class SelectAppScreenComponent(
+class AppListScreenComponent(
     componentContext: ComponentContext,
     appComponent: AppComponent,
     private val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
@@ -21,7 +21,7 @@ class SelectAppScreenComponent(
 ) : Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var selectAppViewModel: SelectAppViewModel
+    lateinit var appListViewModel: AppListViewModel
 
     init {
         println("Create new select app screen component")
@@ -31,16 +31,16 @@ class SelectAppScreenComponent(
     @Composable
     override fun render() {
         val scope = rememberCoroutineScope()
-        LaunchedEffect(selectAppViewModel) {
+        LaunchedEffect(appListViewModel) {
             println("Creating select app screen...")
-            selectAppViewModel.init(scope, apkSource)
-            if (selectAppViewModel.apps.value == null) {
-                selectAppViewModel.loadApps()
+            appListViewModel.init(scope, apkSource)
+            if (appListViewModel.apps.value == null) {
+                appListViewModel.loadApps()
             }
         }
 
         SelectAppScreen(
-            selectAppViewModel = selectAppViewModel,
+            appListViewModel = appListViewModel,
             onBackClicked = onBackClicked,
             onAppSelected = {
                 onAppSelected(apkSource, it)

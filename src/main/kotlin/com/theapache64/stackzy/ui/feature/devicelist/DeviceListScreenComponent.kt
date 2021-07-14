@@ -1,4 +1,4 @@
-package com.theapache64.stackzy.ui.feature.selectdevice
+package com.theapache64.stackzy.ui.feature.devicelist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -10,7 +10,7 @@ import com.theapache64.stackzy.ui.navigation.Component
 import com.toxicbakery.logging.Arbor
 import javax.inject.Inject
 
-class SelectDeviceScreenComponent(
+class DeviceListScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
     private val onDeviceSelected: (AndroidDeviceWrapper) -> Unit,
@@ -18,7 +18,7 @@ class SelectDeviceScreenComponent(
 ) : Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var selectDeviceViewModel: SelectDeviceViewModel
+    lateinit var deviceListViewModel: DeviceListViewModel
 
     init {
         appComponent.inject(this)
@@ -28,18 +28,18 @@ class SelectDeviceScreenComponent(
     override fun render() {
 
         val scope = rememberCoroutineScope()
-        DisposableEffect(selectDeviceViewModel) {
+        DisposableEffect(deviceListViewModel) {
             Arbor.d("Init scope")
-            selectDeviceViewModel.init(scope)
-            selectDeviceViewModel.watchConnectedDevices()
+            deviceListViewModel.init(scope)
+            deviceListViewModel.watchConnectedDevices()
             onDispose {
                 Arbor.d("Dispose scope")
-                selectDeviceViewModel.stopWatchConnectedDevices()
+                deviceListViewModel.stopWatchConnectedDevices()
             }
         }
 
         SelectDeviceScreen(
-            selectDeviceViewModel,
+            deviceListViewModel,
             onBackClicked = onBackClicked,
             onDeviceSelected = {
                 onDeviceSelected(it)
