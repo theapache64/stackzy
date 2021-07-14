@@ -142,7 +142,7 @@ fun PathwayCard(
                 false
             },
             onExit = {
-                onMouseLeave
+                onMouseLeave()
                 false
             }
         )

@@ -11,10 +11,14 @@ class PathwayViewModel @Inject constructor(
     private val authRepo: AuthRepo
 ) {
 
+    companion object {
+        private const val INFO_MADE_WITH_LOVE = "Made with ❤️"
+    }
+
     private val _loggedInAccount = MutableStateFlow<Account?>(null)
     val loggedInAccount: StateFlow<Account?> = _loggedInAccount
 
-    private val _focusedCardInfo = MutableStateFlow("")
+    private val _focusedCardInfo = MutableStateFlow(INFO_MADE_WITH_LOVE)
     val focusedCardInfo = _focusedCardInfo.asStateFlow()
 
     private lateinit var onPlayStoreSelected: (Account) -> Unit
@@ -61,7 +65,7 @@ class PathwayViewModel @Inject constructor(
     }
 
     fun onCardFocusLost() {
-        _focusedCardInfo.value = ""
+        _focusedCardInfo.value = INFO_MADE_WITH_LOVE
     }
 
 }
