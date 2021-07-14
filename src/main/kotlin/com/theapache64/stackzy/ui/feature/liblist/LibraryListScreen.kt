@@ -1,10 +1,12 @@
 package com.theapache64.stackzy.ui.feature.liblist
 
-import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
@@ -19,8 +21,6 @@ import com.theapache64.stackzy.ui.common.*
 import com.theapache64.stackzy.util.R
 
 
-private const val GRID_SIZE = 4
-
 @Composable
 fun LibraryListScreen(
     viewModel: LibraryListViewModel,
@@ -31,8 +31,6 @@ fun LibraryListScreen(
     val librariesResp by viewModel.libsResp.collectAsState()
     val subTitle by viewModel.subTitle.collectAsState()
 
-    // Calculating item width based on screen width
-    val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
     CustomScaffold(
         title = R.string.libraries_list_title,
@@ -83,30 +81,22 @@ fun LibraryListScreen(
                 Column {
 
                     if (libraries.isNotEmpty()) {
-                        // Grid
-                        LazyColumn {
-                            items(
-                                items = if (libraries.size > GRID_SIZE) {
-                                    libraries.chunked(GRID_SIZE)
-                                } else {
-                                    listOf(libraries)
-                                }
-                            ) { librarySet ->
-                                Row {
-                                    librarySet.map { library ->
+                        LazyVerticalGrid(
+                            cells = GridCells.Fixed(4)
+                        ) {
+                            items(libraries) { library ->
+                                Column {
+                                    // GridItem
+                                    Selectable(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        data = library,
+                                        onSelected = onLibraryClicked
+                                    )
 
-                                        // GridItem
-                                        Selectable(
-                                            modifier = Modifier.width(appItemWidth.dp),
-                                            data = library,
-                                            onSelected = onLibraryClicked
-                                        )
-                                    }
+                                    Spacer(
+                                        modifier = Modifier.height(10.dp)
+                                    )
                                 }
-
-                                Spacer(
-                                    modifier = Modifier.height(10.dp)
-                                )
                             }
                         }
 

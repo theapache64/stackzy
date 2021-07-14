@@ -1,11 +1,10 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
-import androidx.compose.desktop.LocalAppWindow
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,12 +13,10 @@ import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.model.AnalysisReportWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
-import com.theapache64.stackzy.ui.common.CONTENT_PADDING_HORIZONTAL
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.GradientMargin
 import com.theapache64.stackzy.ui.common.Selectable
 
-private const val GRID_SIZE = 4
 
 @Composable
 fun Libraries(
@@ -47,32 +44,23 @@ fun Libraries(
         }
     } else {
 
-        // Calculating item width based on screen width
-        val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
-
-        LazyColumn {
+        LazyVerticalGrid(
+            cells = GridCells.Fixed(4)
+        ) {
             items(
-                items = if (report.libraryWrappers.size > GRID_SIZE) {
-                    report.libraryWrappers.chunked(GRID_SIZE)
-                } else {
-                    listOf(report.libraryWrappers)
-                }
-            ) { appSet ->
-                Row {
-                    appSet
-                        .map { app ->
-                            // GridItem
-                            Selectable(
-                                modifier = Modifier.width(appItemWidth.dp),
-                                data = app,
-                                onSelected = onLibrarySelected
-                            )
-                        }
-                }
+                items = report.libraryWrappers
+            ) { app ->
+                Column {
+                    // GridItem
+                    Selectable(
+                        data = app,
+                        onSelected = onLibrarySelected
+                    )
 
-                Spacer(
-                    modifier = Modifier.height(10.dp)
-                )
+                    Spacer(
+                        modifier = Modifier.height(10.dp)
+                    )
+                }
             }
 
             item {

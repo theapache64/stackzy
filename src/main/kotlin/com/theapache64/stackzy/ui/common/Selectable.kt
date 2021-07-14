@@ -89,6 +89,7 @@ fun <T : AlphabetCircle> Selectable(
 
     Row(
         modifier = modifier
+            .fillMaxWidth()
             .addHoverEffect(
                 onClicked = {
                     onSelected(data)

@@ -2,7 +2,9 @@ package com.theapache64.stackzy.ui.feature.applist
 
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -19,7 +21,6 @@ import com.theapache64.stackzy.model.AndroidAppWrapper
 import com.theapache64.stackzy.ui.common.*
 import com.theapache64.stackzy.util.R
 
-private const val GRID_SIZE = 3
 
 /**
  * To select an application from the selected device
@@ -34,9 +35,6 @@ fun SelectAppScreen(
     val searchKeyword by appListViewModel.searchKeyword.collectAsState()
     val appsResponse by appListViewModel.apps.collectAsState()
     val selectedTabIndex by appListViewModel.selectedTabIndex.collectAsState()
-
-    // Calculating item width based on screen width
-    val appItemWidth = (LocalAppWindow.current.width - (CONTENT_PADDING_HORIZONTAL * 2)) / GRID_SIZE
 
     val hasData = appsResponse is Resource.Success
             && (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data.isNotEmpty()
@@ -115,29 +113,23 @@ fun SelectAppScreen(
 
                     if (apps.isNotEmpty()) {
                         // Grid
-                        LazyColumn {
+                        LazyVerticalGrid(
+                            cells = GridCells.Fixed(3)
+                        ) {
                             items(
-                                items = if (apps.size > GRID_SIZE) {
-                                    apps.chunked(GRID_SIZE)
-                                } else {
-                                    listOf(apps)
-                                }
-                            ) { appSet ->
-                                Row {
-                                    appSet.map { app ->
+                                items = apps
+                            ) { app ->
+                                Column {
+                                    // GridItem
+                                    Selectable(
+                                        data = app,
+                                        onSelected = onAppSelected
+                                    )
 
-                                        // GridItem
-                                        Selectable(
-                                            modifier = Modifier.width(appItemWidth.dp),
-                                            data = app,
-                                            onSelected = onAppSelected
-                                        )
-                                    }
+                                    Spacer(
+                                        modifier = Modifier.height(10.dp)
+                                    )
                                 }
-
-                                Spacer(
-                                    modifier = Modifier.height(10.dp)
-                                )
                             }
                         }
 
