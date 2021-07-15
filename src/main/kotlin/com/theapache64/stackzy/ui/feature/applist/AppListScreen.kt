@@ -1,9 +1,7 @@
 package com.theapache64.stackzy.ui.feature.applist
 
-import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -73,52 +71,50 @@ fun SelectAppScreen(
             modifier = Modifier.height(20.dp)
         )
 
-        when (appsResponse) {
-            is Resource.Loading -> {
-                val message = (appsResponse as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
-                LoadingAnimation(message)
-            }
-            is Resource.Error -> {
-                Box {
-                    ErrorSnackBar(
-                        (appsResponse as Resource.Error<List<AndroidAppWrapper>>).errorData
+        Column {
+
+            if (selectedTabIndex != AppListViewModel.TAB_NO_TAB) {
+                TabRow(
+                    selectedTabIndex = selectedTabIndex,
+                    backgroundColor = Color.Transparent,
+                    contentColor = MaterialTheme.colors.primary,
+                    modifier = Modifier.padding(
+                        top = 5.dp,
+                        bottom = 10.dp,
                     )
+                ) {
+                    AppListViewModel.tabsMap.entries.forEach { tabEntry ->
+                        Tab(
+                            selected = tabEntry.key == selectedTabIndex,
+                            onClick = { appListViewModel.onTabClicked(tabEntry.key) },
+                            text = { Text(tabEntry.value) }
+                        )
+                    }
                 }
             }
-            is Resource.Success -> {
-                val apps = (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data
 
+            when (appsResponse) {
 
-                Column {
-
-                    if (selectedTabIndex != AppListViewModel.TAB_NO_TAB) {
-                        TabRow(
-                            selectedTabIndex = selectedTabIndex,
-                            backgroundColor = Color.Transparent,
-                            contentColor = MaterialTheme.colors.primary,
-                            modifier = Modifier.padding(
-                                top = 5.dp,
-                                bottom = 10.dp,
-                            )
-                        ) {
-                            AppListViewModel.tabsMap.entries.forEach { tabEntry ->
-                                Tab(
-                                    selected = tabEntry.key == selectedTabIndex,
-                                    onClick = { appListViewModel.onTabClicked(tabEntry.key) },
-                                    text = { Text(tabEntry.value) }
-                                )
-                            }
-                        }
+                is Resource.Loading -> {
+                    val message = (appsResponse as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
+                    LoadingAnimation(message)
+                }
+                is Resource.Error -> {
+                    Box {
+                        ErrorSnackBar(
+                            (appsResponse as Resource.Error<List<AndroidAppWrapper>>).errorData
+                        )
                     }
+                }
+                is Resource.Success -> {
+                    val apps = (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data
 
                     if (apps.isNotEmpty()) {
                         // Grid
                         LazyVerticalGrid(
-                            cells = GridCells.Fixed(3)
+                            cells = GridCells.Fixed(3),
                         ) {
-                            items(
-                                items = apps
-                            ) { app ->
+                            items(items = apps) { app ->
                                 Column {
                                     // GridItem
                                     Selectable(
@@ -150,14 +146,12 @@ fun SelectAppScreen(
                             }
                         )
                     }
-
-
                 }
-
-            }
-            null -> {
-                LoadingAnimation("Preparing apps...")
+                null -> {
+                    LoadingAnimation("Preparing apps...")
+                }
             }
         }
+
     }
 }

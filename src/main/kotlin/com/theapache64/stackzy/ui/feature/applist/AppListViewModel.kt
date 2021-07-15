@@ -119,69 +119,74 @@ class AppListViewModel @Inject constructor(
         val newKeyword = _newKeyword.replace("\n", "")
         _searchKeyword.value = newKeyword
 
-        when (apkSource) {
-            is ApkSource.Adb -> {
-                // ### ADB ###
+        viewModelScope.launch {
+            when (apkSource) {
+                is ApkSource.Adb -> {
+                    // ### ADB ###
 
-                // Filtering apps
-                val filteredApps = fullApps
-                    ?.filter {
-                        // search with keyword
-                        it.appPackage.name.lowercase(Locale.getDefault()).contains(newKeyword, ignoreCase = true)
-                    }
-                    ?.filter {
-                        // filter for active tab
-                        it.isSystemApp == (selectedTabIndex.value == TAB_SYSTEM_APPS_ID)
-                    }
-                    ?: listOf()
+                    _apps.value = Resource.Loading()
+                    delay(1)
 
-                _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
-            }
-            is ApkSource.PlayStore -> {
-                if (isPlayStoreUrl(newKeyword)) {
-                    // Pasted a play store url
-                    val packageName = parsePackageName(newKeyword)!!
-                    viewModelScope.launch {
-                        val account = (apkSource as ApkSource.PlayStore<Account>).value
-                        val api = Play.getApi(account)
-                        val app = playStoreRepo.find(packageName, api)
-                        if (app != null) {
-                            // found app in playstore
-                            _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)))
-                        } else {
-                            _apps.value = Resource.Error("Invalid PlayStore URL")
+                    // Filtering apps
+                    val filteredApps = fullApps
+                        ?.filter {
+                            // search with keyword
+                            it.appPackage.name.lowercase(Locale.getDefault()).contains(newKeyword, ignoreCase = true)
                         }
-                    }
-                } else {
+                        ?.filter {
+                            // filter for active tab
+                            it.isSystemApp == (selectedTabIndex.value == TAB_SYSTEM_APPS_ID)
+                        }
+                        ?: listOf()
 
-                    // Play Store
-                    searchJob?.cancel()
-                    println("initiating search")
-                    searchJob = viewModelScope.launch {
-                        println("Waiting for delay")
-                        delay(500)
-                        println("Delay done.. let's search ${searchKeyword.value}")
-                        val account = (apkSource as ApkSource.PlayStore<Account>).value
-                        val api = Play.getApi(account)
-                        val keyword = searchKeyword.value.let {
-                            it.ifBlank {
-                                " "
+                    _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
+                }
+                is ApkSource.PlayStore -> {
+                    if (isPlayStoreUrl(newKeyword)) {
+                        // Pasted a play store url
+                        val packageName = parsePackageName(newKeyword)!!
+                        viewModelScope.launch {
+                            val account = (apkSource as ApkSource.PlayStore<Account>).value
+                            val api = Play.getApi(account)
+                            val app = playStoreRepo.find(packageName, api)
+                            if (app != null) {
+                                // found app in playstore
+                                _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)))
+                            } else {
+                                _apps.value = Resource.Error("Invalid PlayStore URL")
                             }
                         }
-                        val loadingMsg = if (keyword.isBlank()) {
-                            MSG_LOADING_TRENDING_APPS
-                        } else {
-                            "Searching for '$keyword'"
+                    } else {
+
+                        // Play Store
+                        searchJob?.cancel()
+                        println("initiating search")
+                        searchJob = viewModelScope.launch {
+                            println("Waiting for delay")
+                            delay(500)
+                            println("Delay done.. let's search ${searchKeyword.value}")
+                            val account = (apkSource as ApkSource.PlayStore<Account>).value
+                            val api = Play.getApi(account)
+                            val keyword = searchKeyword.value.let {
+                                it.ifBlank {
+                                    " "
+                                }
+                            }
+                            val loadingMsg = if (keyword.isBlank()) {
+                                MSG_LOADING_TRENDING_APPS
+                            } else {
+                                "Searching for '$keyword'"
+                            }
+
+                            _apps.value = Resource.Loading(loadingMsg)
+
+                            val apps = playStoreRepo.search(keyword, api)
+                            _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
                         }
-
-                        _apps.value = Resource.Loading(loadingMsg)
-
-                        val apps = playStoreRepo.search(keyword, api)
-                        _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
                     }
+
+
                 }
-
-
             }
         }
 
