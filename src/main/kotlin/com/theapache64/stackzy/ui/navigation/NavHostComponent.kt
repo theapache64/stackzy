@@ -14,6 +14,7 @@ import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
 import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
+import com.theapache64.stackzy.ui.feature.libdetail.LibraryDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.liblist.LibraryListScreenComponent
 import com.theapache64.stackzy.ui.feature.login.LogInScreenComponent
 import com.theapache64.stackzy.ui.feature.pathway.PathwayScreenComponent
@@ -50,6 +51,9 @@ class NavHostComponent(
 
         object Update : Config()
         object LibraryList : Config()
+        data class LibraryDetail(
+            val libraryWrapper: LibraryWrapper
+        ) : Config()
     }
 
     private val appComponent: AppComponent = DaggerAppComponent
@@ -119,9 +123,23 @@ class NavHostComponent(
             is Config.LibraryList -> LibraryListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
+                onLibraryClicked = ::onLibraryClicked,
+                onBackClicked = ::onBackClicked
+            )
+
+            is Config.LibraryDetail -> LibraryDetailScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext,
                 onBackClicked = ::onBackClicked
             )
         }
+    }
+
+    /**
+     * Invoked when a library clicked
+     */
+    private fun onLibraryClicked(libraryWrapper: LibraryWrapper) {
+        router.push(Config.LibraryDetail(libraryWrapper))
     }
 
 

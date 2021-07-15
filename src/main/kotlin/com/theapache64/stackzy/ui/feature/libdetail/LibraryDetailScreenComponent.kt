@@ -1,23 +1,21 @@
-package com.theapache64.stackzy.ui.feature.liblist
+package com.theapache64.stackzy.ui.feature.libdetail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.theapache64.stackzy.di.AppComponent
-import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.navigation.Component
 import javax.inject.Inject
 
-class LibraryListScreenComponent(
+class LibraryDetailScreenComponent(
     componentContext: ComponentContext,
     appComponent: AppComponent,
-    val onLibraryClicked: (LibraryWrapper) -> Unit,
     val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
 
     @Inject
-    lateinit var libraryListViewModel: LibraryListViewModel
+    lateinit var libraryDetailViewModel: LibraryDetailViewModel
 
     init {
         println("Create new select app screen component")
@@ -27,14 +25,16 @@ class LibraryListScreenComponent(
     @Composable
     override fun render() {
         val scope = rememberCoroutineScope()
-        LaunchedEffect(libraryListViewModel) {
+        LaunchedEffect(libraryDetailViewModel) {
             println("Creating select app screen...")
-            libraryListViewModel.init(scope)
+            libraryDetailViewModel.init(scope)
         }
 
-        LibraryListScreen(
-            viewModel = libraryListViewModel,
-            onLibraryClicked = onLibraryClicked,
+        LibraryDetailScreen(
+            viewModel = libraryDetailViewModel,
+            onAppClicked = {
+
+            },
             onBackClicked = onBackClicked
         )
     }
