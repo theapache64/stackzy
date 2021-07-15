@@ -1,6 +1,8 @@
 package com.theapache64.stackzy.data.repo
 
+import com.akdeniz.googleplaycrawler.GooglePlay
 import com.akdeniz.googleplaycrawler.GooglePlayAPI
+import com.akdeniz.googleplaycrawler.GooglePlayException
 import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.malinskiy.adam.request.pkg.Package
@@ -16,6 +18,21 @@ import java.util.*
 import javax.inject.Inject
 
 class PlayStoreRepo @Inject constructor() {
+
+    suspend fun find(
+        packageName: String,
+        api: GooglePlayAPI
+    ): AndroidApp? = withContext(Dispatchers.IO) {
+        try {
+            api.details(
+                packageName
+            ).let {
+                parseAndroidApp(it.docV2)
+            }
+        } catch (e: GooglePlayException) {
+            null
+        }
+    }
 
     /**
      * To search with the given keyword in play store
@@ -40,24 +57,27 @@ class PlayStoreRepo @Inject constructor() {
         serp.content
             .distinctBy { it.docid } // To remove duplicates
             .map { item ->
-
-                // Convert bytes to MB (to readable format)
-                val appDetails = item.details.appDetails
-                val sizeInMb = appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
-                    "%.2f".format(Locale.US, sizeInMb).toFloat()
-                }
-
-                // Adding app to final list
-                AndroidApp(
-                    appPackage = Package(item.docid), // Package name
-                    appTitle = item.title, // App title
-                    versionCode = appDetails.versionCode,
-                    versionName = appDetails.versionString,
-                    imageUrl = item.imageList[1].imageUrl, // Logo URL
-                    appSize = "$sizeInMb MB", // APK Size
-                    isSystemApp = false,
-                )
+                parseAndroidApp(item)
             }
+    }
+
+    private fun parseAndroidApp(item: GooglePlay.DocV2): AndroidApp {
+        // Convert bytes to MB (to readable format)
+        val appDetails = item.details.appDetails
+        val sizeInMb = appDetails.installDetails.totalApkSize.bytesToMb.let { sizeInMb ->
+            "%.2f".format(Locale.US, sizeInMb).toFloat()
+        }
+
+        // Adding app to final list
+        return AndroidApp(
+            appPackage = Package(item.docid), // Package name
+            appTitle = item.title, // App title
+            versionCode = appDetails.versionCode,
+            versionName = appDetails.versionString,
+            imageUrl = item.imageList[1].imageUrl, // Logo URL
+            appSize = "$sizeInMb MB", // APK Size
+            isSystemApp = false,
+        )
     }
 
     /**

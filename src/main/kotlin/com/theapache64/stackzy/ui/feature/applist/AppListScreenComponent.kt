@@ -42,8 +42,8 @@ class AppListScreenComponent(
         SelectAppScreen(
             appListViewModel = appListViewModel,
             onBackClicked = onBackClicked,
-            onAppSelected = {
-                onAppSelected(apkSource, it)
+            onAppSelected = { app ->
+                onAppSelected(apkSource, app)
             }
         )
     }

@@ -34,6 +34,20 @@ class AppListViewModel @Inject constructor(
         )
 
         private const val MSG_LOADING_TRENDING_APPS = "Loading trending apps..."
+
+
+        private val playStoreUrlRegEx by lazy {
+            "^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?id=(?<packageName>[\\w\\.]+)\$".toRegex()
+        }
+
+        fun isPlayStoreUrl(input: String): Boolean {
+            return playStoreUrlRegEx.matches(input)
+        }
+
+        fun parsePackageName(playStoreUrl: String): String? {
+            val matches = playStoreUrlRegEx.find(playStoreUrl)
+            return matches?.groupValues?.getOrNull(1)
+        }
     }
 
     private lateinit var viewModelScope: CoroutineScope
@@ -101,8 +115,9 @@ class AppListViewModel @Inject constructor(
         }
     }
 
-    fun onSearchKeywordChanged(newKeyword: String) {
-        _searchKeyword.value = newKeyword.replace("\n", "")
+    fun onSearchKeywordChanged(_newKeyword: String) {
+        val newKeyword = _newKeyword.replace("\n", "")
+        _searchKeyword.value = newKeyword
 
         when (apkSource) {
             is ApkSource.Adb -> {
@@ -123,34 +138,56 @@ class AppListViewModel @Inject constructor(
                 _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
             }
             is ApkSource.PlayStore -> {
-                // Play Store
-                searchJob?.cancel()
-                println("initiating search")
-                searchJob = viewModelScope.launch {
-                    println("Waiting for delay")
-                    delay(500)
-                    println("Delay done.. let's search ${searchKeyword.value}")
-                    val account = (apkSource as ApkSource.PlayStore<Account>).value
-                    val api = Play.getApi(account)
-                    val keyword = searchKeyword.value.let {
-                        it.ifBlank {
-                            " "
+                if (isPlayStoreUrl(newKeyword)) {
+                    // Pasted a play store url
+                    val packageName = parsePackageName(newKeyword)!!
+                    viewModelScope.launch {
+                        val account = (apkSource as ApkSource.PlayStore<Account>).value
+                        val api = Play.getApi(account)
+                        val app = playStoreRepo.find(packageName, api)
+                        if (app != null) {
+                            // found app in playstore
+                            _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)))
+                        } else {
+                            _apps.value = Resource.Error("Invalid PlayStore URL")
                         }
                     }
-                    val loadingMsg = if (keyword.isBlank()) {
-                        MSG_LOADING_TRENDING_APPS
-                    } else {
-                        "Searching for '$keyword'"
+                } else {
+
+                    // Play Store
+                    searchJob?.cancel()
+                    println("initiating search")
+                    searchJob = viewModelScope.launch {
+                        println("Waiting for delay")
+                        delay(500)
+                        println("Delay done.. let's search ${searchKeyword.value}")
+                        val account = (apkSource as ApkSource.PlayStore<Account>).value
+                        val api = Play.getApi(account)
+                        val keyword = searchKeyword.value.let {
+                            it.ifBlank {
+                                " "
+                            }
+                        }
+                        val loadingMsg = if (keyword.isBlank()) {
+                            MSG_LOADING_TRENDING_APPS
+                        } else {
+                            "Searching for '$keyword'"
+                        }
+
+                        _apps.value = Resource.Loading(loadingMsg)
+
+                        val apps = playStoreRepo.search(keyword, api)
+                        _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
                     }
-
-                    _apps.value = Resource.Loading(loadingMsg)
-
-                    val apps = playStoreRepo.search(keyword, api)
-                    _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
                 }
+
+
             }
         }
+
+
     }
+
 
     fun onOpenMarketClicked() {
         if (apkSource is ApkSource.Adb) {

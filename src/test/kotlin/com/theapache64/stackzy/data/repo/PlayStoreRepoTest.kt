@@ -43,4 +43,20 @@ class PlayStoreRepoTest {
             maxSearchResult
         ).size.should.above(maxSearchResult - 1) // more than or equal
     }
+
+    @Test
+    fun givenPackageName_whenFind_thenReturnValidDetails() = runBlockingUnitTest {
+        playStoreRepo.find(
+            "com.theapache64.papercop",
+            api
+        )?.appTitle.should.equal("Paper Cop")
+    }
+
+    @Test
+    fun givenInvalidPackageName_whenFind_thenReturnNull() = runBlockingUnitTest {
+        playStoreRepo.find(
+            "com.theapache64.some.invalid.package.name",
+            api
+        ).should.`null`
+    }
 }
