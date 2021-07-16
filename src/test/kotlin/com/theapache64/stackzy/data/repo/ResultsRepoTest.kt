@@ -24,6 +24,8 @@ class ResultsRepoTest {
     companion object {
         private const val TEST_PACKAGE_NAME = "com.theapache64.test.app"
         private const val TEST_VERSION_CODE = 11111
+        private const val DUMMY_IMAGE_URL =
+            "https://play-lh.googleusercontent.com/6iyA2zVz5PyyMjK5SIxdUhrb7oh9cYVXJ93q6DZkmx07Er1o90PXYeo6mzL4VC2Gj9s"
     }
 
     @get:Rule
@@ -57,7 +59,8 @@ class ResultsRepoTest {
             apkSizeInMb = 5.6f,
             gradleInfoJson = "{}",
             permissions = "android.permission.INTERNET",
-            stackzyLibVersion = 1
+            stackzyLibVersion = 1,
+            logoImageUrl = DUMMY_IMAGE_URL
         )
 
         resultsRepo.add(result).collect {
@@ -90,12 +93,12 @@ class ResultsRepoTest {
         ).collect { pullPercentage ->
             if (pullPercentage == 100) {
                 // pulled
-                
+
                 val decompiledDir = createTempDirectory().toFile()
                 apkToolRepo.decompile(apkFile, decompiledDir)
                 librariesRepo.loadLibs { allLibs ->
                     val report = apkAnalyzerRepo.analyze(packageName, apkFile, decompiledDir, allLibs)
-                    val result = report.toResult(resultsRepo, null)
+                    val result = report.toResult(resultsRepo, null, DUMMY_IMAGE_URL)
                     resultsRepo.add(result).collect {
                         if (it is Resource.Error) {
                             assert(false) { it.errorData }
@@ -166,7 +169,7 @@ class ResultsRepoTest {
         resultsRepo.getAllLibPackages().collect {
             when (it) {
                 is Resource.Loading -> {
-                    
+
                 }
 
                 is Resource.Success -> {
