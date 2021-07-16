@@ -3,6 +3,7 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val lib_detail_loading: String = "Loading apps..."
         const val libraries_list_title: String = "Libraries"
         const val app_detail_action_open_market = "SEARCH IN MARKET"
         const val any_error_title_damn_it: String = "Damn It!"

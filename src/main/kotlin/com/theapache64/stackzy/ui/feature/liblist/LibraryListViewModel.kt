@@ -35,7 +35,9 @@ class LibraryListViewModel @Inject constructor(
         scope: CoroutineScope,
     ) {
         this.viewModelScope = scope
+    }
 
+    fun loadLibraries() {
         viewModelScope.launch {
             val cachedLibs = librariesRepo.getCachedLibraries()!!
             resultsRepo.getAllLibPackages().collect {

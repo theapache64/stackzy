@@ -4,7 +4,10 @@ import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidAppDefinition
 import java.util.*
 
-class AndroidAppWrapper(val androidApp: AndroidApp) : AndroidAppDefinition by androidApp, AlphabetCircle() {
+class AndroidAppWrapper(
+    val androidApp: AndroidApp,
+    val shouldUseVersionNameAsSubTitle: Boolean = false
+) : AndroidAppDefinition by androidApp, AlphabetCircle() {
     companion object {
         /**
          * Remove these keywords when to GUESS app name from package name
@@ -30,7 +33,11 @@ class AndroidAppWrapper(val androidApp: AndroidApp) : AndroidAppDefinition by an
     }
 
     override fun getSubtitle2(): String? {
-        return appSize
+        return if (shouldUseVersionNameAsSubTitle) {
+            "v${versionName}"
+        } else {
+            appSize
+        }
     }
 
     override fun imageUrl(): String? = imageUrl

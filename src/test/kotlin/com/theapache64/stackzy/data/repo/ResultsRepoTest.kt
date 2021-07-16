@@ -90,7 +90,7 @@ class ResultsRepoTest {
         ).collect { pullPercentage ->
             if (pullPercentage == 100) {
                 // pulled
-                println("Pulled")
+                
                 val decompiledDir = createTempDirectory().toFile()
                 apkToolRepo.decompile(apkFile, decompiledDir)
                 librariesRepo.loadLibs { allLibs ->
@@ -166,13 +166,31 @@ class ResultsRepoTest {
         resultsRepo.getAllLibPackages().collect {
             when (it) {
                 is Resource.Loading -> {
-                    println("Finding...")
+                    
                 }
 
                 is Resource.Success -> {
                     it.data.should.not.empty
                 }
 
+                is Resource.Error -> {
+                    assert(false)
+                }
+            }
+        }
+    }
+
+
+    @Test
+    fun `Get apps that are using a specific library`() = runBlockingUnitTest {
+        resultsRepo.getResults("com.squareup.moshi").collect {
+            when (it) {
+                is Resource.Loading -> {
+                    // Do nothing
+                }
+                is Resource.Success -> {
+                    it.data.size.should.above(0)
+                }
                 is Resource.Error -> {
                     assert(false)
                 }

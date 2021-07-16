@@ -43,6 +43,12 @@ interface ApiInterface {
         @Query("stackzy_lib_version") stackzyLibVersion: Int,
     ): Flow<Resource<Result>>
 
+    @Read("SELECT * WHERE lib_packages contains :lib_package ORDER BY created_at DESC")
+    @GET(NetworkModule.TABLE_RESULTS)
+    fun getResults(
+        @Query("lib_package") libPackageName: String,
+    ): Flow<Resource<List<Result>>>
+
     @Read("SELECT lib_packages WHERE lib_packages != ''")
     @GET(NetworkModule.TABLE_RESULTS)
     fun getAllLibPackages(): Flow<Resource<List<OptionalResult>>>

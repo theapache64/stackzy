@@ -29,7 +29,6 @@ class NetworkModule {
     @Provides
     fun provideRetrosheetInterceptor(): RetrosheetInterceptor {
         return RetrosheetInterceptor.Builder()
-            .setLogging(true)
             .addSheet(
                 sheetName = TABLE_CATEGORIES,
                 "id", "name"
@@ -63,7 +62,8 @@ class NetworkModule {
                 "platform",
                 "apk_size_in_mb",
                 "permissions",
-                "gradle_info_json"
+                "gradle_info_json",
+                "logo_image_url"
             )
             .addForm(
                 endPoint = TABLE_RESULTS,

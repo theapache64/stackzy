@@ -25,4 +25,6 @@ data class Result(
     val gradleInfoJson: String,
     @Json(name = "stackzy_lib_version")
     val stackzyLibVersion: Int,
+    @Json(name = "logo_image_url")
+    val logoImageUrl: String
 )

@@ -24,7 +24,7 @@ class AppListScreenComponent(
     lateinit var appListViewModel: AppListViewModel
 
     init {
-        println("Create new select app screen component")
+        
         appComponent.inject(this)
     }
 
@@ -32,7 +32,7 @@ class AppListScreenComponent(
     override fun render() {
         val scope = rememberCoroutineScope()
         LaunchedEffect(appListViewModel) {
-            println("Creating select app screen...")
+            
             appListViewModel.init(scope, apkSource)
             if (appListViewModel.apps.value == null) {
                 appListViewModel.loadApps()

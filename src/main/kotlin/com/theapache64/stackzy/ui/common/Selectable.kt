@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.model.AlphabetCircle
 import com.theapache64.stackzy.ui.theme.StackzyTheme
+import com.toxicbakery.logging.Arbor
 import io.kamel.image.KamelImage
 import io.kamel.image.lazyImageResource
 
@@ -104,6 +105,7 @@ fun <T : AlphabetCircle> Selectable(
             AlphabetCircle(data)
         } else {
             // Show alphabet then image
+            Arbor.d("Selectable: ImageURL is ${data.imageUrl()}")
             KamelImage(
                 resource = lazyImageResource(data.imageUrl()!!),
                 contentScale = ContentScale.FillBounds,

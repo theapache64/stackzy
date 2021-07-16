@@ -130,7 +130,8 @@ class NavHostComponent(
             is Config.LibraryDetail -> LibraryDetailScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
-                onBackClicked = ::onBackClicked
+                onBackClicked = ::onBackClicked,
+                libraryWrapper = config.libraryWrapper
             )
         }
     }

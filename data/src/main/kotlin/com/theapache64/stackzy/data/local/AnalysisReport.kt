@@ -32,8 +32,8 @@ class AnalysisReport(
 ) : AnalysisReportDefinition
 
 
-fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null): Result {
-    println("Permissions : $permissions")
+fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null, logoImageUrl: String): Result {
+
     return Result(
         appName = this.appName ?: this.packageName,
         packageName = this.packageName,
@@ -45,5 +45,6 @@ fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null): R
         permissions = this.permissions.joinToString(","),
         gradleInfoJson = resultsRepo.jsonify(this.gradleInfo),
         stackzyLibVersion = config?.latestStackzyLibVersion ?: 0,
+        logoImageUrl = logoImageUrl
     )
 }

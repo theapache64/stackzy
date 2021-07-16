@@ -34,4 +34,5 @@ class ResultsRepo @Inject constructor(
     }
 
     fun getAllLibPackages() = apiInterface.getAllLibPackages()
+    fun getResults(libPackageName: String) = apiInterface.getResults(libPackageName)
 }
