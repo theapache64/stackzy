@@ -21,6 +21,7 @@ class LogInScreenViewModel @Inject constructor(
         const val URL_GOOGLE_CREATE_ACCOUNT = "https://accounts.google.com/Signup"
     }
 
+    private var shouldGoToPlayStore: Boolean = false
     private lateinit var viewModelScope: CoroutineScope
 
     // Using env vars for debug purpose only.
@@ -39,10 +40,18 @@ class LogInScreenViewModel @Inject constructor(
     private val _logInResponse = MutableStateFlow<Resource<Account>?>(null)
     val logInResponse: StateFlow<Resource<Account>?> = _logInResponse
 
+    private lateinit var onLoggedIn: (shouldGoToPlayStore: Boolean, Account) -> Unit
+
     private var isSubmitted = false
 
-    fun init(scope: CoroutineScope) {
+    fun init(
+        scope: CoroutineScope,
+        onLoggedIn: (shouldGoToPlayStore: Boolean, Account) -> Unit,
+        shouldGoToPlayStore: Boolean
+    ) {
         this.viewModelScope = scope
+        this.onLoggedIn = onLoggedIn
+        this.shouldGoToPlayStore = shouldGoToPlayStore
     }
 
     fun onUsernameChanged(newUsername: String) {
@@ -74,6 +83,7 @@ class LogInScreenViewModel @Inject constructor(
                 .onEach {
                     if (it is Resource.Success) {
                         authRepo.storeAccount(it.data)
+                        onLoggedIn(it.data)
                     }
                 }.collect { logInResponse ->
                     _logInResponse.value = logInResponse
@@ -86,6 +96,10 @@ class LogInScreenViewModel @Inject constructor(
 
     fun onCreateAccountClicked() {
         Desktop.getDesktop().browse(URI(URL_GOOGLE_CREATE_ACCOUNT))
+    }
+
+    fun onLoggedIn(account: Account) {
+        this.onLoggedIn.invoke(shouldGoToPlayStore, account)
     }
 
 }

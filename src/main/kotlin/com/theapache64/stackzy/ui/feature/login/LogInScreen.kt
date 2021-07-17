@@ -30,7 +30,6 @@ import com.theapache64.stackzy.ui.theme.R
 @Composable
 fun LogInScreen(
     viewModel: LogInScreenViewModel,
-    onLoggedIn: (Account) -> Unit,
     onBackClicked: () -> Unit
 ) {
 
@@ -59,8 +58,7 @@ fun LogInScreen(
                 }
 
                 is Resource.Success -> {
-                    val account = (logInResponse as Resource.Success<Account>).data
-                    onLoggedIn(account)
+                    // Do nothing
                 }
 
                 null, is Resource.Error -> {

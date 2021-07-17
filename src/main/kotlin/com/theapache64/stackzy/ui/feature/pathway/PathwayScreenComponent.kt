@@ -14,7 +14,7 @@ class PathwayScreenComponent(
     private val onAdbSelected: () -> Unit,
     private val onLibrariesSelected: () -> Unit,
     onPlayStoreSelected: (Account) -> Unit,
-    onLogInNeeded: () -> Unit,
+    onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit,
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -25,7 +25,9 @@ class PathwayScreenComponent(
 
         viewModel.init(
             onPlayStoreSelected = onPlayStoreSelected,
-            onLogInNeeded = onLogInNeeded
+            onLogInNeeded = {
+                onLogInNeeded(true)
+            }
         )
     }
 

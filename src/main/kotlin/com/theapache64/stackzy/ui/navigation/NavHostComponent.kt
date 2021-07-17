@@ -38,7 +38,7 @@ class NavHostComponent(
     private sealed class Config : Parcelable {
         object Splash : Config()
         object SelectPathway : Config()
-        object LogIn : Config()
+        data class LogIn(val shouldGoToPlayStore: Boolean) : Config()
         object DeviceList : Config()
         data class AppList(
             val apkSource: ApkSource<AndroidDeviceWrapper, Account>
@@ -90,7 +90,8 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 onLoggedIn = ::onLoggedIn,
-                onBackClicked = ::onBackClicked
+                onBackClicked = ::onBackClicked,
+                shouldGoToPlayStore = config.shouldGoToPlayStore
             )
 
             is Config.DeviceList -> DeviceListScreenComponent(
@@ -131,7 +132,9 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 onBackClicked = ::onBackClicked,
-                libraryWrapper = config.libraryWrapper
+                onAppClicked = ::onAppSelected,
+                libraryWrapper = config.libraryWrapper,
+                onLogInNeeded = ::onLogInNeeded
             )
         }
     }
@@ -188,15 +191,20 @@ class NavHostComponent(
     /**
      * This method will be invoked when login is needed (either login pressed or authentication failed)
      */
-    private fun onLogInNeeded() {
-        router.push(Config.LogIn)
+    private fun onLogInNeeded(shouldGoToPlayStore: Boolean) {
+        router.push(Config.LogIn(shouldGoToPlayStore))
     }
 
     /**
      * Invoked when login succeeded.
      */
-    private fun onLoggedIn(account: Account) {
-        router.replaceCurrent(Config.AppList(ApkSource.PlayStore(account)))
+    private fun onLoggedIn(shouldGoToPlayStore: Boolean, account: Account) {
+        if (shouldGoToPlayStore) {
+            router.replaceCurrent(Config.AppList(ApkSource.PlayStore(account)))
+        } else {
+            Arbor.d("onLoggedIn: Moving back...")
+            router.pop()
+        }
     }
 
     /**

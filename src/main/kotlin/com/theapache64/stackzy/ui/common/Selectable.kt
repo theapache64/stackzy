@@ -105,7 +105,6 @@ fun <T : AlphabetCircle> Selectable(
             AlphabetCircle(data)
         } else {
             // Show alphabet then image
-            Arbor.d("Selectable: ImageURL is ${data.imageUrl()}")
             KamelImage(
                 resource = lazyImageResource(data.imageUrl()!!),
                 contentScale = ContentScale.FillBounds,

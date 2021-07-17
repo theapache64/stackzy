@@ -12,8 +12,9 @@ import javax.inject.Inject
 class LogInScreenComponent(
     appComponent: AppComponent,
     private val componentContext: ComponentContext,
-    private val onLoggedIn: (Account) -> Unit,
+    private val onLoggedIn: (shouldGoToPlayStore: Boolean, Account) -> Unit,
     private val onBackClicked: () -> Unit,
+    private val shouldGoToPlayStore: Boolean
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -28,12 +29,11 @@ class LogInScreenComponent(
 
         val scope = rememberCoroutineScope()
         LaunchedEffect(viewModel) {
-            viewModel.init(scope)
+            viewModel.init(scope, onLoggedIn, shouldGoToPlayStore)
         }
 
         LogInScreen(
             viewModel = viewModel,
-            onLoggedIn = onLoggedIn,
             onBackClicked = onBackClicked
         )
     }

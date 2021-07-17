@@ -1,11 +1,15 @@
 package com.theapache64.stackzy.ui.feature.libdetail
 
+import com.github.theapache64.gpa.model.Account
 import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
+import com.theapache64.stackzy.data.repo.AuthRepo
 import com.theapache64.stackzy.data.repo.ResultsRepo
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidAppWrapper
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
+import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +19,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LibraryDetailViewModel @Inject constructor(
-    private val resultsRepo: ResultsRepo
+    private val resultsRepo: ResultsRepo,
+    private val authRepo: AuthRepo
 ) {
     private lateinit var libWrapper: LibraryWrapper
     private lateinit var viewModelScope: CoroutineScope
@@ -29,9 +34,19 @@ class LibraryDetailViewModel @Inject constructor(
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword = _searchKeyword.asStateFlow()
 
-    fun init(viewModelScope: CoroutineScope, libWrapper: LibraryWrapper) {
+    private lateinit var onAppSelected: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit
+    private lateinit var onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit
+
+    fun init(
+        viewModelScope: CoroutineScope,
+        libWrapper: LibraryWrapper,
+        onAppSelected: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit,
+        onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit
+    ) {
         this.viewModelScope = viewModelScope
         this.libWrapper = libWrapper
+        this.onAppSelected = onAppSelected
+        this.onLogInNeeded = onLogInNeeded
 
         this._pageTitle.value = libWrapper.name
     }
@@ -66,6 +81,14 @@ class LibraryDetailViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun onAppClicked(appWrapper: AndroidAppWrapper) {
+        viewModelScope.launch {
+            authRepo.getAccount()?.let { account ->
+                onAppSelected(ApkSource.PlayStore(account), appWrapper)
+            } ?: onLogInNeeded(false)
         }
     }
 

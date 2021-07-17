@@ -18,7 +18,6 @@ import com.theapache64.stackzy.ui.common.*
 fun LibraryDetailScreen(
     viewModel: LibraryDetailViewModel,
     onBackClicked: () -> Unit,
-    onAppClicked: (AndroidAppWrapper) -> Unit,
 ) {
     val pageTitle by viewModel.pageTitle.collectAsState()
     val appsResp by viewModel.apps.collectAsState()
@@ -57,7 +56,7 @@ fun LibraryDetailScreen(
                                     Selectable(
                                         modifier = Modifier.fillMaxWidth(),
                                         data = library,
-                                        onSelected = onAppClicked
+                                        onSelected = viewModel::onAppClicked
                                     )
 
                                     Spacer(
