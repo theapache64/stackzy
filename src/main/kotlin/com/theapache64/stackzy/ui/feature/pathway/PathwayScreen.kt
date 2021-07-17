@@ -28,6 +28,7 @@ fun PathwayScreen(
 
     val loggedInAccount by viewModel.loggedInAccount.collectAsState()
     val focusedCardInfo by viewModel.focusedCardInfo.collectAsState()
+    val isBrowseByLibEnabled by viewModel.isBrowseByLibEnabled.collectAsState()
 
     Box {
         // Logout
@@ -97,17 +98,19 @@ fun PathwayScreen(
                     onMouseLeave = viewModel::onCardFocusLost
                 )
 
-                Spacer(
-                    modifier = Modifier.width(10.dp)
-                )
+                if (isBrowseByLibEnabled) {
+                    Spacer(
+                        modifier = Modifier.width(10.dp)
+                    )
 
-                PathwayCard(
-                    text = "Libraries",
-                    icon = svgResource("drawables/books.svg"),
-                    onClicked = onLibrariesSelected,
-                    onMouseEnter = viewModel::onLibrariesCardFocused,
-                    onMouseLeave = viewModel::onCardFocusLost
-                )
+                    PathwayCard(
+                        text = "Libraries (beta)",
+                        icon = svgResource("drawables/books.svg"),
+                        onClicked = onLibrariesSelected,
+                        onMouseEnter = viewModel::onLibrariesCardFocused,
+                        onMouseLeave = viewModel::onCardFocusLost
+                    )
+                }
             }
 
             Spacer(

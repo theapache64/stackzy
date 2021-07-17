@@ -2,13 +2,15 @@ package com.theapache64.stackzy.ui.feature.pathway
 
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.repo.AuthRepo
+import com.theapache64.stackzy.data.repo.ConfigRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class PathwayViewModel @Inject constructor(
-    private val authRepo: AuthRepo
+    private val authRepo: AuthRepo,
+    private val configRepo: ConfigRepo
 ) {
 
     companion object {
@@ -20,6 +22,9 @@ class PathwayViewModel @Inject constructor(
 
     private val _focusedCardInfo = MutableStateFlow(INFO_MADE_WITH_LOVE)
     val focusedCardInfo = _focusedCardInfo.asStateFlow()
+
+    private val _isBrowseByLibEnabled = MutableStateFlow(configRepo.getLocalConfig()?.isBrowseByLibEnabled ?: false)
+    val isBrowseByLibEnabled = _isBrowseByLibEnabled.asStateFlow()
 
     private lateinit var onPlayStoreSelected: (Account) -> Unit
     private lateinit var onLogInNeeded: () -> Unit

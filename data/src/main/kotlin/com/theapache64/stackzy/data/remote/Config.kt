@@ -11,4 +11,6 @@ data class Config(
     val latestStackzyLibVersion: Int,
     @Json(name = "mandatory_version_code")
     val mandatoryVersionCode: Int,
+    @Json(name = "is_browse_by_lib_enabled")
+    val isBrowseByLibEnabled: Boolean
 )

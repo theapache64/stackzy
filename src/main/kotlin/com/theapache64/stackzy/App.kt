@@ -40,7 +40,7 @@ fun main() {
     val appArgs = AppArgs(
         appName = "Stackzy",
         version = "v1.0.7",
-        versionCode = 20210712
+        versionCode = 20210717
     )
 
     // Passing args
