@@ -1,8 +1,6 @@
 # 🚀 stackzy
 
-![](extras/libs.png)
-
-👷 This project is under active development.
+![](https://i.imgur.com/wxn30fq.png)
 
 [comment]: <> (![latestVersion]&#40;https://img.shields.io/github/v/release/theapache64/stackzy&#41;)
 <a href="https://twitter.com/theapache64" target="_blank">

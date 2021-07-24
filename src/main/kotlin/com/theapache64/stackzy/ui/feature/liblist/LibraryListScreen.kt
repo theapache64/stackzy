@@ -36,6 +36,7 @@ fun LibraryListScreen(
         title = R.string.libraries_list_title,
         subTitle = subTitle,
         onBackClicked = onBackClicked,
+        bottomGradient = librariesResp is Resource.Success,
         topRightSlot = {
 
             // SearchBox
