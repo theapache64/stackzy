@@ -29,6 +29,7 @@ fun PathwayScreen(
     val loggedInAccount by viewModel.loggedInAccount.collectAsState()
     val focusedCardInfo by viewModel.focusedCardInfo.collectAsState()
     val isBrowseByLibEnabled by viewModel.isBrowseByLibEnabled.collectAsState()
+    val isPlayStoreEnabled by viewModel.isPlayStoreEnabled.collectAsState()
 
     Box {
         // Logout
@@ -78,17 +79,19 @@ fun PathwayScreen(
 
 
             Row {
-                PathwayCard(
-                    text = "Play Store",
-                    icon = svgResource("drawables/playstore.svg"),
-                    onClicked = viewModel::onPlayStoreClicked,
-                    onMouseEnter = viewModel::onPlayStoreCardFocused,
-                    onMouseLeave = viewModel::onCardFocusLost
-                )
+                if (isPlayStoreEnabled) {
+                    PathwayCard(
+                        text = "Play Store",
+                        icon = svgResource("drawables/playstore.svg"),
+                        onClicked = viewModel::onPlayStoreClicked,
+                        onMouseEnter = viewModel::onPlayStoreCardFocused,
+                        onMouseLeave = viewModel::onCardFocusLost
+                    )
 
-                Spacer(
-                    modifier = Modifier.width(10.dp)
-                )
+                    Spacer(
+                        modifier = Modifier.width(10.dp)
+                    )
+                }
 
                 PathwayCard(
                     text = "ADB",

@@ -26,6 +26,9 @@ class PathwayViewModel @Inject constructor(
     private val _isBrowseByLibEnabled = MutableStateFlow(configRepo.getLocalConfig()?.isBrowseByLibEnabled ?: false)
     val isBrowseByLibEnabled = _isBrowseByLibEnabled.asStateFlow()
 
+    private val _isPlayStoreEnabled = MutableStateFlow(configRepo.getLocalConfig()?.isPlayStoreEnabled ?: false)
+    val isPlayStoreEnabled = _isPlayStoreEnabled.asStateFlow()
+
     private lateinit var onPlayStoreSelected: (Account) -> Unit
     private lateinit var onLogInNeeded: () -> Unit
 
