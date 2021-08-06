@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.ui.common.Badge
 import com.theapache64.stackzy.ui.common.addHoverEffect

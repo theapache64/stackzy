@@ -2,7 +2,6 @@ package com.theapache64.stackzy.ui.feature.applist
 
 import com.github.theapache64.expekt.should
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
 
 class AppListViewModelTest {
     @Test

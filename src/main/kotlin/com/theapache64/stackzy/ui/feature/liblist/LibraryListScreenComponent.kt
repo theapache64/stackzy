@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
-import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.navigation.Component

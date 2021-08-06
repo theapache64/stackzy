@@ -44,7 +44,7 @@ fun main() {
             onCloseRequest = {
                 exitProcess(0)
             }
-        ){
+        ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,

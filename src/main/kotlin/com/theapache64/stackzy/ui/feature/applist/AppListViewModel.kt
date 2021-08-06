@@ -160,11 +160,11 @@ class AppListViewModel @Inject constructor(
 
                         // Play Store
                         searchJob?.cancel()
-                        
+
                         searchJob = viewModelScope.launch {
-                            
+
                             delay(500)
-                            
+
                             val account = (apkSource as ApkSource.PlayStore<Account>).value
                             val api = Play.getApi(account)
                             val keyword = searchKeyword.value.let {
