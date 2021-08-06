@@ -1,10 +1,15 @@
 package com.theapache64.stackzy
 
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.singleWindowApplication
 import com.theapache64.cyclone.core.Application
 import com.theapache64.stackzy.data.local.AppArgs
 import com.theapache64.stackzy.ui.feature.MainActivity
 import com.toxicbakery.logging.Arbor
 import com.toxicbakery.logging.Seedling
+import kotlin.system.exitProcess
 
 
 class App(
@@ -13,7 +18,6 @@ class App(
 
     companion object {
         // GLOBAL CONFIGS
-        const val CUSTOM_TOOLBAR = false // TODO: Implement a custom toolbar
         lateinit var appArgs: AppArgs
     }
 

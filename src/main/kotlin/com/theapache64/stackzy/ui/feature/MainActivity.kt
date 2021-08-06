@@ -1,6 +1,9 @@
 package com.theapache64.stackzy.ui.feature
 
-import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.application
+import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
 import com.theapache64.cyclone.core.Activity
 import com.theapache64.cyclone.core.Intent
@@ -9,7 +12,8 @@ import com.theapache64.stackzy.ui.navigation.NavHostComponent
 import com.theapache64.stackzy.ui.theme.StackzyTheme
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
-import androidx.compose.desktop.Window as setContent
+import kotlin.system.exitProcess
+import androidx.compose.ui.window.Window as setContent
 
 
 class MainActivity : Activity() {
@@ -23,48 +27,51 @@ class MainActivity : Activity() {
 
     override fun onCreate() {
         super.onCreate()
-
-        setContent(
-            title = "${App.appArgs.appName} (${App.appArgs.version})",
-            icon = getAppIcon(),
-            undecorated = App.CUSTOM_TOOLBAR,
-            size = IntSize(1224, 800),
-        ) {
-            StackzyTheme(
-                title = App.appArgs.appName,
-                subTitle = "(${App.appArgs.version})",
-                customToolbar = App.CUSTOM_TOOLBAR
+        application {
+            setContent(
+                onCloseRequest = {
+                    exitProcess(0)
+                },
+                title = "${App.appArgs.appName} (${App.appArgs.version})",
+                icon =  painterResource("drawables/launcher_icons/linux.png"),
+                state = rememberWindowState(
+                    width = 1224.dp,
+                    height = 800.dp
+                ),
             ) {
-                // Igniting navigation
-                rememberRootComponent(factory = ::NavHostComponent)
-                    .render()
+                StackzyTheme {
+                    // Igniting navigation
+                    rememberRootComponent(factory = ::NavHostComponent)
+                        .render()
+                }
             }
         }
-
     }
+}
 
-    /**
-     * To get app icon for toolbar and system tray
-     */
-    private fun getAppIcon(): BufferedImage {
 
-        // Retrieving image
-        val resourceFile = MainActivity::class.java.classLoader.getResourceAsStream(
-            "drawables/launcher_icons/linux.png"
-        )
-        val imageInput = ImageIO.read(resourceFile)
 
-        val newImage = BufferedImage(
-            imageInput.width,
-            imageInput.height,
-            BufferedImage.TYPE_INT_ARGB
-        )
+/**
+ * To get app icon for toolbar and system tray
+ */
+private fun getAppIcon(): BufferedImage {
 
-        // Drawing
-        val canvas = newImage.createGraphics()
-        canvas.drawImage(imageInput, 0, 0, null)
-        canvas.dispose()
+    // Retrieving image
+    val resourceFile = MainActivity::class.java.classLoader.getResourceAsStream(
+        "drawables/launcher_icons/linux.png"
+    )
+    val imageInput = ImageIO.read(resourceFile)
 
-        return newImage
-    }
+    val newImage = BufferedImage(
+        imageInput.width,
+        imageInput.height,
+        BufferedImage.TYPE_INT_ARGB
+    )
+
+    // Drawing
+    val canvas = newImage.createGraphics()
+    canvas.drawImage(imageInput, 0, 0, null)
+    canvas.dispose()
+
+    return newImage
 }

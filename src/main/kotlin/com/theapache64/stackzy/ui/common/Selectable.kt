@@ -1,6 +1,5 @@
 package com.theapache64.stackzy.ui.common
 
-import androidx.compose.desktop.Window
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,11 +17,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 import com.theapache64.stackzy.model.AlphabetCircle
 import com.theapache64.stackzy.ui.theme.StackzyTheme
-import com.toxicbakery.logging.Arbor
 import io.kamel.image.KamelImage
 import io.kamel.image.lazyImageResource
+import kotlin.system.exitProcess
 
 
 /**
@@ -61,9 +62,13 @@ fun Modifier.addHoverEffect(
 }
 
 // Preview
-fun main() {
+fun main() = application {
 
-    Window {
+    Window(
+        onCloseRequest = {
+            exitProcess(0)
+        }
+    ) {
         StackzyTheme {
             Selectable(
                 data = object : AlphabetCircle() {

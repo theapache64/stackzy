@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.model.AnalysisReportWrapper
@@ -32,14 +32,14 @@ fun Libraries(
             FullScreenError(
                 title = "We couldn't find any libraries",
                 message = "But don't worry, we're improving our dictionary strength. Please try later",
-                image = imageResource("drawables/guy.png")
+                image = painterResource("drawables/guy.png")
             )
         } else {
             // non native platform with no libs
             FullScreenError(
                 title = "// TODO : ",
                 message = "${report.platform.name} dependency analysis is not yet supported",
-                image = imageResource("drawables/ic_error_code.png")
+                image = painterResource("drawables/ic_error_code.png")
             )
         }
     } else {

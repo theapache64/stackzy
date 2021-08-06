@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidAppWrapper
@@ -71,7 +72,7 @@ fun LibraryDetailScreen(
                         FullScreenError(
                             title = "Library not found",
                             message = "Couldn't find any library with $searchKeyword",
-                            image = imageResource("drawables/woman_desk.png"),
+                            image = painterResource("drawables/woman_desk.png"),
                         )
                     }
                 }

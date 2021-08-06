@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.ui.common.CustomScaffold
@@ -57,7 +58,7 @@ fun Content(
             FullScreenError(
                 title = R.string.device_no_device_title,
                 message = R.string.device_no_device_message,
-                image = imageResource("drawables/no_device.png")
+                image = painterResource("drawables/no_device.png")
             )
         } else {
 

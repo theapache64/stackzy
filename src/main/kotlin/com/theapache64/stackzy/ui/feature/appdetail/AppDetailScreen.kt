@@ -11,8 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.svgResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.common.Badge
@@ -78,7 +77,7 @@ fun AppDetailScreen(
         val roFatalError = fatalError
         if (roFatalError != null) {
             FullScreenError(
-                image = imageResource("drawables/ic_error_code.png"),
+                image = painterResource("drawables/ic_error_code.png"),
                 title = R.string.any_error_title_damn_it,
                 message = roFatalError
             )
@@ -140,7 +139,7 @@ private fun PlayStoreIcon(onClicked: () -> Unit) {
         onClick = onClicked
     ) {
         Icon(
-            painter = svgResource("drawables/playstore.svg"),
+            painter = painterResource("drawables/playstore.svg"),
             contentDescription = "open play store",
             tint = MaterialTheme.colors.onSurface
         )

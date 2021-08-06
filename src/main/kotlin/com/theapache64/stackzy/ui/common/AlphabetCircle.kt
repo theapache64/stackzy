@@ -25,7 +25,7 @@ fun AlphabetCircle(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = character.toUpperCase().toString(),
+            text = character.uppercaseChar().toString(),
             style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
         )
     }

@@ -1,6 +1,5 @@
 package com.theapache64.stackzy.ui.theme
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.theapache64.stackzy.ui.common.ToolBar
 
 // Color set
 val LightTheme = lightColors() // TODO :
@@ -26,9 +24,6 @@ val DarkTheme = darkColors(
 
 @Composable
 fun StackzyTheme(
-    title: String = "",
-    subTitle: String = "",
-    customToolbar: Boolean = false,
     isDark: Boolean = true,
     content: @Composable (ColumnScope) -> Unit
 ) {
@@ -40,17 +35,7 @@ fun StackzyTheme(
             modifier = Modifier.fillMaxSize()
         ) {
             Column {
-                if (customToolbar) {
-                    Column {
-                        ToolBar(
-                            title = title,
-                            subTitle = subTitle
-                        )
-                        content(this)
-                    }
-                } else {
-                    content(this)
-                }
+                content(this)
             }
         }
     }

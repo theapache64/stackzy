@@ -12,17 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.theapache64.stackzy.ui.util.Preview
-
-// Preview
-fun main() {
-    Preview {
-        LoadingAnimation("Test")
-    }
-}
-
 
 /**
  * To show a rotating icon at the center and blinking text at the bottom of the screen
@@ -56,7 +47,7 @@ fun LoadingAnimation(message: String) {
                 .align(Alignment.Center)
                 .size(50.dp),
             colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-            bitmap = imageResource("drawables/loading.png"),
+            painter = painterResource("drawables/loading.png"),
             contentDescription = ""
         )
 

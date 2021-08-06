@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.svgResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.ui.common.Badge
@@ -82,7 +83,7 @@ fun PathwayScreen(
                 if (isPlayStoreEnabled) {
                     PathwayCard(
                         text = "Play Store",
-                        icon = svgResource("drawables/playstore.svg"),
+                        icon = painterResource("drawables/playstore.svg"),
                         onClicked = viewModel::onPlayStoreClicked,
                         onMouseEnter = viewModel::onPlayStoreCardFocused,
                         onMouseLeave = viewModel::onCardFocusLost
@@ -95,7 +96,7 @@ fun PathwayScreen(
 
                 PathwayCard(
                     text = "ADB",
-                    icon = svgResource("drawables/usb.svg"),
+                    icon = painterResource("drawables/usb.svg"),
                     onClicked = onAdbSelected,
                     onMouseEnter = viewModel::onAdbCardFocused,
                     onMouseLeave = viewModel::onCardFocusLost
@@ -108,7 +109,7 @@ fun PathwayScreen(
 
                     PathwayCard(
                         text = "Libraries (beta)",
-                        icon = svgResource("drawables/books.svg"),
+                        icon = painterResource("drawables/books.svg"),
                         onClicked = onLibrariesSelected,
                         onMouseEnter = viewModel::onLibrariesCardFocused,
                         onMouseLeave = viewModel::onCardFocusLost
