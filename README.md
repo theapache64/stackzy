@@ -25,7 +25,8 @@
 | Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| ✅ Stable | 
 | MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | ✅ Stable | 
 
-- To run the `jar` version, you need Java 15 or above.
+> ℹ️ To run the `jar`, you need Java 15 or above. If you hate running jar, you can clone the repo and execute `./gradlew createDistributable` to
+> build executable for your system.
 
 ## 🏋 Dependency
 
@@ -67,6 +68,7 @@
 - Special thanks to [@SpikeySanju](https://github.com/Spikeysanju) for the beautiful design 😎
 - Icons are from [flaticon.com](https://www.flaticon.com/)
 - Illustrations are from [evernote.design](https://evernote.design/categories/illustrations/)
+- Thanks to all amazing people at Twitter for inspiring me to continue the development of this project.
 
 ## 🥼 Test
 
