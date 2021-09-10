@@ -3,13 +3,13 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.5.21"
+    val kotlinVersion = "1.5.30"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "1.0.0-alpha3"
+    id("org.jetbrains.compose") version "1.0.0-alpha4-build331"
 }
 
-val daggerVersion by extra("2.36")
+val daggerVersion by extra("2.37")
 val stackzyVersion by extra("1.0.9") // TODO : Change in App.kt also
 
 group = "com.theapache64"
@@ -41,7 +41,7 @@ dependencies {
     kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.2.6"
+    val decomposeVersion = "0.3.1"
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
@@ -49,15 +49,18 @@ dependencies {
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
 
     // Kamel : Image loading library
-    implementation("com.alialbaali.kamel:kamel-image:0.2.1")
+    implementation("com.alialbaali.kamel:kamel-image:0.2.2")
 
-    val bouncyCastleVersion = 1.65
+    val bouncyCastleVersion = 1.69
     implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
+
+    // Bugsnag
+    implementation("com.bugsnag:bugsnag:3.6.2")
 
     /**
      * Testing Dependencies
      */
-    testImplementation("org.mockito:mockito-inline:3.7.7")
+    testImplementation("org.mockito:mockito-inline:3.12.4")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 
     // DaggerMock
@@ -65,13 +68,13 @@ dependencies {
     testImplementation("com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5")
 
     // Mockito Core : Mockito mock objects library core API and implementation
-    testImplementation("org.mockito:mockito-core:3.7.7")
+    testImplementation("org.mockito:mockito-core:3.12.4")
 
     // Expekt : An assertion library for Kotlin
     testImplementation("com.github.theapache64:expekt:1.0.0")
 
     // JUnit
-    testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
 }
 
 tasks.test {

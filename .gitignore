@@ -159,6 +159,7 @@ adb
 AdbWinApi.dll
 AdbWinUsbApi.dll
 adb.exe
+.DS_Store
 
 build/topcorn_decompiled
 gpm.json

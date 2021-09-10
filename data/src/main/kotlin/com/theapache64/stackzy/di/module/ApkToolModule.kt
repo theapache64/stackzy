@@ -5,12 +5,13 @@ import dagger.Module
 import dagger.Provides
 import java.io.File
 import java.io.IOException
+import com.theapache64.stackzy.data.util.ResDir
 
 @Module
 class ApkToolModule {
 
     companion object {
-        private val apkToolJar = File("apk-tool.jar")
+        private val apkToolJar = File("${ResDir.dir}${File.separator}apk-tool.jar")
         private const val APKTOOL_JAR_NAME = "apktool_2.5.0.jar"
     }
 
@@ -20,7 +21,16 @@ class ApkToolModule {
         if (apkToolJar.exists().not()) {
             val apkToolStream = this::class.java.classLoader.getResourceAsStream(APKTOOL_JAR_NAME)
             if (apkToolStream != null) {
-                apkToolJar.writeBytes(apkToolStream.readAllBytes())
+                apkToolJar.parentFile.let { parentDir ->
+                    if (parentDir.exists().not()) {
+                        parentDir.mkdirs()
+                    }
+                }
+                if (apkToolJar.createNewFile()) {
+                    apkToolJar.writeBytes(apkToolStream.readAllBytes())
+                } else {
+                    throw IOException("Failed to create ${apkToolJar.absolutePath}")
+                }
             } else {
                 throw IOException("Failed to parse apk-tool from resources")
             }

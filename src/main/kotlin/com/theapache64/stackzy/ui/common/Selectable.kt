@@ -23,6 +23,7 @@ import com.theapache64.stackzy.model.AlphabetCircle
 import com.theapache64.stackzy.ui.theme.StackzyTheme
 import io.kamel.image.KamelImage
 import io.kamel.image.lazyImageResource
+import io.kamel.image.lazyPainterResource
 import kotlin.system.exitProcess
 
 
@@ -111,7 +112,7 @@ fun <T : AlphabetCircle> Selectable(
         } else {
             // Show alphabet then image
             KamelImage(
-                resource = lazyImageResource(data.imageUrl()!!),
+                resource = lazyPainterResource(data.imageUrl()!!),
                 contentScale = ContentScale.FillBounds,
                 contentDescription = "app logo",
                 onLoading = {

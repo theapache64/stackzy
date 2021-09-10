@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.arkivanov.decompose.*
 import com.arkivanov.decompose.extensions.compose.jetbrains.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.animation.child.crossfadeScale
-import com.arkivanov.decompose.statekeeper.Parcelable
+import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.di.DaggerAppComponent
@@ -147,6 +147,7 @@ class NavHostComponent(
     }
 
 
+    @OptIn(ExperimentalDecomposeApi::class)
     @Composable
     override fun render() {
         Children(
