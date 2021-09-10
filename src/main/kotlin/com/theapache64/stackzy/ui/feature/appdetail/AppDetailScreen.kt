@@ -132,6 +132,7 @@ fun AppDetailScreen(
     }
 }
 
+private val iconSize = 24.dp
 
 @Composable
 private fun PlayStoreIcon(onClicked: () -> Unit) {
@@ -141,7 +142,8 @@ private fun PlayStoreIcon(onClicked: () -> Unit) {
         Icon(
             painter = painterResource("drawables/playstore.svg"),
             contentDescription = "open play store",
-            tint = MaterialTheme.colors.onSurface
+            tint = MaterialTheme.colors.onSurface,
+            modifier = Modifier.size(iconSize)
         )
     }
 }
@@ -154,7 +156,8 @@ private fun FilesIcon(onClicked: () -> Unit) {
         Icon(
             imageVector = Icons.Outlined.Folder,
             contentDescription = "open files",
-            tint = MaterialTheme.colors.onSurface
+            tint = MaterialTheme.colors.onSurface,
+            modifier = Modifier.size(iconSize)
         )
     }
 }
@@ -166,7 +169,8 @@ private fun CodeIcon(onClicked: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Outlined.Code,
-            contentDescription = "Browse Code"
+            contentDescription = "Browse Code",
+            modifier = Modifier.size(iconSize)
         )
     }
 }
