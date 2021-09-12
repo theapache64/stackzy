@@ -110,6 +110,7 @@ compose.desktop {
             description = "An application to identify libraries used inside an android application"
             copyright = "© 2021 theapache64. All rights reserved."
             vendor = "theapache64"
+            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
 
             modules(
                 "java.logging",
