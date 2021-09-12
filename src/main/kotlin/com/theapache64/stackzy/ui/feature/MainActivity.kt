@@ -1,5 +1,6 @@
 package com.theapache64.stackzy.ui.feature
 
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -9,9 +10,6 @@ import com.theapache64.cyclone.core.Intent
 import com.theapache64.stackzy.App
 import com.theapache64.stackzy.ui.navigation.NavHostComponent
 import com.theapache64.stackzy.ui.theme.StackzyTheme
-import java.awt.Taskbar
-import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
 import androidx.compose.ui.window.Window as setContent
 
 
@@ -26,11 +24,11 @@ class MainActivity : Activity() {
 
     override fun onCreate() {
         super.onCreate()
-        Taskbar.getTaskbar().iconImage = getAppIcon()
         application {
             setContent(
                 onCloseRequest = ::exitApplication,
                 title = "${App.appArgs.appName} (${App.appArgs.version})",
+                icon = painterResource("drawables/launcher_icons/linux.png"),
                 state = rememberWindowState(
                     width = 1224.dp,
                     height = 800.dp
@@ -44,30 +42,4 @@ class MainActivity : Activity() {
             }
         }
     }
-}
-
-
-/**
- * To get app icon for toolbar and system tray
- */
-private fun getAppIcon(): BufferedImage {
-
-    // Retrieving image
-    val resourceFile = MainActivity::class.java.classLoader.getResourceAsStream(
-        "drawables/launcher_icons/linux.png"
-    )
-    val imageInput = ImageIO.read(resourceFile)
-
-    val newImage = BufferedImage(
-        imageInput.width,
-        imageInput.height,
-        BufferedImage.TYPE_INT_ARGB
-    )
-
-    // Drawing
-    val canvas = newImage.createGraphics()
-    canvas.drawImage(imageInput, 0, 0, null)
-    canvas.dispose()
-
-    return newImage
 }
