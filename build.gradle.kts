@@ -104,7 +104,6 @@ tasks.jar {
 compose.desktop {
     application {
         mainClass = "com.theapache64.stackzy.AppKt"
-        jvmArgs("-Xdock:icon=src/main/resources/drawables/launcher_icons/linux.png")
         nativeDistributions {
             packageName = "Stackzy"
             packageVersion = project.version as String
