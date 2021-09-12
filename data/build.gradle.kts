@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.theapache64.stackzy"
-version = "1.0.9"
+version = "1.0.10"
 
 repositories {
     jcenter()
