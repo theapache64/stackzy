@@ -21,9 +21,9 @@
 
 | Platform | Download | Status |
 |----------|----------|--------|
-| Linux    |[![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| ✅ Stable | 
-| Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| ✅ Stable | 
-| MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | ✅ Stable | 
+| Linux    |[![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| Experimental | 
+| Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| Experimental | 
+| MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
 
 > ℹ️ To run the `jar`, you need Java 15 or above. If you hate running jar, you can clone the repo and execute `./gradlew createDistributable` to
 > build executable for your system.
