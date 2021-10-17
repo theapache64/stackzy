@@ -1,8 +1,8 @@
 package com.theapache64.stackzy.data.remote
 
-import com.github.theapache64.retrosheet.core.KeyValue
-import com.github.theapache64.retrosheet.core.Read
-import com.github.theapache64.retrosheet.core.Write
+import com.github.theapache64.retrosheet.annotations.KeyValue
+import com.github.theapache64.retrosheet.annotations.Read
+import com.github.theapache64.retrosheet.annotations.Write
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.di.module.NetworkModule
 import kotlinx.coroutines.flow.Flow
