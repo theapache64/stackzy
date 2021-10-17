@@ -33,10 +33,10 @@ dependencies {
 
 
     // Kotlinx Coroutines Core : Coroutines support libraries for Kotlin
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
 
     // Arbor : Like Timber, just different.
-    api("com.ToxicBakery.logging:arbor-jvm:1.34.109")
+    api("com.ToxicBakery.logging:arbor-jvm:1.35.72")
 
     val daggerVersion: String by rootProject.extra
     api("com.google.dagger:dagger:$daggerVersion")
@@ -44,11 +44,11 @@ dependencies {
 
 
     // GooglePlay API
-    implementation("com.google.protobuf:protobuf-java:3.14.0")
+    implementation("com.google.protobuf:protobuf-java:3.18.1")
     api("com.github.theapache64:google-play-api:0.0.8")
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
-    implementation("org.yaml:snakeyaml:1.28")
+    implementation("org.yaml:snakeyaml:1.29")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.compose") version "1.0.0-alpha4-build331"
 }
 
-val daggerVersion by extra("2.37")
+val daggerVersion by extra("2.39.1")
 val stackzyVersion by extra("1.1.0") // TODO : Change in App.kt also
 
 group = "com.theapache64"
@@ -59,7 +59,7 @@ dependencies {
     /**
      * Testing Dependencies
      */
-    testImplementation("org.mockito:mockito-inline:3.12.4")
+    testImplementation("org.mockito:mockito-inline:4.0.0")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
 
     // DaggerMock
@@ -67,13 +67,13 @@ dependencies {
     testImplementation("com.github.fabioCollini.daggermock:daggermock-kotlin:0.8.5")
 
     // Mockito Core : Mockito mock objects library core API and implementation
-    testImplementation("org.mockito:mockito-core:3.12.4")
+    testImplementation("org.mockito:mockito-core:4.0.0")
 
     // Expekt : An assertion library for Kotlin
     testImplementation("com.github.theapache64:expekt:1.0.0")
 
     // JUnit
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
 tasks.test {
