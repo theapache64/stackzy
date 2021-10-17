@@ -7,7 +7,6 @@ group = "com.theapache64.stackzy"
 version = "1.1.0"
 
 repositories {
-    jcenter()
     mavenCentral()
     maven { url = uri("https://jitpack.io") }
 }
@@ -16,7 +15,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     // Adam : The ADB client
-    api("com.malinskiy:adam:0.2.3")
+    api("com.malinskiy.adam:adam:0.4.0")
 
     // Moshi : A modern JSON API for Android and Java
     val moshiVersion = "1.12.0"
