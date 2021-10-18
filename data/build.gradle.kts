@@ -24,7 +24,7 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
 
     // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
-    api("com.github.theapache64:retrosheet:2.0.0-beta02")
+    api("com.github.theapache64:retrosheet:2.0.0-beta03")
 
     // Retrofit : A type-safe HTTP client for Android and Java.
     val retrofitVersion = "2.9.0"
