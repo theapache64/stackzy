@@ -45,7 +45,7 @@ dependencies {
 
     // GooglePlay API
     implementation("com.google.protobuf:protobuf-java:3.18.1")
-    api("com.github.theapache64:google-play-api:0.0.8")
+    api("com.github.theapache64:google-play-api:0.0.9")
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
     implementation("org.yaml:snakeyaml:1.29")
