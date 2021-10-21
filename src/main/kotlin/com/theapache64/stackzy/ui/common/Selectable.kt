@@ -19,10 +19,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.ui.window.singleWindowApplication
+import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.model.AlphabetCircle
+import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.theme.StackzyTheme
 import io.kamel.image.KamelImage
-import io.kamel.image.lazyImageResource
 import io.kamel.image.lazyPainterResource
 import kotlin.system.exitProcess
 
@@ -83,6 +85,28 @@ fun main() = application {
                 }
             )
         }
+    }
+}
+
+fun main(args: Array<String>) = singleWindowApplication {
+    StackzyTheme {
+        val dummyLib = LibraryWrapper(
+            Library(
+                category = "Category 1",
+                id = 0,
+                name = "My Lib",
+                packageName = "com.something",
+                replacementPackage = null,
+                website = ""
+            ),
+            null
+        )
+        Selectable(
+            data = dummyLib,
+            onSelected = {
+
+            }
+        )
     }
 }
 
@@ -166,7 +190,20 @@ fun <T : AlphabetCircle> Selectable(
                 )
             }
         }
+
+        if (data.isNew() == true) {
+            // TODO: Find a good position
+            Text(
+                text = "✨",
+                modifier = Modifier.padding(10.dp),
+            )
+        }
     }
+}
+
+@Composable
+fun LabelNew() {
+
 }
 
 @Composable

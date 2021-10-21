@@ -7,4 +7,5 @@ abstract class BaseAlphabetCircle {
     open fun getSubtitle2(): String? = null
     abstract fun imageUrl(): String?
     open fun getAlphabet() = getTitle().first()
+    open fun isNew(): Boolean? = null
 }

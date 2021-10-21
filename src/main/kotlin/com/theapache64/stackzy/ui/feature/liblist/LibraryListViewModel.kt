@@ -68,7 +68,7 @@ class LibraryListViewModel @Inject constructor(
             allLibPackages.find {
                 it.libPackages?.contains(library.packageName) ?: false
             } != null
-        }.map { LibraryWrapper(it) }
+        }.map { LibraryWrapper(it, null) }
     }
 
     fun onSearchKeywordChanged(newKeyword: String) {

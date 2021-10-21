@@ -36,17 +36,17 @@ class FlowResourceCallAdapter<R>(
                 emit(Success(data))
             } ?: kotlin.run {
                 // Error
-                emit(Error("Response can't be null"))
+                emit(Error("Response can't be null", resp.code()))
             }
         } else {
             // Error
             val errorBody = resp.message()
-            emit(Error(errorBody))
+            emit(Error(errorBody, resp.code()))
         }
 
     }.catch { error: Throwable ->
         if (isSelfExceptionHandling) {
-            emit(Error(error.message ?: "Something went wrong"))
+            emit(Error(error.message ?: "Something went wrong", -1))
         } else {
             throw error
         }

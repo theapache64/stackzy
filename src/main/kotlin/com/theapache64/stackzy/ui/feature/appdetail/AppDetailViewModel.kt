@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.awt.Desktop
 import java.io.File
+import java.net.HttpURLConnection
 import java.net.URI
 import java.nio.file.Path
 import javax.inject.Inject
@@ -94,24 +95,26 @@ class AppDetailViewModel @Inject constructor(
                     androidAppWrapper.versionCode!!,
                     config.latestStackzyLibVersion
                 )
-                    .collect {
-                        when (it) {
+                    .collect { resultResponse ->
+                        when (resultResponse) {
                             is Resource.Loading -> {
                                 _loadingMessage.value = "Analysing previous results..."
                             }
                             is Resource.Success -> {
                                 // Found
-                                onResultFound(it.data)
+                                findPrevResult { prevResult ->
+                                    onResultFound(resultResponse.data, prevResult)
+                                }
                             }
                             is Resource.Error -> {
                                 // Not found
-                                if (it.errorData == "No data found") {
+                                if (resultResponse.errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
                                     // Its a new app, no one didn't decompiled it before
                                     Arbor.d("Decompiling it from scratch...")
                                     startDecompileFromScratch()
                                 } else {
                                     // Some network error
-                                    _fatalError.value = it.errorData
+                                    _fatalError.value = resultResponse.errorData
                                 }
                             }
                         }
@@ -123,8 +126,36 @@ class AppDetailViewModel @Inject constructor(
         }
     }
 
+    private suspend fun findPrevResult(
+        onPrevResult: suspend (prevResult: Result?) -> Unit
+    ) {
+        resultsRepo.getPrevResult(
+            packageName = androidAppWrapper.appPackage.name,
+            exceptVersionCode = androidAppWrapper.versionCode ?: -1
+        )
+            .collect { prevResultResource ->
+                when (prevResultResource) {
+                    is Resource.Loading -> {
+                        _loadingMessage.value = "Finding new libraries..."
+                    }
+                    is Resource.Success -> {
+                        val prevResult = prevResultResource.data
+                        onPrevResult(prevResult)
+                    }
+                    is Resource.Error -> {
+                        if (prevResultResource.errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                            onPrevResult(null)
+                        } else {
+                            _fatalError.value = prevResultResource.errorData
+                        }
+                    }
+                }
+            }
+    }
+
     private suspend fun onResultFound(
-        result: Result
+        result: Result,
+        prevResult: Result?
     ) {
         // Convert result to AnalysisReport
         val report = AnalysisReport(
@@ -139,7 +170,7 @@ class AppDetailViewModel @Inject constructor(
             gradleInfo = resultsRepo.parseGradleInfo(result.gradleInfoJson)!! // this shouldn't be null
         )
 
-        onReportReady(report)
+        onReportReady(report, prevResult)
     }
 
 
@@ -306,7 +337,9 @@ class AppDetailViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         // Result synced, now lets show the data
-                        onReportReady(report)
+                        findPrevResult { prevResult ->
+                            onReportReady(report, prevResult)
+                        }
                     }
 
                     is Resource.Error -> {
@@ -315,7 +348,9 @@ class AppDetailViewModel @Inject constructor(
                 }
             }
         } else {
-            onReportReady(report)
+            findPrevResult { prevResult ->
+                onReportReady(report, prevResult)
+            }
         }
 
     }
@@ -332,11 +367,16 @@ class AppDetailViewModel @Inject constructor(
         this.apkFile = newApkFile
     }
 
-    private suspend fun onReportReady(report: AnalysisReport) {
+    private suspend fun onReportReady(
+        report: AnalysisReport,
+        prevResult: Result?
+    ) {
         trackUntrackedLibs(report)
         _analysisReport.value = AnalysisReportWrapper(
             report,
-            report.libraries.sortedBy { it.id }.map { LibraryWrapper(it) }
+            report.libraries.sortedBy { it.id }.map { library ->
+                LibraryWrapper(library, prevResult)
+            }
         )
         _loadingMessage.value = null
     }

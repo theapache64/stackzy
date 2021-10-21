@@ -53,4 +53,11 @@ interface ApiInterface {
     @GET(NetworkModule.TABLE_RESULTS)
     fun getAllLibPackages(): Flow<Resource<List<OptionalResult>>>
 
+    @Read("SELECT * WHERE package_name = :package_name AND version_code != :except_v_code ORDER BY created_at DESC LIMIT 1")
+    @GET(NetworkModule.TABLE_RESULTS)
+    fun getPrevResult(
+        @Query("package_name") packageName: String,
+        @Query("except_v_code") exceptVersionCode : Int
+    ): Flow<Resource<Result>>
+
 }
