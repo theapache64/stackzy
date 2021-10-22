@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidAppWrapper
 import com.theapache64.stackzy.ui.common.*
+import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
 
@@ -97,7 +98,7 @@ fun SelectAppScreen(
 
                 is Resource.Loading -> {
                     val message = (appsResponse as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
-                    LoadingAnimation(message)
+                    LoadingAnimation(message, funFacts = null)
                 }
                 is Resource.Error -> {
                     Box {
@@ -148,7 +149,7 @@ fun SelectAppScreen(
                     }
                 }
                 null -> {
-                    LoadingAnimation("Preparing apps...")
+                    LoadingAnimation("Preparing apps...", funFacts = null)
                 }
             }
         }

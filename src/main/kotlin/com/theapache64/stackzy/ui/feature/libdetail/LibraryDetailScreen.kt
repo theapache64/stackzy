@@ -12,7 +12,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidAppWrapper
-import com.theapache64.stackzy.ui.common.*
+import com.theapache64.stackzy.ui.common.CustomScaffold
+import com.theapache64.stackzy.ui.common.ErrorSnackBar
+import com.theapache64.stackzy.ui.common.FullScreenError
+import com.theapache64.stackzy.ui.common.Selectable
+import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 
 @Composable
 fun LibraryDetailScreen(
@@ -31,7 +35,7 @@ fun LibraryDetailScreen(
         when (appsResp) {
             is Resource.Loading -> {
                 val message = (appsResp as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
-                LoadingAnimation(message)
+                LoadingAnimation(message, funFacts = null)
             }
             is Resource.Error -> {
                 Box {
@@ -78,7 +82,7 @@ fun LibraryDetailScreen(
 
             }
             null -> {
-                LoadingAnimation("Preparing apps...")
+                LoadingAnimation("Preparing apps...", null)
             }
         }
     }

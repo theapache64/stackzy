@@ -17,7 +17,7 @@ import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.common.Badge
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
-import com.theapache64.stackzy.ui.common.LoadingAnimation
+import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
 
@@ -31,6 +31,7 @@ fun AppDetailScreen(
     val loadingMessage by viewModel.loadingMessage.collectAsState()
     val report by viewModel.analysisReport.collectAsState()
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+    val funFacts by viewModel.funFacts.collectAsState()
 
     val title = report?.appName ?: R.string.app_detail_title
 
@@ -90,7 +91,7 @@ fun AppDetailScreen(
             val roLoadingMsg = loadingMessage
 
             if (roLoadingMsg != null) {
-                LoadingAnimation(roLoadingMsg)
+                LoadingAnimation(roLoadingMsg, funFacts)
             } else if (roReport != null) {
 
                 Box(

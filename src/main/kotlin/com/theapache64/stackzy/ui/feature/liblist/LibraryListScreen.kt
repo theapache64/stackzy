@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.common.*
+import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
 
@@ -66,7 +67,7 @@ fun LibraryListScreen(
         when (librariesResp) {
             is Resource.Loading -> {
                 val message = (librariesResp as Resource.Loading<List<LibraryWrapper>>).message ?: ""
-                LoadingAnimation(message)
+                LoadingAnimation(message,funFacts = null)
             }
             is Resource.Error -> {
                 Box {
@@ -115,7 +116,7 @@ fun LibraryListScreen(
 
             }
             null -> {
-                LoadingAnimation("Preparing apps...")
+                LoadingAnimation("Preparing apps...", funFacts = null)
             }
         }
 

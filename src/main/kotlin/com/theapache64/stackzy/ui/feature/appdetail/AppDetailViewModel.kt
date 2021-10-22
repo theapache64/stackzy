@@ -43,7 +43,8 @@ class AppDetailViewModel @Inject constructor(
     private val playStoreRepo: PlayStoreRepo,
     private val resultsRepo: ResultsRepo,
     private val configRepo: ConfigRepo,
-    private val jadxRepo: JadxRepo
+    private val jadxRepo: JadxRepo,
+    private val funFactsRepo :FunFactsRepo,
 ) {
 
     companion object {
@@ -70,6 +71,9 @@ class AppDetailViewModel @Inject constructor(
 
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
+
+    private val _funFacts = MutableStateFlow(funFactsRepo.getLocalFunFacts() ?: setOf())
+    val funFacts = _funFacts.asStateFlow()
 
     fun init(
         scope: CoroutineScope,

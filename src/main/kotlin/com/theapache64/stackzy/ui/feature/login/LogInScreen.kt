@@ -24,7 +24,7 @@ import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
-import com.theapache64.stackzy.ui.common.LoadingAnimation
+import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.ui.theme.R
 
 @Composable
@@ -53,7 +53,8 @@ fun LogInScreen(
 
                 is Resource.Loading -> {
                     LoadingAnimation(
-                        message = "Authenticating..."
+                        message = "Authenticating...",
+                        funFacts = null
                     )
                 }
 
