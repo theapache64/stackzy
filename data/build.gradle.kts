@@ -22,6 +22,7 @@ dependencies {
     api("com.squareup.moshi:moshi:$moshiVersion")
     implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 
     // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
     api("com.github.theapache64:retrosheet:2.0.0-beta03")
