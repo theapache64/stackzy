@@ -115,7 +115,7 @@ object ColorUtil {
     private val pureRandom = PureRandom(colorSet)
 
     fun getRandomColor(): Color {
-        return pureRandom.take()
+        return pureRandom.get()
     }
 
 }

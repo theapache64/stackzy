@@ -8,7 +8,7 @@ class PureRandom<T>(
 ) {
     private val takenItems = mutableSetOf<T>()
 
-    fun take(): T {
+    fun get(): T {
 
         if (takenItems.size >= items.size) {
             // all items taken so clear the list
@@ -18,7 +18,7 @@ class PureRandom<T>(
         val takenItem = items.random()
         if (takenItems.contains(takenItem)) {
             // already taken
-            return take()
+            return get()
         }
         takenItems.add(takenItem)
         return takenItem

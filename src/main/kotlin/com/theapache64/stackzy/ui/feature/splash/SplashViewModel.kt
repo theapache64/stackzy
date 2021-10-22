@@ -4,6 +4,7 @@ import com.theapache64.stackzy.App
 import com.theapache64.stackzy.data.remote.Config
 import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.data.repo.ConfigRepo
+import com.theapache64.stackzy.data.repo.FunFactsRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.toxicbakery.logging.Arbor
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val librariesRepo: LibrariesRepo,
     private val adbRepo: AdbRepo,
-    private val configRepo: ConfigRepo
+    private val configRepo: ConfigRepo,
+    private val funFactsRepo: FunFactsRepo
 ) {
 
     private lateinit var viewModelScope: CoroutineScope
@@ -47,9 +49,11 @@ class SplashViewModel @Inject constructor(
             try {
                 syncAndCacheLibraries { // first cache libs
                     syncAndStoreConfig { // then sync config
-                        checkAndFixAdb { // then check adb
-                            checkJdk {
-                                _isSyncFinished.value = true // all done
+                        syncAndStoreFunFacts {
+                            checkAndFixAdb { // then check adb
+                                checkJdk {
+                                    _isSyncFinished.value = true // all done
+                                }
                             }
                         }
                     }
@@ -70,6 +74,25 @@ class SplashViewModel @Inject constructor(
         }
     }
 
+    private suspend fun syncAndStoreFunFacts(
+        onSynced: suspend () -> Unit
+    ) {
+        funFactsRepo.getRemoteFunFacts().collect { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    _syncMsg.value = "Getting some fun facts for you..."
+                }
+                is Resource.Success -> {
+                    val funFacts = resource.data
+                    funFactsRepo.saveFunFactsToLocal(funFacts)
+                    onSynced()
+                }
+                is Resource.Error -> {
+                    _syncFailedMsg.value = resource.errorData
+                }
+            }
+        }
+    }
 
     private suspend fun syncAndCacheLibraries(
         onSuccess: suspend () -> Unit

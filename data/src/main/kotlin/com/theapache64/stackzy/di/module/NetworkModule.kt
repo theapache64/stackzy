@@ -23,6 +23,7 @@ class NetworkModule {
         const val TABLE_UNTRACKED_LIBS = "untracked_libs"
         const val TABLE_RESULTS = "results"
         const val TABLE_CONFIG = "config"
+        const val TABLE_FUN_FACTS = "fun_facts"
     }
 
     @Singleton
@@ -33,6 +34,10 @@ class NetworkModule {
             .addSheet(
                 sheetName = TABLE_CATEGORIES,
                 "id", "name"
+            )
+            .addSheet(
+                sheetName = TABLE_FUN_FACTS,
+                "id", "fun_fact"
             )
             .addSheet(
                 sheetName = TABLE_LIBRARIES,
