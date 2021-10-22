@@ -48,7 +48,9 @@ class SplashViewModel @Inject constructor(
                 syncAndCacheLibraries { // first cache libs
                     syncAndStoreConfig { // then sync config
                         checkAndFixAdb { // then check adb
-                            _isSyncFinished.value = true // all done
+                            checkJdk {
+                                _isSyncFinished.value = true // all done
+                            }
                         }
                     }
                 }
@@ -56,6 +58,15 @@ class SplashViewModel @Inject constructor(
                 e.printStackTrace()
                 _syncFailedMsg.value = e.message
             }
+        }
+    }
+
+    private fun checkJdk(onExist: () -> Unit) {
+        val isJdkExists = System.getenv("JAVA_HOME") != null
+        if (isJdkExists) {
+            onExist()
+        } else {
+            _syncFailedMsg.value = "Ohh no! It looks like you don't have JDK installed 😥"
         }
     }
 
