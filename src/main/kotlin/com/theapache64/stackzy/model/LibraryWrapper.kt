@@ -9,7 +9,7 @@ class LibraryWrapper(
     private val prevResult: Result?
 ) : AlphabetCircle(), LibraryDefinition by library {
 
-    private val isNew: Boolean by lazy {
+    private val isNewLib: Boolean by lazy {
         if (prevResult != null) {
             // If the prev result has this library inside the libPackage, then it is not a new lib.
             prevResult.libPackages?.contains(library.packageName) == false
@@ -29,6 +29,6 @@ class LibraryWrapper(
     override fun imageUrl(): String? = null
 
     override fun isNew(): Boolean {
-        return isNew
+        return isNewLib
     }
 }

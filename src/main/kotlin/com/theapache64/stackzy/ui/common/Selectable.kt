@@ -209,8 +209,9 @@ fun LabelNew() {
 @Composable
 private fun <T : AlphabetCircle> AlphabetCircle(data: T) {
     AlphabetCircle(
-        data.getAlphabet(),
-        data.getGradientColor(),
-        modifier = Modifier.size(60.dp)
+        character = data.getAlphabet(),
+        color = data.getGradientColor(),
+        modifier = Modifier.size(60.dp),
+        isNew = data.isNew()
     )
 }
