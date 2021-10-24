@@ -3,14 +3,14 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.5.30"
+    val kotlinVersion = "1.5.31"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "1.0.0-alpha4-build331"
+    id("org.jetbrains.compose") version "1.0.0-beta1"
 }
 
 val daggerVersion by extra("2.39.1")
-val stackzyVersion by extra("1.1.1") // TODO : Change in App.kt also
+val stackzyVersion by extra("1.1.2") // TODO : Change in App.kt also
 
 group = "com.theapache64"
 version = stackzyVersion
@@ -40,7 +40,7 @@ dependencies {
     kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.3.1"
+    val decomposeVersion = "0.3.1" // FIXME : bump to latest
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
@@ -48,9 +48,9 @@ dependencies {
     implementation("com.github.theapache64:name-that-color:1.0.0-alpha02")
 
     // Kamel : Image loading library
-    implementation("com.alialbaali.kamel:kamel-image:0.2.2")
+    implementation("com.alialbaali.kamel:kamel-image:0.3.0")
 
-    val bouncyCastleVersion = 1.69
+    val bouncyCastleVersion = "1.69"
     implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
 
     // Bugsnag
