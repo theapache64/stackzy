@@ -70,7 +70,7 @@ class SplashViewModel @Inject constructor(
         if (isJdkExists) {
             onExist()
         } else {
-            _syncFailedMsg.value = "Ohh no! It looks like you don't have JDK installed 😥"
+            _syncFailedMsg.value = "Ohh no! JAVA_HOME env variable not found 😥"
         }
     }
 
