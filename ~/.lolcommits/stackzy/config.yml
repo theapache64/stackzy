@@ -1,0 +1,22 @@
+---
+loltext:
+  :enabled: true
+  :message:
+    :color: white
+    :font: /Users/theapache64/Downloads/raleway/Raleway-Light.ttf
+    :position: C
+    :size: 30
+    :stroke_color: none
+    :uppercase: true
+  :sha:
+    :color: white
+    :font: /Users/theapache64/Downloads/raleway/Raleway-Light.ttf
+    :position: S
+    :size: 20
+    :stroke_color: none
+    :uppercase: false
+  :overlay:
+    :enabled: true
+  :border:
+    :enabled: false
+

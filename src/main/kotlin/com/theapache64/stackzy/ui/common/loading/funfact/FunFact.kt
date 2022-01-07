@@ -28,24 +28,23 @@ fun FunFact(
     var currentFunFact by remember { mutableStateOf(pureRandom.get()) }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.clickable {
+            isClicked = true
+            currentFunFact = pureRandom.get()
+        }
     ) {
 
         Text(
             text = "\"${currentFunFact.funFact}\"",
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-            fontSize = 15.sp,
-            modifier = modifier
-                .clickable {
-                    isClicked = true
-                    currentFunFact = pureRandom.get()
-                }
+            fontSize = 15.sp
         )
 
         if (!isClicked) {
             Text(
-                text = "Click on the fact to get more",
+                text = "Click to get more facts",
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f),
                 fontSize = 13.sp,
             )
