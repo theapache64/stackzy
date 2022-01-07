@@ -107,7 +107,7 @@ fun PathwayScreen(
                     )
 
                     PathwayCard(
-                        text = "Libraries (beta)",
+                        text = "Libraries",
                         icon = painterResource("drawables/books.svg"),
                         onClicked = onLibrariesSelected,
                         onMouseEnter = viewModel::onLibrariesCardFocused,

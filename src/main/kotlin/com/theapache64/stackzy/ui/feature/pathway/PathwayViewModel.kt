@@ -69,7 +69,7 @@ class PathwayViewModel @Inject constructor(
     }
 
     fun onLibrariesCardFocused() {
-        _focusedCardInfo.value = "Find apps that are using a specific library (beta)"
+        _focusedCardInfo.value = "Find apps that are using a specific library"
     }
 
     fun onCardFocusLost() {
