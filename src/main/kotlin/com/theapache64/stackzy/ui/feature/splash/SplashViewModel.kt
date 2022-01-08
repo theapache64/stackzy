@@ -66,10 +66,11 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun checkJdk(onExist: () -> Unit) {
-        val isJdkExists = System.getenv("JAVA_HOME") != null
-        if (isJdkExists) {
+        try {
+            Runtime.getRuntime().exec("java -version");
+            // jdk exists, pass callback
             onExist()
-        } else {
+        } catch (e: IOException) {
             _syncFailedMsg.value = "Ohh no! It looks like you don't have JDK installed 😥"
         }
     }
