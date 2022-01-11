@@ -139,7 +139,7 @@ class AppListViewModel @Inject constructor(
                         }
                         ?: listOf()
 
-                    _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
+                    _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) }.sortedBy { app-> app.getTitle() })
                 }
                 is ApkSource.PlayStore -> {
                     if (isPlayStoreUrl(newKeyword)) {
@@ -151,7 +151,7 @@ class AppListViewModel @Inject constructor(
                             val app = playStoreRepo.find(packageName, api)
                             if (app != null) {
                                 // found app in playstore
-                                _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)))
+                                _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)).sortedBy { it->it.getTitle() })
                             } else {
                                 _apps.value = Resource.Error("Invalid PlayStore URL")
                             }
