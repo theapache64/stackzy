@@ -9,12 +9,12 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.io.path.createTempDirectory
 
-class ApkToolRepo @Inject constructor(
+private class ApkToolRepo @Inject constructor(
     @ApkToolJarFile
     private val apkToolJarFile: File
 ) {
 
-    suspend fun decompile(
+    private suspend fun decompile(
         destinationFile: File,
         targetDir: File = createTempDirectory().toFile(),
         onDecompileMessage: ((String) -> Unit)? = null

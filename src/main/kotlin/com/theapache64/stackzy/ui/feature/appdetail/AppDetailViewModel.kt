@@ -36,7 +36,6 @@ import kotlin.math.roundToInt
 
 class AppDetailViewModel @Inject constructor(
     private val adbRepo: AdbRepo,
-    private val apkToolRepo: ApkToolRepo,
     private val apkAnalyzerRepo: ApkAnalyzerRepo,
     private val librariesRepo: LibrariesRepo,
     private val untrackedLibsRepo: UntrackedLibsRepo,
