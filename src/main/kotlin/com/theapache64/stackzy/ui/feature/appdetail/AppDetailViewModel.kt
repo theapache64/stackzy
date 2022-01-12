@@ -43,7 +43,7 @@ class AppDetailViewModel @Inject constructor(
     private val resultsRepo: ResultsRepo,
     private val configRepo: ConfigRepo,
     private val jadxRepo: JadxRepo,
-    private val funFactsRepo :FunFactsRepo,
+    funFactsRepo :FunFactsRepo,
 ) {
 
     companion object {
@@ -302,7 +302,7 @@ class AppDetailViewModel @Inject constructor(
 
         // Now let's decompile
         _loadingMessage.value = R.string.app_detail_loading_decompiling
-        this.decompiledDir = apkToolRepo.decompile(
+        this.decompiledDir = jadxRepo.decompile(
             destinationFile = apkFile,
             targetDir = File(getDecompiledDirPath(androidApp.appPackage.name)),
             onDecompileMessage = {
