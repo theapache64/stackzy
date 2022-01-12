@@ -3,6 +3,7 @@ package com.theapache64.stackzy.data.repo
 import brut.androlib.meta.MetaInfo
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.GradleInfo
+import com.theapache64.stackzy.data.local.LibResult
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.data.util.AndroidVersionIdentifier
@@ -41,13 +42,14 @@ class ApkAnalyzerRepo @Inject constructor() {
         allLibraries: List<Library>
     ): AnalysisReport = withContext(Dispatchers.IO) {
         val platform = getPlatform(decompiledDir)
-        val (untrackedLibs, libraries) = getLibraries(platform, decompiledDir, allLibraries)
+        val libResult = getLibraries(platform, decompiledDir, allLibraries)
         AnalysisReport(
             appName = getAppName(decompiledDir) ?: packageName,
             packageName = packageName,
             platform = platform,
-            libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
-            untrackedLibraries = untrackedLibs,
+            appLibs = libResult.appLibs.sortedBy { it.category == Library.CATEGORY_OTHER },
+            transitiveLibs = libResult.transitiveDeps.sortedBy { it.category == Library.CATEGORY_OTHER },
+            untrackedLibraries = libResult.untrackedLibs,
             apkSizeInMb = "%.2f".format(Locale.US, apkFile.sizeInMb).toFloat(),
             assetsDir = getAssetsDir(decompiledDir).takeIf { it.exists() },
             permissions = getPermissions(decompiledDir),
@@ -112,20 +114,24 @@ class ApkAnalyzerRepo @Inject constructor() {
         platform: Platform,
         decompiledDir: File,
         allRemoteLibraries: List<Library>
-    ): Pair<Set<String>, Set<Library>> {
+    ): LibResult {
         return when (platform) {
             is Platform.NativeJava,
             is Platform.NativeKotlin -> {
 
                 // Get all used libraries
-                var (appLibraries, untrackedLibs) = getAppLibraries(decompiledDir, allRemoteLibraries)
-                appLibraries = mergeDep(appLibraries)
-
-                return Pair(untrackedLibs, appLibraries)
+                val libResult = getAppLibraries(decompiledDir, allRemoteLibraries)
+                libResult.appLibs = mergeDep(libResult.appLibs)
+                libResult.transitiveDeps = mergeDep(libResult.transitiveDeps)
+                return libResult
             }
             else -> {
                 // TODO : Support other platforms
-                Pair(setOf(), setOf())
+                LibResult(
+                    untrackedLibs = setOf(),
+                    appLibs = setOf(),
+                    transitiveDeps = setOf()
+                )
             }
         }
     }
@@ -134,26 +140,26 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To merge dependencies.
      */
     private fun mergeDep(
-        appLibSet: Set<Library>
+        _appLibs: Set<Library>
     ): MutableSet<Library> {
-        val appLibraries = appLibSet.toMutableSet()
-        val mergePairs = appLibSet
+        val appLibs = _appLibs.toMutableSet()
+        val mergePairs = _appLibs
             .filter { it.replacementPackage != null }
             .map {
                 Pair(it.replacementPackage, it.packageName)
             }
         for ((libToRemove, replacement) in mergePairs) {
-            val hasDepLib = appLibraries.find { it.packageName.lowercase(Locale.getDefault()) == replacement } != null
+            val hasDepLib = appLibs.find { it.packageName.lowercase(Locale.getDefault()) == replacement } != null
             if (hasDepLib) {
                 // remove that lib
-                val library = appLibraries.find { it.packageName == libToRemove }
+                val library = appLibs.find { it.packageName == libToRemove }
                 if (library != null) {
-                    appLibraries.removeIf { it.id == library.id }
+                    appLibs.removeIf { it.id == library.id }
                 }
             }
         }
 
-        return appLibraries
+        return appLibs
     }
 
     /**
@@ -305,7 +311,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     fun getAppLibraries(
         decompiledDir: File,
         allLibraries: List<Library>
-    ): Pair<Set<Library>, Set<String>> {
+    ): LibResult {
         val appLibs = mutableSetOf<Library>()
         val untrackedLibs = mutableSetOf<String>() // TODO:
 
@@ -373,7 +379,11 @@ class ApkAnalyzerRepo @Inject constructor() {
             }
         }*/
 
-        return Pair(appLibs, untrackedLibs)
+        return LibResult(
+            untrackedLibs = untrackedLibs,
+            appLibs = appLibs,
+            transitiveDeps = setOf() // TODO: Feature implementation goes here
+        )
     }
 
 /*    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {

@@ -43,15 +43,15 @@ interface ApiInterface {
         @Query("stackzy_lib_version") stackzyLibVersion: Int,
     ): Flow<Resource<Result>>
 
-    @Read("SELECT * WHERE lib_packages contains :lib_package AND package_name != 'com.theapache64.test.app' ORDER BY created_at DESC")
+    @Read("SELECT * WHERE app_libs contains :lib_package AND package_name != 'com.theapache64.test.app' ORDER BY created_at DESC")
     @GET(NetworkModule.TABLE_RESULTS)
     fun getResults(
-        @Query("lib_package") libPackageName: String,
+        @Query("app_lib") appLib: String,
     ): Flow<Resource<List<Result>>>
 
-    @Read("SELECT lib_packages WHERE lib_packages != '' && package_name != 'com.theapache64.test.app'")
+    @Read("SELECT app_libs WHERE app_libs != '' && package_name != 'com.theapache64.test.app'")
     @GET(NetworkModule.TABLE_RESULTS)
-    fun getAllLibPackages(): Flow<Resource<List<OptionalResult>>>
+    fun getAllAppLibs(): Flow<Resource<List<OptionalResult>>>
 
     @Read("SELECT * WHERE package_name = :package_name AND version_code != :except_v_code ORDER BY created_at DESC LIMIT 1")
     @GET(NetworkModule.TABLE_RESULTS)

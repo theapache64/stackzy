@@ -7,8 +7,10 @@ import com.squareup.moshi.JsonClass
 data class Result(
     @Json(name = "app_name")
     val appName: String,
-    @Json(name = "lib_packages")
-    val libPackages: String?,
+    @Json(name = "app_libs")
+    val appLibs: String?,
+    @Json(name = "transitive_libs")
+    val transitiveLibs: String?,
     @Json(name = "package_name")
     val packageName: String, // comma-sep
     @Json(name = "version_code")

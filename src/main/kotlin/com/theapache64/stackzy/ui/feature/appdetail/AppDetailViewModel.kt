@@ -166,7 +166,8 @@ class AppDetailViewModel @Inject constructor(
             appName = result.appName,
             packageName = result.packageName,
             platform = Platform.fromClassName(result.platform),
-            libraries = getLibrariesFromPackages(result.libPackages),
+            appLibs = getLibrariesFromPackages(result.appLibs),
+            transitiveLibs = getLibrariesFromPackages(result.transitiveLibs),
             untrackedLibraries = setOf(),
             apkSizeInMb = result.apkSizeInMb,
             assetsDir = null,
@@ -378,7 +379,7 @@ class AppDetailViewModel @Inject constructor(
         trackUntrackedLibs(report)
         _analysisReport.value = AnalysisReportWrapper(
             report,
-            report.libraries.sortedBy { it.id }.map { library ->
+            report.transitiveLibs.sortedBy { it.id }.map { library ->
                 LibraryWrapper(library, prevResult)
             }
         )

@@ -40,7 +40,7 @@ class LibraryListViewModel @Inject constructor(
     fun loadLibraries() {
         viewModelScope.launch {
             val cachedLibs = librariesRepo.getCachedLibraries()!!
-            resultsRepo.getAllLibPackages().collect {
+            resultsRepo.getAllAppLibs().collect {
                 when (it) {
                     is Resource.Loading -> {
                         _libsResp.value = Resource.Loading()
@@ -66,7 +66,7 @@ class LibraryListViewModel @Inject constructor(
     ): List<LibraryWrapper> {
         return cachedLibs.filter { library ->
             allLibPackages.find {
-                it.libPackages?.contains(library.packageName) ?: false
+                it.appLibs?.contains(library.packageName) ?: false
             } != null
         }.map { LibraryWrapper(it, null) }
     }

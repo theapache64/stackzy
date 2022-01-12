@@ -24,7 +24,7 @@ fun Libraries(
     onLibrarySelected: (LibraryWrapper) -> Unit
 ) {
 
-    if (report.libraries.isEmpty()) {
+    if (report.transitiveLibs.isEmpty()) {
         // No libraries found
         val platform = report.platform
         if (platform is Platform.NativeKotlin || platform is Platform.NativeJava) {

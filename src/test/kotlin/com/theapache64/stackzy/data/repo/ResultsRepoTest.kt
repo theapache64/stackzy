@@ -52,7 +52,7 @@ class ResultsRepoTest {
         val result = Result(
             appName = "Test App",
             packageName = TEST_PACKAGE_NAME,
-            libPackages = "okhttp3, retrofit2",
+            appLibs = "okhttp3, retrofit2",
             versionCode = TEST_VERSION_CODE,
             versionName = "v1.2.3-alpha04",
             platform = "NativeKotlin",
@@ -166,7 +166,7 @@ class ResultsRepoTest {
 
     @Test
     fun `Get all lib packages`() = runBlockingUnitTest {
-        resultsRepo.getAllLibPackages().collect {
+        resultsRepo.getAllAppLibs().collect {
             when (it) {
                 is Resource.Loading -> {
 

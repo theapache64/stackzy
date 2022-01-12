@@ -11,7 +11,8 @@ interface AnalysisReportDefinition {
     val appName: String?
     val packageName: String
     val platform: Platform
-    val libraries: List<Library>
+    val appLibs: List<Library>
+    val transitiveLibs: List<Library>
     val untrackedLibraries: Set<String>
     val apkSizeInMb: Float
     val assetsDir: File?
@@ -23,7 +24,8 @@ class AnalysisReport(
     override val appName: String?,
     override val packageName: String,
     override val platform: Platform,
-    override val libraries: List<Library>,
+    override val appLibs: List<Library>,
+    override val transitiveLibs: List<Library>,
     override val untrackedLibraries: Set<String>,
     override val apkSizeInMb: Float,
     override val assetsDir: File?,
@@ -37,7 +39,8 @@ fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null, lo
     return Result(
         appName = this.appName ?: this.packageName,
         packageName = this.packageName,
-        libPackages = this.libraries.joinToString(",") { it.packageName },
+        appLibs = this.appLibs.joinToString(",") { it.packageName },
+        transitiveLibs = this.transitiveLibs.joinToString(",") { it.packageName },
         versionName = this.gradleInfo.versionName ?: "Unknown",
         versionCode = this.gradleInfo.versionCode ?: -1,
         platform = this.platform::class.simpleName!!,

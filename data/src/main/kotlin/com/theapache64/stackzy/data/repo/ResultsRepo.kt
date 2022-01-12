@@ -33,7 +33,7 @@ class ResultsRepo @Inject constructor(
         return gradleInfoAdapter.toJson(gradleInfo)
     }
 
-    fun getAllLibPackages() = apiInterface.getAllLibPackages()
+    fun getAllAppLibs() = apiInterface.getAllAppLibs()
     fun getResults(libPackageName: String) = apiInterface.getResults(libPackageName)
     fun getPrevResult(
         packageName: String,

@@ -12,7 +12,7 @@ class LibraryWrapper(
     private val isNewLib: Boolean by lazy {
         if (prevResult != null) {
             // If the prev result has this library inside the libPackage, then it is not a new lib.
-            prevResult.libPackages?.contains(library.packageName) == false
+            prevResult.appLibs?.contains(library.packageName) == false
         } else {
             false
         }
