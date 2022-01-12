@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.theapache64.stackzy"
-version = "1.1.3"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
