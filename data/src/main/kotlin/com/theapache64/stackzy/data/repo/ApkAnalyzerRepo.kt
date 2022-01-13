@@ -13,11 +13,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.w3c.dom.Element
 import java.io.File
-import java.nio.file.Files.walk
 import java.nio.file.Path
 import java.util.*
 import javax.inject.Inject
-import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.io.path.Path
 import kotlin.io.path.div
@@ -68,14 +66,27 @@ class ApkAnalyzerRepo @Inject constructor() {
     fun getGradleInfo(decompiledDir: File): GradleInfo {
         val manifestFileContent = getManifestFile(decompiledDir).toFile()
         val manifestDoc = DocumentBuilderFactory.newInstance().apply {
-            setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
+            // setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
         }.newDocumentBuilder().parse(manifestFileContent)
-        val versionCode = manifestDoc.documentElement.getAttribute("android:versionCode").toInt()
-        val versionName = manifestDoc.documentElement.getAttribute("android:versionName")
+        val versionCode =
+            manifestDoc.documentElement.getAttribute("android:versionCode").toIntOrNull()
+                ?: manifestDoc.documentElement.getAttribute("versionCode").toIntOrNull() ?: 0
+
+        val versionName = manifestDoc.documentElement.getAttribute("android:versionName").ifEmpty {
+            manifestDoc.documentElement.getAttribute("versionName")
+        }
+
+
         val minSdk = (manifestDoc.getElementsByTagName("uses-sdk").item(0) as Element)
-            .getAttribute("android:minSdkVersion").toInt()
+            .let { element ->
+                element.getAttribute("android:minSdkVersion").toIntOrNull() ?: element.getAttribute("minSdkVersion")
+                    .toIntOrNull() ?: 0
+            }
         val targetSdk = (manifestDoc.getElementsByTagName("uses-sdk").item(0) as Element)
-            .getAttribute("android:targetSdkVersion").toInt()
+            .let { element ->
+                element.getAttribute("android:targetSdkVersion").toIntOrNull()
+                    ?: element.getAttribute("targetSdkVersion").toIntOrNull() ?: 0
+            }
 
         // Building gradle info
         return GradleInfo(
@@ -267,7 +278,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     }
 
     private fun isXamarin(decompiledDir: File): Boolean {
-        return File(decompiledDir.absolutePath ).resolve("resources").walk().find {
+        return File(decompiledDir.absolutePath).resolve("resources").walk().find {
             it.name == "libxamarin-app.so" || it.name == "libmonodroid.so" || it.name == "Xamarin.Forms.Core.dll"
         } != null
     }
