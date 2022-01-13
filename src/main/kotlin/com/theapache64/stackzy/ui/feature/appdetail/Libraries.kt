@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,7 +25,7 @@ fun Libraries(
     onLibrarySelected: (LibraryWrapper) -> Unit
 ) {
 
-    if (report.transitiveLibs.isEmpty()) {
+    if (report.appLibs.isEmpty()) {
         // No libraries found
         val platform = report.platform
         if (platform is Platform.NativeKotlin || platform is Platform.NativeJava) {
@@ -44,29 +45,51 @@ fun Libraries(
         }
     } else {
 
-        LazyVerticalGrid(
-            cells = GridCells.Fixed(4)
-        ) {
-            items(
-                items = report.libraryWrappers
-            ) { app ->
-                Column {
-                    // GridItem
-                    Selectable(
-                        data = app,
-                        onSelected = onLibrarySelected
-                    )
+        Column {
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(4)
+            ) {
+                items(
+                    items = report.appLibWrappers
+                ) { app ->
+                    Column {
+                        // GridItem
+                        Selectable(
+                            data = app,
+                            onSelected = onLibrarySelected
+                        )
 
-                    Spacer(
-                        modifier = Modifier.height(10.dp)
-                    )
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+                    }
                 }
             }
 
-            item {
-                // Gradient margin
-                GradientMargin()
+            Text("Trans")
+
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(4)
+            ) {
+                items(
+                    items = report.transLibWrappers
+                ) { app ->
+                    Column {
+                        // GridItem
+                        Selectable(
+                            data = app,
+                            onSelected = onLibrarySelected
+                        )
+
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+                    }
+                }
             }
+
+            // Gradient margin
+            GradientMargin()
         }
     }
 }

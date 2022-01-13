@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @Component(
     modules = [
         NetworkModule::class,
-        ApkToolModule::class,
         PreferenceModule::class,
         CryptoModule::class,
         JadxModule::class,

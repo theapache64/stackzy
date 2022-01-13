@@ -3,14 +3,14 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
-        const val lib_detail_loading: String = "Loading apps..."
-        const val libraries_list_title: String = "Libraries"
+        const val lib_detail_loading = "Loading apps..."
+        const val libraries_list_title = "Libraries"
         const val app_detail_action_open_market = "SEARCH IN MARKET"
-        const val any_error_title_damn_it: String = "Damn It!"
-        const val app_detail_loading_fetching_apk: String = "Fetching APK..."
-        const val app_detail_loading_decompiling: String = "Decompiling..."
-        const val app_detail_loading_analysing: String = "Analysing..."
-        const val app_detail_error_apk_remote_path: String = "Couldn't find APK remote path"
+        const val any_error_title_damn_it = "Damn It!"
+        const val app_detail_loading_fetching_apk = "Fetching APK..."
+        const val app_detail_loading_decompiling = "Decompiling..."
+        const val app_detail_loading_analysing = "Analysing..."
+        const val app_detail_error_apk_remote_path = "Couldn't find APK remote path"
         const val app_detail_title = "Built with"
         const val select_app_label_search = "Search"
         const val select_app_cd_go_back = "Go back"

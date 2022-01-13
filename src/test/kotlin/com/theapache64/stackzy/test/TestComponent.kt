@@ -10,7 +10,6 @@ import javax.inject.Singleton
 @Component(
     modules = [
         NetworkModule::class,
-        ApkToolModule::class,
         PreferenceModule::class,
         CryptoModule::class,
         JadxModule::class,
@@ -24,7 +23,6 @@ interface TestComponent {
     fun configRepo(): ConfigRepo
     fun resultRepo(): ResultsRepo
     fun playStoreRepo(): PlayStoreRepo
-    fun apkToolRepo(): ApkToolRepo
     fun apkAnalyzerRepo(): ApkAnalyzerRepo
     fun untrackedLibsRepo(): UntrackedLibsRepo
     fun jadxRepo(): JadxRepo

@@ -44,8 +44,7 @@ class ResultsRepoTest {
     private lateinit var librariesRepo: LibrariesRepo
 
     @InjectFromComponent
-    private lateinit var apkToolRepo: ApkToolRepo
-
+    private lateinit var jadxRepo: JadxRepo
     @Test
     @BeforeAll
     fun `Add result`() = runBlockingUnitTest {
@@ -53,6 +52,7 @@ class ResultsRepoTest {
             appName = "Test App",
             packageName = TEST_PACKAGE_NAME,
             appLibs = "okhttp3, retrofit2",
+            transitiveLibs = "okio",
             versionCode = TEST_VERSION_CODE,
             versionName = "v1.2.3-alpha04",
             platform = "NativeKotlin",
@@ -95,7 +95,7 @@ class ResultsRepoTest {
                 // pulled
 
                 val decompiledDir = createTempDirectory().toFile()
-                apkToolRepo.decompile(apkFile, decompiledDir)
+                jadxRepo.decompile(apkFile, decompiledDir)
                 librariesRepo.loadLibs { allLibs ->
                     val report = apkAnalyzerRepo.analyze(packageName, apkFile, decompiledDir, allLibs)
                     val result = report.toResult(resultsRepo, null, DUMMY_IMAGE_URL)
