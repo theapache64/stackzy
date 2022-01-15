@@ -13,7 +13,7 @@ import kotlin.io.path.*
 class JadxModule {
 
     companion object {
-        private val jadxZipFile = Path(ResDir.dir) / "jadx-1.2.0.zip"
+        private val jadxZipFile = Path(ResDir.dir) / "jadx-1.3.1.zip"
         private val jadxDirFile = Path(ResDir.dir) / "build" / jadxZipFile.nameWithoutExtension
     }
 
