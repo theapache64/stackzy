@@ -3,6 +3,7 @@ package com.theapache64.stackzy.data.repo
 import brut.androlib.meta.MetaInfo
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.GradleInfo
+import com.theapache64.stackzy.data.local.LibResult
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.remote.Library
 import com.theapache64.stackzy.data.util.AndroidVersionIdentifier
@@ -41,13 +42,13 @@ class ApkAnalyzerRepo @Inject constructor() {
         allLibraries: List<Library>
     ): AnalysisReport = withContext(Dispatchers.IO) {
         val platform = getPlatform(decompiledDir)
-        val (untrackedLibs, libraries) = getLibraries(platform, decompiledDir, allLibraries)
+        val libResult = getLibResult(platform, decompiledDir, allLibraries)
         AnalysisReport(
             appName = getAppName(decompiledDir) ?: packageName,
             packageName = packageName,
             platform = platform,
-            libraries = libraries.sortedBy { it.category == Library.CATEGORY_OTHER },
-            untrackedLibraries = untrackedLibs,
+            libraries = libResult?.appLibs?.sortedBy { it.category == Library.CATEGORY_OTHER }?.toSet() ?: emptySet(),
+            untrackedLibraries = libResult?.untrackedLibs ?: emptySet(),
             apkSizeInMb = "%.2f".format(Locale.US, apkFile.sizeInMb).toFloat(),
             assetsDir = getAssetsDir(decompiledDir).takeIf { it.exists() },
             permissions = getPermissions(decompiledDir),
@@ -87,13 +88,13 @@ class ApkAnalyzerRepo @Inject constructor() {
     /**
      * To get permissions used inside decompiled dir.
      */
-    fun getPermissions(decompiledDir: File): List<String> {
+    fun getPermissions(decompiledDir: File): Set<String> {
         val manifestFile = Path(decompiledDir.absolutePath) / "AndroidManifest.xml"
         return getPermissionsFromManifestFile(manifestFile)
     }
 
-    fun getPermissionsFromManifestFile(manifestFile: Path): List<String> {
-        val permissions = mutableListOf<String>()
+    fun getPermissionsFromManifestFile(manifestFile: Path): Set<String> {
+        val permissions = mutableSetOf<String>()
         val manifestRead = manifestFile.readText()
         var matchResult = USER_PERMISSION_REGEX.find(manifestRead)
         while (matchResult != null) {
@@ -108,24 +109,24 @@ class ApkAnalyzerRepo @Inject constructor() {
      *
      * Returns (untrackedLibs, usedLibs) in a Pair
      */
-    fun getLibraries(
+    fun getLibResult(
         platform: Platform,
         decompiledDir: File,
         allRemoteLibraries: List<Library>
-    ): Pair<Set<String>, Set<Library>> {
+    ): LibResult? {
         return when (platform) {
             is Platform.NativeJava,
             is Platform.NativeKotlin -> {
 
                 // Get all used libraries
-                var (appLibraries, untrackedLibs) = getAppLibraries(decompiledDir, allRemoteLibraries)
-                appLibraries = mergeDep(appLibraries)
+                val libResult = getAppLibraries(decompiledDir, allRemoteLibraries)
+                libResult.appLibs = mergeDep(libResult.appLibs)
 
-                return Pair(untrackedLibs, appLibraries)
+                libResult
             }
             else -> {
                 // TODO : Support other platforms
-                Pair(setOf(), setOf())
+                null
             }
         }
     }
@@ -305,7 +306,7 @@ class ApkAnalyzerRepo @Inject constructor() {
     fun getAppLibraries(
         decompiledDir: File,
         allLibraries: List<Library>
-    ): Pair<Set<Library>, Set<String>> {
+    ): LibResult {
         val appLibs = mutableSetOf<Library>()
         val untrackedLibs = mutableSetOf<String>() // TODO:
 
@@ -339,54 +340,8 @@ class ApkAnalyzerRepo @Inject constructor() {
             }
         }
 
-
-        /*
-        // Legacy algorithm
-        val allFiles = decompiledDir.walk().toList()
-        for(file in allFiles){
-            if (file.isDirectory) {
-                var isLibFound = false
-
-                val filePath = file.absolutePath
-                    .replace("\\", "/") // replace f-slash with b-slash for windows
-
-                for (remoteLib in allLibraries) {
-                    val packageAsPath = remoteLib.packageName.replace(".", "/")
-                    val dirRegEx = getDirRegExFormat(packageAsPath)
-                    if (isMatch(dirRegEx, filePath)) {
-                        appLibs.add(remoteLib)
-                        isLibFound = true
-                        break
-                    }
-                }
-
-                // Listing untracked libs
-                if (isLibFound.not()) {
-                    val filesInsideDir = file.listFiles { it -> !it.isDirectory }?.size ?: 0
-                    if (filesInsideDir > 0 && file.absolutePath.contains("${File.separator}smali")) {
-                        val afterSmali = file.absolutePath.split("${File.separator}smali")[1]
-                        val firstSlash = afterSmali.indexOf(File.separator)
-                        val packageName = afterSmali.substring(firstSlash + 1).replace(File.separator, ".")
-                        untrackedLibs.add(packageName)
-                    }
-                }
-            }
-        }*/
-
-        return Pair(appLibs, untrackedLibs)
+        return LibResult(appLibs, untrackedLibs)
     }
-
-/*    private fun isMatch(dirRegEx: Regex, absolutePath: String): Boolean {
-        return dirRegEx.find(absolutePath) != null
-    }
-
-    private fun getDirRegExFormat(packageAsPath: String): Regex {
-        return String.format(
-            DIR_REGEX_FORMAT,
-            packageAsPath
-        ).toRegex()
-    }*/
-
 }
 
 

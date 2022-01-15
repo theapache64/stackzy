@@ -166,7 +166,7 @@ private fun BuildGradleGroovy(
 @Composable
 private fun PermissionsXml(
     modifier: Modifier = Modifier,
-    permission: List<String>
+    permission: Set<String>
 ) {
     Column(modifier) {
 

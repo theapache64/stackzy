@@ -11,11 +11,11 @@ interface AnalysisReportDefinition {
     val appName: String?
     val packageName: String
     val platform: Platform
-    val libraries: List<Library>
+    val libraries: Set<Library>
     val untrackedLibraries: Set<String>
     val apkSizeInMb: Float
     val assetsDir: File?
-    val permissions: List<String>
+    val permissions: Set<String>
     val gradleInfo: GradleInfo
 }
 
@@ -23,11 +23,11 @@ class AnalysisReport(
     override val appName: String?,
     override val packageName: String,
     override val platform: Platform,
-    override val libraries: List<Library>,
+    override val libraries: Set<Library>,
     override val untrackedLibraries: Set<String>,
     override val apkSizeInMb: Float,
     override val assetsDir: File?,
-    override val permissions: List<String>,
+    override val permissions: Set<String>,
     override val gradleInfo: GradleInfo
 ) : AnalysisReportDefinition
 

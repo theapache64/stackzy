@@ -30,7 +30,7 @@ class NetworkModule {
     @Provides
     fun provideRetrosheetInterceptor(): RetrosheetInterceptor {
         return RetrosheetInterceptor.Builder()
-            .setLogging(true)
+            // .setLogging(true)
             .addSheet(
                 sheetName = TABLE_CATEGORIES,
                 "id", "name"

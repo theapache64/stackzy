@@ -3,9 +3,12 @@ package com.theapache64.stackzy.data.repo
 import com.akdeniz.googleplaycrawler.GooglePlayAPI
 import com.github.theapache64.expekt.should
 import com.github.theapache64.gpa.api.Play
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
+import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
+import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
@@ -30,8 +33,22 @@ class PlayStoreRepoTest {
     @BeforeAll
     @Test
     fun beforeAll() = runBlockingUnitTest {
-        val account = authRepo.getAccountOrThrow()
-        api = Play.getApi(account)
+        val username = System.getenv("PLAY_API_GOOGLE_USERNAME")!!
+        val password = System.getenv("PLAY_API_GOOGLE_PASSWORD")!!
+
+        authRepo.logIn(username, password).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    Arbor.d("logging in...")
+                }
+                is Resource.Success -> {
+                    api = Play.getApi(account = it.data)
+                }
+                is Resource.Error -> {
+                    assert(false)
+                }
+            }
+        }
     }
 
     @Test

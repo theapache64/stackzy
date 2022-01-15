@@ -174,21 +174,22 @@ class AppDetailViewModel @Inject constructor(
             gradleInfo = resultsRepo.parseGradleInfo(result.gradleInfoJson)!! // this shouldn't be null
         )
 
+
         onReportReady(report, prevResult)
     }
 
 
-    private fun getFullPermissionsFromPermissions(permissions: String?): List<String> {
-        return permissions?.split(",")?.filter { it.isNotBlank() } ?: listOf()
+    private fun getFullPermissionsFromPermissions(permissions: String?): Set<String> {
+        return permissions?.split(",")?.filter { it.isNotBlank() }?.toSet() ?: setOf()
     }
 
-    private fun getLibrariesFromPackages(libPackages: String?): List<Library> {
-        if (libPackages == null) return listOf()
+    private fun getLibrariesFromPackages(libPackages: String?): Set<Library> {
+        if (libPackages == null) return setOf()
 
         val packages = libPackages.split(",")
             .map { it.trim() }
 
-        return librariesRepo.getCachedLibraries()?.filter { packages.contains(it.packageName) } ?: listOf()
+        return librariesRepo.getCachedLibraries()?.filter { packages.contains(it.packageName) }?.toSet() ?: setOf()
     }
 
     /**
@@ -211,7 +212,7 @@ class AppDetailViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _fatalError.value = e.message
+            _fatalError.value = "${e::class.simpleName}: ${e.message}"
         }
     }
 
