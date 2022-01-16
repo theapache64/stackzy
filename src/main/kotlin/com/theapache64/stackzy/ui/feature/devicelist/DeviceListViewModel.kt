@@ -1,6 +1,7 @@
 package com.theapache64.stackzy.ui.feature.devicelist
 
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
@@ -16,8 +17,8 @@ class DeviceListViewModel @Inject constructor(
 ) {
 
     private lateinit var viewModelScope: CoroutineScope
-    private val _connectedDevices = MutableStateFlow<List<AndroidDeviceWrapper>?>(null)
-    val connectedDevices: StateFlow<List<AndroidDeviceWrapper>?> = _connectedDevices
+    private val _connectedDevices = MutableStateFlow<Resource<List<AndroidDeviceWrapper>>?>(null)
+    val connectedDevices: StateFlow<Resource<List<AndroidDeviceWrapper>>?> = _connectedDevices
 
 
     fun init(scope: CoroutineScope) {
@@ -30,13 +31,15 @@ class DeviceListViewModel @Inject constructor(
      */
     fun watchConnectedDevices() {
         viewModelScope.launch {
+            _connectedDevices.value = Resource.Loading("🔍 Scanning for devices...")
             adbRepo.watchConnectedDevice()
                 .catch {
                     Arbor.d("Error: ${it.message}")
+                    _connectedDevices.value = Resource.Error(it.message ?: "Something went wrong")
                 }
                 .collect {
                     Arbor.d("Devices : $it")
-                    _connectedDevices.value = it.map { device -> AndroidDeviceWrapper(device) }
+                    _connectedDevices.value = Resource.Success(it.map { device -> AndroidDeviceWrapper(device) })
                 }
         }
     }

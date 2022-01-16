@@ -9,10 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.ui.common.CustomScaffold
+import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
+import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
 /**
@@ -27,19 +30,21 @@ fun SelectDeviceScreen(
     val devices by deviceListViewModel.connectedDevices.collectAsState()
 
     Content(
-        devices = devices,
+        devicesResp = devices,
         onDeviceSelected = onDeviceSelected,
-        onBackClicked = onBackClicked
+        onBackClicked = onBackClicked,
+        onRetry = { deviceListViewModel.watchConnectedDevices() }
     )
 }
 
 @Composable
 fun Content(
-    devices: List<AndroidDeviceWrapper>?,
+    devicesResp: Resource<List<AndroidDeviceWrapper>>?,
     onDeviceSelected: (AndroidDeviceWrapper) -> Unit,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onRetry: () -> Unit
 ) {
-    if (devices == null) {
+    if (devicesResp == null) {
         // Just background
         Box(
             modifier = Modifier.fillMaxSize()
@@ -53,38 +58,45 @@ fun Content(
         onBackClicked = onBackClicked
     ) {
 
-        if (devices.isEmpty()) {
-            FullScreenError(
-                title = R.string.device_no_device_title,
-                message = R.string.device_no_device_message,
-                image = painterResource("drawables/no_device.png")
-            )
-        } else {
-
-            Spacer(
-                modifier = Modifier.height(10.dp)
-            )
-
-            LazyColumn {
-                items(devices) { device ->
-                    Selectable(
-                        data = device,
-                        modifier = Modifier
-                            .width(400.dp),
-                        onSelected = onDeviceSelected
+        when (devicesResp) {
+            is Resource.Loading -> {
+                LoadingAnimation(message = devicesResp.message ?: "", null)
+            }
+            is Resource.Error -> {
+                ErrorSnackBar(syncFailedReason = devicesResp.errorData, onRetryClicked = onRetry)
+            }
+            is Resource.Success -> {
+                val devices = devicesResp.data
+                if (devices.isEmpty()) {
+                    FullScreenError(
+                        title = R.string.device_no_device_title,
+                        message = R.string.device_no_device_message,
+                        image = painterResource("drawables/no_device.png")
                     )
+                } else {
 
                     Spacer(
                         modifier = Modifier.height(10.dp)
                     )
+
+                    LazyColumn {
+                        items(devices) { device ->
+                            Selectable(
+                                data = device,
+                                modifier = Modifier
+                                    .width(400.dp),
+                                onSelected = onDeviceSelected
+                            )
+
+                            Spacer(
+                                modifier = Modifier.height(10.dp)
+                            )
+                        }
+                    }
                 }
             }
-
         }
-
     }
-
-
 }
 
 
