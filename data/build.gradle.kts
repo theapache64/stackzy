@@ -15,10 +15,10 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     // Adam : The ADB client
-    api("com.malinskiy.adam:adam:0.4.0")
+    api("com.malinskiy.adam:adam:0.4.3")
 
     // Moshi : A modern JSON API for Android and Java
-    val moshiVersion = "1.12.0"
+    val moshiVersion = "1.13.0"
     api("com.squareup.moshi:moshi:$moshiVersion")
     implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
@@ -34,7 +34,7 @@ dependencies {
 
 
     // Kotlinx Coroutines Core : Coroutines support libraries for Kotlin
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
 
     // Arbor : Like Timber, just different.
     api("com.ToxicBakery.logging:arbor-jvm:1.35.72")
@@ -45,7 +45,7 @@ dependencies {
 
 
     // GooglePlay API
-    implementation("com.google.protobuf:protobuf-java:3.18.1")
+    implementation("com.google.protobuf:protobuf-java:3.19.3")
     api("com.github.theapache64:google-play-api:0.0.9")
 
     // SnakeYAML : YAML 1.1 parser and emitter for Java
