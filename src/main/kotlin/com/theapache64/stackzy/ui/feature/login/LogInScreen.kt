@@ -76,7 +76,8 @@ fun LogInScreen(
                         onPasswordChanged = viewModel::onPasswordChanged,
                         onLogInClicked = viewModel::onLogInClicked,
                         onCreateAccountClicked = viewModel::onCreateAccountClicked,
-                        onRememberChanged = viewModel::onRememberChanged
+                        onRememberChanged = viewModel::onRememberChanged,
+                        onRememberMeClicked = viewModel::onRememberClicked
                     )
 
                     if (logInResponse is Resource.Error) {
@@ -100,6 +101,7 @@ private fun Form(
     onUsernameChanged: (username: String) -> Unit,
     onPasswordChanged: (password: String) -> Unit,
     onRememberChanged: (isRemember: Boolean) -> Unit,
+    onRememberMeClicked :()->Unit,
     onLogInClicked: () -> Unit,
     onCreateAccountClicked: () -> Unit
 ) {
@@ -211,7 +213,13 @@ private fun Form(
                     onCheckedChange = onRememberChanged,
                     colors = CheckboxDefaults.colors(checkedColor = R.color.TelegramBlue)
                 )
-                Text(text = "Remember Me", style = StackzyTypography.body2)
+                Text(
+                    text = "Remember Me",
+                    style = StackzyTypography.body2,
+                    modifier = Modifier.clickable {
+                        onRememberMeClicked()
+                    }
+                )
             }
 
 

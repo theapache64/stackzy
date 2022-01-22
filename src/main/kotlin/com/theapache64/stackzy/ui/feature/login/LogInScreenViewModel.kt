@@ -117,6 +117,10 @@ class LogInScreenViewModel @Inject constructor(
         _isRemember.value = isRemember
     }
 
+    fun onRememberClicked() {
+        _isRemember.value = !isRemember.value
+    }
+
     fun onLoggedIn(account: Account) {
         this.onLoggedIn.invoke(shouldGoToPlayStore, account)
     }
