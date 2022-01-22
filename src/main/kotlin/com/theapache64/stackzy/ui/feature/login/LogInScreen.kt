@@ -26,6 +26,7 @@ import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.ui.theme.R
+import com.theapache64.stackzy.ui.theme.StackzyTypography
 
 @Composable
 fun LogInScreen(
@@ -35,6 +36,7 @@ fun LogInScreen(
 
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
+    val isRemember by viewModel.isRemember.collectAsState()
     val isUsernameError by viewModel.isUsernameError.collectAsState()
     val isPasswordError by viewModel.isPasswordError.collectAsState()
 
@@ -68,11 +70,13 @@ fun LogInScreen(
                         username = username,
                         isUsernameError = isUsernameError,
                         password = password,
+                        isRemember = isRemember,
                         isPasswordError = isPasswordError,
                         onUsernameChanged = viewModel::onUsernameChanged,
                         onPasswordChanged = viewModel::onPasswordChanged,
                         onLogInClicked = viewModel::onLogInClicked,
-                        onCreateAccountClicked = viewModel::onCreateAccountClicked
+                        onCreateAccountClicked = viewModel::onCreateAccountClicked,
+                        onRememberChanged = viewModel::onRememberChanged
                     )
 
                     if (logInResponse is Resource.Error) {
@@ -92,8 +96,10 @@ private fun Form(
     isUsernameError: Boolean,
     password: String,
     isPasswordError: Boolean,
+    isRemember: Boolean,
     onUsernameChanged: (username: String) -> Unit,
     onPasswordChanged: (password: String) -> Unit,
+    onRememberChanged: (isRemember: Boolean) -> Unit,
     onLogInClicked: () -> Unit,
     onCreateAccountClicked: () -> Unit
 ) {
@@ -194,7 +200,23 @@ private fun Form(
             )
 
             Spacer(
-                modifier = Modifier.height(20.dp)
+                modifier = Modifier.height(5.dp)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(
+                    checked = isRemember,
+                    onCheckedChange = onRememberChanged,
+                    colors = CheckboxDefaults.colors(checkedColor = R.color.TelegramBlue)
+                )
+                Text(text = "Remember Me", style = StackzyTypography.body2)
+            }
+
+
+            Spacer(
+                modifier = Modifier.height(10.dp)
             )
 
             // Button

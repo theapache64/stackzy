@@ -7,7 +7,6 @@ import com.theapache64.stackzy.test.MyDaggerMockRule
 import com.theapache64.stackzy.test.runBlockingUnitTest
 import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
-import kotlinx.coroutines.flow.collect
 import org.junit.Rule
 import org.junit.Test
 
@@ -65,7 +64,7 @@ class AuthRepoTest {
             gsfId = "jhj45k34h5k3h45kjh34k",
             locale = "en-IN"
         )
-        authRepo.storeAccount(dummyAccount)
+        authRepo.storeAccount(dummyAccount, true)
         authRepo.getAccount().should.equal(dummyAccount)
 
         authRepo.logout() // test finished, so delete account

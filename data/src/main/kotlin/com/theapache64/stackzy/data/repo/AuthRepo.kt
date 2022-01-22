@@ -21,6 +21,7 @@ class AuthRepo @Inject constructor(
 
     companion object {
         private const val KEY_ENC_ACCOUNT = "enc_account"
+        private const val KEY_IS_REMEMBER = "is_remember"
     }
 
     private val accountAdapter by lazy {
@@ -62,10 +63,12 @@ class AuthRepo @Inject constructor(
     /**
      * To persist account
      */
-    fun storeAccount(account: Account) {
+    fun storeAccount(account: Account, isRemember: Boolean) {
         val encAccountJson = crypto.encrypt(accountAdapter.toJson(account))
         pref.put(KEY_ENC_ACCOUNT, encAccountJson)
+        pref.putBoolean(KEY_IS_REMEMBER, isRemember)
     }
+
 
     /**
      * To logout and remove account details from preference
@@ -79,6 +82,8 @@ class AuthRepo @Inject constructor(
      */
     fun getAccountOrThrow() = getAccount()
         ?: throw IllegalArgumentException("Couldn't get account. Are you sure you've logged in via the app?")
+
+    fun isRemember() = pref.getBoolean(KEY_IS_REMEMBER, false)
 
 
 }

@@ -25,11 +25,14 @@ class LogInScreenViewModel @Inject constructor(
     private lateinit var viewModelScope: CoroutineScope
 
     // Using env vars for debug purpose only.
-    private val _username = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_USERNAME") ?: "")
+    private val _username = MutableStateFlow("")
     val username: StateFlow<String> = _username
 
-    private val _password = MutableStateFlow(System.getenv("PLAY_API_GOOGLE_PASSWORD") ?: "")
+    private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password
+
+    private val _isRemember = MutableStateFlow(false)
+    val isRemember: StateFlow<Boolean> = _isRemember
 
     private val _isUsernameError = MutableStateFlow(false)
     val isUsernameError: StateFlow<Boolean> = _isUsernameError
@@ -52,6 +55,18 @@ class LogInScreenViewModel @Inject constructor(
         this.viewModelScope = scope
         this.onLoggedIn = onLoggedIn
         this.shouldGoToPlayStore = shouldGoToPlayStore
+
+        viewModelScope.launch {
+            val isRemember = authRepo.isRemember()
+            if (isRemember) {
+                // load account and set username and password field
+                authRepo.getAccount()?.let { account ->
+                    _username.value = account.username
+                    _password.value = account.password
+                }
+            }
+            _isRemember.value = isRemember
+        }
     }
 
     fun onUsernameChanged(newUsername: String) {
@@ -82,7 +97,7 @@ class LogInScreenViewModel @Inject constructor(
             authRepo.logIn(username, password)
                 .onEach {
                     if (it is Resource.Success) {
-                        authRepo.storeAccount(it.data)
+                        authRepo.storeAccount(it.data, isRemember.value)
                         onLoggedIn(it.data)
                     }
                 }.collect { logInResponse ->
@@ -96,6 +111,10 @@ class LogInScreenViewModel @Inject constructor(
 
     fun onCreateAccountClicked() {
         Desktop.getDesktop().browse(URI(URL_GOOGLE_CREATE_ACCOUNT))
+    }
+
+    fun onRememberChanged(isRemember: Boolean) {
+        _isRemember.value = isRemember
     }
 
     fun onLoggedIn(account: Account) {

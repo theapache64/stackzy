@@ -63,7 +63,7 @@ class NavHostComponent(
      * Router configuration
      */
     private val router = router<Config, Component>(
-        initialConfiguration = Config.Splash,
+        initialConfiguration = Config.LogIn(true),
         childFactory = ::createScreenComponent
     )
 
