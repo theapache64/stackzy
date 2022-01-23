@@ -31,7 +31,12 @@ class ApkAnalyzerRepoTest {
     fun `Analysis Report - Native - Cached`() = runBlockingUnitTest {
         librariesRepo.loadLibs { libs ->
             getCachedDecompiledApk(NATIVE_KOTLIN_APK_FILE_NAME) { nativeApkFile, decompiledDir ->
-                val report = apkAnalyzerRepo.analyze(NATIVE_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
+                val report = apkAnalyzerRepo.analyze(
+                    packageName = NATIVE_KOTLIN_PACKAGE_NAME,
+                    apkFile = nativeApkFile,
+                    decompiledDir = decompiledDir,
+                    allLibraries = libs
+                )
                 report.appName.should.equal(NATIVE_KOTLIN_APP_NAME)
                 report.packageName.should.equal("com.theapache64.topcorn")
                 report.platform.should.instanceof(Platform.NativeKotlin::class.java)
@@ -209,7 +214,7 @@ class ApkAnalyzerRepoTest {
     fun `Get libraries - native kotlin`() = runBlockingUnitTest {
         librariesRepo.loadLibs { libs ->
             getCachedDecompiledApk(NATIVE_KOTLIN_APK_FILE_NAME) { _, decompiledDir ->
-                val libResult = apkAnalyzerRepo.getLibResult(Platform.NativeKotlin(), decompiledDir, libs)
+                val libResult = apkAnalyzerRepo.getLibResult(NATIVE_KOTLIN_PACKAGE_NAME,Platform.NativeKotlin(), decompiledDir, libs)
                 libResult?.appLibs?.size.should.above(0)
             }
         }
@@ -220,7 +225,23 @@ class ApkAnalyzerRepoTest {
         librariesRepo.loadLibs { libs ->
             getCachedDecompiledApk(NATIVE_KOTLIN_APK_FILE_NAME) { _, decompiledDir ->
                 val libResult = apkAnalyzerRepo.getLibResult(
+                    NATIVE_KOTLIN_PACKAGE_NAME,
                     Platform.NativeKotlin(),
+                    decompiledDir,
+                    libs
+                )
+                libResult?.appLibs?.size.should.above(0)
+            }
+        }
+    }
+
+    @Test
+    fun `Get categorized libraries - twitter - native kotlin`() = runBlockingUnitTest {
+        // Analysis time : 1 mins 25 seconds - VERY BAD!
+        librariesRepo.loadLibs { libs ->
+            getCachedDecompiledApk("com.twitter.android_9.26.0.apk") { _, decompiledDir ->
+                val libResult = apkAnalyzerRepo.getLibResult(
+                    "com.twitter.android",Platform.NativeKotlin(),
                     decompiledDir,
                     libs
                 )

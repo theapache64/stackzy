@@ -17,11 +17,8 @@ import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 import com.toxicbakery.logging.Arbor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.awt.Desktop
 import java.io.File
 import java.net.HttpURLConnection
@@ -80,7 +77,7 @@ class AppDetailViewModel @Inject constructor(
         androidApp: AndroidAppWrapper,
     ) {
         this.viewModelScope = scope
-        this.config = configRepo.getLocalConfig()!! // shouldn't be null
+        this.config = configRepo.getLocalConfig() ?: error("Local config is null")
         this.apkSource = apkSource
         this.androidAppWrapper = androidApp
     }
@@ -371,7 +368,8 @@ class AppDetailViewModel @Inject constructor(
         this.apkFile = newApkFile
     }
 
-    private suspend fun onReportReady(
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun onReportReady(
         report: AnalysisReport,
         prevResult: Result?
     ) {
@@ -382,7 +380,12 @@ class AppDetailViewModel @Inject constructor(
             }
         )
         _loadingMessage.value = null
-        trackUntrackedLibs(report)
+
+        if(config.isLibsTrackingEnabled) {
+            GlobalScope.launch {
+                trackUntrackedLibs(report)
+            }
+        }
     }
 
 
@@ -407,12 +410,11 @@ class AppDetailViewModel @Inject constructor(
 
                             val chunkedLibs = newUntrackedLibs.chunked(20)
                             for (libs in chunkedLibs) {
-                                untrackedLibsRepo.add(UntrackedLibrary(libs.joinToString(separator = ",")))
+                                untrackedLibsRepo.add(UntrackedLibrary(libs.joinToString(separator = ", ")))
                                     .collect {
                                         when (it) {
                                             is Resource.Loading -> {
-                                                /*_loadingMessage.value =
-                                                    "Adding untracked libs"*/
+                                                Arbor.d("Untracked libs syncing started...")
                                             }
                                             is Resource.Success -> {
                                                 Arbor.d("Done!!")

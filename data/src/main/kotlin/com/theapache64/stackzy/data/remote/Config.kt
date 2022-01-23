@@ -15,4 +15,6 @@ data class Config(
     val isBrowseByLibEnabled: Boolean,
     @Json(name = "is_play_store_enabled")
     val isPlayStoreEnabled: Boolean,
+    @Json(name = "is_libs_tracking_enabled")
+    val isLibsTrackingEnabled: Boolean,
 )

@@ -30,7 +30,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val FLUTTER_FILE_PATH_REGEX by lazy { "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex() }
         private val APP_LABEL_MANIFEST_REGEX by lazy { "<application.+?label=\"(.+?)\"".toRegex() }
         private val USER_PERMISSION_REGEX by lazy { "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex() }
-        private val PACKAGE_FROM_DIR_REGEX by lazy { ".+\\/smali.*?\\/(.+)\\/".toRegex() }
+        private val PACKAGE_FROM_DIR_REGEX by lazy { ".+\\/smali.*?\\/(.+)".toRegex() }
     }
 
     /**
@@ -43,7 +43,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         allLibraries: List<Library>
     ): AnalysisReport = withContext(Dispatchers.IO) {
         val platform = getPlatform(decompiledDir)
-        val libResult = getLibResult(platform, decompiledDir, allLibraries)
+        val libResult = getLibResult(packageName, platform, decompiledDir, allLibraries)
         AnalysisReport(
             appName = getAppName(decompiledDir) ?: packageName,
             packageName = packageName,
@@ -111,17 +111,18 @@ class ApkAnalyzerRepo @Inject constructor() {
      * Returns (untrackedLibs, usedLibs) in a Pair
      */
     fun getLibResult(
+        packageName: String,
         platform: Platform,
         decompiledDir: File,
-        allRemoteLibraries: List<Library>
+        allRemoteLibraries: List<Library>,
     ): LibResult? {
         return when (platform) {
             is Platform.NativeJava,
             is Platform.NativeKotlin -> {
 
                 // Get all used libraries
-                val libResult = getAppLibraries(decompiledDir, allRemoteLibraries)
-                libResult.appLibs = mergeDep(libResult.appLibs)
+                val libResult = getAppLibraries(packageName, decompiledDir, allRemoteLibraries)
+                libResult.appLibs = mergeDep(libResult.appLibs.sortedBy { it.name }.toSet()) // TODO: sort is quick fix here. should find better solution.
 
                 libResult
             }
@@ -141,9 +142,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         val appLibraries = appLibSet.toMutableSet()
         val mergePairs = appLibSet
             .filter { it.replacementPackage != null }
-            .map {
-                Pair(it.replacementPackage, it.packageName)
-            }
+            .map { Pair(it.replacementPackage, it.packageName) }
         for ((libToRemove, replacement) in mergePairs) {
             val hasDepLib = appLibraries.find { it.packageName.lowercase(Locale.getDefault()) == replacement } != null
             if (hasDepLib) {
@@ -305,14 +304,39 @@ class ApkAnalyzerRepo @Inject constructor() {
      * To get libraries used in the given decompiledDir (native app)
      */
     private fun getAppLibraries(
+        packageName: String,
         decompiledDir: File,
         allLibraries: List<Library>
     ): LibResult {
         val appLibs = mutableSetOf<Library>()
         val untrackedLibs = mutableSetOf<String>()
+        // loop through all smali_* directories until there's a file
+        val endDirs = decompiledDir.listFiles()
+            ?.filter { it.isDirectory && it.name.startsWith("smali") } // all smali dirs
+            ?.flatMap { smaliDir ->
+                smaliDir.walk().filter {
+                    it.isDirectory &&
+                            !it.absolutePath.contains(packageName.replace(".", File.separator))
+                            && it.listFiles()?.find { x -> x.isDirectory } == null
+                }
+            }
+
+        if (endDirs != null) {
+            for (dir in endDirs) {
+                val dirPackageName = parsePackageFromPath(dir)
+                if (dirPackageName != null) {
+                    val appLib = allLibraries.find { dirPackageName.contains(it.packageName) }
+                    if (appLib != null) {
+                        appLibs.add(appLib)
+                    }else{
+                        untrackedLibs.add(dirPackageName)
+                    }
+                }
+            }
+        }
 
         // FIXME: Improve performace
-        val nonLibSmaliFiles = decompiledDir
+        /*val nonLibSmaliFiles = decompiledDir
             .walk()
             .toList() // all files
             .filter { file ->
@@ -340,7 +364,7 @@ class ApkAnalyzerRepo @Inject constructor() {
                     appLibs.add(library)
                 }
             }
-        }
+        }*/
 
         return LibResult(appLibs, untrackedLibs)
     }
