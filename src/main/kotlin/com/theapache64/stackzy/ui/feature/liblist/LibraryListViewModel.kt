@@ -10,6 +10,7 @@ import com.theapache64.stackzy.ui.util.getSingularOrPlural
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject

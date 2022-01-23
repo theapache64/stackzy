@@ -8,6 +8,7 @@ import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import org.junit.Rule
 import org.junit.Test
+import kotlinx.coroutines.flow.collect
 
 
 class ConfigRepoTest {

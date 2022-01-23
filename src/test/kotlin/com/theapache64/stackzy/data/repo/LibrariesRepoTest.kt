@@ -7,6 +7,7 @@ import com.theapache64.stackzy.test.runBlockingUnitTest
 import it.cosenonjaviste.daggermock.InjectFromComponent
 import org.junit.Rule
 import org.junit.Test
+import kotlinx.coroutines.flow.collect
 
 internal class LibrariesRepoTest {
 

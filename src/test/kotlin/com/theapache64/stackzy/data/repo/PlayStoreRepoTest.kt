@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import kotlinx.coroutines.flow.collect
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlayStoreRepoTest {
