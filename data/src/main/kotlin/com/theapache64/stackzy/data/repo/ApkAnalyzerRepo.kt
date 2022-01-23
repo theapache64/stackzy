@@ -313,11 +313,16 @@ class ApkAnalyzerRepo @Inject constructor() {
         val nonLibSmaliFiles = decompiledDir
             .walk()
             .toList() // all files
-            .filter { it.extension == "smali" } // all smali files
-            .filter {
+            .filter { file ->
                 var isLibFile = false
                 for (library in allLibraries) {
-                    if (it.absolutePath.contains(library.packageName.replace(".", File.separator))) {
+                    if (file.extension == "smali" && file.absolutePath.contains(
+                            library.packageName.replace(
+                                ".",
+                                File.separator
+                            )
+                        )
+                    ) {
                         isLibFile = true
                         break
                     }
