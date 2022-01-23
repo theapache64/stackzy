@@ -57,11 +57,11 @@ interface ApiInterface {
     @GET(NetworkModule.TABLE_RESULTS)
     fun getPrevResult(
         @Query("package_name") packageName: String,
-        @Query("except_v_code") exceptVersionCode : Int
+        @Query("except_v_code") exceptVersionCode: Int
     ): Flow<Resource<Result>>
 
     @Read("SELECT *")
     @GET(NetworkModule.TABLE_FUN_FACTS)
-    fun getFunFacts() : Flow<Resource<List<FunFact>>>
+    fun getFunFacts(): Flow<Resource<List<FunFact>>>
 
 }

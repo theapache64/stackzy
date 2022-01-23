@@ -381,7 +381,7 @@ class AppDetailViewModel @Inject constructor(
         )
         _loadingMessage.value = null
 
-        if(config.isLibsTrackingEnabled) {
+        if (config.isLibsTrackingEnabled) {
             GlobalScope.launch {
                 trackUntrackedLibs(report)
             }

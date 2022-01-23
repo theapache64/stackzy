@@ -1,11 +1,11 @@
 package com.theapache64.stackzy.di.module
 
+import com.theapache64.stackzy.data.util.ResDir
 import com.theapache64.stackzy.di.ApkToolJarFile
 import dagger.Module
 import dagger.Provides
 import java.io.File
 import java.io.IOException
-import com.theapache64.stackzy.data.util.ResDir
 
 @Module
 class ApkToolModule {

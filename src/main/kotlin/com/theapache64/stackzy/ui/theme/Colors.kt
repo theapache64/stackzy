@@ -6,6 +6,7 @@ object R {
     object drawables {
         const val appIcon = "drawables/launcher_icons/linux.png"
     }
+
     @Suppress("ClassName")
     object color {
         val TelegramBlue = Color(0xff30A3E6)

@@ -122,7 +122,8 @@ class ApkAnalyzerRepo @Inject constructor() {
 
                 // Get all used libraries
                 val libResult = getAppLibraries(packageName, decompiledDir, allRemoteLibraries)
-                libResult.appLibs = mergeDep(libResult.appLibs.sortedBy { it.name }.toSet()) // TODO: sort is quick fix here. should find better solution.
+                libResult.appLibs = mergeDep(libResult.appLibs.sortedBy { it.name }
+                    .toSet()) // TODO: sort is quick fix here. should find better solution.
 
                 libResult
             }
@@ -328,7 +329,7 @@ class ApkAnalyzerRepo @Inject constructor() {
                     val appLib = allLibraries.find { dirPackageName.contains(it.packageName) }
                     if (appLib != null) {
                         appLibs.add(appLib)
-                    }else{
+                    } else {
                         untrackedLibs.add(dirPackageName)
                     }
                 }

@@ -101,7 +101,7 @@ private fun Form(
     onUsernameChanged: (username: String) -> Unit,
     onPasswordChanged: (password: String) -> Unit,
     onRememberChanged: (isRemember: Boolean) -> Unit,
-    onRememberMeClicked :()->Unit,
+    onRememberMeClicked: () -> Unit,
     onLogInClicked: () -> Unit,
     onCreateAccountClicked: () -> Unit
 ) {

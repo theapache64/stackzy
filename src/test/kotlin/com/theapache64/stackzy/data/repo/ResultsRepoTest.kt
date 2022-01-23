@@ -11,7 +11,6 @@ import com.theapache64.stackzy.test.runBlockingUnitTest
 import com.theapache64.stackzy.util.loadLibs
 import com.toxicbakery.logging.Arbor
 import it.cosenonjaviste.daggermock.InjectFromComponent
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
