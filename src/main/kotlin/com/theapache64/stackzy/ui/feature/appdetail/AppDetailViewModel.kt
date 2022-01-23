@@ -31,7 +31,6 @@ import javax.inject.Inject
 import kotlin.io.path.Path
 import kotlin.io.path.div
 import kotlin.io.path.exists
-import kotlin.math.roundToInt
 
 
 class AppDetailViewModel @Inject constructor(
@@ -44,7 +43,7 @@ class AppDetailViewModel @Inject constructor(
     private val resultsRepo: ResultsRepo,
     private val configRepo: ConfigRepo,
     private val jadxRepo: JadxRepo,
-    private val funFactsRepo :FunFactsRepo,
+    private val funFactsRepo: FunFactsRepo,
 ) {
 
     companion object {
@@ -376,7 +375,6 @@ class AppDetailViewModel @Inject constructor(
         report: AnalysisReport,
         prevResult: Result?
     ) {
-        trackUntrackedLibs(report)
         _analysisReport.value = AnalysisReportWrapper(
             report,
             report.libraries.map { library ->
@@ -384,50 +382,40 @@ class AppDetailViewModel @Inject constructor(
             }
         )
         _loadingMessage.value = null
+        trackUntrackedLibs(report)
     }
 
-    /**
-     * TODO: ONLY FOR DEBUG PURPOSE
-     */
+
     private suspend fun trackUntrackedLibs(report: AnalysisReport) {
-
-        @Suppress("ConstantConditionIf")
-        if (true) {
-            return
-        }
-
         if (report.untrackedLibraries.isNotEmpty()) {
             // Sync untracked libs
             untrackedLibsRepo.getUntrackedLibs()
                 .collect { remoteUntrackedLibsResp ->
                     when (remoteUntrackedLibsResp) {
                         is Resource.Loading -> {
-                            _loadingMessage.value = "Loading untracked libs..."
+
                         }
                         is Resource.Success -> {
-
                             // remove already listed libs and app packages
-                            val newUntrackedLibs =
-                                report.untrackedLibraries.filter { localUntrackedLib ->
-                                    remoteUntrackedLibsResp.data.find { it.packageNames == localUntrackedLib } == null &&
-                                            localUntrackedLib.startsWith(report.packageName).not()
-                                }.map { UntrackedLibrary(it) }
+                            val newUntrackedLibs = report.untrackedLibraries
+                                .filter { localUntrackedLib ->
+                                    remoteUntrackedLibsResp.data.find { remotePackageNamesNode ->
+                                        val packageNames = remotePackageNamesNode.packageNames.split(",")
+                                        packageNames.contains(localUntrackedLib)
+                                    } == null
+                                }
 
-
-                            val totalLibsToSync = newUntrackedLibs.size
-                            var syncedLibs = 0
-                            for (ut in newUntrackedLibs) {
-                                untrackedLibsRepo.add(ut)
+                            val chunkedLibs = newUntrackedLibs.chunked(20)
+                            for (libs in chunkedLibs) {
+                                untrackedLibsRepo.add(UntrackedLibrary(libs.joinToString(separator = ",")))
                                     .collect {
                                         when (it) {
                                             is Resource.Loading -> {
-                                                val percentage = (syncedLibs.toFloat() / totalLibsToSync) * 100
-                                                _loadingMessage.value =
-                                                    "Adding ${ut.packageNames} to untracked libs... ${percentage.roundToInt()}%"
+                                                /*_loadingMessage.value =
+                                                    "Adding untracked libs"*/
                                             }
                                             is Resource.Success -> {
-                                                Arbor.d("Done!! -> ${ut.packageNames}")
-                                                syncedLibs++
+                                                Arbor.d("Done!!")
                                             }
 
                                             is Resource.Error -> {
@@ -438,7 +426,7 @@ class AppDetailViewModel @Inject constructor(
                             }
                         }
                         is Resource.Error -> {
-
+                            Arbor.e("Failed to get remote untracked libs")
                         }
                     }
                 }

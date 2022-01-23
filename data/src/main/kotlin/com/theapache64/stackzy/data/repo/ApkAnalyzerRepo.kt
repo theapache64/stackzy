@@ -26,10 +26,11 @@ import kotlin.io.path.readText
 class ApkAnalyzerRepo @Inject constructor() {
 
     companion object {
-        private val PHONEGAP_FILE_PATH_REGEX = "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex()
-        private val FLUTTER_FILE_PATH_REGEX = "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex()
-        private val APP_LABEL_MANIFEST_REGEX = "<application.+?label=\"(.+?)\"".toRegex()
-        private val USER_PERMISSION_REGEX = "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex()
+        private val PHONEGAP_FILE_PATH_REGEX by lazy { "temp/smali(?:_classes\\d+)?/com(?:/adobe)?/phonegap".toRegex() }
+        private val FLUTTER_FILE_PATH_REGEX by lazy { "smali/io/flutter/embedding/engine/FlutterJNI.smali".toRegex() }
+        private val APP_LABEL_MANIFEST_REGEX by lazy { "<application.+?label=\"(.+?)\"".toRegex() }
+        private val USER_PERMISSION_REGEX by lazy { "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex() }
+        private val PACKAGE_FROM_DIR_REGEX by lazy { ".+\\/smali.*?\\/(.+)\\/".toRegex() }
     }
 
     /**
@@ -303,26 +304,22 @@ class ApkAnalyzerRepo @Inject constructor() {
     /**
      * To get libraries used in the given decompiledDir (native app)
      */
-    fun getAppLibraries(
+    private fun getAppLibraries(
         decompiledDir: File,
         allLibraries: List<Library>
     ): LibResult {
         val appLibs = mutableSetOf<Library>()
-        val untrackedLibs = mutableSetOf<String>() // TODO:
+        val untrackedLibs = mutableSetOf<String>()
 
+        // FIXME: Improve performace
         val nonLibSmaliFiles = decompiledDir
             .walk()
             .toList() // all files
             .filter { file ->
+                if (file.extension != "smali") return@filter false
                 var isLibFile = false
                 for (library in allLibraries) {
-                    if (file.extension == "smali" && file.absolutePath.contains(
-                            library.packageName.replace(
-                                ".",
-                                File.separator
-                            )
-                        )
-                    ) {
+                    if (file.absolutePath.contains(library.packageName.replace(".", File.separator))) {
                         isLibFile = true
                         break
                     }
@@ -331,6 +328,11 @@ class ApkAnalyzerRepo @Inject constructor() {
             } // All non lib smali files
 
         for (smaliFile in nonLibSmaliFiles) {
+            val libPackageName = parsePackageFromPath(smaliFile)
+            if (libPackageName != null) {
+                untrackedLibs.add(libPackageName)
+            }
+
             val fileContent = smaliFile.readText()
             for (library in allLibraries) {
                 if (fileContent.contains(library.packageName.replace(".", "/"))) {
@@ -338,14 +340,14 @@ class ApkAnalyzerRepo @Inject constructor() {
                     appLibs.add(library)
                 }
             }
-
-            if (allLibraries.size == appLibs.size) {
-                // All libraries detected, so no need to analyze further
-                break
-            }
         }
 
         return LibResult(appLibs, untrackedLibs)
+    }
+
+    private fun parsePackageFromPath(smaliFile: File): String? {
+        val match = PACKAGE_FROM_DIR_REGEX.find(smaliFile.absolutePath)
+        return match?.groupValues?.get(1)?.replace("/", ".")
     }
 }
 
