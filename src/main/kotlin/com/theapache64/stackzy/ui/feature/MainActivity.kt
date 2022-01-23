@@ -4,7 +4,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.theapache64.cyclone.core.Activity
 import com.theapache64.cyclone.core.Intent
 import com.theapache64.stackzy.App
@@ -37,6 +39,10 @@ class MainActivity : Activity() {
         } catch (e: UnsupportedOperationException) {
             e.printStackTrace()
         }
+
+        val lifecycle = LifecycleRegistry()
+        val root = NavHostComponent(DefaultComponentContext(lifecycle))
+
         application {
             setContent(
                 onCloseRequest = ::exitApplication,
@@ -49,8 +55,7 @@ class MainActivity : Activity() {
             ) {
                 StackzyTheme {
                     // Igniting navigation
-                    rememberRootComponent(factory = ::NavHostComponent)
-                        .render()
+                    root.render()
                 }
             }
         }

@@ -40,7 +40,7 @@ dependencies {
     kaptTest("com.google.dagger:dagger-compiler:$daggerVersion")
 
     // Decompose : Decompose
-    val decomposeVersion = "0.3.1" // FIXME : bump to latest
+    val decomposeVersion = "0.5.0" // FIXME : bump to latest
     implementation("com.arkivanov.decompose:decompose-jvm:$decomposeVersion")
     implementation("com.arkivanov.decompose:extensions-compose-jetbrains-jvm:$decomposeVersion")
 
