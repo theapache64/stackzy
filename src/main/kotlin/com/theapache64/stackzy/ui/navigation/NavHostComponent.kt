@@ -257,6 +257,7 @@ class NavHostComponent(
      * Invoked when an update is necessary
      */
     private fun onUpdateNeeded() {
+        println("Update needed")
         router.push(Config.Update)
     }
 

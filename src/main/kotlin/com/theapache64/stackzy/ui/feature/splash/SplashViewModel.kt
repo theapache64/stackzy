@@ -7,9 +7,11 @@ import com.theapache64.stackzy.data.repo.ConfigRepo
 import com.theapache64.stackzy.data.repo.FunFactsRepo
 import com.theapache64.stackzy.data.repo.LibrariesRepo
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
+import com.theapache64.stackzy.util.flow.mutableEventFlow
 import com.toxicbakery.logging.Arbor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
@@ -150,13 +152,13 @@ class SplashViewModel @Inject constructor(
     }
 
 
-    private val _shouldUpdate = MutableStateFlow(false)
-    val shouldUpdate: StateFlow<Boolean> = _shouldUpdate
+    private val _shouldUpdate = mutableEventFlow<Boolean>()
+    val shouldUpdate: SharedFlow<Boolean> = _shouldUpdate
 
     private fun verifyConfig(config: Config): Boolean {
         val isUpdateNeeded = App.appArgs.versionCode < config.mandatoryVersionCode // currentVersion < mandatoryVersion
         return if (isUpdateNeeded) {
-            _shouldUpdate.value = true
+            _shouldUpdate.tryEmit(true)
             false
         } else {
             true

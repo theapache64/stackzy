@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,11 +30,12 @@ fun SplashScreen(
     val isSyncFinished by splashViewModel.isSyncFinished.collectAsState()
     val syncFailedReason by splashViewModel.syncFailedMsg.collectAsState()
     val syncMessage by splashViewModel.syncMsg.collectAsState()
-    val shouldUpdate by splashViewModel.shouldUpdate.collectAsState()
+    val shouldUpdate by splashViewModel.shouldUpdate.collectAsState(initial = false)
 
-    if (shouldUpdate) {
-        onUpdateNeeded()
-        return
+    LaunchedEffect(shouldUpdate) {
+        if (shouldUpdate) {
+            onUpdateNeeded()
+        }
     }
 
     if (isSyncFinished) {
