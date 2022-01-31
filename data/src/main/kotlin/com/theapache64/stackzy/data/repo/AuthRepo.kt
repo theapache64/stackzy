@@ -22,6 +22,7 @@ class AuthRepo @Inject constructor(
     companion object {
         private const val KEY_ENC_ACCOUNT = "enc_account"
         private const val KEY_IS_REMEMBER = "is_remember"
+        private const val KEY_IS_LOGGED_IN = "is_logged_in"
     }
 
     private val accountAdapter by lazy {
@@ -73,7 +74,7 @@ class AuthRepo @Inject constructor(
     /**
      * To logout and remove account details from preference
      */
-    fun logout() {
+    fun clearAccount() {
         pref.remove(KEY_ENC_ACCOUNT)
     }
 
@@ -85,5 +86,9 @@ class AuthRepo @Inject constructor(
 
     fun isRemember() = pref.getBoolean(KEY_IS_REMEMBER, false)
 
+    fun setLoggedIn(isLoggedIn: Boolean) {
+        pref.putBoolean(KEY_IS_LOGGED_IN, isLoggedIn)
+    }
 
+    fun isLoggedIn() = pref.getBoolean(KEY_IS_LOGGED_IN, false)
 }

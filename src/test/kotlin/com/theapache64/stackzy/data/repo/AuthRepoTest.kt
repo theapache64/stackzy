@@ -69,7 +69,7 @@ class AuthRepoTest {
         authRepo.storeAccount(dummyAccount, true)
         authRepo.getAccount().should.equal(dummyAccount)
 
-        authRepo.logout() // test finished, so delete account
+        authRepo.clearAccount() // test finished, so delete account
         authRepo.getAccount().should.`null`
     }
 }

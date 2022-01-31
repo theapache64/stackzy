@@ -98,6 +98,7 @@ class LogInScreenViewModel @Inject constructor(
                 .onEach {
                     if (it is Resource.Success) {
                         authRepo.storeAccount(it.data, isRemember.value)
+                        authRepo.setLoggedIn(true)
                         onLoggedIn(it.data)
                     }
                 }.collect { logInResponse ->

@@ -8,10 +8,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+
 class PathwayViewModel @Inject constructor(
     private val authRepo: AuthRepo,
-    private val configRepo: ConfigRepo
+    configRepo: ConfigRepo
 ) {
+
+    private val config = configRepo.getLocalConfig()
 
     companion object {
         private const val INFO_MADE_WITH_LOVE = "Made with ❤️"
@@ -23,10 +26,10 @@ class PathwayViewModel @Inject constructor(
     private val _focusedCardInfo = MutableStateFlow(INFO_MADE_WITH_LOVE)
     val focusedCardInfo = _focusedCardInfo.asStateFlow()
 
-    private val _isBrowseByLibEnabled = MutableStateFlow(configRepo.getLocalConfig()?.isBrowseByLibEnabled ?: false)
+    private val _isBrowseByLibEnabled = MutableStateFlow(config?.isBrowseByLibEnabled ?: false)
     val isBrowseByLibEnabled = _isBrowseByLibEnabled.asStateFlow()
 
-    private val _isPlayStoreEnabled = MutableStateFlow(configRepo.getLocalConfig()?.isPlayStoreEnabled ?: false)
+    private val _isPlayStoreEnabled = MutableStateFlow(config?.isPlayStoreEnabled ?: false)
     val isPlayStoreEnabled = _isPlayStoreEnabled.asStateFlow()
 
     private lateinit var onPlayStoreSelected: (Account) -> Unit
@@ -56,7 +59,11 @@ class PathwayViewModel @Inject constructor(
     }
 
     fun onLogoutClicked() {
-        authRepo.logout()
+        authRepo.setLoggedIn(false)
+        // If 'RememberMe` is disabled, clear account info as well
+        if (!authRepo.isRemember()) {
+            authRepo.clearAccount()
+        }
         _loggedInAccount.value = null
     }
 
