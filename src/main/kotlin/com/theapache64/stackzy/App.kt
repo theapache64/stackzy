@@ -39,7 +39,7 @@ fun main() {
     // Parsing application arguments
     val appArgs = AppArgs(
         appName = "Stackzy",
-        version = "v1.2.3",
+        version = "v1.2.4",
         versionCode = 20220201
     )
 
