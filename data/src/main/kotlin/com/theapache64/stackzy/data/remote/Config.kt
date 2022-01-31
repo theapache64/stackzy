@@ -17,4 +17,8 @@ data class Config(
     val isPlayStoreEnabled: Boolean,
     @Json(name = "is_libs_tracking_enabled")
     val isLibsTrackingEnabled: Boolean,
+    @Json(name = "is_down")
+    val isDown: Boolean,
+    @Json(name = "down_reason")
+    val downReason: String,
 )

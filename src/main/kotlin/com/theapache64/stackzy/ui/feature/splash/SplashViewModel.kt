@@ -13,8 +13,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
@@ -156,13 +156,20 @@ class SplashViewModel @Inject constructor(
     val shouldUpdate: SharedFlow<Boolean> = _shouldUpdate
 
     private fun verifyConfig(config: Config): Boolean {
-        val isUpdateNeeded = App.appArgs.versionCode < config.mandatoryVersionCode // currentVersion < mandatoryVersion
-        return if (isUpdateNeeded) {
-            _shouldUpdate.tryEmit(true)
-            false
-        } else {
-            true
+        // Checking if app is down or not
+        if (config.isDown) {
+            _syncFailedMsg.tryEmit(config.downReason)
+            return false
         }
+
+        // Checking if update needed
+        val isUpdateNeeded = App.appArgs.versionCode < config.mandatoryVersionCode // currentVersion < mandatoryVersion
+        if (isUpdateNeeded) {
+            _shouldUpdate.tryEmit(true)
+            return false
+        }
+
+        return true
     }
 
     private suspend fun checkAndFixAdb(
