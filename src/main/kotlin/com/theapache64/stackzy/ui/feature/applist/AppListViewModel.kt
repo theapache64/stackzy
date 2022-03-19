@@ -24,17 +24,8 @@ class AppListViewModel @Inject constructor(
 ) {
 
     companion object {
-        const val TAB_NO_TAB = -1
-        private const val TAB_THIRD_PARTY_APPS_ID = 0
-        private const val TAB_SYSTEM_APPS_ID = 1
 
-        val tabsMap = mapOf(
-            TAB_THIRD_PARTY_APPS_ID to "3rd Party Apps",
-            TAB_SYSTEM_APPS_ID to "System Apps"
-        )
-
-        private const val MSG_LOADING_TRENDING_APPS = "Loading trending apps..."
-
+        private const val MSG_LOADING_APPS = "Loading apps..."
 
         private val playStoreUrlRegEx by lazy {
             "^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?id=(?<packageName>[\\w\\.]+)\$".toRegex()
@@ -66,9 +57,6 @@ class AppListViewModel @Inject constructor(
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword: StateFlow<String> = _searchKeyword
 
-    private val _selectedTabIndex = MutableStateFlow(TAB_NO_TAB)
-    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
-
     /**
      * Filtered apps
      */
@@ -81,12 +69,16 @@ class AppListViewModel @Inject constructor(
     ) {
         this.viewModelScope = scope
         this.apkSource = apkSource
+
+        if (apps.value == null) {
+            loadApps()
+        }
     }
 
     fun loadApps() {
 
         // Updating state
-        _apps.value = Resource.Loading(MSG_LOADING_TRENDING_APPS)
+        _apps.value = Resource.Loading(MSG_LOADING_APPS)
 
         when (apkSource) {
             is ApkSource.Adb -> {
@@ -94,12 +86,11 @@ class AppListViewModel @Inject constructor(
                 this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value
                 viewModelScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
-                    val tab = if (selectedTabIndex.value == TAB_NO_TAB) {
-                        TAB_THIRD_PARTY_APPS_ID // first time
-                    } else {
-                        _selectedTabIndex.value // going back from detail page
-                    }
-                    onTabClicked(tab)
+
+                    // utilising existing filter logic : since we've already filter logic inside search,
+                    // passing empty string would filter the tab accordingly and passing search keyword would
+                    // filter the apps accordingly.
+                    onSearchKeywordChanged(searchKeyword.value)
                 }
             }
             is ApkSource.PlayStore -> {
@@ -132,12 +123,7 @@ class AppListViewModel @Inject constructor(
                         ?.filter {
                             // search with keyword
                             it.appPackage.name.lowercase(Locale.getDefault()).contains(newKeyword, ignoreCase = true)
-                        }
-                        ?.filter {
-                            // filter for active tab
-                            it.isSystemApp == (selectedTabIndex.value == TAB_SYSTEM_APPS_ID)
-                        }
-                        ?: listOf()
+                        } ?: listOf()
 
                     _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
                 }
@@ -173,7 +159,7 @@ class AppListViewModel @Inject constructor(
                                 }
                             }
                             val loadingMsg = if (keyword.isBlank()) {
-                                MSG_LOADING_TRENDING_APPS
+                                MSG_LOADING_APPS
                             } else {
                                 "Searching for '$keyword'"
                             }
@@ -189,8 +175,6 @@ class AppListViewModel @Inject constructor(
                 }
             }
         }
-
-
     }
 
 
@@ -203,15 +187,4 @@ class AppListViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Invoked when any of the tabs clicked
-     */
-    fun onTabClicked(tabIndex: Int) {
-        _selectedTabIndex.value = tabIndex
-
-        // utilising existing filter logic : since we've already filter logic inside search,
-        // passing empty string would filter the tab accordingly and passing search keyword would
-        // filter the apps accordingly.
-        onSearchKeywordChanged(searchKeyword.value)
-    }
 }

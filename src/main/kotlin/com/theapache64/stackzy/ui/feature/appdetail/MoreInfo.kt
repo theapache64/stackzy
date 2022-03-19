@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -86,80 +87,82 @@ private fun BuildGradleGroovy(
             modifier = Modifier.height(codeViewerTitleContentSpacerHeight)
         )
 
-        Text(
-            modifier = Modifier
-                .background(MaterialTheme.colors.secondary, RoundedCornerShape(5.dp))
-                .padding(codeViewerPadding),
-            text = with(AnnotatedString.Builder("")) {
+        SelectionContainer {
+            Text(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.secondary, RoundedCornerShape(5.dp))
+                    .padding(codeViewerPadding),
+                text = with(AnnotatedString.Builder("")) {
 
-                // line #1
-                pushStyle(SpanStyle(R.color.JordyBlue))
-                append("android")
-                pushStyle(SpanStyle(Color.White))
-                append(" {\n")
-
-                // line #2
-                pushStyle(SpanStyle(R.color.JordyBlue))
-                append("  defaultConfig")
-                pushStyle(SpanStyle(Color.White))
-                append(" {\n")
-
-                // line #3
-                pushStyle(SpanStyle(R.color.JordyBlue))
-                append("    applicationId")
-                pushStyle(SpanStyle(R.color.YellowGreen))
-                append(" \"${packageName}\"")
-
-                gradleInfo.minSdk?.let { (minSdkInt, minSdkVersionName) ->
-                    // line #4
+                    // line #1
                     pushStyle(SpanStyle(R.color.JordyBlue))
-                    append("\n    minSdkVersion")
-                    pushStyle(SpanStyle(R.color.WildWatermelon))
-                    append(" $minSdkInt")
+                    append("android")
+                    pushStyle(SpanStyle(Color.White))
+                    append(" {\n")
 
-                    // sdk version as comment
-                    pushStyle(SpanStyle(R.color.BlueBayoux))
-                    append(" // $minSdkVersionName")
-                }
-
-                gradleInfo.targetSdk?.let { (targetSdkInt, targetSdkVersionName) ->
-                    // line #5
+                    // line #2
                     pushStyle(SpanStyle(R.color.JordyBlue))
-                    append("\n    targetSdkVersion")
-                    pushStyle(SpanStyle(R.color.WildWatermelon))
-                    append(" $targetSdkInt")
+                    append("  defaultConfig")
+                    pushStyle(SpanStyle(Color.White))
+                    append(" {\n")
 
-                    // sdk version as comment
-                    pushStyle(SpanStyle(R.color.BlueBayoux))
-                    append(" // $targetSdkVersionName")
-                }
-
-                gradleInfo.versionCode?.let { versionCode ->
-                    // line #6
+                    // line #3
                     pushStyle(SpanStyle(R.color.JordyBlue))
-                    append("\n    versionCode")
-                    pushStyle(SpanStyle(R.color.WildWatermelon))
-                    append(" $versionCode")
-                }
-
-
-                gradleInfo.versionName?.let { versionName ->
-                    // line #6
-                    pushStyle(SpanStyle(R.color.JordyBlue))
-                    append("\n    versionName")
+                    append("    applicationId")
                     pushStyle(SpanStyle(R.color.YellowGreen))
-                    append(" \"$versionName\"")
-                }
+                    append(" \"${packageName}\"")
 
-                pushStyle(SpanStyle(Color.White))
-                append("\n  }\n")
-                append("}")
+                    gradleInfo.minSdk?.let { (minSdkInt, minSdkVersionName) ->
+                        // line #4
+                        pushStyle(SpanStyle(R.color.JordyBlue))
+                        append("\n    minSdkVersion")
+                        pushStyle(SpanStyle(R.color.WildWatermelon))
+                        append(" $minSdkInt")
 
-                toAnnotatedString()
-            },
-            fontFamily = firaCode,
-            fontSize = codeViewerFontSize
-        )
+                        // sdk version as comment
+                        pushStyle(SpanStyle(R.color.BlueBayoux))
+                        append(" // $minSdkVersionName")
+                    }
+
+                    gradleInfo.targetSdk?.let { (targetSdkInt, targetSdkVersionName) ->
+                        // line #5
+                        pushStyle(SpanStyle(R.color.JordyBlue))
+                        append("\n    targetSdkVersion")
+                        pushStyle(SpanStyle(R.color.WildWatermelon))
+                        append(" $targetSdkInt")
+
+                        // sdk version as comment
+                        pushStyle(SpanStyle(R.color.BlueBayoux))
+                        append(" // $targetSdkVersionName")
+                    }
+
+                    gradleInfo.versionCode?.let { versionCode ->
+                        // line #6
+                        pushStyle(SpanStyle(R.color.JordyBlue))
+                        append("\n    versionCode")
+                        pushStyle(SpanStyle(R.color.WildWatermelon))
+                        append(" $versionCode")
+                    }
+
+
+                    gradleInfo.versionName?.let { versionName ->
+                        // line #6
+                        pushStyle(SpanStyle(R.color.JordyBlue))
+                        append("\n    versionName")
+                        pushStyle(SpanStyle(R.color.YellowGreen))
+                        append(" \"$versionName\"")
+                    }
+
+                    pushStyle(SpanStyle(Color.White))
+                    append("\n  }\n")
+                    append("}")
+
+                    toAnnotatedString()
+                },
+                fontFamily = firaCode,
+                fontSize = codeViewerFontSize
+            )
+        }
     }
 }
 
@@ -180,31 +183,34 @@ private fun PermissionsXml(
             modifier = Modifier.height(codeViewerTitleContentSpacerHeight)
         )
 
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colors.secondary, RoundedCornerShape(5.dp))
-                .padding(codeViewerPadding)
-        ) {
 
-            // Permissions
-            permission.forEach { permission ->
-                Text(
-                    text = with(AnnotatedString.Builder("")) {
-                        pushStyle(SpanStyle(color = R.color.WildWatermelon))
-                        append("<uses-permission ")
-                        pushStyle(SpanStyle(color = R.color.Goldenrod))
-                        append("android:name")
-                        pushStyle(SpanStyle(color = Color.White))
-                        append("=")
-                        pushStyle(SpanStyle(color = R.color.YellowGreen))
-                        append("\"$permission\"")
-                        pushStyle(SpanStyle(color = R.color.WildWatermelon))
-                        append("/>")
-                        toAnnotatedString()
-                    },
-                    fontFamily = firaCode,
-                    fontSize = codeViewerFontSize
-                )
+        SelectionContainer {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colors.secondary, RoundedCornerShape(5.dp))
+                    .padding(codeViewerPadding)
+            ) {
+
+                // Permissions
+                permission.forEach { permission ->
+                    Text(
+                        text = with(AnnotatedString.Builder("")) {
+                            pushStyle(SpanStyle(color = R.color.WildWatermelon))
+                            append("<uses-permission ")
+                            pushStyle(SpanStyle(color = R.color.Goldenrod))
+                            append("android:name")
+                            pushStyle(SpanStyle(color = Color.White))
+                            append("=")
+                            pushStyle(SpanStyle(color = R.color.YellowGreen))
+                            append("\"$permission\"")
+                            pushStyle(SpanStyle(color = R.color.WildWatermelon))
+                            append("/>")
+                            toAnnotatedString()
+                        },
+                        fontFamily = firaCode,
+                        fontSize = codeViewerFontSize
+                    )
+                }
             }
         }
     }

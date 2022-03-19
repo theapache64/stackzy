@@ -5,73 +5,72 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.github.theapache64.gpa.model.Account
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.common.Badge
-import com.theapache64.stackzy.ui.common.CustomScaffold
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
+import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
 
 
 @Composable
 fun AppDetailScreen(
     viewModel: AppDetailViewModel,
+    apkSource: ApkSource<AndroidDeviceWrapper, Account>,
     onLibrarySelected: (LibraryWrapper) -> Unit,
-    onBackClicked: () -> Unit
+    modifier: Modifier = Modifier,
 ) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(viewModel, apkSource) {
+        viewModel.init(scope, apkSource)
+    }
+
     val fatalError by viewModel.fatalError.collectAsState()
     val loadingMessage by viewModel.loadingMessage.collectAsState()
     val report by viewModel.analysisReport.collectAsState()
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val funFacts by viewModel.funFacts.collectAsState()
 
-    val title = report?.appName ?: R.string.app_detail_title
+    Column(modifier) {
+        if (loadingMessage == null) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
 
-    CustomScaffold(
-        title = title,
-        subTitle = report?.platform?.name,
-        onBackClicked = onBackClicked,
-        bottomGradient = loadingMessage == null, // hide when loading message shows
-        topRightSlot = {
-            if (loadingMessage == null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                report?.let {
 
-                    report?.let {
+                    // Badge
+                    Badge("APK SIZE: ${it.apkSizeInMb} MB")
 
-                        // Badge
-                        Badge("APK SIZE: ${it.apkSizeInMb} MB")
+                    Spacer(
+                        modifier = Modifier.width(5.dp)
+                    )
 
-                        Spacer(
-                            modifier = Modifier.width(5.dp)
-                        )
+                    // Launch app in play-store icon
+                    PlayStoreIcon {
+                        viewModel.onPlayStoreIconClicked()
+                    }
 
-                        // Launch app in play-store icon
-                        PlayStoreIcon {
-                            viewModel.onPlayStoreIconClicked()
-                        }
+                    FilesIcon {
+                        viewModel.onFilesIconClicked()
+                    }
 
-                        FilesIcon {
-                            viewModel.onFilesIconClicked()
-                        }
-
-                        CodeIcon {
-                            viewModel.onCodeIconClicked()
-                        }
+                    CodeIcon {
+                        viewModel.onCodeIconClicked()
                     }
                 }
             }
         }
-    ) {
 
         // Using backing property to prevent double bang usage.
         @Suppress("UnnecessaryVariable")

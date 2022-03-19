@@ -39,12 +39,12 @@ class AppListScreenComponent(
             }
         }
 
-        SelectAppScreen(
+        /*SelectAppScreen(
             appListViewModel = appListViewModel,
             onBackClicked = onBackClicked,
             onAppSelected = { app ->
                 onAppSelected(apkSource, app)
             }
-        )
+        )*/
     }
 }

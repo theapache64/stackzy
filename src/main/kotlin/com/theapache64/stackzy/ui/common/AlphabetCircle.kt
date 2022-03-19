@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 
 private const val DEFAULT_SCALE = 1f
@@ -22,7 +23,8 @@ fun AlphabetCircle(
     character: Char,
     color: Brush,
     modifier: Modifier = Modifier,
-    isNew: Boolean = false
+    isNew: Boolean = false,
+    textStyle: TextStyle = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
 ) {
     val currentScale = if (isNew) {
         // If the library is new, we'll show a zoom-in/zoom-out animation
@@ -54,7 +56,7 @@ fun AlphabetCircle(
     ) {
         Text(
             text = character.uppercaseChar().toString(),
-            style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
+            style = textStyle
         )
     }
 

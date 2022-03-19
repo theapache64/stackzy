@@ -33,7 +33,7 @@ class AppDetailScreenComponent(
     override fun render() {
 
         val scope = rememberCoroutineScope()
-        LaunchedEffect(appDetailViewModel) {
+        /*LaunchedEffect(appDetailViewModel) {
             appDetailViewModel.init(
                 scope = scope,
                 apkSource = apkSource,
@@ -46,6 +46,6 @@ class AppDetailScreenComponent(
             viewModel = appDetailViewModel,
             onLibrarySelected = onLibrarySelected,
             onBackClicked = onBackClicked
-        )
+        )*/
     }
 }

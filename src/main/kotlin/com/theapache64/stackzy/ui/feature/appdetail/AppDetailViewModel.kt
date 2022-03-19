@@ -50,6 +50,7 @@ class AppDetailViewModel @Inject constructor(
         )
     }
 
+    private var decompileJob: Job? = null
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var androidAppWrapper: AndroidAppWrapper
     private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
@@ -74,20 +75,26 @@ class AppDetailViewModel @Inject constructor(
     fun init(
         scope: CoroutineScope,
         apkSource: ApkSource<AndroidDeviceWrapper, Account>,
-        androidApp: AndroidAppWrapper,
     ) {
         this.viewModelScope = scope
         this.config = configRepo.getLocalConfig() ?: error("Local config is null")
         this.apkSource = apkSource
+    }
+
+    fun onAppSelected(
+        androidApp: AndroidAppWrapper
+    ) {
+        decompileJob?.cancel()
         this.androidAppWrapper = androidApp
+        startDecompile()
     }
 
     /**
      * To start the decompiling and analysis from given source
      */
-    fun startDecompile() {
+    private fun startDecompile() {
 
-        viewModelScope.launch {
+        decompileJob = viewModelScope.launch {
             if (androidAppWrapper.versionCode != null && config.shouldConsiderResultCache) {
                 // We've version code here, so we can check results to see if this app has already decompiled by anyone
                 resultsRepo.findResult(
@@ -192,6 +199,8 @@ class AppDetailViewModel @Inject constructor(
      * To start decompile from scratch (download APK and decompile using apk-tool)
      */
     private suspend fun startDecompileFromScratch() {
+        // Reset fatal error flag
+        _fatalError.value = null
         try {
             when (apkSource) {
 
@@ -208,7 +217,9 @@ class AppDetailViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            _fatalError.value = "${e::class.simpleName}: ${e.message}"
+            if (e !is CancellationException) {
+                _fatalError.value = "${e::class.simpleName}: ${e.message}"
+            }
         }
     }
 
