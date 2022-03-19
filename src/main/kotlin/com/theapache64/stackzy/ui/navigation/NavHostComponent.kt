@@ -11,6 +11,9 @@ import com.arkivanov.decompose.router.replaceCurrent
 import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.theapache64.gpa.model.Account
+import com.malinskiy.adam.request.device.Device
+import com.malinskiy.adam.request.device.DeviceState
+import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.di.DaggerAppComponent
 import com.theapache64.stackzy.model.AndroidAppWrapper
@@ -18,6 +21,7 @@ import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
+import com.theapache64.stackzy.ui.feature.appmasterdetail.AppMasterDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
 import com.theapache64.stackzy.ui.feature.libdetail.LibraryDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.liblist.LibraryListScreenComponent
@@ -45,6 +49,10 @@ class NavHostComponent(
         object SelectPathway : Config()
         data class LogIn(val shouldGoToPlayStore: Boolean) : Config()
         object DeviceList : Config()
+        data class AppMasterDetail(
+            val apkSource: ApkSource<AndroidDeviceWrapper, Account>
+        ) : Config()
+
         data class AppList(
             val apkSource: ApkSource<AndroidDeviceWrapper, Account>
         ) : Config()
@@ -68,7 +76,21 @@ class NavHostComponent(
      * Router configuration
      */
     private val router = router<Config, Component>(
-        initialConfiguration = Config.Splash,
+        // initialConfiguration = Config.Splash,
+        initialConfiguration = Config.AppMasterDetail(
+            apkSource = ApkSource.Adb(
+                value = AndroidDeviceWrapper(
+                    androidDevice = AndroidDevice(
+                        name = "OnePlus",
+                        model = "A6000",
+                        device = Device(
+                            serial = "192.168.1.5:5555",
+                            state = DeviceState.DEVICE
+                        )
+                    )
+                )
+            )
+        ),
         childFactory = ::createScreenComponent
     )
 
@@ -106,6 +128,14 @@ class NavHostComponent(
                 onBackClicked = ::onBackClicked,
             )
             is Config.AppList -> AppListScreenComponent(
+                appComponent = appComponent,
+                componentContext = componentContext,
+                apkSource = config.apkSource,
+                onAppSelected = ::onAppSelected,
+                onBackClicked = ::onBackClicked
+            )
+
+            is Config.AppMasterDetail -> AppMasterDetailScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 apkSource = config.apkSource,

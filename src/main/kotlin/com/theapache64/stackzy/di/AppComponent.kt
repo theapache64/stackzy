@@ -4,6 +4,7 @@ import com.theapache64.stackzy.data.repo.AdbRepo
 import com.theapache64.stackzy.di.module.*
 import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
+import com.theapache64.stackzy.ui.feature.appmasterdetail.AppMasterDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
 import com.theapache64.stackzy.ui.feature.libdetail.LibraryDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.liblist.LibraryListScreenComponent
@@ -34,6 +35,7 @@ interface AppComponent {
     fun inject(updateScreenComponent: UpdateScreenComponent)
     fun inject(libraryListScreenComponent: LibraryListScreenComponent)
     fun inject(libraryDetailScreenComponent: LibraryDetailScreenComponent)
+    fun inject(appMasterDetailScreenComponent: AppMasterDetailScreenComponent)
 
     // bind repo to this component
     fun bind(): AdbRepo
