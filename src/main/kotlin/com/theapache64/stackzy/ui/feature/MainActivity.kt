@@ -1,7 +1,15 @@
 package com.theapache64.stackzy.ui.feature
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.arkivanov.decompose.DefaultComponentContext
@@ -12,10 +20,12 @@ import com.theapache64.stackzy.App
 import com.theapache64.stackzy.ui.navigation.NavHostComponent
 import com.theapache64.stackzy.ui.theme.R
 import com.theapache64.stackzy.ui.theme.StackzyTheme
+import com.theapache64.stackzy.util.OSType
+import com.theapache64.stackzy.util.OsCheck
 import java.awt.Taskbar
+import java.awt.Toolkit
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
-import androidx.compose.ui.window.Window as setContent
 
 
 class MainActivity : Activity() {
@@ -43,21 +53,50 @@ class MainActivity : Activity() {
         val root = NavHostComponent(DefaultComponentContext(lifecycle))
 
         application {
-            setContent(
+
+            val title = "${App.appArgs.appName} (${App.appArgs.version})"
+
+            val screenSize = Toolkit.getDefaultToolkit().screenSize
+
+            Window(
                 onCloseRequest = ::exitApplication,
-                title = "${App.appArgs.appName} (${App.appArgs.version})",
+                title = if (OsCheck.operatingSystemType != OSType.MacOS) {
+                    title
+                } else {
+                    ""
+                },
                 icon = painterResource(R.drawables.appIcon),
                 state = rememberWindowState(
-                    width = 1224.dp,
-                    height = 800.dp
+                    width = (screenSize.width * 0.9).dp,
+                    height = (screenSize.height * 0.8).dp
                 ),
             ) {
+
+                if (OsCheck.operatingSystemType == OSType.MacOS) {
+                    window.rootPane.apply {
+                        rootPane.putClientProperty("apple.awt.fullWindowContent", true)
+                        rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
+                    }
+                }
+
                 StackzyTheme {
-                    // Igniting navigation
-                    root.render()
+                    if (OsCheck.operatingSystemType == OSType.MacOS) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(text = title, style = MaterialTheme.typography.subtitle1)
+
+                            // Igniting navigation
+                            root.render()
+                        }
+                    } else {
+                        // Igniting navigation
+                        root.render()
+                    }
                 }
             }
         }
+
+
     }
 }
 

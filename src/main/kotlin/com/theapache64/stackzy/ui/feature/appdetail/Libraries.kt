@@ -21,7 +21,7 @@ import com.theapache64.stackzy.ui.common.Selectable
 @Composable
 fun Libraries(
     report: AnalysisReportWrapper,
-    onLibrarySelected: (LibraryWrapper) -> Unit
+    onLibrarySelected: (LibraryWrapper) -> Unit,
 ) {
 
     if (report.libraries.isEmpty()) {
@@ -45,7 +45,7 @@ fun Libraries(
     } else {
 
         LazyVerticalGrid(
-            cells = GridCells.Fixed(4)
+            cells = GridCells.Fixed(3)
         ) {
             items(
                 items = report.libraryWrappers
@@ -54,7 +54,8 @@ fun Libraries(
                     // GridItem
                     Selectable(
                         data = app,
-                        onSelected = onLibrarySelected
+                        onSelected = onLibrarySelected,
+                        isCopyableTitle = true
                     )
 
                     Spacer(

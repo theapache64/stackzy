@@ -8,4 +8,5 @@ abstract class BaseAlphabetCircle {
     abstract fun imageUrl(): String?
     open fun getAlphabet() = getTitle().first()
     open fun isNew(): Boolean = false
+    abstract fun isActive(): Boolean
 }

@@ -125,7 +125,8 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
                 apkSource = config.apkSource,
-                onBackClicked = ::onBackClicked
+                onBackClicked = ::onBackClicked,
+                onLibrarySelected = ::onLibrarySelected
             )
 
             is Config.AppDetail -> AppDetailScreenComponent(
@@ -185,27 +186,30 @@ class NavHostComponent(
         // router.replaceCurrent(Config.SelectPathway)
         router.replaceCurrent(
             Config.AppMasterDetail(
-                apkSource = ApkSource.Adb(
-                    value = AndroidDeviceWrapper(
-                        androidDevice = AndroidDevice(
-                            name = "OnePlus",
-                            model = "A6000",
-                            device = Device(
-                                serial = "192.168.1.5:5555",
-                                state = DeviceState.DEVICE
+                apkSource = if(false){
+                    ApkSource.Adb(
+                        value = AndroidDeviceWrapper(
+                            androidDevice = AndroidDevice(
+                                name = "OnePlus",
+                                model = "A6000",
+                                device = Device(
+                                    serial = "192.168.1.5:5555",
+                                    state = DeviceState.DEVICE
+                                )
                             )
                         )
                     )
-                )
-               /* apkSource = ApkSource.PlayStore(
-                    Account(
-                        username = "mymailer64",
-                        password = "YOURPASSWORDGOESHERE",
-                        token = "GgiNgFkXmZDpLanov77qhqHwrzA3_BfmD7Cfgy3I-PZlkw9ihJ_B15_4U1VrEd0skxDZCg.",
-                        gsfId = "3992ef54bcc0d9de",
-                        locale = "en-IN"
+                }else{
+                    ApkSource.PlayStore(
+                        Account(
+                            username = "mymailer64",
+                            password = "YOURPASSWORDGOESHERE",
+                            token = "GgiNgFkXmZDpLanov77qhqHwrzA3_BfmD7Cfgy3I-PZlkw9ihJ_B15_4U1VrEd0skxDZCg.",
+                            gsfId = "3992ef54bcc0d9de",
+                            locale = "en-IN"
+                        )
                     )
-                )*/
+                }
             ),
         )
         /*router.push(

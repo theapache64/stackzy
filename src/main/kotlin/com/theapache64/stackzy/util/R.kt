@@ -3,6 +3,10 @@ package com.theapache64.stackzy.util
 object R {
     @Suppress("ClassName")
     object string {
+        const val app_detail_idle_message = "Click on an app to start the magic!"
+        const val app_detail_idle_title = "You're here!"
+        const val app_master_detail_title_playstore = "Browse PlayStore"
+        const val app_master_detail_title_adb = "Browse Device"
         const val lib_detail_loading = "Loading apps..."
         const val libraries_list_title = "Libraries"
         const val app_detail_action_open_market = "SEARCH IN MARKET"

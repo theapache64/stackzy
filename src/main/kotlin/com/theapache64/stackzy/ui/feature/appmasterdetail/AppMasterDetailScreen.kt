@@ -17,6 +17,7 @@ import com.theapache64.stackzy.ui.feature.appdetail.AppDetailViewModel
 import com.theapache64.stackzy.ui.feature.applist.AppListViewModel
 import com.theapache64.stackzy.ui.feature.applist.SelectAppScreen
 import com.theapache64.stackzy.util.ApkSource
+import com.theapache64.stackzy.util.R
 
 
 /**
@@ -35,7 +36,10 @@ fun AppMasterDetailsScreen(
 ) {
 
     CustomScaffold(
-        title = "Master Detail Demo",
+        title = when (apkSource) {
+            is ApkSource.Adb -> R.string.app_master_detail_title_adb
+            is ApkSource.PlayStore -> R.string.app_master_detail_title_playstore
+        },
         onBackClicked = onBackClicked,
         bottomGradient = false
     ) {
@@ -44,14 +48,14 @@ fun AppMasterDetailsScreen(
         )
         Row {
             SelectAppScreen(
-                modifier = Modifier.weight(weight = 0.2f),
+                modifier = Modifier.weight(weight = 0.3f),
                 appListViewModel = appListViewModel,
                 apkSource = apkSource,
                 onAppSelected = onAppSelected
             )
             Spacer(modifier = Modifier.width(20.dp))
             AppDetailScreen(
-                modifier = Modifier.weight(weight = 0.8f),
+                modifier = Modifier.weight(weight = 0.7f),
                 viewModel = appDetailViewModel,
                 onLibrarySelected = onLibrarySelected,
                 apkSource = apkSource

@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
@@ -44,29 +45,34 @@ fun AppDetailScreen(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
                 report?.let {
+                    Text(text = it.appName ?: it.packageName,
+                        style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
 
-                    // Badge
-                    Badge("APK SIZE: ${it.apkSizeInMb} MB")
+                        // Badge
+                        Badge("APK SIZE: ${it.apkSizeInMb} MB")
 
-                    Spacer(
-                        modifier = Modifier.width(5.dp)
-                    )
+                        Spacer(
+                            modifier = Modifier.width(5.dp)
+                        )
 
-                    // Launch app in play-store icon
-                    PlayStoreIcon {
-                        viewModel.onPlayStoreIconClicked()
-                    }
+                        // Launch app in play-store icon
+                        PlayStoreIcon {
+                            viewModel.onPlayStoreIconClicked()
+                        }
 
-                    FilesIcon {
-                        viewModel.onFilesIconClicked()
-                    }
+                        FilesIcon {
+                            viewModel.onFilesIconClicked()
+                        }
 
-                    CodeIcon {
-                        viewModel.onCodeIconClicked()
+                        CodeIcon {
+                            viewModel.onCodeIconClicked()
+                        }
                     }
                 }
             }
@@ -117,6 +123,8 @@ fun AppDetailScreen(
                             }
                         }
 
+                        Spacer(modifier = Modifier.height(10.dp))
+
                         if (selectedTabIndex == 0) {
                             // Libraries Tab
                             Libraries(roReport, onLibrarySelected)
@@ -126,7 +134,13 @@ fun AppDetailScreen(
                         }
                     }
                 }
-
+            } else {
+                // Idle
+                FullScreenError(
+                    image = painterResource("drawables/art_click.png"),
+                    title = R.string.app_detail_idle_title,
+                    message = R.string.app_detail_idle_message
+                )
             }
         }
     }

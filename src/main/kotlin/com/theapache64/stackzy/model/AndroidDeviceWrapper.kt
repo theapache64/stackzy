@@ -10,4 +10,5 @@ class AndroidDeviceWrapper(
     override fun getTitle() = model
     override fun getSubtitle() = name
     override fun imageUrl(): String? = null
+    override fun isActive(): Boolean = false
 }

@@ -71,7 +71,7 @@ fun Content(
                     FullScreenError(
                         title = R.string.device_no_device_title,
                         message = R.string.device_no_device_message,
-                        image = painterResource("drawables/no_device.png")
+                        image = painterResource("drawables/art_click.png")
                     )
                 } else {
 

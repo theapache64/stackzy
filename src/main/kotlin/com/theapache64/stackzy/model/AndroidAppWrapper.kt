@@ -1,13 +1,19 @@
 package com.theapache64.stackzy.model
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.local.AndroidAppDefinition
 import java.util.*
 
 class AndroidAppWrapper(
     val androidApp: AndroidApp,
-    val shouldUseVersionNameAsSubTitle: Boolean = false
+    val shouldUseVersionNameAsSubTitle: Boolean = false,
 ) : AndroidAppDefinition by androidApp, AlphabetCircle() {
+
+    var isAppActive by mutableStateOf(false)
+
     companion object {
         /**
          * Remove these keywords when to GUESS app name from package name
@@ -44,5 +50,9 @@ class AndroidAppWrapper(
 
     override fun getAlphabet(): Char {
         return getTitle().first()
+    }
+
+    override fun isActive(): Boolean {
+        return isAppActive
     }
 }

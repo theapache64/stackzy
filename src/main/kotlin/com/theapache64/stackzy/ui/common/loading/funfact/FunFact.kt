@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.singleWindowApplication
 import com.theapache64.stackzy.data.remote.FunFact
@@ -39,7 +40,8 @@ fun FunFact(
             text = "\"${currentFunFact.funFact}\"",
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f),
-            fontSize = 15.sp
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
         )
 
         if (!isClicked) {

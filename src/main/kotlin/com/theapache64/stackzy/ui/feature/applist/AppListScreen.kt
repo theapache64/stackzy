@@ -3,7 +3,10 @@ package com.theapache64.stackzy.ui.feature.applist
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
@@ -82,6 +85,7 @@ fun SelectAppScreen(
                 val apps = (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data
 
                 if (apps.isNotEmpty()) {
+                    var prevSelectedApp = remember<AndroidAppWrapper?> { null }
                     // Grid
                     LazyColumn {
                         items(items = apps, key = { it.appPackage.name }) { app ->
@@ -89,8 +93,12 @@ fun SelectAppScreen(
                                 // GridItem
                                 Selectable(
                                     data = app,
-                                    onSelected = onAppSelected,
-                                    isCompact = true
+                                    onSelected = { app ->
+                                        prevSelectedApp?.isAppActive = false
+                                        onAppSelected(app)
+                                        app.isAppActive = true
+                                        prevSelectedApp = app
+                                    }
                                 )
 
                                 Spacer(

@@ -31,4 +31,6 @@ class LibraryWrapper(
     override fun isNew(): Boolean {
         return isNewLib
     }
+
+    override fun isActive(): Boolean = false
 }
