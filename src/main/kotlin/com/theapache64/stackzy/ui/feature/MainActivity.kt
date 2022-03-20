@@ -7,6 +7,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -70,6 +74,14 @@ class MainActivity : Activity() {
                     width = (screenSize.width * 0.9).dp,
                     height = (screenSize.height * 0.8).dp
                 ),
+                onKeyEvent = {
+                    if (it.type == KeyEventType.KeyUp && it.key.keyCode == Key.Escape.keyCode) {
+                        root.onEscapePressed()
+                        true
+                    } else {
+                        false
+                    }
+                }
             ) {
 
                 if (OsCheck.operatingSystemType == OSType.MacOS) {

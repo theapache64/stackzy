@@ -24,7 +24,6 @@ import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
 import com.theapache64.stackzy.util.R
 
-
 @Composable
 fun LibraryListScreen(
     viewModel: LibraryListViewModel,
@@ -87,7 +86,7 @@ fun LibraryListScreen(
 
                     if (libraries.isNotEmpty()) {
                         LazyVerticalGrid(
-                            cells = GridCells.Fixed(4)
+                            cells = GridCells.Fixed(4),
                         ) {
                             items(libraries) { library ->
                                 Column {

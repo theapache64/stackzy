@@ -138,6 +138,11 @@ class NavHostComponent(
         router.push(Config.LibraryDetail(libraryWrapper))
     }
 
+    fun onEscapePressed() {
+        if (router.state.value.backStack.isNotEmpty()) {
+            router.pop()
+        }
+    }
 
     @OptIn(ExperimentalDecomposeApi::class)
     @Composable
@@ -244,6 +249,11 @@ class NavHostComponent(
                 androidApp = androidAppWrapper
             )
         )*/
+
+        // Temp
+        val playStoreUrl =
+            URI("https://play.google.com/store/apps/details?id=${androidAppWrapper.androidApp.appPackage.name}")
+        Desktop.getDesktop().browse(playStoreUrl)
     }
 
     /**
