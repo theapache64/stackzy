@@ -11,16 +11,11 @@ import com.arkivanov.decompose.router.replaceCurrent
 import com.arkivanov.decompose.router.router
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.github.theapache64.gpa.model.Account
-import com.malinskiy.adam.request.device.Device
-import com.malinskiy.adam.request.device.DeviceState
-import com.theapache64.stackzy.data.local.AndroidDevice
 import com.theapache64.stackzy.di.AppComponent
 import com.theapache64.stackzy.di.DaggerAppComponent
 import com.theapache64.stackzy.model.AndroidAppWrapper
 import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
-import com.theapache64.stackzy.ui.feature.appdetail.AppDetailScreenComponent
-import com.theapache64.stackzy.ui.feature.applist.AppListScreenComponent
 import com.theapache64.stackzy.ui.feature.appmasterdetail.AppMasterDetailScreenComponent
 import com.theapache64.stackzy.ui.feature.devicelist.DeviceListScreenComponent
 import com.theapache64.stackzy.ui.feature.libdetail.LibraryDetailScreenComponent
@@ -38,7 +33,7 @@ import java.net.URI
  * All navigation decisions are made from here
  */
 class NavHostComponent(
-    private val componentContext: ComponentContext
+    private val componentContext: ComponentContext,
 ) : Component, ComponentContext by componentContext {
 
     /**
@@ -50,22 +45,13 @@ class NavHostComponent(
         data class LogIn(val shouldGoToPlayStore: Boolean) : Config()
         object DeviceList : Config()
         data class AppMasterDetail(
-            val apkSource: ApkSource<AndroidDeviceWrapper, Account>
-        ) : Config()
-
-        data class AppList(
-            val apkSource: ApkSource<AndroidDeviceWrapper, Account>
-        ) : Config()
-
-        data class AppDetail(
             val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
-            val androidApp: AndroidAppWrapper
         ) : Config()
 
         object Update : Config()
         object LibraryList : Config()
         data class LibraryDetail(
-            val libraryWrapper: LibraryWrapper
+            val libraryWrapper: LibraryWrapper,
         ) : Config()
     }
 
@@ -113,13 +99,7 @@ class NavHostComponent(
                 onDeviceSelected = ::onDeviceSelected,
                 onBackClicked = ::onBackClicked,
             )
-            is Config.AppList -> AppListScreenComponent(
-                appComponent = appComponent,
-                componentContext = componentContext,
-                apkSource = config.apkSource,
-                onAppSelected = ::onAppSelected,
-                onBackClicked = ::onBackClicked
-            )
+
 
             is Config.AppMasterDetail -> AppMasterDetailScreenComponent(
                 appComponent = appComponent,
@@ -127,15 +107,6 @@ class NavHostComponent(
                 apkSource = config.apkSource,
                 onBackClicked = ::onBackClicked,
                 onLibrarySelected = ::onLibrarySelected
-            )
-
-            is Config.AppDetail -> AppDetailScreenComponent(
-                appComponent = appComponent,
-                componentContext = componentContext,
-                selectedApp = config.androidApp,
-                apkSource = config.apkSource,
-                onLibrarySelected = ::onLibrarySelected,
-                onBackClicked = ::onBackClicked
             )
 
             is Config.Update -> UpdateScreenComponent(
@@ -183,10 +154,10 @@ class NavHostComponent(
      * Invoked when splash finish data sync
      */
     private fun onSplashSyncFinished() {
-        // router.replaceCurrent(Config.SelectPathway)
-        router.replaceCurrent(
+        router.replaceCurrent(Config.SelectPathway)
+        /*outer.replaceCurrent(
             Config.AppMasterDetail(
-                apkSource = if(false){
+                apkSource = if (false) {
                     ApkSource.Adb(
                         value = AndroidDeviceWrapper(
                             androidDevice = AndroidDevice(
@@ -199,7 +170,7 @@ class NavHostComponent(
                             )
                         )
                     )
-                }else{
+                } else {
                     ApkSource.PlayStore(
                         Account(
                             username = "mymailer64",
@@ -211,22 +182,6 @@ class NavHostComponent(
                     )
                 }
             ),
-        )
-        /*router.push(
-            Config.AppDetail(
-                AndroidDevice(
-                    "Samsung",
-                    "someModel",
-                    Device(
-                        "R52M604X18E",
-                        DeviceState.DEVICE
-                    )
-                ),
-                AndroidApp(
-                    // Package("a.i"),
-                    Package("com.theapache64.topcorn"),
-                )
-            )
         )*/
     }
 
@@ -235,7 +190,7 @@ class NavHostComponent(
      */
     private fun onPathwayPlayStoreSelected(account: Account) {
         Arbor.d("Showing select app")
-        router.push(Config.AppList(ApkSource.PlayStore(account)))
+        router.push(Config.AppMasterDetail(ApkSource.PlayStore(account)))
     }
 
     /**
@@ -250,7 +205,7 @@ class NavHostComponent(
      */
     private fun onLoggedIn(shouldGoToPlayStore: Boolean, account: Account) {
         if (shouldGoToPlayStore) {
-            router.replaceCurrent(Config.AppList(ApkSource.PlayStore(account)))
+            router.replaceCurrent(Config.AppMasterDetail(ApkSource.PlayStore(account)))
         } else {
             Arbor.d("onLoggedIn: Moving back...")
             router.pop()
@@ -272,7 +227,7 @@ class NavHostComponent(
      * Invoked when a device selected
      */
     private fun onDeviceSelected(androidDevice: AndroidDeviceWrapper) {
-        router.push(Config.AppList(ApkSource.Adb(androidDevice)))
+        router.push(Config.AppMasterDetail(ApkSource.Adb(androidDevice)))
     }
 
     /**
@@ -280,14 +235,15 @@ class NavHostComponent(
      */
     private fun onAppSelected(
         apkSource: ApkSource<AndroidDeviceWrapper, Account>,
-        androidAppWrapper: AndroidAppWrapper
+        androidAppWrapper: AndroidAppWrapper,
     ) {
-        router.push(
+        // TODO: Support auto decompile when passed appWrapper to master-detail screen
+        /*router.push(
             Config.AppDetail(
                 apkSource = apkSource,
                 androidApp = androidAppWrapper
             )
-        )
+        )*/
     }
 
     /**
