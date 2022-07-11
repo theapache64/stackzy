@@ -17,7 +17,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.BeforeAll
 import kotlin.io.path.createTempDirectory
-import kotlinx.coroutines.flow.collect
 
 class ResultsRepoTest {
 

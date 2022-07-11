@@ -1,9 +1,11 @@
 {
-    "configurations": [
-        {
-            "type": "gradle",
-            "name": "Run App",
-            "tasks": ["run"]
-        }
-    ]
+  "configurations": [
+    {
+      "type": "gradle",
+      "name": "Run App",
+      "tasks": [
+        "run"
+      ]
+    }
+  ]
 }

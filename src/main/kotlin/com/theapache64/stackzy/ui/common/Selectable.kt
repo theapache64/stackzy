@@ -51,12 +51,12 @@ fun Modifier.addHoverEffect(
     }
 
     return this.background(normalColor.copy(alpha = backgroundAlpha), RoundedCornerShape(cornerRadius)).clickable {
-            onClicked()
-        }.onPointerEvent(eventType = PointerEventType.Enter, onEvent = {
-            isHovered = true
-        }).onPointerEvent(eventType = PointerEventType.Exit, onEvent = {
-            isHovered = false
-        })
+        onClicked()
+    }.onPointerEvent(eventType = PointerEventType.Enter, onEvent = {
+        isHovered = true
+    }).onPointerEvent(eventType = PointerEventType.Exit, onEvent = {
+        isHovered = false
+    })
 }
 
 // Preview
@@ -102,8 +102,8 @@ fun <T : AlphabetCircle> Selectable(
 ) {
 
     Row(modifier = modifier.fillMaxWidth().addHoverEffect(onClicked = {
-            onSelected(data)
-        }).padding(padding), verticalAlignment = Alignment.CenterVertically) {
+        onSelected(data)
+    }).padding(padding), verticalAlignment = Alignment.CenterVertically) {
 
         if (data.imageUrl() == null) {
             // Show only alphabet
