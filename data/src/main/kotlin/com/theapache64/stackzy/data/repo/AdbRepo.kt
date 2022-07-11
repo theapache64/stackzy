@@ -26,7 +26,6 @@ import java.net.URL
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
@@ -232,7 +231,6 @@ class AdbRepo @Inject constructor(
         }
     }
 
-    @ExperimentalPathApi
     @Suppress("BlockingMethodInNonBlockingContext") // suppressing due to invalid IDE warning (bug)
     suspend fun downloadAdb() = flow {
 

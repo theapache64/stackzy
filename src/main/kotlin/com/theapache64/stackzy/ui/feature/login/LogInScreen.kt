@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusOrder
@@ -91,6 +92,8 @@ fun LogInScreen(
     }
 }
 
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Form(
     username: String,

@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.theapache64.stackzy.ui.common.Badge
@@ -130,7 +132,7 @@ fun PathwayScreen(
     }
 }
 
-
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PathwayCard(
     modifier: Modifier = Modifier,
@@ -142,16 +144,19 @@ fun PathwayCard(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.pointerMoveFilter(
-            onMove = {
-                onMouseEnter()
-                false
-            },
-            onExit = {
-                onMouseLeave()
-                false
-            }
-        )
+        modifier = modifier
+            .onPointerEvent(
+                eventType = PointerEventType.Enter,
+                onEvent = {
+                    onMouseEnter()
+                },
+            )
+            .onPointerEvent(
+                eventType = PointerEventType.Exit,
+                onEvent = {
+                    onMouseLeave()
+                }
+            )
     ) {
         /*Icon*/
         Image(

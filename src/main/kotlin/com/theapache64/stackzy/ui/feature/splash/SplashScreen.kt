@@ -1,7 +1,5 @@
 package com.theapache64.stackzy.ui.feature.splash
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,7 +19,6 @@ import com.theapache64.stackzy.ui.common.Logo
 /**
  * Renders SplashScreen
  */
-@ExperimentalFoundationApi
 @Composable
 fun SplashScreen(
     splashViewModel: SplashViewModel,
@@ -57,7 +54,7 @@ fun SplashScreen(
                 .align(Alignment.Center)
         )
 
-        if (isSyncFinished.not()) {
+        if (!isSyncFinished) {
 
             // Loading text
             LoadingText(

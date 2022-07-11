@@ -3,9 +3,9 @@ package com.theapache64.stackzy.ui.feature.appdetail
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -45,7 +45,7 @@ fun Libraries(
     } else {
 
         LazyVerticalGrid(
-            cells = GridCells.Fixed(4)
+            columns = GridCells.Fixed(4)
         ) {
             items(
                 items = report.libraryWrappers

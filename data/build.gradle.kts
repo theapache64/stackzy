@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.theapache64.stackzy"
-version = "1.2.4"
+version = "1.2.5"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
 
     // Retrosheet : Turn Google Spreadsheet to JSON endpoint (for Android and JVM)
-    api("com.github.theapache64:retrosheet:2.0.0-beta03")
+    api("com.github.theapache64:retrosheet:2.0.0")
 
     // Retrofit : A type-safe HTTP client for Android and Java.
     val retrofitVersion = "2.9.0"

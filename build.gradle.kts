@@ -3,14 +3,14 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.7.0"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "1.0.1"
+    id("org.jetbrains.compose") version "1.2.0-alpha01-dev741"
 }
 
-val daggerVersion by extra("2.40.5")
-val stackzyVersion by extra("1.2.4") // TODO : Change in App.kt also
+val daggerVersion by extra("2.42")
+val stackzyVersion by extra("1.2.5") // TODO : Change in App.kt also
 
 group = "com.theapache64"
 version = stackzyVersion
