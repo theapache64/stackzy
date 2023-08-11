@@ -52,7 +52,7 @@ class PlayStoreRepoTest {
 
     @Test
     fun givenKeyword_whenSearch_thenSuccess() = runBlockingUnitTest {
-        val maxSearchResult = 30
+        val maxSearchResult = 10
         playStoreRepo.search(
             "WhatsApp",
             api,
