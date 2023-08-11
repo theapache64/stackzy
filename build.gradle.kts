@@ -3,14 +3,14 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    val kotlinVersion = "1.7.0"
+    val kotlinVersion = "1.9.0"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "1.2.0-alpha01-dev741"
+    id("org.jetbrains.compose") version "1.5.0-beta01"
 }
 
-val daggerVersion by extra("2.42")
-val stackzyVersion by extra("1.2.5") // TODO : Change in App.kt also
+val daggerVersion by extra("2.47")
+val stackzyVersion by extra("1.2.6") // TODO : Change in App.kt also
 
 group = "com.theapache64"
 version = stackzyVersion
@@ -54,7 +54,7 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
 
     // Bugsnag
-    implementation("com.bugsnag:bugsnag:3.6.3")
+    implementation("com.bugsnag:bugsnag:3.7.0")
 
     /**
      * Testing Dependencies

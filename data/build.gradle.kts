@@ -18,7 +18,7 @@ dependencies {
     api("com.malinskiy.adam:adam:0.4.3")
 
     // Moshi : A modern JSON API for Android and Java
-    val moshiVersion = "1.13.0"
+    val moshiVersion = "1.15.0"
     api("com.squareup.moshi:moshi:$moshiVersion")
     implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion")
