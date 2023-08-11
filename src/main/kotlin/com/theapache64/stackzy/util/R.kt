@@ -20,5 +20,6 @@ object R {
         const val device_no_device_title = "No device connected"
         const val all_action_retry = "RETRY"
         const val logo = "Logo"
+        const val lib_detail_sub_title = "is utilized by these apps"
     }
 }

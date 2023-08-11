@@ -17,6 +17,7 @@ import com.theapache64.stackzy.ui.common.ErrorSnackBar
 import com.theapache64.stackzy.ui.common.FullScreenError
 import com.theapache64.stackzy.ui.common.Selectable
 import com.theapache64.stackzy.ui.common.loading.LoadingAnimation
+import com.theapache64.stackzy.util.R
 
 @Composable
 fun LibraryDetailScreen(
@@ -30,6 +31,7 @@ fun LibraryDetailScreen(
 
     CustomScaffold(
         title = pageTitle,
+        subTitle = R.string.lib_detail_sub_title,
         onBackClicked = onBackClicked
     ) {
         when (appsResp) {
