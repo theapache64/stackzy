@@ -58,7 +58,7 @@
   as the backend, thanks to [Retrosheet](https://github.com/theapache64/retrosheet)
 
 - The initial name of Stackzy was `Which Stack`
-- Stackzy uses a gloabl caching mechanism, which works as a centralized caching system. Means, if **someone**
+- Stackzy uses a global caching mechanism, which works as a centralized caching system. Means, if **someone**
   decompiled `WhatsApp`, the next time you try to find the stack, it won't be decompiled and the result will be served
   from the cache.
 
