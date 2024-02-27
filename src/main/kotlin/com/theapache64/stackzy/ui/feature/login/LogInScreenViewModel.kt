@@ -17,7 +17,7 @@ class LogInScreenViewModel @Inject constructor(
 ) {
 
     companion object {
-        const val URL_GOOGLE_CREATE_ACCOUNT = "https://accounts.google.com/Signup"
+        const val URL_GOOGLE_CREATE_ACCOUNT = "https://accounts.google.com/signup"
     }
 
     private var shouldGoToPlayStore: Boolean = false
