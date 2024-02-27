@@ -56,7 +56,11 @@ class AuthRepo @Inject constructor(
                 emit(Resource.Success(account))
             } catch (e: Exception) {
                 e.printStackTrace()
-                emit(Resource.Error(e.message ?: "Something went wrong"))
+                val userFriendlyMsg = when (e.message) {
+                    "NeedsBrowser" -> "Looks like you've 2FA enabled. Please disable it and try again"
+                    else -> e.message
+                }
+                emit(Resource.Error(userFriendlyMsg ?: "Something went wrong"))
             }
         }
     }
