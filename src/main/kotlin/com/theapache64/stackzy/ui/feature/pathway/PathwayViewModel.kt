@@ -44,7 +44,12 @@ class PathwayViewModel @Inject constructor(
     }
 
     fun refreshAccount() {
-        _loggedInAccount.value = authRepo.getAccount()
+        val isLoggedIn = authRepo.isLoggedIn()
+        _loggedInAccount.value = if(isLoggedIn){
+            authRepo.getAccount()
+        }else{
+            null
+        }
     }
 
     fun onPlayStoreClicked() {
