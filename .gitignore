@@ -153,7 +153,7 @@ gradle-app.setting
 build
 adb
 
-!src/main/resources/apktool_2.5.0.jar
+!src/main/resources/apktool_*.jar
 !src/main/resources/adb
 
 AdbWinApi.dll

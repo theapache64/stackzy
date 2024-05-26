@@ -12,7 +12,7 @@ class ApkToolModule {
 
     companion object {
         private val apkToolJar = File("${ResDir.dir}${File.separator}apk-tool.jar")
-        private const val APKTOOL_JAR_NAME = "apktool_2.5.0.jar"
+        private const val APKTOOL_JAR_NAME = "apktool_2.9.3.jar"
     }
 
     @Provides
