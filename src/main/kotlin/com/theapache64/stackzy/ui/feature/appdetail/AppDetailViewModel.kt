@@ -409,15 +409,15 @@ class AppDetailViewModel @Inject constructor(
                                 }
 
                             val chunkedLibs = newUntrackedLibs.chunked(20)
-                            for (libs in chunkedLibs) {
+                            for ((index, libs) in chunkedLibs.withIndex()) {
                                 untrackedLibsRepo.add(UntrackedLibrary(libs.joinToString(separator = ", ")))
                                     .collect {
                                         when (it) {
                                             is Resource.Loading -> {
-                                                Arbor.d("Untracked libs syncing started...")
+                                                Arbor.d("Untracked libs syncing started... ($index/${chunkedLibs.size})")
                                             }
                                             is Resource.Success -> {
-                                                Arbor.d("Done!!")
+                                                Arbor.d("Done!! ($index/${chunkedLibs.size})")
                                             }
 
                                             is Resource.Error -> {
