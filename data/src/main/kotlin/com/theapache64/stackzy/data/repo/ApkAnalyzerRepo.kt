@@ -329,7 +329,8 @@ class ApkAnalyzerRepo @Inject constructor() {
                     val appLib = allLibraries.find { dirPackageName.contains(it.packageName) }
                     if (appLib != null) {
                         appLibs.add(appLib)
-                    } else {
+                    } else if(dirPackageName.contains(".")) {
+                        // to avoid obfuscated package names
                         untrackedLibs.add(dirPackageName)
                     }
                 }
