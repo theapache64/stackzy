@@ -39,11 +39,11 @@ class AppListViewModel @Inject constructor(
 
 
         private val playStoreUrlRegEx by lazy {
-            "^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?id=(?<packageName>[\\w\\.]+)\$".toRegex()
+            "^https:\\/\\/play\\.google\\.com\\/store\\/apps\\/details\\?id=(?<packageName>[\\w\\.]+)(&.+)*\$".toRegex()
         }
 
         fun isPlayStoreUrl(input: String): Boolean {
-            return playStoreUrlRegEx.matches(input)
+            return playStoreUrlRegEx.containsMatchIn(input)
         }
 
         fun parsePackageName(playStoreUrl: String): String? {

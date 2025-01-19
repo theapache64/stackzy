@@ -12,6 +12,13 @@ class AppListViewModelTest {
     }
 
     @Test
+    fun validFullUrl() {
+        AppListViewModel.isPlayStoreUrl(
+            "https://play.google.com/store/apps/details?id=in.startv.hotstar&hl=en_IN"
+        ).should.`true`
+    }
+
+    @Test
     fun invalidUrl() {
         AppListViewModel.isPlayStoreUrl(
             "https://play.google.com/store/apps/details?id=co-m.theapache64.papercop"
@@ -22,6 +29,13 @@ class AppListViewModelTest {
     fun parseValidPackageName() {
         AppListViewModel.parsePackageName(
             "https://play.google.com/store/apps/details?id=com.theapache64.papercop"
+        ).should.equal("com.theapache64.papercop")
+    }
+
+    @Test
+    fun parseValidPackageNameFull() {
+        AppListViewModel.parsePackageName(
+            "https://play.google.com/store/apps/details?id=com.theapache64.papercop&hl=en_IN"
         ).should.equal("com.theapache64.papercop")
     }
 
