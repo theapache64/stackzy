@@ -1,6 +1,5 @@
 package com.theapache64.stackzy.ui.feature.appdetail
 
-import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AnalysisReport
 import com.theapache64.stackzy.data.local.Platform
 import com.theapache64.stackzy.data.local.toResult
@@ -12,7 +11,6 @@ import com.theapache64.stackzy.data.repo.*
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AnalysisReportWrapper
 import com.theapache64.stackzy.model.AndroidAppWrapper
-import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
@@ -101,12 +99,14 @@ class AppDetailViewModel @Inject constructor(
                             is Resource.Loading -> {
                                 _loadingMessage.value = "Analysing previous results..."
                             }
+
                             is Resource.Success -> {
                                 // Found
                                 findPrevResult { prevResult ->
                                     onResultFound(resultResponse.data, prevResult)
                                 }
                             }
+
                             is Resource.Error -> {
                                 // Not found
                                 if (resultResponse.errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
@@ -139,10 +139,12 @@ class AppDetailViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _loadingMessage.value = "Finding new libraries..."
                     }
+
                     is Resource.Success -> {
                         val prevResult = prevResultResource.data
                         onPrevResult(prevResult)
                     }
+
                     is Resource.Error -> {
                         if (prevResultResource.errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
                             onPrevResult(null)
@@ -337,6 +339,7 @@ class AppDetailViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _loadingMessage.value = "Saving result..."
                     }
+
                     is Resource.Success -> {
                         // Result synced, now lets show the data
                         findPrevResult { prevResult ->
@@ -399,6 +402,7 @@ class AppDetailViewModel @Inject constructor(
                         is Resource.Loading -> {
 
                         }
+
                         is Resource.Success -> {
                             // remove already listed libs and app packages
                             val newUntrackedLibs = report.untrackedLibraries
@@ -417,6 +421,7 @@ class AppDetailViewModel @Inject constructor(
                                             is Resource.Loading -> {
                                                 Arbor.d("Untracked libs syncing started... ($index/${chunkedLibs.size})")
                                             }
+
                                             is Resource.Success -> {
                                                 Arbor.d("Done!! ($index/${chunkedLibs.size})")
                                             }
@@ -428,6 +433,7 @@ class AppDetailViewModel @Inject constructor(
                                     }
                             }
                         }
+
                         is Resource.Error -> {
                             Arbor.e("Failed to get remote untracked libs")
                         }

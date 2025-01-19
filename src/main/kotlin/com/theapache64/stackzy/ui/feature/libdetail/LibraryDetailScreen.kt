@@ -39,6 +39,7 @@ fun LibraryDetailScreen(
                 val message = (appsResp as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
                 LoadingAnimation(message, funFacts = null)
             }
+
             is Resource.Error -> {
                 Box {
                     ErrorSnackBar(
@@ -46,6 +47,7 @@ fun LibraryDetailScreen(
                     )
                 }
             }
+
             is Resource.Success -> {
                 val libraries = (appsResp as Resource.Success<List<AndroidAppWrapper>>).data
 
@@ -83,6 +85,7 @@ fun LibraryDetailScreen(
                 }
 
             }
+
             null -> {
                 LoadingAnimation("Preparing apps...", null)
             }

@@ -6,6 +6,7 @@ fun Int.getSingularOrPlural(singular: String, plural: String): String {
         this == 1 -> {
             singular
         }
+
         else -> {
             plural
         }

@@ -103,6 +103,7 @@ fun SelectAppScreen(
                     val message = (appsResponse as Resource.Loading<List<AndroidAppWrapper>>).message ?: ""
                     LoadingAnimation(message, funFacts = null)
                 }
+
                 is Resource.Error -> {
                     Box {
                         ErrorSnackBar(
@@ -110,6 +111,7 @@ fun SelectAppScreen(
                         )
                     }
                 }
+
                 is Resource.Success -> {
                     val apps = (appsResponse as Resource.Success<List<AndroidAppWrapper>>).data
 
@@ -151,6 +153,7 @@ fun SelectAppScreen(
                         )
                     }
                 }
+
                 null -> {
                     LoadingAnimation("Preparing apps...", funFacts = null)
                 }

@@ -24,9 +24,11 @@ internal class LibrariesRepoTest {
                     is Resource.Loading -> {
                         // do nothing
                     }
+
                     is Resource.Success -> {
                         it.data.size.should.above(0)
                     }
+
                     is Resource.Error -> {
                         assert(false)
                     }

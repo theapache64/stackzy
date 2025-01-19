@@ -28,9 +28,11 @@ class AuthRepoTest {
                 is Resource.Loading -> {
                     Arbor.d("logging in...")
                 }
+
                 is Resource.Success -> {
                     it.data.username.should.equal(username)
                 }
+
                 is Resource.Error -> {
                     assert(false)
                 }
@@ -46,9 +48,11 @@ class AuthRepoTest {
                 is Resource.Loading -> {
                     Arbor.d("logging in...")
                 }
+
                 is Resource.Success -> {
                     assert(false)
                 }
+
                 is Resource.Error -> {
                     assert(true)
                 }

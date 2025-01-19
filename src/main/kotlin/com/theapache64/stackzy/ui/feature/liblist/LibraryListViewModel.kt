@@ -44,6 +44,7 @@ class LibraryListViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _libsResp.value = Resource.Loading()
                     }
+
                     is Resource.Success -> {
                         // Here, valid means results that have at least one library
                         val validLibPackages = filterValidLibPackages(cachedLibs, allLibPackages = it.data)
@@ -51,6 +52,7 @@ class LibraryListViewModel @Inject constructor(
                         _libsResp.value = Resource.Success(validLibPackages)
                         _subTitle.value = getSubtitleFor(validLibPackages)
                     }
+
                     is Resource.Error -> {
                         _libsResp.value = Resource.Error(it.errorData)
                     }

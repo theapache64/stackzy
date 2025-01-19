@@ -62,9 +62,11 @@ fun Content(
             is Resource.Loading -> {
                 LoadingAnimation(message = devicesResp.message ?: "", null)
             }
+
             is Resource.Error -> {
                 ErrorSnackBar(syncFailedReason = devicesResp.errorData, onRetryClicked = onRetry)
             }
+
             is Resource.Success -> {
                 val devices = devicesResp.data
                 if (devices.isEmpty()) {

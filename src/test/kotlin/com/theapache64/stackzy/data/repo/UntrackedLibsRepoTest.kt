@@ -27,9 +27,11 @@ internal class UntrackedLibsRepoTest {
                     is Resource.Loading -> {
                         // do nothing
                     }
+
                     is Resource.Success -> {
                         it.data.packageNames.should.equal(inputPackageName)
                     }
+
                     is Resource.Error -> {
                         assert(false)
                     }
@@ -46,9 +48,11 @@ internal class UntrackedLibsRepoTest {
                     is Resource.Loading -> {
                         // do nothing
                     }
+
                     is Resource.Success -> {
                         it.data.size.should.above(0)
                     }
+
                     is Resource.Error -> {
                         assert(false)
                     }

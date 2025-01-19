@@ -1,13 +1,11 @@
 package com.theapache64.stackzy.ui.feature.libdetail
 
-import com.github.theapache64.gpa.model.Account
 import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.repo.AuthRepo
 import com.theapache64.stackzy.data.repo.ResultsRepo
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidAppWrapper
-import com.theapache64.stackzy.model.AndroidDeviceWrapper
 import com.theapache64.stackzy.model.LibraryWrapper
 import com.theapache64.stackzy.util.ApkSource
 import com.theapache64.stackzy.util.R
@@ -57,6 +55,7 @@ class LibraryDetailViewModel @Inject constructor(
                     is Resource.Loading -> {
                         _apps.value = Resource.Loading(R.string.lib_detail_loading)
                     }
+
                     is Resource.Success -> {
                         val apps = it.data
                             .distinctBy { result -> result.packageName }
@@ -75,6 +74,7 @@ class LibraryDetailViewModel @Inject constructor(
                             }
                         _apps.value = Resource.Success(apps)
                     }
+
                     is Resource.Error -> {
 
                     }

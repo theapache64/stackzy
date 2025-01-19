@@ -11,9 +11,11 @@ suspend fun LibrariesRepo.loadLibs(onLibsLoaded: suspend (List<Library>) -> Unit
             is Resource.Loading -> {
                 Arbor.d("Loading libs")
             }
+
             is Resource.Success -> {
                 onLibsLoaded(it.data)
             }
+
             is Resource.Error -> {
                 throw IllegalArgumentException(it.errorData)
             }

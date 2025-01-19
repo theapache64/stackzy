@@ -83,6 +83,7 @@ class NavHostComponent(
                 onSyncFinished = ::onSplashSyncFinished,
                 onUpdateNeeded = ::onUpdateNeeded
             )
+
             is Config.SelectPathway -> PathwayScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
@@ -91,6 +92,7 @@ class NavHostComponent(
                 onPlayStoreSelected = ::onPathwayPlayStoreSelected,
                 onLibrariesSelected = ::onPathwayLibrariesSelected
             )
+
             is Config.LogIn -> LogInScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
@@ -105,6 +107,7 @@ class NavHostComponent(
                 onDeviceSelected = ::onDeviceSelected,
                 onBackClicked = ::onBackClicked,
             )
+
             is Config.AppList -> AppListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,
@@ -127,6 +130,7 @@ class NavHostComponent(
                 appComponent = appComponent,
                 componentContext = componentContext
             )
+
             is Config.LibraryList -> LibraryListScreenComponent(
                 appComponent = appComponent,
                 componentContext = componentContext,

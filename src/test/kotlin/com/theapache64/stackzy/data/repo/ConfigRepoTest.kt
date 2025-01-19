@@ -24,6 +24,7 @@ class ConfigRepoTest {
                 is Resource.Loading -> {
                     Arbor.d("Loading config")
                 }
+
                 is Resource.Success -> {
                     val remoteConfig = it.data
                     remoteConfig.should.not.`null`
@@ -37,6 +38,7 @@ class ConfigRepoTest {
                     // Both should same
                     remoteConfig.should.equal(localConfig)
                 }
+
                 is Resource.Error -> {
                     assert(false) {
                         it.errorData

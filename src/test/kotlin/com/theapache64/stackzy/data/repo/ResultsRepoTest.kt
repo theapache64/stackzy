@@ -67,9 +67,11 @@ class ResultsRepoTest {
                 is Resource.Loading -> {
                     Arbor.d("Adding...")
                 }
+
                 is Resource.Success -> {
                     it.data.should.equal(result)
                 }
+
                 is Resource.Error -> {
                     assert(false) {
                         it.errorData
@@ -190,9 +192,11 @@ class ResultsRepoTest {
                 is Resource.Loading -> {
                     // Do nothing
                 }
+
                 is Resource.Success -> {
                     it.data.size.should.above(0)
                 }
+
                 is Resource.Error -> {
                     assert(false)
                 }

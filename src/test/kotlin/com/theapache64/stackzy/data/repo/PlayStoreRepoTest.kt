@@ -40,9 +40,11 @@ class PlayStoreRepoTest {
                 is Resource.Loading -> {
                     Arbor.d("logging in...")
                 }
+
                 is Resource.Success -> {
                     api = Play.getApi(account = it.data)
                 }
+
                 is Resource.Error -> {
                     assert(false)
                 }

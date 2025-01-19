@@ -19,11 +19,11 @@
 
 ## 💻 Install
 
-| Platform | Download | Status |
-|----------|----------|--------|
-| Linux    |[![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| Experimental | 
-| Windows    |[![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)| Experimental | 
-| MacOS    |[![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
+| Platform | Download                                                                                                                                                      | Status       |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| Linux    | [![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
+| Windows  | [![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
+| MacOS    | [![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
 
 > ℹ️ To run the `jar`, you need Java 15 or above. If you hate running jar, you can clone the repo and
 > execute `./gradlew createDistributable` to
@@ -35,21 +35,21 @@
 
 ## 🏗️️ Built with
 
-| What            | How                        |
-|----------------	|------------------------------	|
-| 🎭 User Interface    | [Compose Desktop](https://github.com/jetbrains/compose-jb)                |
-| 🏗 Architecture    | [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)                            |
-| 🧠 Backend    | [Retrosheet](https://github.com/theapache64/retrosheet)                            |
-| 💉 DI                | [Dagger2](https://github.com/google/dagger)                        |
-| 🛠️ APK Decompiling                | [ApkTool](https://github.com/iBotPeaches/Apktool)                        |
-| ☕ Dex to Java                | [jadx](https://github.com/skylot/jadx)                        |
-| 🛣️ Navigation        | [Decompose](https://github.com/arkivanov/Decompose)                        |
-| 🌊 Async            | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/)                |
-| 🌐 Networking        | [Retrofit](https://github.com/square/retrofit)                        |
-| 📄 JSON            | [Moshi](https://github.com/square/moshi)                            |
-| ⌨️ Logging            | [Arbor](https://github.com/ToxicBakery/Arbor)                            |
-| 💻 ADB            | [Adam](https://malinskiy.github.io/adam/)                            |
-| 🧪 Testing            | [DaggerMock](https://github.com/fabioCollini/DaggerMock) + [JUnit](https://github.com/junit-team/junit5)    |
+| What                | How                                                                                                                                                                             |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 🎭 User Interface   | [Compose Desktop](https://github.com/jetbrains/compose-jb)                                                                                                                      |
+| 🏗 Architecture     | [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)                                                                                                      |
+| 🧠 Backend          | [Retrosheet](https://github.com/theapache64/retrosheet)                                                                                                                         |
+| 💉 DI               | [Dagger2](https://github.com/google/dagger)                                                                                                                                     |
+| 🛠️ APK Decompiling | [ApkTool](https://github.com/iBotPeaches/Apktool)                                                                                                                               |
+| ☕ Dex to Java       | [jadx](https://github.com/skylot/jadx)                                                                                                                                          |
+| 🛣️ Navigation      | [Decompose](https://github.com/arkivanov/Decompose)                                                                                                                             |
+| 🌊 Async            | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/) |
+| 🌐 Networking       | [Retrofit](https://github.com/square/retrofit)                                                                                                                                  |
+| 📄 JSON             | [Moshi](https://github.com/square/moshi)                                                                                                                                        |
+| ⌨️ Logging          | [Arbor](https://github.com/ToxicBakery/Arbor)                                                                                                                                   |
+| 💻 ADB              | [Adam](https://malinskiy.github.io/adam/)                                                                                                                                       |
+| 🧪 Testing          | [DaggerMock](https://github.com/fabioCollini/DaggerMock) + [JUnit](https://github.com/junit-team/junit5)                                                                        |
 
 ## 😂 Fun Facts
 

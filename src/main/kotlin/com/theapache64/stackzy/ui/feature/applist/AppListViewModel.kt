@@ -107,6 +107,7 @@ class AppListViewModel @Inject constructor(
                     onTabClicked(tab)
                 }
             }
+
             is ApkSource.PlayStore -> {
 
                 // ### PLAY STORE ###
@@ -146,6 +147,7 @@ class AppListViewModel @Inject constructor(
 
                     _apps.value = Resource.Success(filteredApps.map { AndroidAppWrapper(it) })
                 }
+
                 is ApkSource.PlayStore -> {
                     if (isPlayStoreUrl(newKeyword)) {
                         // Pasted a play store url
