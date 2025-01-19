@@ -75,8 +75,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
+        os: [macos-latest, ubuntu-latest, windows-latest, macos-arm64]
         arch: [x64, arm64]
+        exclude:
+          - { os: macos-latest, arch: arm64 }
+          - { os: windows-latest, arch: arm64 }
+          - { os: ubuntu-latest, arch: arm64 }
+          - { os: macos-arm64, arch: x64 }
     runs-on: ${{ matrix.os }}
     if: startsWith(github.ref, 'refs/tags/')
     steps:
