@@ -113,7 +113,7 @@ jobs:
           ./gradlew package
 
       - name: Archive Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: distributable-${{ matrix.os }}
           if-no-files-found: ignore
