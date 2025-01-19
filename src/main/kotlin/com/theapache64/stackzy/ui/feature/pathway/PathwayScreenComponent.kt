@@ -13,7 +13,7 @@ class PathwayScreenComponent(
     private val componentContext: ComponentContext,
     private val onAdbSelected: () -> Unit,
     private val onLibrariesSelected: () -> Unit,
-    onPlayStoreSelected: (Account) -> Unit,
+    onPlayStoreSelected: () -> Unit,
     onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit,
 ) : Component, ComponentContext by componentContext {
 

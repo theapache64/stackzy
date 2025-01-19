@@ -17,7 +17,7 @@ class LibraryDetailScreenComponent(
     componentContext: ComponentContext,
     appComponent: AppComponent,
     val libraryWrapper: LibraryWrapper,
-    val onAppClicked: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit,
+    val onAppClicked: (ApkSource, AndroidAppWrapper) -> Unit,
     val onBackClicked: () -> Unit,
     val onLogInNeeded: (Boolean) -> Unit
 ) : Component, ComponentContext by componentContext {

@@ -40,7 +40,8 @@ class AppDetailViewModel @Inject constructor(
     private val resultsRepo: ResultsRepo,
     private val configRepo: ConfigRepo,
     private val jadxRepo: JadxRepo,
-    private val funFactsRepo: FunFactsRepo,
+    funFactsRepo: FunFactsRepo,
+    private val authRepo: AuthRepo
 ) {
 
     companion object {
@@ -52,7 +53,7 @@ class AppDetailViewModel @Inject constructor(
 
     private lateinit var viewModelScope: CoroutineScope
     private lateinit var androidAppWrapper: AndroidAppWrapper
-    private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
+    private lateinit var apkSource: ApkSource
     private var decompiledDir: File? = null
     private var apkFile: File? = null
     private lateinit var config: Config
@@ -73,7 +74,7 @@ class AppDetailViewModel @Inject constructor(
 
     fun init(
         scope: CoroutineScope,
-        apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+        apkSource: ApkSource,
         androidApp: AndroidAppWrapper,
     ) {
         this.viewModelScope = scope
@@ -153,7 +154,7 @@ class AppDetailViewModel @Inject constructor(
             }
     }
 
-    private suspend fun onResultFound(
+    private fun onResultFound(
         result: Result,
         prevResult: Result?
     ) {
@@ -240,7 +241,7 @@ class AppDetailViewModel @Inject constructor(
         // Download APK from playstore
         playStoreRepo.downloadApk(
             apkFile,
-            (apkSource as ApkSource.PlayStore<Account>).value,
+            authRepo.getAccountOrThrow(),
             packageName
         ).distinctUntilChanged().collect { downloadPercentage ->
             _loadingMessage.value = "Downloading APK... $downloadPercentage%"
@@ -446,6 +447,7 @@ class AppDetailViewModel @Inject constructor(
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun onCodeIconClicked() {
 
         if (apkFile?.exists() == true) {

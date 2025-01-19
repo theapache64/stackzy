@@ -1,6 +1,8 @@
 package com.theapache64.stackzy.util
 
-sealed class ApkSource<out A, out B> {
-    class Adb<A>(val value: A) : ApkSource<A, Nothing>()
-    class PlayStore<B>(val value: B) : ApkSource<Nothing, B>()
+import com.theapache64.stackzy.model.AndroidDeviceWrapper
+
+sealed interface ApkSource {
+    class Adb(val value: AndroidDeviceWrapper) : ApkSource
+    data object PlayStore : ApkSource
 }

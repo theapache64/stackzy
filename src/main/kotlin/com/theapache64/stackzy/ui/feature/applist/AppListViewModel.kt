@@ -1,9 +1,10 @@
 package com.theapache64.stackzy.ui.feature.applist
 
+import com.akdeniz.googleplaycrawler.GooglePlayException
 import com.github.theapache64.gpa.api.Play
-import com.github.theapache64.gpa.model.Account
 import com.theapache64.stackzy.data.local.AndroidApp
 import com.theapache64.stackzy.data.repo.AdbRepo
+import com.theapache64.stackzy.data.repo.AuthRepo
 import com.theapache64.stackzy.data.repo.PlayStoreRepo
 import com.theapache64.stackzy.data.util.calladapter.flow.Resource
 import com.theapache64.stackzy.model.AndroidAppWrapper
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 class AppListViewModel @Inject constructor(
     private val adbRepo: AdbRepo,
-    private val playStoreRepo: PlayStoreRepo
+    private val playStoreRepo: PlayStoreRepo,
+    private val authRepo: AuthRepo
 ) {
 
     companion object {
@@ -50,13 +52,14 @@ class AppListViewModel @Inject constructor(
         }
     }
 
+    private lateinit var onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit
     private lateinit var viewModelScope: CoroutineScope
     private var searchJob: Job? = null
 
     /**
      * APK source can be either from an AndroidDevice or from a google Account
      */
-    private lateinit var apkSource: ApkSource<AndroidDeviceWrapper, Account>
+    private lateinit var apkSource: ApkSource
     private var selectedDevice: AndroidDeviceWrapper? = null
 
     /**
@@ -77,10 +80,12 @@ class AppListViewModel @Inject constructor(
 
     fun init(
         scope: CoroutineScope,
-        apkSource: ApkSource<AndroidDeviceWrapper, Account>
+        apkSource: ApkSource,
+        onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit
     ) {
         this.viewModelScope = scope
         this.apkSource = apkSource
+        this.onLogInNeeded = onLogInNeeded
     }
 
     fun loadApps() {
@@ -91,7 +96,7 @@ class AppListViewModel @Inject constructor(
         when (apkSource) {
             is ApkSource.Adb -> {
                 // ### ADB ###
-                this.selectedDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value
+                this.selectedDevice = (apkSource as ApkSource.Adb).value
                 viewModelScope.launch {
                     fullApps = adbRepo.getInstalledApps(selectedDevice!!.device)
                     val tab = if (selectedTabIndex.value == TAB_NO_TAB) {
@@ -146,14 +151,18 @@ class AppListViewModel @Inject constructor(
                         // Pasted a play store url
                         val packageName = parsePackageName(newKeyword)!!
                         viewModelScope.launch {
-                            val account = (apkSource as ApkSource.PlayStore<Account>).value
-                            val api = Play.getApi(account)
-                            val app = playStoreRepo.find(packageName, api)
-                            if (app != null) {
-                                // found app in playstore
-                                _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)))
+                            val account = authRepo.getAccount()
+                            if (account != null) {
+                                val api = Play.getApi(account)
+                                val app = playStoreRepo.find(packageName, api)
+                                if (app != null) {
+                                    // found app in playstore
+                                    _apps.value = Resource.Success(listOf(AndroidAppWrapper(app)))
+                                } else {
+                                    _apps.value = Resource.Error("Invalid PlayStore URL")
+                                }
                             } else {
-                                _apps.value = Resource.Error("Invalid PlayStore URL")
+                                onPlayStoreAccountUnavailable()
                             }
                         }
                     } else {
@@ -165,23 +174,38 @@ class AppListViewModel @Inject constructor(
 
                             delay(500)
 
-                            val account = (apkSource as ApkSource.PlayStore<Account>).value
-                            val api = Play.getApi(account)
-                            val keyword = searchKeyword.value.let {
-                                it.ifBlank {
-                                    " "
+                            val account = authRepo.getAccount()
+                            if (account != null) {
+                                val api = Play.getApi(account)
+                                val keyword = searchKeyword.value.let {
+                                    it.ifBlank {
+                                        " "
+                                    }
                                 }
-                            }
-                            val loadingMsg = if (keyword.isBlank()) {
-                                MSG_LOADING_TRENDING_APPS
+                                val loadingMsg = if (keyword.isBlank()) {
+                                    MSG_LOADING_TRENDING_APPS
+                                } else {
+                                    "Searching for '$keyword'"
+                                }
+
+                                _apps.value = Resource.Loading(loadingMsg)
+
+                                try {
+                                    val apps = playStoreRepo.search(keyword, api)
+                                    _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
+                                } catch (e: GooglePlayException) {
+                                    e.printStackTrace()
+                                    if (e.message?.contains("DF-DFERH-01") == true) {
+                                        // Redirect to login screen with auto-login
+                                        _apps.value = null
+                                        onLogInNeeded(false)
+                                    } else {
+                                        throw e
+                                    }
+                                }
                             } else {
-                                "Searching for '$keyword'"
+                                onPlayStoreAccountUnavailable()
                             }
-
-                            _apps.value = Resource.Loading(loadingMsg)
-
-                            val apps = playStoreRepo.search(keyword, api)
-                            _apps.value = Resource.Success(apps.map { AndroidAppWrapper(it) })
                         }
                     }
 
@@ -193,11 +217,15 @@ class AppListViewModel @Inject constructor(
 
     }
 
+    private fun onPlayStoreAccountUnavailable() {
+        _apps.value = Resource.Error("Please login")
+    }
+
 
     fun onOpenMarketClicked() {
         if (apkSource is ApkSource.Adb) {
             viewModelScope.launch {
-                val androidDevice = (apkSource as ApkSource.Adb<AndroidDeviceWrapper>).value.androidDevice
+                val androidDevice = (apkSource as ApkSource.Adb).value.androidDevice
                 adbRepo.launchMarket(androidDevice, searchKeyword.value)
             }
         }

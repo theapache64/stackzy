@@ -46,11 +46,11 @@ class NavHostComponent(
         data class LogIn(val shouldGoToPlayStore: Boolean) : Config()
         object DeviceList : Config()
         data class AppList(
-            val apkSource: ApkSource<AndroidDeviceWrapper, Account>
+            val apkSource: ApkSource
         ) : Config()
 
         data class AppDetail(
-            val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+            val apkSource: ApkSource,
             val androidApp: AndroidAppWrapper
         ) : Config()
 
@@ -110,7 +110,8 @@ class NavHostComponent(
                 componentContext = componentContext,
                 apkSource = config.apkSource,
                 onAppSelected = ::onAppSelected,
-                onBackClicked = ::onBackClicked
+                onBackClicked = ::onBackClicked,
+                onLogInNeeded = ::onLogInNeeded
             )
 
             is Config.AppDetail -> AppDetailScreenComponent(
@@ -189,9 +190,9 @@ class NavHostComponent(
     /**
      * Invoked when play store selected from the pathway screen
      */
-    private fun onPathwayPlayStoreSelected(account: Account) {
+    private fun onPathwayPlayStoreSelected() {
         Arbor.d("Showing select app")
-        router.push(Config.AppList(ApkSource.PlayStore(account)))
+        router.push(Config.AppList(ApkSource.PlayStore))
     }
 
     /**
@@ -206,7 +207,7 @@ class NavHostComponent(
      */
     private fun onLoggedIn(shouldGoToPlayStore: Boolean, account: Account) {
         if (shouldGoToPlayStore) {
-            router.replaceCurrent(Config.AppList(ApkSource.PlayStore(account)))
+            router.replaceCurrent(Config.AppList(ApkSource.PlayStore))
         } else {
             Arbor.d("onLoggedIn: Moving back...")
             router.pop()
@@ -235,7 +236,7 @@ class NavHostComponent(
      * Invoked when the app got selected
      */
     private fun onAppSelected(
-        apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+        apkSource: ApkSource,
         androidAppWrapper: AndroidAppWrapper
     ) {
         router.push(

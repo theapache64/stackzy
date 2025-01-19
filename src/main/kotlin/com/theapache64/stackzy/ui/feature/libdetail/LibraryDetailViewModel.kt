@@ -33,13 +33,13 @@ class LibraryDetailViewModel @Inject constructor(
     private val _searchKeyword = MutableStateFlow("")
     val searchKeyword = _searchKeyword.asStateFlow()
 
-    private lateinit var onAppSelected: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit
+    private lateinit var onAppSelected: (ApkSource, AndroidAppWrapper) -> Unit
     private lateinit var onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit
 
     fun init(
         viewModelScope: CoroutineScope,
         libWrapper: LibraryWrapper,
-        onAppSelected: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit,
+        onAppSelected: (ApkSource, AndroidAppWrapper) -> Unit,
         onLogInNeeded: (shouldGoToPlayStore: Boolean) -> Unit
     ) {
         this.viewModelScope = viewModelScope
@@ -86,7 +86,7 @@ class LibraryDetailViewModel @Inject constructor(
     fun onAppClicked(appWrapper: AndroidAppWrapper) {
         viewModelScope.launch {
             authRepo.getAccount()?.let { account ->
-                onAppSelected(ApkSource.PlayStore(account), appWrapper)
+                onAppSelected(ApkSource.PlayStore, appWrapper)
             } ?: onLogInNeeded(false)
         }
     }

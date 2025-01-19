@@ -56,7 +56,7 @@ fun LogInScreen(
 
                 is Resource.Loading -> {
                     LoadingAnimation(
-                        message = "Authenticating...",
+                        message = "Authenticating... (this will take 10 seconds)",
                         funFacts = null
                     )
                 }

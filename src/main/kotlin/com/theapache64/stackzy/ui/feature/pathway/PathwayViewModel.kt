@@ -32,11 +32,11 @@ class PathwayViewModel @Inject constructor(
     private val _isPlayStoreEnabled = MutableStateFlow(config?.isPlayStoreEnabled ?: false)
     val isPlayStoreEnabled = _isPlayStoreEnabled.asStateFlow()
 
-    private lateinit var onPlayStoreSelected: (Account) -> Unit
+    private lateinit var onPlayStoreSelected: () -> Unit
     private lateinit var onLogInNeeded: () -> Unit
 
     fun init(
-        onPlayStoreSelected: (Account) -> Unit,
+        onPlayStoreSelected: () -> Unit,
         onLogInNeeded: () -> Unit,
     ) {
         this.onPlayStoreSelected = onPlayStoreSelected
@@ -59,7 +59,7 @@ class PathwayViewModel @Inject constructor(
             onLogInNeeded.invoke()
         } else {
             // logged in
-            onPlayStoreSelected.invoke(loggedInAccount.value!!)
+            onPlayStoreSelected.invoke()
         }
     }
 

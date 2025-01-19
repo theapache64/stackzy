@@ -15,9 +15,10 @@ import javax.inject.Inject
 class AppListScreenComponent(
     componentContext: ComponentContext,
     appComponent: AppComponent,
-    private val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
-    val onAppSelected: (ApkSource<AndroidDeviceWrapper, Account>, AndroidAppWrapper) -> Unit,
-    val onBackClicked: () -> Unit
+    private val apkSource: ApkSource,
+    val onAppSelected: (ApkSource, AndroidAppWrapper) -> Unit,
+    val onBackClicked: () -> Unit,
+    val onLogInNeeded : (shouldGoToPlayStore: Boolean) -> Unit
 ) : Component, ComponentContext by componentContext {
 
     @Inject
@@ -33,7 +34,7 @@ class AppListScreenComponent(
         val scope = rememberCoroutineScope()
         LaunchedEffect(appListViewModel) {
 
-            appListViewModel.init(scope, apkSource)
+            appListViewModel.init(scope, apkSource, onLogInNeeded)
             if (appListViewModel.apps.value == null) {
                 appListViewModel.loadApps()
             }

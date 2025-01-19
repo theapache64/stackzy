@@ -17,7 +17,7 @@ class AppDetailScreenComponent(
     appComponent: AppComponent,
     componentContext: ComponentContext,
     private val selectedApp: AndroidAppWrapper,
-    private val apkSource: ApkSource<AndroidDeviceWrapper, Account>,
+    private val apkSource: ApkSource,
     val onLibrarySelected: (LibraryWrapper) -> Unit,
     private val onBackClicked: () -> Unit
 ) : Component, ComponentContext by componentContext {
