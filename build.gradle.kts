@@ -5,7 +5,7 @@ plugins {
     val kotlinVersion = "1.9.0"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
-    id("org.jetbrains.compose") version "1.5.0-beta01"
+    id("org.jetbrains.compose") version "1.7.3"
 }
 
 val daggerVersion by extra("2.47")
