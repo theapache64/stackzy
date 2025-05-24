@@ -90,9 +90,7 @@ Give a ⭐️ if this project helped you!
   <img alt="Patron Link" src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160"/>
 </a>
 
-<a href="https://www.buymeacoffee.com/theapache64" target="_blank">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="160">
-</a>
+
 
 ## 📝 License
 
