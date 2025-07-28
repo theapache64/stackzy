@@ -91,15 +91,6 @@ class PlayStoreRepo @Inject constructor() {
         account: Account,
         packageName: String
     ) = flow {
-        val api = Play.getApi(account)
-        val appDetails = api.details(packageName)
-        val downloadData = api.purchaseAndDeliver(
-            packageName,
-            appDetails.docV2.details.appDetails.versionCode,
-            1
-        )
-
-        val totalSize = downloadData.appSize
 
         // Starting download
         withExponentialBackOff(
@@ -107,6 +98,15 @@ class PlayStoreRepo @Inject constructor() {
                 result is Result.Error && retryCount < 3
             },
             block = { retryCount, previousException ->
+                val api = Play.getApi(account)
+                val appDetails = api.details(packageName)
+                val downloadData = api.purchaseAndDeliver(
+                    packageName,
+                    appDetails.docV2.details.appDetails.versionCode,
+                    1
+                )
+
+                val totalSize = downloadData.appSize
                 downloadData.openApp().use { input ->
                     FileOutputStream(apkFile).use { output ->
                         val buffer = ByteArray(1024)

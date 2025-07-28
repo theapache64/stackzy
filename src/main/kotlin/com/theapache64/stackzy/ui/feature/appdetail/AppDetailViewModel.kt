@@ -413,6 +413,8 @@ class AppDetailViewModel @Inject constructor(
                                     } == null
                                 }
 
+
+
                             val chunkedLibs = newUntrackedLibs.chunked(20)
                             for ((index, libs) in chunkedLibs.withIndex()) {
                                 untrackedLibsRepo.add(UntrackedLibrary(libs.joinToString(separator = ", ")))

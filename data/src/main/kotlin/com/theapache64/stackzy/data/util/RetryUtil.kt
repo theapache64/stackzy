@@ -56,6 +56,7 @@ suspend fun <T> withExponentialBackOff(
         result = try {
             Result.Success(block(retryCount, previousException))
         } catch (e: Exception) {
+            println("QuickTag: :withExponentialBackOff: ${e::class.simpleName} ${e.message}")
             previousException = e
             Result.Error(e)
         }
