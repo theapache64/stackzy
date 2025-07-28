@@ -39,8 +39,8 @@ fun main() {
     // Parsing application arguments
     val appArgs = AppArgs(
         appName = "Stackzy",
-        version = "v1.2.8", // TODO: Change below date also
-        versionCode = 20250119
+        version = "v1.2.9", // TODO: Change below date also
+        versionCode = 20250728
     )
 
     // Passing args
