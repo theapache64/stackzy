@@ -22,6 +22,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.div
 import kotlin.io.path.exists
 import kotlin.io.path.readText
+import kotlin.jvm.java
 
 class ApkAnalyzerRepo @Inject constructor() {
 
@@ -69,21 +70,43 @@ class ApkAnalyzerRepo @Inject constructor() {
             }
         )
         val yamlString = yamlFile.readText()
-        val metaInfo: MetaInfo = yaml.load(yamlString)
+        val metaInfo : Any = yaml.load(yamlString)
+        if(metaInfo is MetaInfo){
+            // Backward compatible
 
-        // Building gradle info
-        return GradleInfo(
-            versionCode = metaInfo.versionInfo?.versionCode,
-            versionName = metaInfo.versionInfo?.versionName,
-            minSdk = metaInfo.sdkInfo?.minSdkVersion?.let {
-                val androidVersionName = AndroidVersionIdentifier.getVersion(it)
-                GradleInfo.Sdk(it, androidVersionName)
-            },
-            targetSdk = metaInfo.sdkInfo?.targetSdkVersion?.let {
-                val androidVersionName = AndroidVersionIdentifier.getVersion(it)
-                GradleInfo.Sdk(it, androidVersionName)
-            }
-        )
+            // Building gradle info
+            return GradleInfo(
+                versionCode = metaInfo.versionInfo?.versionCode,
+                versionName = metaInfo.versionInfo?.versionName,
+                minSdk = metaInfo.sdkInfo?.minSdkVersion?.let {
+                    val androidVersionName = AndroidVersionIdentifier.getVersion(it)
+                    GradleInfo.Sdk(it, androidVersionName)
+                },
+                targetSdk = metaInfo.sdkInfo?.targetSdkVersion?.let {
+                    val androidVersionName = AndroidVersionIdentifier.getVersion(it)
+                    GradleInfo.Sdk(it, androidVersionName)
+                }
+            )
+        }else if(metaInfo is LinkedHashMap<*, *>) {
+            // Handle LinkedHashMap format
+            val versionInfo = metaInfo["versionInfo"] as? LinkedHashMap<*, *>
+            val sdkInfo = metaInfo["sdkInfo"] as? LinkedHashMap<*, *>
+
+            return GradleInfo(
+                versionCode = versionInfo?.get("versionCode")?.toString()?.toIntOrNull(),
+                versionName = versionInfo?.get("versionName") as? String,
+                minSdk = (sdkInfo?.get("minSdkVersion") as? Int)?.let {
+                    val androidVersionName = AndroidVersionIdentifier.getVersion(it)
+                    GradleInfo.Sdk(it, androidVersionName)
+                },
+                targetSdk = (sdkInfo?.get("targetSdkVersion") as? Int)?.let {
+                    val androidVersionName = AndroidVersionIdentifier.getVersion(it)
+                    GradleInfo.Sdk(it, androidVersionName)
+                }
+            )
+        }else{
+            error("Unsupported meta info type: ${metaInfo::class.simpleName}. Expected MetaInfo or LinkedHashMap")
+        }
     }
 
     /**
