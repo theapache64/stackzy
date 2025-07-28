@@ -65,9 +65,9 @@ class PlayStoreRepoTest {
     @Test
     fun givenPackageName_whenFind_thenReturnValidDetails() = runBlockingUnitTest {
         playStoreRepo.find(
-            "com.theapache64.papercop",
+            "org.telegram.messenger",
             api
-        )?.appTitle.should.equal("Paper Cop")
+        )?.appTitle.should.equal("Telegram")
     }
 
     @Test
