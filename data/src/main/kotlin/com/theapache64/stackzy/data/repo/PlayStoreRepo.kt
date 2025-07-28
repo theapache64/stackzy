@@ -7,7 +7,9 @@ import com.github.theapache64.gpa.api.Play
 import com.github.theapache64.gpa.model.Account
 import com.malinskiy.adam.request.pkg.Package
 import com.theapache64.stackzy.data.local.AndroidApp
+import com.theapache64.stackzy.data.util.Result
 import com.theapache64.stackzy.data.util.bytesToMb
+import com.theapache64.stackzy.data.util.withExponentialBackOff
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -100,25 +102,32 @@ class PlayStoreRepo @Inject constructor() {
         val totalSize = downloadData.appSize
 
         // Starting download
-        downloadData.openApp().use { input ->
-            FileOutputStream(apkFile).use { output ->
-                val buffer = ByteArray(1024)
-                var read: Int
-                var counter = 0f
-                while (input.read(buffer).also { read = it } != -1) {
-                    // Write
-                    output.write(buffer, 0, read)
+        withExponentialBackOff(
+            retryIf = { result, retryCount ->
+                result is Result.Error && retryCount < 3
+            },
+            block = { retryCount, previousException ->
+                downloadData.openApp().use { input ->
+                    FileOutputStream(apkFile).use { output ->
+                        val buffer = ByteArray(1024)
+                        var read: Int
+                        var counter = 0f
+                        while (input.read(buffer).also { read = it } != -1) {
+                            // Write
+                            output.write(buffer, 0, read)
 
-                    // Update progress
-                    counter += read
-                    val percentage = (counter / totalSize) * 100
-                    emit(percentage.toInt())
+                            // Update progress
+                            counter += read
+                            val percentage = (counter / totalSize) * 100
+                            emit(percentage.toInt())
+                        }
+
+                        // Finish progress
+                        emit(100)
+                    }
                 }
-
-                // Finish progress
-                emit(100)
             }
-        }
+        )
     }.flowOn(Dispatchers.IO)
 
 }
