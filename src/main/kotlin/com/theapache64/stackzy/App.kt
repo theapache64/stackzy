@@ -40,7 +40,7 @@ fun main() {
     val appArgs = AppArgs(
         appName = "Stackzy",
         // [latest version - i promise!]
-        version = "1.2.9", // TODO: Change below date also
+        version = "1.2.10", // TODO: Change below date also
     )
 
     // Passing args
