@@ -112,6 +112,7 @@ jobs:
             build/**/*.deb
             build/**/*.msi
             build/compose/jars/*.jar
+            build/compose/binaries/main/dmg/*.dmg
 
       - name: Release
         uses: softprops/action-gh-release@v2
@@ -120,5 +121,6 @@ jobs:
             build/**/*.deb
             build/**/*.msi
             build/compose/jars/*.jar
+            build/compose/binaries/main/dmg/*.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
