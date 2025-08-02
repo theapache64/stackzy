@@ -9,8 +9,8 @@ data class Config(
     val shouldConsiderResultCache: Boolean,
     @Json(name = "latest_stackzy_lib_version")
     val latestStackzyLibVersion: Int,
-    @Json(name = "mandatory_version_code")
-    val mandatoryVersionCode: Int,
+    @Json(name = "mandatory_version")
+    val mandatoryVersion: String,
     @Json(name = "is_browse_by_lib_enabled")
     val isBrowseByLibEnabled: Boolean,
     @Json(name = "is_play_store_enabled")

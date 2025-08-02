@@ -3,4 +3,14 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17" />
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="stackzy" options="-proc:none" />
+      <module name="stackzy.data" options="-proc:none" />
+      <module name="stackzy.data.main" options="-proc:none" />
+      <module name="stackzy.data.test" options="-proc:none" />
+      <module name="stackzy.main" options="-proc:none" />
+      <module name="stackzy.test" options="-proc:none" />
+    </option>
+  </component>
 </project>
