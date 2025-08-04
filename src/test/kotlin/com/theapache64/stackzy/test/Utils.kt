@@ -13,6 +13,10 @@ const val NATIVE_KOTLIN_APP_NAME = "TopCorn"
 const val NATIVE_KOTLIN_PACKAGE_NAME = "com.theapache64.topcorn"
 const val NATIVE_KOTLIN_APK_FILE_NAME = "com.theapache64.topcorn_kotlin_android.apk"
 
+const val NATIVE_OBF_KOTLIN_APP_NAME = "JioHotstar"
+const val NATIVE_OBF_KOTLIN_PACKAGE_NAME = "in.startv.hotstar"
+const val NATIVE_OBF_KOTLIN_APK_FILE_NAME = "in.startv.hotstar.apk"
+
 const val CORDOVA_APP_NAME = "FinC Financial Calculators"
 const val CORDOVA_PACKAGE_NAME = "com.swot.emicalculator"
 const val CORDOVA_APK_FILE_NAME = "com.swot.emicalculator_cordova.apk"

@@ -107,6 +107,22 @@ class ApkAnalyzerRepoTest {
     }
 
     @Test
+    fun `Analysis Report - Obf Native`() = runBlockingUnitTest {
+        // First, lets decompile a native kotlin apk file
+        librariesRepo.loadLibs { libs ->
+            Arbor.d("Starting test... ;)")
+            getCachedDecompiledApk(NATIVE_OBF_KOTLIN_APK_FILE_NAME) { nativeApkFile, decompiledDir ->
+                val report = apkAnalyzerRepo.analyze(NATIVE_OBF_KOTLIN_PACKAGE_NAME, nativeApkFile, decompiledDir, libs)
+                report.appName.should.equal(NATIVE_OBF_KOTLIN_APP_NAME)
+                report.platform.should.instanceof(Platform.NativeKotlin::class.java)
+                report.libraries.size.should.above(0)
+                report.untrackedLibraries.should.not.contain("lm.1")
+                report.untrackedLibraries.should.not.contain("z.1")
+            }
+        }
+    }
+
+    @Test
     fun `Analysis Report - Flutter`() = runBlockingUnitTest {
         librariesRepo.loadLibs { libs ->
             getCachedDecompiledApk(FLUTTER_APK_FILE_NAME) { apkFile, decompiledDir ->

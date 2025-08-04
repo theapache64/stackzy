@@ -32,6 +32,7 @@ class ApkAnalyzerRepo @Inject constructor() {
         private val APP_LABEL_MANIFEST_REGEX by lazy { "<application.+?label=\"(.+?)\"".toRegex() }
         private val USER_PERMISSION_REGEX by lazy { "<uses-permission (?:android:)?name=\"(?<permission>.+?)\"/>".toRegex() }
         private val PACKAGE_FROM_DIR_REGEX by lazy { ".+\\/smali.*?\\/(.+)".toRegex() }
+        private val OBF_REGEX by lazy { "^[a-z][a-z0-9]?\\.[0-9]$".toRegex() }
     }
 
     /**
@@ -353,7 +354,7 @@ class ApkAnalyzerRepo @Inject constructor() {
                     val appLib = allLibraries.find { dirPackageName.contains(it.packageName) }
                     if (appLib != null) {
                         appLibs.add(appLib)
-                    } else if (dirPackageName.contains(".")) {
+                    } else if (dirPackageName.contains(".") && !dirPackageName.matches(OBF_REGEX)) {
                         // to avoid obfuscated package names
                         untrackedLibs.add(dirPackageName)
                     }
