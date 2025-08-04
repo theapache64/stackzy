@@ -32,8 +32,12 @@
       "target": "- [ImgBot] $2"
     },
     {
-      "pattern": "(.) (.+)",
+      "pattern": "([🚀🌟🐛🚑]) (.+)",
       "target": "- $2"
+    },
+    {
+      "pattern": "(.+)",
+      "target": "- $1"
     }
   ],
   "exclude_merge_branches": [
