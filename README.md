@@ -19,15 +19,24 @@
 
 ## 💻 Install
 
-| Platform | Download                                                                                                                                                      | Status       |
-|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| Linux    | [![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
-| Windows  | [![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
-| MacOS    | [![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
+| Platform     | Format | Download                                                                                                                                                      | Status       |
+|--------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| **Linux**    | DEB    | [![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.deb&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
+|              | JAR    | [![Download Button](https://img.shields.io/static/v1?label=Linux&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
+| **Windows**  | MSI    | [![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.msi&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
+|              | JAR    | [![Download Button](https://img.shields.io/static/v1?label=Windows&message=Stackzy.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
+| **MacOS**    | DMG    | [![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy.dmg&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
+|              | JAR (ARM64) | [![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy-ARM64.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest) | Experimental | 
+|              | JAR (x64)   | [![Download Button](https://img.shields.io/static/v1?label=MacOS&message=Stackzy-x64.jar&color=30A3E6)](https://github.com/theapache64/stackzy/releases/latest)   | Experimental | 
 
-> ℹ️ To run the `jar`, you need Java 15 or above. If you hate running jar, you can clone the repo and
-> execute `./gradlew createDistributable` to
-> build executable for your system.
+### 📋 Installation Notes
+
+- **JAR files**: Require Java 15 or above to run
+- **MacOS DMG**: The DMG file is not notarized and may trigger a security warning. To resolve this:
+  1. Right-click the app and select "Open"
+  2. If prompted with a security warning, go to **System Preferences** → **Security & Privacy**
+  3. Click **"Open Anyway"** next to the blocked app message
+- **Alternative build**: If you prefer building from source, clone the repo and execute `./gradlew createDistributable`
 
 ## 🏋 Dependency
 
