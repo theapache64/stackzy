@@ -10,7 +10,7 @@ plugins {
 
 val daggerVersion by extra("2.47")
 // [latest version - i promise!]
-val stackzyVersion by extra("1.2.12")
+val stackzyVersion by extra("1.2.13")
 
 group = "com.theapache64"
 version = stackzyVersion
