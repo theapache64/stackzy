@@ -43,10 +43,7 @@ class AppDetailScreenComponent(
         AppDetailScreen(
             viewModel = appDetailViewModel,
             onLibrarySelected = onLibrarySelected,
-            onBackClicked = {
-                appDetailViewModel.onDestroy()
-                onBackClicked()
-            }
+            onBackClicked = onBackClicked
         )
     }
 }
