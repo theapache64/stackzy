@@ -19,7 +19,11 @@ object AndroidVersionIdentifier {
             28 to "Pie",
             29 to "Android 10",
             30 to "Android 11",
-            31 to "Android 12",
+            31..32 to "Android 12",
+            33 to "Android 13",
+            34 to "Android 14",
+            35 to "Android 15",
+            36 to "Android 16",
         )
     }
 
