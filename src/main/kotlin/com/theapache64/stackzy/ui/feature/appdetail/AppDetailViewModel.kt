@@ -534,4 +534,8 @@ class AppDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun onDestroy() {
+        viewModelScope.cancel()
+    }
 }
