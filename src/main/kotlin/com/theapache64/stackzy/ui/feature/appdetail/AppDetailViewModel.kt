@@ -332,7 +332,7 @@ class AppDetailViewModel @Inject constructor(
 
         if (shouldStoreResult) {
             // Converting AnalysisReport to Result
-            val result = report.toResult(resultsRepo, config, androidApp.imageUrl!!)
+            val result = report.toResult(resultsRepo, config, androidApp.imageUrl)
 
             // Add result to remove
             resultsRepo.add(result).collect {

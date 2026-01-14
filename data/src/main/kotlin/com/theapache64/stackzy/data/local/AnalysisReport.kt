@@ -32,7 +32,7 @@ class AnalysisReport(
 ) : AnalysisReportDefinition
 
 
-fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null, logoImageUrl: String): Result {
+fun AnalysisReport.toResult(resultsRepo: ResultsRepo, config: Config? = null, logoImageUrl: String?): Result {
 
     return Result(
         appName = this.appName ?: this.packageName,

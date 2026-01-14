@@ -131,15 +131,18 @@ class AdbRepo @Inject constructor(
 
         installedPackages
             .split("\n") // parse line by line
-            .filter { packageName -> packageName.isNotBlank() }
-            .map { it.replace("package:", "").trim() } // filter package name
-            .map { packageName ->
-                AndroidApp(Package(packageName), isSystemApp = isSystemApp)
-            }
+            .filter { packageNameAndVersionCode -> packageNameAndVersionCode.isNotBlank() }
+            .map { packageNameAndVersionCode ->
+                var (packageName, versionCode) = packageNameAndVersionCode.split(" ")
+                packageName = packageName.replace("package:", "").trim()
+                val versionCodeInt = versionCode.replace("versionCode:", "").trim().toIntOrNull()
+                AndroidApp(Package(packageName), isSystemApp = isSystemApp,versionCode = versionCodeInt)
+            } // filter package name
+
     }
 
     private suspend fun getInstalledPackagesByFlag(device: Device, flag: String): String = adb.execute(
-        request = ShellCommandRequest("pm list packages $flag"),
+        request = ShellCommandRequest("pm list packages --show-versioncode $flag"),
         serial = device.serial
     ).output
 
